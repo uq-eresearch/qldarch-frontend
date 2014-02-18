@@ -1,0 +1,14 @@
+<div class="thumbnail" >
+
+    <a ng-href="#/architect/{{ architect.encodedUri }}" class="thumbnail-image">
+        <img ng-if="!architect.picture" ng-src="images/icon.png" style="display:block; width:100%">
+        <img ng-if="architect.picture" ng-src="{{ Uris.FILE_ROOT + architect.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ architect.name }}">
+    </a>
+
+    <div class="caption">
+        <h4><a ng-href="#/architect/{{ architect.encodedUri }}">
+            {{ architect.name }}
+        </a></h4>
+        <!--<p><a ng-href="#/architect/{{ architect.encodedUri }}" class="btn btn-primary btn-sm" role="button">Go</a></p>-->
+    </div>
+</div>

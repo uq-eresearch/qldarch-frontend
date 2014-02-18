@@ -1,0 +1,54 @@
+<div class="page-header">
+    <div class="container">
+        <small>
+            <a ng-href="#/articles">Articles »</a>
+        </small>
+        <h1>{{ article[Uris.DCT_TITLE] }}</h1>
+    </div>
+</div>
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-6">
+            <img ng-src="images/icon.png" style="display:block; width:100%">
+        </div>
+        <div class="col-md-6">
+            <h5>Summary</h5>
+            <p>{{ article[Uris.DCT_DESCRIPTION] || "No summary" }}</p>
+
+            <h5>Issue</h5>
+            <p>
+                {{ article[Uris.QA_ISSUE] }}
+            </p>
+
+            <h5>Periodical Title</h5>
+            <p>
+                {{ article[Uris.QA_PERIODICAL_TITLE] }}
+            </p>
+
+            <h5>Pages</h5>
+            <p>
+                {{ article[Uris.QA_PAGES] }}
+            </p>
+
+            <h5>Authors</h5>
+            <p>
+                {{ article[Uris.QA_AUTHORS] }}
+            </p>
+
+            <!-- Single button -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    Download <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+
+                    <li ng-repeat="file in article.files">
+                        <a ng-href="{{ Uris.FILE_ROOT + file[Uris.QA_SYSTEM_LOCATION] }}" alt="" target="_blank">{{ file[Uris.QA_SOURCE_FILENAME] }}</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+<div class="thumbnail" >
+
+    <a ng-href="#/building-typology/{{ buildingTypology.encodedUri }}" class="thumbnail-image">
+        <img ng-if="!buildingTypology.picture" ng-src="images/icon.png" style="display:block; width:100%">
+        <img ng-if="buildingTypology.picture" ng-src="{{ Uris.FILE_ROOT + buildingTypology.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ buildingTypology.name }}">
+    </a>
+
+    <div class="caption">
+        <h4><a ng-href="#/buildingTypology/{{ buildingTypology.encodedUri }}">
+            {{ buildingTypology.name }}
+        </a></h4>
+        <!--<p><a ng-href="#/buildingTypology/{{ buildingTypology.encodedUri }}" class="btn btn-primary btn-sm" role="button">Go</a></p>-->
+    </div>
+</div>

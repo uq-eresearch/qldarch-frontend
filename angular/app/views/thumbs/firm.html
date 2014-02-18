@@ -1,0 +1,13 @@
+<div class="thumbnail" >
+    <a ng-href="#/firm/{{ firm.encodedUri }}" class="thumbnail-image">
+        <img ng-if="!firm.picture" ng-src="images/icon.png" style="display:block; width:100%">
+        <img ng-if="firm.picture" ng-src="{{ Uris.FILE_ROOT + firm.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ firm.name }}">    
+    </a>
+
+    <div class="caption">
+        <h4><a ng-href="#/firm/{{ firm.encodedUri }}">
+            {{ firm.name }}
+        </a></h4>
+        <p><a ng-href="#/firm/{{ firm.encodedUri }}" class="btn btn-primary" role="button">Go</a></p>
+    </div>
+</div>

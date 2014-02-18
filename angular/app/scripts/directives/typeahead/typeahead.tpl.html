@@ -1,0 +1,40 @@
+<div class="typeahead">
+    <div ng-show="multi == 'true'">
+        <div class="typeahead-tokens" ng-show="tokens.length">
+            <button class="typeahead-token typeahead-token-multi" ng-repeat="token in tokens" ng-click="removeToken(token)">
+                {{ token.name }}&nbsp;&nbsp;<i class="icon icon-remove"></i>
+            </button>
+        </div>
+    </div>
+    <div ng-show="multi == 'false'">
+        <button ng-show="tokens" class="typeahead-token typeahead-token-single" ng-click="removeToken(tokens[0])">
+            <i class="icon icon-remove pull-right"></i>
+            {{ tokens.name }}
+        </button>
+    </div>
+
+    <div ng-show="multi == 'true' || (multi == 'false' && !tokens)">
+        <img src="images/throbber.gif" class="typeahead-loader" ng-show="loadCount"/>
+        <i class="icon icon-search typeahead-icon" ng-show="!loadCount"></i>
+
+        <input type="text"
+               id="{{ id }}"
+               ng-model="input"
+               ng-change="inputChanged(input)"
+               ng-keydown="inputKeyPressed()"
+               placeholder="{{ placeholder }}"
+        />
+        <div class="typeahead-options-wrapper">
+            <ul class="typeahead-options typeahead-options-inside" ng-show="options.length" ng-mouseleave="$parent.selectedIndex = 0">
+                <li ng-repeat="option in options | limitTo:10 | filter:input"
+                    class="typeahead-option"
+                    ng-class="{'selected': $parent.selectedIndex == $index}"
+                    ng-click="addToken(option)"
+                    ng-mouseenter="$parent.selectedIndex = $index">
+                    {{ option.name }}
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>

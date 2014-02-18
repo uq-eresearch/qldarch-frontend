@@ -1,0 +1,14 @@
+<div class="thumbnail" >
+
+    <a ng-href="#/photograph/{{ photograph.encodedUri }}" class="thumbnail-image">
+        <img ng-if="photograph.file" class="img-responsive" ng-src="{{ Uris.FILE_ROOT + photograph.file[Uris.QA_SYSTEM_LOCATION] }}" alt=""/>
+        <img ng-if="!photograph.file" ng-src="images/icon.png" style="display:block; width:100%">
+    </a>
+
+    <div class="caption">
+        <h4><a ng-href="#/photograph/{{ photograph.encodedUri }}">
+            {{ photograph[Uris.DCT_TITLE] }}
+        </a></h4>
+        <p><a ng-href="#/photograph/{{ photograph.encodedUri }}" class="btn btn-primary btn-sm" role="button">Go</a></p>
+    </div>
+</div>

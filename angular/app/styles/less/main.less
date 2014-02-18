@@ -1,0 +1,92 @@
+/** Import bootstrap */
+// Core variables and mixins
+//@import "../../bower_components/bootstrap/less/variables.less";
+//@import "../../bower_components/bootstrap/less/mixins.less";
+//
+//// Reset
+//@import "../../bower_components/bootstrap/less/normalize.less";
+//@import "../../bower_components/bootstrap/less/print.less";
+//
+@import "../../bower_components/bootstrap/less/bootstrap";
+//@import "../../bower_components/bootstrap/less/type.less";
+//@import "../../bower_components/bootstrap/less/code.less";
+//@import "../../bower_components/bootstrap/less/tables.less";
+//@import "../../bower_components/bootstrap/less/forms.less";
+//@import "../../bower_components/bootstrap/less/buttons.less";
+@import "variables.less";
+@import "header.less";
+@import "footer.less";
+
+@import "dropdowns.less";
+@import "segmented-control.less";
+@import "section.less";
+@import "thumbnails.less";
+@import "typeahead.less";
+@import "type.less";
+@import "navbar.less";
+
+body {
+  background-color: white;
+}
+
+.row + .row {
+  margin-top: @line-height-computed;
+}
+
+.img-full {
+  .img-responsive();
+  width: 100%;
+}
+
+.ui-scrollfix {
+  position: fixed;
+  top: 0;
+}
+
+.ui-match { background: yellow; }
+
+
+.interview {
+  .interview-heading {
+    text-transform: capitalize;
+  }
+}
+
+.interview-heading {
+  cursor: pointer;
+}
+.interview-player {
+  margin-bottom: @line-height-computed;;
+}
+.player {
+  background-color: @gray-darker;
+  .player-video {
+    padding: @line-height-computed;
+  }
+  .player-controls {
+    audio {
+      width: 100%;
+      background-color: @gray-darker;
+    }
+  }
+}
+
+.content {
+  margin-bottom: @line-height-computed;
+}
+
+.exchange {
+  &.exchange-searching {
+    background-color: @gray-lighter;
+    padding: @line-height-computed / 2 inherit;
+  }
+}
+
+.subnav {
+  padding: @line-height-computed / 2 0;
+  border: 1px solid @gray-lighter;
+  margin-bottom: @line-height-computed;
+  .nav > li > a {
+    padding: 5px 15px;
+  }
+}

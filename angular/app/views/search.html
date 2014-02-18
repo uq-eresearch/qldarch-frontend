@@ -1,0 +1,39 @@
+<div class="content">
+    <style>
+        .row {
+            margin-bottom: 21px;;
+        }
+    </style>
+    <div class="page-header">
+        <div class="container">
+            <h1>
+                Search Results - "{{ query }}"
+            </h1>
+        </div>
+    </div>
+
+    <section>
+        <div class="container">
+            <!--<div ng-include="'views/searchbox.html'"></div>-->
+            <div ng-repeat="result in results | orderBy:'-rank'" class="row">
+                <div class="col-md-6">
+                    <h3>
+
+                        <a ng-href="#/{{ result.type }}/{{ result.encodedUri }}">{{ result.title }}</a>
+                        <small><a ng-href="#/{{ result.type == 'interview' && 'interviews' || 'articles' }}">{{ result.type == 'interview' && 'Interview' || 'Article' }}</a></small>
+                    </h3>
+
+                    <!-- Result: type -->
+                    <div>
+
+                    </div>
+
+                    <!-- Result: Snippet -->
+                    <div ng-bind-html="result.snippet">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>

@@ -1,0 +1,66 @@
+// Style the navbar search input
+@navbar-inverse-autocomplete-color: white;
+@navbar-inverse-autocomplete-hover-color: white;
+@navbar-inverse-autocomplete-hover-bg: lighten(@navbar-inverse-bg, 20);
+@navbar-inverse-autocomplete-active-color: white;
+@navbar-inverse-autocomplete-active-bg: lighten(@navbar-inverse-bg, 20);
+@navbar-inverse-autocomplete-disabled-color: @gray-light; 
+@navbar-inverse-autocomplete-disabled-bg: lighten(@navbar-inverse-bg, 5);
+
+.navbar-inverse {
+	.input-group {
+		input {
+		border: none;
+		background-color: lighten(@navbar-inverse-bg, 10);
+		color: white;
+
+			&:focus {			
+			box-shadow: none;
+			}
+		}
+
+		.input-group-addon {
+			border: none;
+			background-color: lighten(@navbar-inverse-bg, 5);
+		}
+
+		.dropdown-menu {
+			background-color: lighten(@navbar-inverse-bg, 10);
+
+			> .dropdown-header {
+				border-color: @navbar-inverse-border;
+			}
+			.divider {
+				background-color: @navbar-inverse-border;
+			}
+			> li > a {
+				color: @navbar-inverse-autocomplete-color;
+				&:hover,
+				&:focus {
+					color: @navbar-inverse-autocomplete-hover-color;
+					background-color: @navbar-inverse-autocomplete-hover-bg;
+				}
+			}
+			> .active > a {
+				&,
+				&:hover,
+				&:focus {
+					color: @navbar-inverse-autocomplete-active-color;
+					background-color: @navbar-inverse-autocomplete-active-bg;
+				}
+			}
+			> .disabled > a {
+				&,
+				&:hover,
+				&:focus {
+					color: @navbar-inverse-autocomplete-disabled-color;
+					background-color: @navbar-inverse-autocomplete-disabled-bg;
+				}
+			}
+		}
+		@media (max-width: @grid-float-breakpoint-max) {
+			// Dropdowns get custom display
+			
+		}
+	}	
+}

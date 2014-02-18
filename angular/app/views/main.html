@@ -1,0 +1,55 @@
+<div class="content">
+    <!--<div class="page-header" style="background-image: url('images/header.jpg'); height: 200px;">-->
+        <!--<div class="container">-->
+            <!--<h1>-->
+                <!--QLDArch-->
+            <!--</h1>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <!--<section>-->
+        <!--<div class="container">-->
+            <!--<div ng-include="'views/searchbox.html'"></div>-->
+            <!--<div class="row">-->
+                <!--<div ng-repeat="entity in entities">-->
+                    <!--<a ng-href="#/explore?uri={{ entity.encodedUri }}">{{ entity.name }}</a>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</section>-->
+
+
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Architects
+                        <a href="#/architects" class="btn btn-sm btn-default pull-right">More architects</a>
+                    </h2>
+                </div>
+            </div>
+            <div class="row" ng-repeat="architectRow in architectRows | limitTo:1">
+                <div class="col-sm-2" ng-repeat="architect in architectRow">
+                    <div ng-include="'views/thumbs/architect.html'"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Interviews
+                        <a href="#/interviews" class="btn btn-sm btn-default pull-right">More interviews</a>
+                    </h2>
+                </div>
+            </div>
+            <div class="row" ng-repeat="interviewRow in interviewRows | limitTo:1">
+                <div class="col-sm-2" ng-repeat="interview in interviewRow">
+                    <div ng-include="'views/thumbs/interview.html'"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>

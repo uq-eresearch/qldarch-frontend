@@ -1,0 +1,35 @@
+<div class="content">
+    <div ng-include="'views/architects/header.html'"></div>
+
+    <div class="container" ng-show="isShowingMap">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+
+                    </div>
+                    <div class="panel-body">
+                        word cloud
+                        <!--<div ui-map="$parent.myMap" class="map-canvas map"
+                             ui-event="mapEvents"
+                             ui-options="mapOptions">
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div ng-repeat="article in articles">
+                    <h4>
+                        <a href="#/article/{{ article.encodedUri }}">{{ article.title }}</a>
+                    </h4>
+                    <p ng-bind-html="article.snippet"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

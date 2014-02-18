@@ -1,0 +1,15 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-7">
+            <h5>Biography</h5>
+            <p>{{ architect[Uris.QA_SUMMARY] }}</p>
+            <p ng-show="!architect[Uris.QA_SUMMARY].length">
+                No biography.
+            </p>
+        </div>
+        <div class="col-sm-5">
+            <img ng-if="architect.picture" class="img-responsive" ng-src="{{ Uris.FILE_ROOT + architect.picture[Uris.QA_SYSTEM_LOCATION] }}" alt=""/>
+            <img ng-if="!architect.picture" ng-src="images/icon.png" style="display:block; width:100%">
+        </div>
+    </div>
+</div>
