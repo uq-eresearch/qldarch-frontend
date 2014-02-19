@@ -222,6 +222,24 @@ var myApp = angular.module('angularApp', [
                     }
                 }
             })
+            .state('architect.timeline', {
+                url: '/timeline',
+                templateUrl: 'views/architect/timeline.html',
+                resolve: {
+                    data: function (Relationship, GraphHelper, Entity, $stateParams, $filter, Uris) {
+                        var architectUri = GraphHelper.decodeUriString($stateParams.architectId);
+                        // Get all the relationships
+                        return Relationship.findByEntityUri(architectUri).then(function (relationships) {
+
+                            var relationshipsWithDates = $filter('filter')(relationships, function (relationship) {
+                                return angular.isDefined(relationship[Uris.QA_START_DATE]);
+                            });
+                            return Relationship.getData(relationshipsWithDates);
+                        });
+                    }
+                },
+                controller: 'TimelineCtrl'
+            })
             .state('architect.interview', {
                 url: '/interview/:interviewId',
                 templateUrl: 'views/architect/interview.html',
