@@ -1,0 +1,36 @@
+<div class="content">
+    <div class="page-header">
+        <div class="container">
+            <small><a ng-href="#/firms">Firms »</a></small>
+            <h1>{{ firm.name }}</h1>
+        </div>
+    </div>
+
+    <div class="subnav">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="nav nav-pills">
+                        <li ui-sref-active="active">
+                            <a href ui-sref="firm.summary({ firmId: firm.encodedUri })">Summary</a>
+                        </li>
+                        <li ui-sref-active="active">
+                            <a href ui-sref="firm.employees({ firmId: firm.encodedUri })">Employees</a>
+                        </li>
+                        <li ui-sref-active="active">
+                            <a href ui-sref="firm.structures({ firmId: firm.encodedUri })">Structures</a>
+                        </li>
+                        <li ui-sref-active="active">
+                            <a href ui-sref="firm.lineDrawings({ firmId: firm.encodedUri })">Line Drawings</a>
+                        </li>
+                        <li ui-sref-active="active">
+                            <a href ui-sref="firm.relationships({ firmId: firm.encodedUri })">Relationships</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ui-view autoscroll="false"></div>
+</div>

@@ -1,0 +1,20 @@
+<div class="container">
+    <div class="row" ng-repeat="lineDrawingRow in lineDrawingRows">
+        <div class="col-sm-2" ng-repeat="lineDrawing in lineDrawingRow">
+            <div class="thumbnail" >
+                <a ng-href="#/structure/{{ structure.encodedUri }}/line-drawing/{{ lineDrawing.encodedUri }}" class="thumbnail-image">
+                    <img ng-if="lineDrawing.file" class="img-responsive" ng-src="{{ Uris.FILE_ROOT + lineDrawing.file[Uris.QA_SYSTEM_LOCATION] }}" alt=""/>
+                    <img ng-if="!lineDrawing.file" ng-src="images/icon.png" style="display:block; width:100%">
+                </a>
+
+                <div class="caption">
+                    <h4>
+                        <a ng-href="#/structure/{{ structure.encodedUri }}//line-drawing/{{ lineDrawing.encodedUri }}">
+                            {{ lineDrawing[Uris.DCT_TITLE] }}
+                        </a>
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

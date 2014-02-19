@@ -1,0 +1,15 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-7">
+            <h5>Summary</h5>
+            <p>{{ firm[Uris.QA_SUMMARY] }}</p>
+            <p ng-show="!firm[Uris.QA_SUMMARY].length">
+                No summary.
+            </p>
+        </div>
+        <div class="col-sm-5">
+            <img ng-if="firm.picture" class="img-responsive" ng-src="{{ Uris.FILE_ROOT + firm.picture[Uris.QA_SYSTEM_LOCATION] }}" alt=""/>
+            <img ng-if="!firm.picture" ng-src="images/icon.png" style="display:block; width:100%">
+        </div>
+    </div>
+</div>

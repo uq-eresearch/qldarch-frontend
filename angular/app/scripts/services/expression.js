@@ -33,17 +33,40 @@ angular.module('angularApp')
              * Finds all photos that depict a building in a list
              * @param buildingUris  Array of building uris
              */
-            findByBuildingUris: function (buildingUris) {
-                return Request.getIndex("expression", "qldarch:Photograph", false, false).then(function (expressions) {
+            findByBuildingUris: function (buildingUris, type) {
+                if (!angular.isDefined(type)) {
+                    throw ('Type needs to be defined');
+                }
+                return Request.getIndex('expression', type, false, false).then(function (expressions) {
                     var photographs = [];
                     angular.forEach(expressions, function (expression) {
-                        if (angular.isDefined(expression[Uris.QA_DEPICTS_BUILDING]) && buildingUris.indexOf(expression[Uris.QA_DEPICTS_BUILDING]) != -1) {
+                        if (angular.isDefined(expression[Uris.QA_DEPICTS_BUILDING]) && buildingUris.indexOf(expression[Uris.QA_DEPICTS_BUILDING]) !== -1) {
                             photographs.push(expression);
                         }
                     });
                     return attachFiles(photographs);
                 });
             },
+
+            /**
+             * Finds all photos that have an associated firm
+             * @param firmUris  Array of firm uris
+             */
+            findByFirmUris: function (firmUris, type) {
+                if (!angular.isDefined(type)) {
+                    throw ('Type needs to be defined');
+                }
+                return Request.getIndex('expression', type, false, false).then(function (expressions) {
+                    var photographs = [];
+                    angular.forEach(expressions, function (expression) {
+                        if (angular.isDefined(expression[Uris.QA_ASSOCIATED_FIRM]) && firmUris.indexOf(expression[Uris.QA_ASSOCIATED_FIRM]) !== -1) {
+                            photographs.push(expression);
+                        }
+                    });
+                    return attachFiles(photographs);
+                });
+            },
+
 
             /**
              * Loads a single entity

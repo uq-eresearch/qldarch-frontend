@@ -1,8 +1,6 @@
-<div class="content">
-    <div ng-include="'views/architects/header.html'"></div>
-    
-    <div class="container" ng-show="isShowingMap">
-        <div class="row">
+<div>
+     <div class="container" >
+        <div class="row" ng-if="isShowingMap">
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -20,8 +18,7 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="container">
+
         <div class="row">
             <div class="col-md-12">
                 <div class="row" ng-repeat="structureRow in structureRows">
@@ -30,18 +27,15 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                
-            </div>
         </div>
-        <p ng-show="!structureRows.length">
-            No structures found.
-        </p>
-
+        
         <div class="row">
             <div class="col-md-12">
-
+                <p ng-show="!structureRows.length">
+                    No structures found.
+                </p>
             </div>
         </div>
+
     </div>
 </div>

@@ -1,25 +1,25 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <img ng-if="photograph.file" class="img-responsive" ng-src="{{ Uris.FILE_ROOT + photograph.file[Uris.QA_SYSTEM_LOCATION] }}" alt=""/>
-            <img ng-if="!photograph.file" ng-src="images/icon.png" style="display:block; width:100%">
+            <img ng-if="lineDrawing.file" class="img-responsive" ng-src="{{ Uris.FILE_ROOT + lineDrawing.file[Uris.QA_SYSTEM_LOCATION] }}" alt=""/>
+            <img ng-if="!lineDrawing.file" ng-src="images/icon.png" style="display:block; width:100%">
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
             <h5>Title</h5>
             <p>
-                {{ photograph[Uris.DCT_TITLE] }}
+                {{ lineDrawing[Uris.DCT_TITLE] }}
             </p>
 
             <h5>Rights</h5>
             <p>
-                {{ photograph[Uris.DCT_RIGHTS] }}
+                {{ lineDrawing[Uris.DCT_RIGHTS] }}
             </p>
 
             <h5>Identifier</h5>
             <p>
-                {{ photograph[Uris.DCT_IDENTIFIER] }}
+                {{ lineDrawing[Uris.DCT_IDENTIFIER] }}
             </p>
         </div>
         <div class="col-md-6">
@@ -27,13 +27,13 @@
                 Building
             </h5>
             <p>
-                <a href="#/structure/{{ photograph.building.encodedUri }}">
-                    {{ photograph.building.name }}
+                <a href="#/structure/{{ lineDrawing.building.encodedUri }}">
+                    {{ lineDrawing.building.name }}
                 </a>
             </p>
             <h5>Location</h5>
             <p>
-                {{ photograph[Uris.QA_LOCATION] }}
+                {{ lineDrawing[Uris.QA_LOCATION] }}
             </p>
 
         </div>

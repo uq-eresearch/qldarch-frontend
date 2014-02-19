@@ -18,10 +18,10 @@
 	                    	<a href ui-sref="architect.structures({ architectId: architect.encodedUri })">Structures</a>
 	                    </li>
 	                    <li ui-sref-active="active">
-	                    	<a href="#/architect/{{ architect.encodedUri }}/articles">Articles</a>
+	                    	<a href ui-sref="architect.articles({ architectId: architect.encodedUri })">Articles</a>
                     	</li>
 	                    <li ui-sref-active="active">
-	                    	<a href="#/architect/{{ architect.encodedUri }}/relationships">Relationships</a>
+	                    	<a href ui-sref="architect.relationships({ architectId: architect.encodedUri })">Relationships</a>
                     	</li>
 	                    <li class="dropdown" ng-show="interviews.length" ui-sref-active="active">
 	                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -29,7 +29,7 @@
 	                        </a>
 	                        <ul class="dropdown-menu">
 	                            <li role="presentation" ng-repeat="interview in interviews">
-	                                <a role="menuitem" tabindex="-1" href="#architect/{{ architect.encodedUri }}/interview/{{ interview.encodedUri }}">Interview #{{ $index + 1 }}</a>
+	                                <a role="menuitem" tabindex="-1" href ui-sref="architect.interview({ architectId: architect.encodedUri, interviewId: interview.encodedUri })">Interview #{{ $index + 1 }}</a>
 	                            </li>
 	                        </ul>
 	                    </li>
@@ -39,5 +39,5 @@
 	    </div>
 	</div>
 
-	<div ui-view></div>
+	<div ui-view autoscroll="false"></div>
 </div>

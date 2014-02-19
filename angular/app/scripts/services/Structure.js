@@ -25,7 +25,7 @@ angular.module('angularApp')
             });
 
             // Setup pictures
-            return Expression.findByBuildingUris(uris).then(function (pictures) {
+            return Expression.findByBuildingUris(uris, 'qldarch:Photograph').then(function (pictures) {
                 angular.forEach(pictures, function (picture) {
                     angular.forEach(structures, function (structure) {
                         if (picture[Uris.QA_DEPICTS_BUILDING] === structure.uri) {
@@ -40,7 +40,6 @@ angular.module('angularApp')
                     buildingTypologyUris = buildingTypologyUris.concat(GraphHelper.asArray(structure[Uris.QA_BUILDING_TYPOLOGY_P]));
                 });
 
-                console.log('uri set', buildingTypologyUris);
                 return Entity.loadList(buildingTypologyUris).then(function (buildingTypologies) {
                     angular.forEach(structures, function (structure) {
                         structure.buildingTypologies = [];

@@ -1,5 +1,4 @@
 <div class="interview">
-
     <div class="interview-heading">
         <div class="container">
             <h4 ng-click="isShowingInterviewDetails = !isShowingInterviewDetails">
@@ -169,16 +168,21 @@
                         <div class="panel panel-default" ng-hide="isSearching && !exchange.relationships.length">
                             <div class="panel-heading" ng-hide="isSearching">
 
-                                <h1>Hello?</h1>
                                 <!-- Control buttons -->
-                                <span ng-hide="exchange.isAddingRelationship">
+                                <span ng-hide="exchange.isAddingRelationship || exchange.isEditingRelationships">
                                     <button type="button" class="btn btn-default btn-xs"
-                                            ng-click="showAddRelationship(exchange)"><i class="fa fa-plus"></i> Add</button>
+                                            ng-click="showAddRelationship(exchange)"
+                                            ><i class="fa fa-plus fa-fw"></i></button>    
+
                                     <button type="button" class="btn btn-default btn-xs"
-                                            ng-click="showEditRelationships(exchange)"><i class="fa fa-pencil"></i> Edit</button>
+                                            ng-click="showEditRelationships(exchange)"
+                                            ><i class="fa fa-pencil fa-fw"></i></button>
                                 </span>
+                                <button type="button" class="btn btn-primary btn-xs"
+                                            ng-click="hideEditRelationships(exchange)" ng-show="exchange.isEditingRelationships"
+                                            ><i class="fa fa-check fa-fw"></i></button>
                                 <!-- /Control Buttons -->
-                                
+
                                 <!-- New relationship -->
                                 <form role="form" ng-show="exchange.isAddingRelationship">
                                     <div class="form-group">
@@ -214,16 +218,19 @@
                                 </form>
 
                             </div>
-                            <!-- /new relationship -->
 
-                            <!-- Relationship list -->
+                            <!-- Relationship List -->
                             <ul class="list-group" ng-if="exchange.relationships.length">
                                 <li class="list-group-item" ng-repeat="relationship in exchange.relationships">
-                                    <!--<i class="fa fa-bars"> </i>-->
+                                    
+                                    <button class="btn btn-xs btn-danger" ng-show="exchange.isEditingRelationships" style="margin-right: 5px;" ng-click="deleteRelationship(relationship, exchange)">
+                                        <i class="fa fa-trash-o fa-fw"></i>
+                                    </button>
+
                                     <a href="#/{{ relationship.subject.type }}/{{ relationship.subject.encodedUri }}" ng-bind-html="relationship.subject.name || '' | highlight:transcriptSearchInput"></a>
 
-                                <span ng-bind-html="relationship.predicate[Uris.QA_LABEL] || relationship.predicate.name || '' | highlight:transcriptSearchInput">
-                                </span>
+                                    <span ng-bind-html="relationship.predicate[Uris.QA_LABEL] || relationship.predicate.name || '' | highlight:transcriptSearchInput">
+                                    </span>
 
                                     <a href="#/{{ relationship.object.type }}/{{ relationship.object.encodedUri }}" ng-bind-html="relationship.object.name || '' | highlight:transcriptSearchInput"></a>
 
@@ -231,12 +238,9 @@
                                     {{ relationship[Uris.QA_START_DATE] }}
                                     <span ng-show="relationship[Uris.QA_START_DATE] && relationship[Uris.QA_END_DATE]"> - </span>
                                     {{ relationship[Uris.QA_END_DATE] }}
-
-                                    <!--<button class="btn btn-xs btn-danger pull-right"><i class="fa fa-times"> Delete</i></button>-->
-
                                 </li>
                             </ul>
-                            <!-- /relationship list -->
+                            <!-- /Relationship List -->
 
                         </div>
                     </div>

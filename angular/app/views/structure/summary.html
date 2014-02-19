@@ -1,0 +1,53 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-7">
+            <h5>Summary</h5>
+            <p>{{ structure[Uris.QA_SUMMARY] }}</p>
+            <p ng-show="!structure[Uris.QA_SUMMARY].length">No summary.</p>
+
+            <h5>Location</h5>
+            <p>{{ structure[Uris.QA_LOCATION] }} </p>
+            <p ng-show="!structure[Uris.QA_LOCATION]">No location.</p>
+
+            <h5>Typology</h5>
+            <ul>
+                <li ng-repeat="buildingTypology in structure.buildingTypologies">
+                    <a href="#/building-typology/{{ buildingTypology.encodedUri }}">{{ buildingTypology.name }}</a>
+                </li>
+            </ul>
+            <p ng-show="!structure.buildingTypologies.length">
+                No building typology.
+            </p>
+
+            <h5>Associated Firm</h5>
+            <p>
+                <a href="#/firm/{{ structure.firm.encodedUri }}">{{ structure.firm.name }}</a>
+            </p>
+
+            <h5>Architects</h5>
+            <div ng-show="!designers.length">
+                No associated architects.
+            </div>
+
+            <ul class="media-list">
+                <li class="media" ng-repeat="designer in designers">
+                    <a class="pull-left" href="#/{{ designer.type }}/{{ designer.encodedUri }}">
+                        <img class="media-object img-responsive img-circle" ng-if="!designer.picture" ng-src="images/icon.png" style="display:block; width:32px">
+                        <img class="media-object img-responsive img-circle" ng-if="designer.picture" ng-src="{{ Uris.FILE_ROOT + designer.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ designer.name }}" style="width:32px">
+                    </a>
+                    <div class="media-body">
+                        <a ng-href="#/{{ designer.type }}/{{ designer.encodedUri }}">
+                            {{ designer.name }}
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-sm-5">
+            <img ng-if="structure.picture" class="img-responsive" ng-src="{{ Uris.FILE_ROOT + structure.picture[Uris.QA_SYSTEM_LOCATION] }}" alt=""/>
+            <img ng-if="!structure.picture" ng-src="images/icon.png" style="display:block; width:100%">
+        </div>
+
+    </div>
+</div>

@@ -38,11 +38,7 @@
     <!-- Add your site or application content here -->
     <ng-progress></ng-progress>
     <div ng-include="'views/header.html'"></div>
-     <div ui-view></div>
-    <!-- We'll also add some navigation: -->
-    <a ui-sref="state1">State 1</a>
-    <a ui-sref="state2">State 2</a>
-    <!-- <ng-view></ng-view> -->
+    <div ui-view autoscroll="false"></div>
     <div ng-include="'views/footer.html'"></div>
 
 
@@ -148,6 +144,8 @@
     <script src="scripts/controllers/ArchitectRelationships.js"></script>
     <script src="scripts/controllers/ArchitectArticles.js"></script>
     <script src="scripts/directives/force.js"></script>
+    <script src="scripts/controllers/Relationship.js"></script>
+    <script src="scripts/controllers/StructureMap.js"></script>
     <!-- endbuild -->
 
     <!--<spt src="//localhost:35729/livereload.js"></script>-->

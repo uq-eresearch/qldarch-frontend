@@ -1,0 +1,37 @@
+<div class="content">
+    <div class="page-header">
+        <div class="container">
+            <small><a ng-href="#/structures">Structures »</a></small>
+            <h1>{{ structure.name }}</h1>
+        </div>
+    </div>
+
+    <div class="subnav">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="nav nav-pills">
+                        <li ui-sref-active="active">
+                            <a href ui-sref="structure.summary({ structureId: structure.encodedUri })">Summary</a>
+                        </li>
+                        <li ng-class="{active: $state.includes('structure.photograph') || $state.includes('structure.photographs')}">
+                            <a href ui-sref="structure.photographs({ structureId: structure.encodedUri })">Photographs</a>
+                        </li>
+                        <li ng-class="{active: $state.includes('structure.lineDrawing') || $state.includes('structure.lineDrawings')}">
+                            <a href ui-sref="structure.lineDrawings({ structureId: structure.encodedUri })">Line Drawings</a>
+                        </li>
+                        <li ng-class="{active: $state.includes('structure.map'), disabled: !structure.lat}">
+                            <a href ui-sref="structure.map({ structureId: structure.encodedUri })" ng-show="structure.lat">Map</a>
+                            <a href ng-show="!structure.lat" tooltip="No location stored.">Map</a>
+                        </li>
+                        <li ui-sref-active="active">
+                            <a href ui-sref="structure.relationships({ structureId: structure.encodedUri })">Relationships</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ui-view autoscroll="false"></div>
+</div>
