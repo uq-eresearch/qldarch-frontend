@@ -20,8 +20,19 @@
             </p>
 
             <h5>Associated Firm</h5>
-            <p>
-                <a href="#/firm/{{ structure.firm.encodedUri }}">{{ structure.firm.name }}</a>
+            <div class="media" style="margin-bottom: 10px;" ng-show="structure.firm">
+                <a class="pull-left" href="#/firm/{{ structure.firm.encodedUri }}">
+                    <img class="media-object img-responsive img-circle" ng-if="!structure.firm.picture" ng-src="images/icon.png" style="display:block; width:32px">
+                    <img class="media-object img-responsive img-circle" ng-if="structure.firm.picture" ng-src="{{ Uris.FILE_ROOT + structure.firm.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ structure.firm.name }}" style="width:32px; height: 32px;">
+                </a>
+                <div class="media-body">
+                    <a ng-href="#/{{ structure.firm.type }}/{{ structure.firm.encodedUri }}">
+                        {{ structure.firm.name }}
+                    </a>
+                </div>
+            </div>
+            <p ng-show="!structure.firm">
+                No associated firm.
             </p>
 
             <h5>Architects</h5>

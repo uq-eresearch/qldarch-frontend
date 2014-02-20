@@ -224,18 +224,21 @@ var myApp = angular.module('angularApp', [
             })
             .state('architect.timeline', {
                 url: '/timeline',
-                templateUrl: 'views/architect/timeline.html',
+                templateUrl: 'views/timeline.html',
                 resolve: {
                     data: function (Relationship, GraphHelper, Entity, $stateParams, $filter, Uris) {
                         var architectUri = GraphHelper.decodeUriString($stateParams.architectId);
                         // Get all the relationships
                         return Relationship.findByEntityUri(architectUri).then(function (relationships) {
-
                             var relationshipsWithDates = $filter('filter')(relationships, function (relationship) {
                                 return angular.isDefined(relationship[Uris.QA_START_DATE]);
                             });
                             return Relationship.getData(relationshipsWithDates);
                         });
+                    },
+                    entity: function (Architect, $stateParams, GraphHelper) {
+                        var architectUri = GraphHelper.decodeUriString($stateParams.architectId);
+                        return Architect.load(architectUri, false);
                     }
                 },
                 controller: 'TimelineCtrl'
@@ -447,6 +450,31 @@ var myApp = angular.module('angularApp', [
                 },
                 controller: 'RelationshipCtrl'
             })
+            .state('firm.timeline', {
+                url: '/timeline',
+                templateUrl: 'views/timeline.html',
+                resolve: {
+                    data: function (Relationship, GraphHelper, Entity, $stateParams, $filter, Uris) {
+
+                        var firmUri = GraphHelper.decodeUriString($stateParams.firmId);
+                        // Get all the relationships
+                        console.log('hello?');
+                        return Relationship.findByEntityUri(firmUri).then(function (relationships) {
+                            var relationshipsWithDates = $filter('filter')(relationships, function (relationship) {
+                                return angular.isDefined(relationship[Uris.QA_START_DATE]);
+                            });
+                            return Relationship.getData(relationshipsWithDates);
+                        });
+                    },
+                    entity: function (Firm, $stateParams, GraphHelper) {
+
+                        var firmUri = GraphHelper.decodeUriString($stateParams.firmId);
+                        console.log('resolving firm?', firmUri);
+                        return Firm.load(firmUri, false);
+                    }
+                },
+                controller: 'TimelineCtrl'
+            })
             .state('structures', {
                 url: '/structures',
                 templateUrl: 'views/structures.html',
@@ -571,6 +599,29 @@ var myApp = angular.module('angularApp', [
                 controller: function ($scope, lineDrawing) {
                     $scope.lineDrawing = lineDrawing;
                 }
+            })
+            .state('structure.timeline', {
+                url: '/timeline',
+                templateUrl: 'views/timeline.html',
+                resolve: {
+                    data: function (Relationship, GraphHelper, Entity, $stateParams, $filter, Uris) {
+
+                        var structureUri = GraphHelper.decodeUriString($stateParams.structureId);
+                        // Get all the relationships
+                        return Relationship.findByEntityUri(structureUri).then(function (relationships) {
+                            var relationshipsWithDates = $filter('filter')(relationships, function (relationship) {
+                                return angular.isDefined(relationship[Uris.QA_START_DATE]);
+                            });
+                            return Relationship.getData(relationshipsWithDates);
+                        });
+                    },
+                    entity: function (Structure, $stateParams, GraphHelper) {
+
+                        var structureUri = GraphHelper.decodeUriString($stateParams.structureId);
+                        return Structure.load(structureUri, false);
+                    }
+                },
+                controller: 'TimelineCtrl'
             })
             .state('structure.relationships', {
                 url: '/relationships',

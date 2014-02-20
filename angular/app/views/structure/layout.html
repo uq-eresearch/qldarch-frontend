@@ -25,6 +25,9 @@
                             <a href ng-show="!structure.lat" tooltip="No location stored.">Map</a>
                         </li>
                         <li ui-sref-active="active">
+                            <a href ui-sref="structure.timeline({ structureId: structure.encodedUri })">Timeline</a>
+                        </li>
+                        <li ui-sref-active="active">
                             <a href ui-sref="structure.relationships({ structureId: structure.encodedUri })">Relationships</a>
                         </li>
                     </ul>
