@@ -17,13 +17,22 @@
       </style>
 
 
+
         <!-- build:css(.tmp) styles/main.css -->
         <link rel="stylesheet" href="styles/main.css">
         <!-- endbuild -->
 
-      <!-- fonts -->
-      <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
-      <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+        <!-- @fixme: work out why this cannot be included in the usemin group for css -->
+        <link rel="stylesheet" href="bower_components/ngprogress/ngProgress.css"/>
+        <link rel="stylesheet" href="bower_components/select2/select2.css">
+        <!--<link rel="stylesheet" href="bower_components/select2/select2-bootstrap.css">-->
+        <link rel="stylesheet" href="bower_components/select2-bootstrap-css/select2-bootstrap.css">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+        <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+      
 </head>
   <body >
     <!--[if lt IE 7]>
@@ -42,52 +51,18 @@
     <div ng-include="'views/footer.html'"></div>
 
 
-    <!-- Jquery -->
     <script src="bower_components/jquery/jquery.js"></script>
-
-    <!-- boostrap -->
+    <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 
-    <!-- timelinejs -->
-    <!-- and then one of either -->
+    <!-- ENV Angular Constants -->
+    <script src="scripts/config.js"></script>
+
+    <!-- build:js scripts/plugins.js -->
+    <script src="bower_components/select2/select2.js"></script>
+    <script src="bower_components/d3/d3.js"></script>
     <script type="text/javascript" src="bower_components/timelinejs/build/js/storyjs-embed.js"></script>
-
-
-    <!-- select 2 js -->
-    <link rel="stylesheet" href="bower_components/select2/select2.css">
-    <!--<link rel="stylesheet" href="bower_components/select2/select2-bootstrap.css">-->
-    <link rel="stylesheet" href="bower_components/select2-bootstrap-css/select2-bootstrap.css">
-    <script type="text/javascript" src="bower_components/select2/select2.js"></script>
-
-    <!-- angular -->
-    <script src="bower_components/angular/angular.js"></script>
-
-    <!-- select 2 -->
-    <script type="text/javascript" src="bower_components/angular-ui-select2/src/select2.js"></script>
-
-    <!-- ng-progress -->
-    <script type="text/javascript" src="bower_components/ngprogress/build/ngProgress.js"></script>
-    <link rel="stylesheet" href="bower_components/ngprogress/ngProgress.css"/>
-
-    <!-- ui utils -->
-    <script type="text/javascript" src="bower_components/angular-ui-utils/ui-utils.min.js"></script>
-
-    <!-- ui map -->
-    <script type="text/javascript" src="bower_components/angular-ui-map/ui-map.js"></script>
-
-    <!-- audio player -->
-    <script type="text/javascript" src="bower_components/angular-audio-player/dist/angular-audio-player.js"></script>
-
-    <!-- infinite scroll -->
-    <script type="text/javascript" src="bower_components/nginfinitescroll/build/ng-infinite-scroll.js"></script>
-
-    <!-- ui router -->
-    <script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-
-    
-
-    <!-- bower:js -->
-    <!-- endbower -->
+    <!-- endbuild -->   
 
     <!-- build:js scripts/modules.js -->
     <script src="bower_components/angular-resource/angular-resource.js"></script>
@@ -95,8 +70,14 @@
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-    <script src="bower_components/d3/d3.js"></script>
-    <!-- endbuild -->
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/nginfinitescroll/build/ng-infinite-scroll.js"></script>
+    <script src="bower_components/angular-audio-player/dist/angular-audio-player.js"></script>
+    <script src="bower_components/angular-ui-map/ui-map.js"></script>
+    <script src="bower_components/angular-ui-utils/ui-utils.min.js"></script>
+    <script src="bower_components/angular-ui-select2/src/select2.js"></script>
+    <script src="bower_components/ngprogress/build/ngProgress.js"></script>
+    <!-- endbuild -->   
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
@@ -118,7 +99,6 @@
     <script src="scripts/services/entity.js"></script>
     <script src="scripts/services/expression.js"></script>
     <script src="scripts/controllers/search.js"></script>
-
     <script src="scripts/controllers/browse.js"></script>
     <script src="scripts/controllers/explore.js"></script>
     <script src="scripts/services/relationship.js"></script>
@@ -154,14 +134,32 @@
     <script src="scripts/controllers/Relationship.js"></script>
     <script src="scripts/controllers/StructureMap.js"></script>
     <script src="scripts/controllers/Timeline.js"></script>
+    <script src="scripts/controllers/CreateTimeline.js"></script>
+    <script src="scripts/directives/Timeline.js"></script>
     <!-- endbuild -->
 
     <!--<spt src="//localhost:35729/livereload.js"></script>-->
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=onGoogleReady"></script>
     <script>
-        function onGoogleReady() {
-            angular.bootstrap(document, ["angularApp"]);
-        }
+    function onGoogleReady() {
+        angular.bootstrap(document, ['angularApp']);
+    }
+
+    /**
+     * Returns a number whose value is limited to the given range.
+     *
+     * Example: limit the output of this computation to between 0 and 255
+     * (x * 255).clamp(0, 255)
+     *
+     * @param {Number} min The lower boundary of the output range
+     * @param {Number} max The upper boundary of the output range
+     * @returns A number in the range [min, max]
+     * @type Number
+     */
+    Number.prototype.clamp = function(min, max) {
+      return Math.min(Math.max(this, min), max);
+    };
+
     </script>
 
 

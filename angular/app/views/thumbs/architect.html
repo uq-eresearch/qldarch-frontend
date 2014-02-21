@@ -1,8 +1,8 @@
 <div class="thumbnail" >
 
     <a ng-href="#/architect/{{ architect.encodedUri }}" class="thumbnail-image">
-        <img ng-if="!architect.picture" ng-src="images/icon.png" style="display:block; width:100%">
-        <img ng-if="architect.picture" ng-src="{{ Uris.FILE_ROOT + architect.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ architect.name }}">
+        <img ng-if="!architect.picture" src="images/icon.png" style="display:block; width:100%">
+        <img ng-if="architect.picture" ng-src="{{ Uris.THUMB_ROOT + architect.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ architect.name }}">
     </a>
 
     <div class="caption">

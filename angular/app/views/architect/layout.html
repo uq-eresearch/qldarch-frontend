@@ -13,7 +13,20 @@
 	                <ul class="nav nav-pills">
 	                    <li ui-sref-active="active">
 	                    	<a href ui-sref="architect.summary({ architectId: architect.encodedUri })">Summary</a>
-	                    	</li>
+                    	</li>
+						<li ui-sref-active="active" ng-if="interviews.length == 1">
+	                    	<a href href ui-sref="architect.interview({ architectId: architect.encodedUri, interviewId: interviews[0].encodedUri })">Interview</a>
+                    	</li>
+                    	<li class="dropdown" ng-show="interviews.length > 1" ui-sref-active="active">
+	                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+	                            Interviews <span class="caret"></span>
+	                        </a>
+	                        <ul class="dropdown-menu">
+	                            <li role="presentation" ng-repeat="interview in interviews">
+	                                <a role="menuitem" tabindex="-1" href ui-sref="architect.interview({ architectId: architect.encodedUri, interviewId: interview.encodedUri })">Interview #{{ $index + 1 }}</a>
+	                            </li>
+	                        </ul>
+	                    </li>
 	                    <li ui-sref-active="active">
 	                    	<a href ui-sref="architect.structures({ architectId: architect.encodedUri })">Structures</a>
 	                    </li>
@@ -26,16 +39,6 @@
                     	<li ui-sref-active="active">
 	                    	<a href ui-sref="architect.timeline({ architectId: architect.encodedUri })">Timeline</a>
                     	</li>
-	                    <li class="dropdown" ng-show="interviews.length" ui-sref-active="active">
-	                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-	                            Interviews <span class="caret"></span>
-	                        </a>
-	                        <ul class="dropdown-menu">
-	                            <li role="presentation" ng-repeat="interview in interviews">
-	                                <a role="menuitem" tabindex="-1" href ui-sref="architect.interview({ architectId: architect.encodedUri, interviewId: interview.encodedUri })">Interview #{{ $index + 1 }}</a>
-	                            </li>
-	                        </ul>
-	                    </li>
 	                </ul>
 	            </div>
 	        </div>

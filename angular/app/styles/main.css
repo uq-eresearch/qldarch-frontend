@@ -5946,7 +5946,7 @@ section .thumbnail {
 }
 .thumbnail .caption a {
   font-weight: normal;
-  color: #999999;
+  color: #555555;
   line-height: 24px;
 }
 .thumbnail .caption .btn {
@@ -6103,6 +6103,9 @@ h1 {
 }
 .page-header small a {
   color: #97d6d2;
+}
+.highlight {
+  background-color: yellow;
 }
 .navbar-inverse .input-group input {
   border: none;

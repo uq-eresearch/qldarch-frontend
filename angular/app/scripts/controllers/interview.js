@@ -4,23 +4,32 @@ angular.module('angularApp')
 // interview, transcript, evidences
 .controller('InterviewCtrl', function ($scope, interview, $http, Uris, Entity, Ontology, architect, interviews) {
     // Setup
-    $scope.sub = "interviews";
+    $scope.sub = 'interviews';
     $scope.interviews = interviews;
     $scope.architect = architect;
     $scope.interview = interview;
-    $scope.title = interview.transcript.date.toLowerCase();
+    if (interview.transcript) {
+        $scope.title = interview.transcript.date.toLowerCase();
+        $scope.isShowingTranscript = true;
+    } else {
+        $scope.title = 'Unknown Date';
+        $scope.isShowingTranscript = false;
+    }
 
-    $scope.isShowingTranscript = true;
     $scope.isSyncingTranscript = false;
-    $scope.audioPlayer = {}
     var audioPlayerDom = document.getElementById('audio1');
+    $scope.audioPlayer = {};
     $scope.audioPlayerPlaylist = [{
-        src: 'audio/bligh.mp3',
-        type: 'audio/mp3'
-    }, {
-        src: 'audio/bligh.ogg',
+        src: interview[Uris.QA_EXTERNAL_LOCATION],
         type: 'audio/ogg'
     }];
+    // $scope.audioPlayerPlaylist = [{
+    //     src: 'audio/bligh.mp3',
+    //     type: 'audio/mp3'
+    // }, {
+    //     src: 'audio/bligh.ogg',
+    //     type: 'audio/ogg'
+    // }];
     $scope.currentSpeaker = {};
     $scope.isSyncing = true;
     $scope.isSearching = false;
@@ -35,15 +44,17 @@ angular.module('angularApp')
      */
     function setCurrentExchangeFromTime(currentTime) {
         var index;
-        angular.forEach($scope.interview.transcript.exchanges, function (exchange, exchangeIndex) {
-            if (currentTime < exchange.endTime && !angular.isDefined(index)) {
-                index = exchangeIndex;
+        if (interview.transcript) {
+            angular.forEach($scope.interview.transcript.exchanges, function (exchange, exchangeIndex) {
+                if (currentTime < exchange.endTime && !angular.isDefined(index)) {
+                    index = exchangeIndex;
+                }
+            });
+            if (index >= 0) {
+                $scope.currentExchangeIndex = index;
+                $scope.currentExchange = $scope.interview.transcript.exchanges[index];
+                $scope.currentSpeaker = $scope.interview.transcript.exchanges[index].speaker;
             }
-        });
-        if (index >= 0) {
-            $scope.currentExchangeIndex = index;
-            $scope.currentExchange = $scope.interview.transcript.exchanges[index];
-            $scope.currentSpeaker = $scope.interview.transcript.exchanges[index].speaker;
         }
     }
 

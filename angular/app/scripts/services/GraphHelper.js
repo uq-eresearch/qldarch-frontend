@@ -21,9 +21,9 @@ angular.module('angularApp')
             var results = [];
             angular.forEach(graphs, function (graph) {
                 results.push(graph);
-            })
+            });
             return results;
-        }
+        };
 
         /**
          * Adds an encoded uri to a single graph
@@ -34,7 +34,8 @@ angular.module('angularApp')
             graph.encodedUri = btoa(graph.uri);
 
             return graph;
-        }
+        };
+
         /**
          * Adds an encoded uri to a series of graphs
          * @param graphs
@@ -47,13 +48,13 @@ angular.module('angularApp')
                 }
             });
             return graphs;
-        }
+        };
         this.decodeUriString = function (encodedUri) {
             return atob(encodedUri);
-        }
+        };
         this.encodeUriString = function (uri) {
             return btoa(uri);
-        }
+        };
 
 
         this.indexOfWithAttr = function (array, attr, value) {
@@ -62,7 +63,7 @@ angular.module('angularApp')
                     return i;
                 }
             }
-        }
+        };
 
         /**
          * Adds in a type (structure, architect etc) to an array of items
@@ -83,14 +84,16 @@ angular.module('angularApp')
 
                 angular.forEach(typeUris, function (typeUri) {
                     var currentItemType = item[Uris.RDF_TYPE];
-                    if (!angular.isArray(currentItemType)) currentItemType = [currentItemType];
+                    if (!angular.isArray(currentItemType)) {
+                        currentItemType = [currentItemType];
+                    }
 
-                    if (currentItemType.indexOf(typeUri) != -1) {
+                    if (currentItemType.indexOf(typeUri) !== -1) {
                         item.type = typeUri.substring(Uris.QA_NS.length).toLowerCase();
                     }
                 });
-            })
-        }
+            });
+        };
 
         this.filterTypes = function (array, type) {
             // Setup types
@@ -98,12 +101,12 @@ angular.module('angularApp')
 
             var results = [];
             angular.forEach(array, function (item) {
-                if (item.type == type) {
+                if (item.type === type) {
                     results.push(item);
                 }
             });
             return results;
-        }
+        };
 
         /**
          * Get out all the unique values assoc with a property
@@ -155,12 +158,11 @@ angular.module('angularApp')
 
                 angular.forEach(newArray, function (newItem, i2) {
                     // Check if this old item is in new array
-                    if (newItem[comparisonAttr] == originalItem[comparisonAttr]) {
+                    if (newItem[comparisonAttr] === originalItem[comparisonAttr]) {
                         atIndex = i2;
                     }
-
                 });
-                if (atIndex != -1) {
+                if (atIndex !== -1) {
                     // we found it in the new stuff, so remove it from the new stuff
                     newArray.splice(atIndex, 1);
                     originalItem.new = true;
@@ -175,7 +177,7 @@ angular.module('angularApp')
             angular.forEach(newArray, function (newItem) {
 
                 originalArray.push(newItem);
-            })
-        }
+            });
+        };
 
     });

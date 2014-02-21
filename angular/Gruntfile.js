@@ -11,17 +11,10 @@ module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
     require('time-grunt')(grunt);
 
-    grunt.loadNpmTasks('grunt-bower-install');
     grunt.loadNpmTasks('grunt-contrib-less');
+    grunt.loadNpmTasks('grunt-ng-constant');
 
     grunt.initConfig({
-        'bower-install': {
-            target: {
-                // Point to the files that should be updated when
-                // you run `grunt bower-install`
-                src: ['<%= yeoman.app %>/index.html']
-            }
-        },
         yeoman: {
             // configurable paths
             app: require('./bower.json').appPath || 'app',
@@ -37,6 +30,35 @@ module.exports = function (grunt) {
                     '<%= yeoman.app %>/styles/main.css': '<%= yeoman.app %>/styles/less/main.less'
                 }
             }
+        },
+        ngconstant: {
+            options: {
+                space: '  '
+            },
+            // Environment targets
+            development: [{
+                dest: '<%= yeoman.app %>/scripts/config.js',
+                wrap: '"use strict";\n\n <%= __ngModule %>',
+                name: 'config',
+                constants: {
+                    ENV: {
+                        name: 'development',
+                        apiEndpoint: 'http://your-development.api.endpoint:3000'
+                    }
+                }
+            }],
+            production: [{
+                dest: '<%= yeoman.dist %>/scripts/config.js',
+                wrap: '"use strict";\n\n <%= __ngModule %>',
+                name: 'config',
+                constants: {
+                    // '<constant name>': grunt.file.readJSON('<JSON file>')
+                    ENV: {
+                        name: 'production',
+                        apiEndpoint: 'go go go'
+                    }
+                }
+            }]
         },
         watch: {
             coffee: {
@@ -181,7 +203,7 @@ module.exports = function (grunt) {
             }
         },
         usemin: {
-            html: ['<%= yeoman.dist %>/{,*/}*.html'],
+            html: ['<%= yeoman.dist %>/{,*/}*.html', '<%= yeoman.dist %>/views/**/{,*/}*.html'],
             css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
             options: {
                 assetsDirs: ['<%= yeoman.dist %>']
@@ -236,7 +258,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: '<%= yeoman.app %>',
-                    src: ['*.html', 'views/*.html'],
+                    src: ['*.html', 'views/**/*.html'],
                     dest: '<%= yeoman.dist %>'
                 }]
             }
@@ -328,6 +350,7 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
+            'ngconstant:development', // 
             'concurrent:server',
             'autoprefixer',
             'connect:livereload',
@@ -345,6 +368,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
+        'ngconstant:production', // 
         'useminPrepare',
         'concurrent:dist',
         'autoprefixer',
@@ -352,6 +376,7 @@ module.exports = function (grunt) {
         'ngmin',
         'copy:dist',
         'cdnify',
+        'less',
         'cssmin',
         'uglify',
         'rev',

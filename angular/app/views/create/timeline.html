@@ -1,0 +1,48 @@
+<div class="container">
+	<!-- <div class="row">
+		<div class="col-md-12">	
+		<h1>{{ hello }}?</h1>
+			<ul>
+				<li>Search for items</li>
+				<li>Create item</li>
+				<li>Add to timeline</li>
+				<li>Pin items to a timeline</li>
+				<li>Pin items to a map</li>
+				<li>Pin items to word cloud? not really the same</li>
+			</ul>
+		</div>
+	</div>	 -->
+	<div class="row">
+		<div class="col-md-12">
+			<form role="form" >
+                <div class="form-group">
+                    <label for="headline">Title</label>
+                    <input ng-model="date.headline" name="firstName" type="text" class="form-control" id="headline" placeholder="Title">
+                </div>
+                <div class="form-group">
+                    <label for="yourcomments">Text</label>
+                    <textarea ng-model="date.text" name="comments" class="form-control" id="yourcomments" placeholder="Text"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Entity</label>
+                    <div ui-select2="entitySelectOptions" ng-model="date.entity" class="form-control"></div>
+                </div>
+                <div class="form-group">
+                    <label>Dates</label>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" placeholder="Start Year" ng-model="date.startDate"/>
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" placeholder="End Year" ng-model="date.endDate"/>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" ng-click="add()">Submit</button>
+            </form>
+		</div>
+		<div class="col-md-12">
+			<timeline headline="Graham Bligh" subtitle="" asset="asset" dates="dates"></timeline>
+		</div>
+	</div>
+</div>

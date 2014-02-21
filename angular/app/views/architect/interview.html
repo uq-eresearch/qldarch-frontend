@@ -14,7 +14,7 @@
                     <ul class="media-list">
                         <li class="media" ng-repeat="interviewee in interview.interviewees">
                             <a class="pull-left" href="#">
-                                <img class="media-object img-responsive img-circle" ng-if="!interviewee.picture" ng-src="images/icon.png" style="display:block; width: 20px">
+                                <img class="media-object img-responsive img-circle" ng-if="!interviewee.picture" src="images/icon.png" style="display:block; width: 20px">
                                 <img class="media-object img-responsive img-circle" ng-if="interviewee.picture" ng-src="{{ Uris.FILE_ROOT + interviewee.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ interviewer.name }}" style="width: 20px">
                             </a>
                             <div class="media-body">
@@ -33,7 +33,7 @@
                     <ul class="media-list">
                         <li class="media" ng-repeat="interviewer in interview.interviewers">
                             <a class="pull-left" href="#">
-                                <img class="media-object img-responsive img-circle" ng-if="!interviewer.picture" ng-src="images/icon.png" style="display:block; width: 20px">
+                                <img class="media-object img-responsive img-circle" ng-if="!interviewer.picture" src="images/icon.png" style="display:block; width: 20px">
                                 <img class="media-object img-responsive img-circle" ng-if="interviewer.picture" ng-src="{{ Uris.FILE_ROOT + interviewer.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ interviewer.name }}" style="width: 20px">
                             </a>
                             <div class="media-body">
@@ -58,7 +58,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-sm-4 col-sm-offset-4">
-                            <img class="media-object img-full" ng-if="!currentSpeaker.picture" ng-src="images/icon.png">
+                            <img class="media-object img-full" ng-if="!currentSpeaker.picture" src="images/icon.png">
                             <img class="media-object img-full" ng-if="currentSpeaker.picture" ng-src="{{ Uris.FILE_ROOT + currentSpeaker.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ interviewer.name }}">
                         </div>
                     </div>
@@ -83,7 +83,7 @@
     <!-- end of interview player -->
 
     <!-- interview transcript -->
-    <div class="interview-transcript">
+    <div class="interview-transcript" ng-show="isShowingTranscript">
         <div class="container">
             <div class="row">
                 <div class="col-sm-12" >
@@ -133,7 +133,7 @@
                             <div class="pull-left" style="text-align: center">
                                 <a href="#/{{ exchange.speaker.type }}/{{ exchange.speaker.encodedUri }}">
                                     <img ng-if="exchange.speaker.picture" class="img-circle media-object" ng-src="{{ Uris.FILE_ROOT + exchange.speaker.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="" style="width: 32px"/>
-                                    <img ng-if="!exchange.speaker.picture" class="img-circle media-object" ng-src="images/icon.png" style="display:block; width:32px">
+                                    <img ng-if="!exchange.speaker.picture" class="img-circle media-object" src="images/icon.png" style="display:block; width:32px">
                                 </a>
 
                                 <!-- play button -->

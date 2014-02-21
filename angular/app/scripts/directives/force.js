@@ -1,7 +1,12 @@
 'use strict';
 
 angular.module('angularApp')
-    .directive('force', function () {
+    .directive('force', function ($state, GraphHelper) {
+        var LINK_DISTANCE = 100;
+        var CHARGE = -1500;
+        var HEIGHT = 600;
+
+
         return {
             template: '<div></div>',
             restrict: 'E',
@@ -14,21 +19,21 @@ angular.module('angularApp')
 
                 // Setup the height and width
                 var forceWidth = element.width(),
-                    forceHeight = element.width();
+                    forceHeight = HEIGHT;
 
-            // $scope.$watch(function () {
-            //     return element.width();
-            // }, function (width, oldWidth) {
-            //     if (oldWidth && width && oldWidth !== width) {
-            //         console.log('width changed', oldWidth, width);
-            //         forceWidth = width;
-            //         forceHeight = 200;
-            //         d3.select(element.get(0)).html('').append('svg')
-            //             .attr('width', forceWidth);
-            //         // .attr('height', forceHeight);
-            //         start();
-            //     }
-            // });
+                // $scope.$watch(function () {
+                //     return element.width();
+                // }, function (width, oldWidth) {
+                //     if (oldWidth && width && oldWidth !== width) {
+                //         console.log('width changed', oldWidth, width);
+                //         forceWidth = width;
+                //         forceHeight = 200;
+                //         d3.select(element.get(0)).html('').append('svg')
+                //             .attr('width', forceWidth);
+                //         // .attr('height', forceHeight);
+                //         start();
+                //     }
+                // });
 
                 // Setup the SVG
                 var svg = d3.select(element.get(0))
@@ -56,8 +61,8 @@ angular.module('angularApp')
                         .nodes($scope.data.nodes)
                         .links($scope.data.links)
                         .size([forceWidth, forceHeight])
-                        .linkDistance(150)
-                        .charge(-1000)
+                        .linkDistance(LINK_DISTANCE)
+                        .charge(CHARGE)
                         .on('tick', function () {
                             link
                                 .attr('x1', function (d) {
@@ -90,10 +95,7 @@ angular.module('angularApp')
 
                     // Enter links
                     link.enter().append('line')
-                        .attr('class', 'link')
-                        .attr('stroke-width', function (d) {
-                            return 1;
-                        });
+                        .attr('class', 'link');
 
                     // Exit links
                     link.exit().remove();
@@ -109,27 +111,37 @@ angular.module('angularApp')
                     // Enter Nodes
                     var newNodesElements = node.enter().append('g');
                     newNodesElements.attr('class', function (d) {
-                        var classes = "node " + "node-" + d.type;
-                        // if (d.uri === $scope.entity.uri) {
-                        //     $scope.selected = d;
-                        //     $scope.selectedType = 'node';
-                        //     classes += ' selected';
-                        // }
+                        var classes = 'node ' + 'node-' + d.type;
                         return classes;
                     }).on('click', function (d) {
                         d3.selectAll('.node').classed('selected', false);
                         d3.select(this).classed('selected', true);
-
                         $scope.$apply(function () {
                             $scope.selected({
                                 node: d
                             });
                         });
+                    }).on('dblclick', function (d) {
+                        var params = {};
+                        params[d.type + 'Id'] = d.encodedUri;
+                        console.log('going to', d.type + '.relationships', params);
+                        $state.go(d.type + '.relationships', params);
+
                     }).call(force.drag);
 
-                    newNodesElements.append('circle').attr('r', 15);
+                    newNodesElements.append('circle').attr('r', function (d) {
+                        // Calculate the size of the cirlce
+                        // based on the number of links
+                        var referenceCount = 0;
+                        angular.forEach($scope.data.links, function (link) {
+                            if (link.source === d || link.target === d) {
+                                referenceCount++;
+                            }
+                        });
+                        return 15 * d.count.clamp(1, 3);
+                    });
                     newNodesElements.append('text')
-                        .attr('dx', '2em')
+                        .attr('dx', '0')
                         .attr('dy', '.35em')
                         .text(function (d) {
                             return d.name;

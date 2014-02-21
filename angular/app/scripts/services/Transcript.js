@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .factory('Transcript', function (Request, Uris) {
+    .factory('Transcript', function (Request, Uris, ENV) {
 
         var convertToSeconds = function (timeString) {
             var parts = timeString.split(':');
@@ -9,9 +9,13 @@ angular.module('angularApp')
         };
 
         var getInitials = function (speaker) {
-            var firstInitial = speaker[Uris.FOAF_FIRST_NAME].charAt(0);
-            var lastInitial = speaker[Uris.FOAF_LAST_NAME].charAt(0);
-            return firstInitial + lastInitial;
+            if (speaker.name === 'Deborah van der Plaat') {
+                return 'DV';
+            } else {
+                var firstInitial = speaker[Uris.FOAF_FIRST_NAME].charAt(0);
+                var lastInitial = speaker[Uris.FOAF_LAST_NAME].charAt(0);
+                return firstInitial + lastInitial;
+            }
         };
 
         // Public API here
@@ -24,9 +28,14 @@ angular.module('angularApp')
              * @returns {Promise|*}
              */
             findWithUrl: function (url) {
-                url = 'http://localhost:8080/qldarch/scripts/SCG_InterviewWithGrahamBligh.json';
+                if (ENV.name === 'development') {
+                    url = 'http://localhost:8080/qldarch/scripts/SCG_InterviewWithGrahamBligh.json';
+                }
+                console.log('transcript url', url);
+                console.log('env name', ENV);
                 return Request.http(url, {}, true).then(function (transcript) {
                     // We have the transcript
+                    console.log('Transcript loaded');
                     return transcript;
                 });
             },

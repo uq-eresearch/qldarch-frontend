@@ -2,7 +2,7 @@
 
 
 angular.module('angularApp')
-    .factory('Solr', function(Entity, GraphHelper, Expression, Uris, $q, $http, $filter) {
+    .factory('Solr', function (Entity, GraphHelper, Expression, Uris, $q, $http, $filter, ENV) {
 
         function createArticleResultFromDoc(doc) {
             var result = {};
@@ -40,9 +40,9 @@ angular.module('angularApp')
             var BACK_LENGTH = 10;
             var FORWARD_LENGTH = 50;
             var indexes = indexesOf(text, terms);
-            angular.forEach(indexes, function(index) {
+            angular.forEach(indexes, function (index) {
                 var found = false;
-                angular.forEach(ranges, function(range) {
+                angular.forEach(ranges, function (range) {
                     if (range.start <= index && index <= range.end) {
                         found = true;
                         range.start = Math.min(index - BACK_LENGTH, range.start);
@@ -62,7 +62,7 @@ angular.module('angularApp')
 
             // Create the snippet
             var snippet = '';
-            angular.forEach(ranges, function(range) {
+            angular.forEach(ranges, function (range) {
                 snippet += text.substring(Math.max(0, range.start), Math.min(range.end, text.length)) + ' ... ';
             });
 
@@ -72,7 +72,7 @@ angular.module('angularApp')
         function indexesOf(text, terms) {
             var indexes = [];
             var indexFrom = 0;
-            angular.forEach(terms, function(term) {
+            angular.forEach(terms, function (term) {
                 var indexOf = text.toLowerCase().indexOf(term.toLowerCase(), indexFrom);
                 while (indexOf !== -1) {
                     indexes.push(indexOf);
@@ -86,9 +86,9 @@ angular.module('angularApp')
 
         function highlight(text, terms) {
             // Highlight the terms
-            angular.forEach(terms, function(term) {
+            angular.forEach(terms, function (term) {
                 var patt = new RegExp(term, 'gi');
-                text = text.replace(patt, function(match) {
+                text = text.replace(patt, function (match) {
                     return '<span class="highlight">' + match + '</span>';
                 });
             });
@@ -99,7 +99,7 @@ angular.module('angularApp')
         // Public API here
         return {
 
-            query: function(args) {
+            query: function (args) {
 
                 var defaults = {
                     query: '',
@@ -116,16 +116,22 @@ angular.module('angularApp')
                 var urlTerms = '';
                 if (args.type !== '') {
                     // Add the type to the query
-                    angular.forEach(args.query.split(' '), function(term) {
+                    angular.forEach(args.query.split(' '), function (term) {
                         urlTerms += args.type + ':' + term + ' ';
                     });
                 } else {
                     urlTerms = args.query;
                 }
 
-                var url = 'scripts/searchresults.json';
+                // this.SOLR_ROOT = '/solr/collection1/';
+                // http://qldarch-test.metadata.net/solr/collection1/select?q=article%3Agraham%20article%3Abligh&wt=json&rows=100
 
-                return $http.get(url).then(function(response) {
+                var url = Uris.SOLR_ROOT + 'select?wt=json&rows=100&q=' + encodeURIComponent(urlTerms);
+                if (ENV.name === 'development') {
+                    url = 'scripts/searchresults.json';
+                }
+
+                return $http.get(url).then(function (response) {
 
                     // We need to go through all the results
                     // And put in a title, and a url that it links to
@@ -135,14 +141,14 @@ angular.module('angularApp')
                     var interviewUris = [];
 
                     // Create the results
-                    angular.forEach(response.data.response.docs, function(doc) {
+                    angular.forEach(response.data.response.docs, function (doc) {
                         var result;
 
                         // Interview
                         if (angular.isDefined(doc.interview)) {
                             // check that we dont have it already
                             var found = false;
-                            angular.forEach(results, function(storedResult) {
+                            angular.forEach(results, function (storedResult) {
                                 if (storedResult.uri === doc.interview) {
                                     // Add this exchange to the results text (will snippet later)
                                     result = storedResult;
@@ -177,8 +183,8 @@ angular.module('angularApp')
                     });
 
                     // Get the titles of the interviews (since they dont come with any ARGH!)
-                    return Expression.loadList(interviewUris, 'qldarch:Interview').then(function(expressions) {
-                        angular.forEach(results, function(result) {
+                    return Expression.loadList(interviewUris, 'qldarch:Interview').then(function (expressions) {
+                        angular.forEach(results, function (result) {
                             if (result.type === 'interview') {
                                 result.title = expressions[result.uri][Uris.DCT_TITLE];
                             }

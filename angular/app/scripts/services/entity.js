@@ -9,7 +9,7 @@ angular.module('angularApp')
             return entity[Uris.QA_LABEL] ||
                 entity[Uris.QA_FIRM_NAME] ||
                 entity[Uris.FOAF_NAME] ||
-                entity[Uris.FOAF_FIRST_NAME] + " " + entity[Uris.FOAF_LAST_NAME]
+                entity[Uris.FOAF_FIRST_NAME] + " " + entity[Uris.FOAF_LAST_NAME];
         };
 
         var setupNames = function (entities) {
@@ -60,12 +60,9 @@ angular.module('angularApp')
              * @returns {Promise|*}
              */
             findByName: function (name, summary, type) {
-                var results = [];
-
-                var promises = [];
 
                 if (!type) {
-                    type = "qldarch:NonDigitalThing";
+                    type = 'qldarch:NonDigitalThing';
                 }
                 if (!angular.isDefined(summary)) {
                     summary = true;
@@ -77,7 +74,7 @@ angular.module('angularApp')
 
                     var results = [];
                     angular.forEach(nonDigitalThings, function (thing) {
-                        if (thing.name.toLowerCase().indexOf(name.toLowerCase()) != -1) {
+                        if (thing.name.toLowerCase().indexOf(name.toLowerCase()) !== -1) {
                             results.push(thing);
                         }
                     });
