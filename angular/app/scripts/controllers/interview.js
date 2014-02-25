@@ -37,6 +37,29 @@ angular.module('angularApp')
     $scope.isSyncing = true;
     $scope.isSearching = false;
 
+    function scrollToTime(time, duration) {
+        if (!duration) {
+            duration = 2000;
+        }
+        jQuery('html, body').animate({
+            scrollTop: jQuery('#' + time).offset().top - 20
+        }, duration);
+    }
+
+    $scope.$watch('isSyncing', function (isSyncing, isSyncingOld) {
+        if (isSyncing === false && isSyncingOld === true) {
+            // Its been turned off, check if there is a time and scroll
+            if (angular.isDefined($scope.currentExchange)) {
+                $timeout(function () {
+                    var startTime = $scope.currentExchange.startTime;
+                    scrollToTime(startTime, 1);
+                }, 0);
+
+            }
+        }
+    });
+
+
     // Amount of exchanges to display
     var exchangeDisplayCountDefault = 10;
     if ($stateParams.time) {
@@ -52,9 +75,7 @@ angular.module('angularApp')
             // $location.hash($stateParams.time);
             // $anchorScroll();
 
-            jQuery('html, body').animate({
-                scrollTop: jQuery('#' + $stateParams.time).offset().top - 20
-            }, 2000);
+            scrollToTime($stateParams.time, 2000);
 
             console.log('there is a time', $stateParams.time);
         }, 0);
@@ -62,6 +83,7 @@ angular.module('angularApp')
     } else {
         $scope.exchangeDisplayCount = exchangeDisplayCountDefault;
     }
+
 
 
     /**
@@ -306,7 +328,7 @@ angular.module('angularApp')
     $scope.timeFilter = function (exchange) {
         if ($scope.isSyncing && !$scope.isSearching) {
             if ($scope.audioPlayer.currentTime === 0) {
-                return true
+                return true;
             } else {
                 return $scope.audioPlayer.currentTime < exchange.endTime;
             }
@@ -342,10 +364,7 @@ angular.module('angularApp')
 
         $scope.audioPlayer.play();
 
-        console.log('scrolling to top');
-        jQuery('html, body').animate({
-            scrollTop: jQuery('#transcript').offset().top - 20
-        }, 1000);
+        jQuery('html, body').scrollTop(jQuery('#transcript').offset().top - 20);
     };
 
 

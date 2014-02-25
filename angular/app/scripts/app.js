@@ -13,7 +13,7 @@
 archi
  */
 
-var myApp = angular.module('angularApp', [
+angular.module('angularApp', [
     'config',
     'ngCookies',
     'ngResource',
@@ -36,13 +36,13 @@ var myApp = angular.module('angularApp', [
         $rootScope.Uris = Uris;
         $rootScope.globalSearchString = '';
         // Adds the slim progress bar
-        $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+        $rootScope.$on('$stateChangeStart', function () {
             ngProgress.reset();
             ngProgress.color('#ea1d5d');
             ngProgress.start();
             console.log('state start');
         });
-        $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+        $rootScope.$on('$stateChangeSuccess', function () {
             ngProgress.complete();
             $rootScope.globalSearchString = '';
             console.log('state success');
@@ -78,7 +78,8 @@ var myApp = angular.module('angularApp', [
          * @param $model
          * @param $label
          */
-        $rootScope.globalSearchOnSelect = function ($item, $model, $label) {
+        $rootScope.globalSearchOnSelect = function ($item) {
+            // $rootScope.globalSearchOnSelect = function ($item, $model, $label) {
             if ($item.type === 'search') {
                 // special case
                 console.log('should be searching for', $item.query);
@@ -86,7 +87,7 @@ var myApp = angular.module('angularApp', [
                 $location.search('query', $item.query);
             } else {
                 // already a result
-                $location.path("/" + $item.type + "/" + $item.encodedUri);
+                $location.path('/' + $item.type + '/' + $item.encodedUri);
             }
         };
 
