@@ -19,7 +19,6 @@ angular.module('angularApp', [
     'ngResource',
     'ngSanitize',
     'ngRoute',
-    'typeahead',
     'ngProgress',
     'ui.bootstrap',
     'ui.select2',
