@@ -174,7 +174,10 @@ var myApp = angular.module('angularApp', [
                 reloadOnSearch: false
             })
             .state('create.map', {
-                url: '/map'
+                url: '/map?map',
+                templateUrl: 'views/create/map.html',
+                controller: 'CreateMapCtrl',
+                reloadOnSearch: false
             })
             .state('create.textAnalysis', {
                 url: '/text-analysis'

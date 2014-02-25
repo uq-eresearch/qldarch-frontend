@@ -5946,7 +5946,7 @@ section .thumbnail {
 }
 .thumbnail .caption a {
   font-weight: normal;
-  color: #555555;
+  color: #999999;
   line-height: 24px;
 }
 .thumbnail .caption .btn {
@@ -6150,6 +6150,9 @@ h1 {
 }
 body {
   background-color: white;
+}
+section.gray {
+  background-color: #eeeeee;
 }
 .row + .row {
   margin-top: 24px;

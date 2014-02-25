@@ -174,8 +174,10 @@
                                             ng-click="showAddRelationship(exchange)"
                                             ><i class="fa fa-plus fa-fw"></i></button>    
 
-                                    <button type="button" class="btn btn-default btn-xs"
-                                            ng-click="showEditRelationships(exchange)"
+                                    <button type="button" 
+                                        class="btn btn-default btn-xs"
+                                        ng-click="showEditRelationships(exchange)"
+                                        ng-show="exchange.relationships.length"
                                             ><i class="fa fa-pencil fa-fw"></i></button>
                                 </span>
                                 <button type="button" class="btn btn-primary btn-xs"

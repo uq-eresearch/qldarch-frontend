@@ -3,7 +3,7 @@
 angular.module('angularApp')
     .directive('timeline', function ($timeout) {
         var TIMELINE_HEIGHT = 600;
-
+        var UPDATE_DELAY = 2000;
         return {
             template: '<div></div>',
             restrict: 'E',
@@ -20,39 +20,91 @@ angular.module('angularApp')
                 var id = 'timeline' + (new Date()).getTime();
                 element.attr('id', id);
 
+                var headlineTimer = null;
+                $scope.$watch('headline', function (headline, headlineOld) {
+                    if (headline !== headlineOld) {
+                        if (headline === '') {
+                            // No headline
+                            reset();
+                        } else {
+                            // Changed headline
+                            // We wait a certain amount of time before doing the update
+                            if (headlineTimer) {
+                                $timeout.cancel(headlineTimer);
+                            }
+                            headlineTimer = $timeout(function () {
+                                restart();
+                            }, UPDATE_DELAY);
+                        }
+                    }
+                });
+
+                var subtitleTimer = null;
+                $scope.$watch('subtitle', function (subtitle, subtitleOld) {
+                    if (subtitle !== subtitleOld) {
+                        if (headlineTimer) {
+                            $timeout.cancel(subtitleTimer);
+                        }
+                        subtitleTimer = $timeout(function () {
+                            restart();
+                        }, UPDATE_DELAY);
+                    }
+                });
+
                 $scope.$watch('dates', function (dates) {
                     if (dates && dates.length) {
-                        element.html('');
-                        console.log('making now');
-                        var timelineData = {
-                            timeline: {
-                                headline: $scope.headline || '',
-                                type: 'default',
-                                text: $scope.subtitle || '<p></p>',
-                                date: $scope.dates
-                                // 'date': [],
-                                // 'era': []
-                            }
-                        };
-
-                        if (angular.isDefined($scope.asset)) {
-                            console.log('asset is', $scope.asset);
-                            timelineData.timeline.asset = $scope.asset;
-                        }
-
-                        $timeout(function () {
-                            var test = createStoryJS({
-                                type: 'timeline',
-                                width: element.width(),
-                                height: TIMELINE_HEIGHT,
-                                source: timelineData,
-                                'embed_id': id,
-                                css: 'bower_components/timelinejs/build/css/timeline.css',
-                                js: 'bower_components/timelinejs/build/js/timeline.js'
-                            });
-                        }, 0);
+                        // Clear a timeline if its there, and create a new one
+                        restart();
+                    } else if (dates) {
+                        // No dates recorded, make no timeline
+                        reset();
                     }
                 }, true);
+
+                function reset() {
+                    console.log('clearing timeline');
+                    element.removeClass();
+                    element.removeAttr('style');
+                    element.html('');
+                }
+
+                function restart() {
+                    reset();
+                    $timeout(function () {
+                        create();
+                    }, 0);
+                }
+
+                function create() {
+                    if (!$scope.dates.length) {
+                        return;
+                    }
+                    var timelineData = {
+                        timeline: {
+                            headline: $scope.headline || '',
+                            type: 'default',
+                            text: $scope.subtitle || '<p></p>',
+                            date: $scope.dates
+                            // 'date': [],
+                            // 'era': []
+                        }
+                    };
+
+                    if (angular.isDefined($scope.asset)) {
+                        console.log('asset is', $scope.asset);
+                        timelineData.timeline.asset = $scope.asset;
+                    }
+
+                    createStoryJS({
+                        type: 'timeline',
+                        width: element.width(),
+                        height: TIMELINE_HEIGHT,
+                        source: timelineData,
+                        'embed_id': id,
+                        css: 'bower_components/timelinejs/build/css/timeline.css',
+                        js: 'bower_components/timelinejs/build/js/timeline.js'
+                    });
+                }
 
                 // angular.forEach(data.relationships, function (relationship) {
                 //     console.log('textual note', relationship, relationship[Uris.QA_TEXTUAL_NOTE]);

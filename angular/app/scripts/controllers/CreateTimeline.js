@@ -49,6 +49,16 @@ angular.module('angularApp')
                 timeline: angular.toJson($scope.timeline)
             });
         };
+        $scope.removeDate = function (date) {
+            var index = $scope.timeline.dates.indexOf(date);
+            $scope.timeline.dates.splice(index, 1);
+            if ($scope.timeline.dates.length === 0) {
+                $scope.isEditing = false;
+            }
+            $location.search({
+                timeline: angular.toJson($scope.timeline)
+            });
+        };
 
         $scope.hideAddDate = function () {
             $scope.isAddingDate = false;

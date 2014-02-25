@@ -122,11 +122,12 @@ angular.module('angularApp')
                             });
                         });
                     }).on('dblclick', function (d) {
-                        var params = {};
-                        params[d.type + 'Id'] = d.encodedUri;
-                        console.log('going to', d.type + '.relationships', params);
-                        $state.go(d.type + '.relationships', params);
-
+                        if (d.type) {
+                            var params = {};
+                            params[d.type + 'Id'] = d.encodedUri;
+                            console.log('going to', d.type + '.relationships', params);
+                            $state.go(d.type + '.relationships', params);
+                        }
                     }).call(force.drag);
 
                     newNodesElements.append('circle').attr('r', function (d) {
