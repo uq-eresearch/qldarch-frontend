@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .directive('force', function ($state, GraphHelper) {
+    .directive('force', function ($state) {
         var LINK_DISTANCE = 100;
         var CHARGE = -1500;
         var HEIGHT = 750;
@@ -15,25 +15,11 @@ angular.module('angularApp')
                 selected: '&'
             },
             replace: true,
-            link: function postLink($scope, element, attrs) {
+            link: function postLink($scope, element) {
 
                 // Setup the height and width
                 var forceWidth = element.width(),
                     forceHeight = HEIGHT;
-
-                // $scope.$watch(function () {
-                //     return element.width();
-                // }, function (width, oldWidth) {
-                //     if (oldWidth && width && oldWidth !== width) {
-                //         console.log('width changed', oldWidth, width);
-                //         forceWidth = width;
-                //         forceHeight = 200;
-                //         d3.select(element.get(0)).html('').append('svg')
-                //             .attr('width', forceWidth);
-                //         // .attr('height', forceHeight);
-                //         start();
-                //     }
-                // });
 
                 // Setup the SVG
                 var svg = d3.select(element.get(0))
