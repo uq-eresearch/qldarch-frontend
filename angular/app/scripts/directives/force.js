@@ -4,7 +4,7 @@ angular.module('angularApp')
     .directive('force', function ($state, GraphHelper) {
         var LINK_DISTANCE = 100;
         var CHARGE = -1500;
-        var HEIGHT = 600;
+        var HEIGHT = 750;
 
 
         return {
