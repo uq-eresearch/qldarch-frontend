@@ -40,15 +40,17 @@ angular.module('angularApp')
                             timelineData.timeline.asset = $scope.asset;
                         }
 
-                        var test = createStoryJS({
-                            type: 'timeline',
-                            width: element.width(),
-                            height: TIMELINE_HEIGHT,
-                            source: timelineData,
-                            'embed_id': id,
-                            css: 'bower_components/timelinejs/build/css/timeline.css',
-                            js: 'bower_components/timelinejs/build/js/timeline.js'
-                        });
+                        $timeout(function () {
+                            var test = createStoryJS({
+                                type: 'timeline',
+                                width: element.width(),
+                                height: TIMELINE_HEIGHT,
+                                source: timelineData,
+                                'embed_id': id,
+                                css: 'bower_components/timelinejs/build/css/timeline.css',
+                                js: 'bower_components/timelinejs/build/js/timeline.js'
+                            });
+                        }, 0);
                     }
                 }, true);
 

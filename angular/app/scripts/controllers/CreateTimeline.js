@@ -1,20 +1,63 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('CreateTimelineCtrl', function ($scope, Entity, Uris) {
-        console.log('hello?');
-        $scope.hello = 'test';
-        $scope.dates = [];
+    .controller('CreateTimelineCtrl', function ($scope, Entity, Uris, $stateParams, $location) {
+        $scope.isEditing = false;
+        if ($stateParams.timeline) {
+            $scope.isNew = false;
+            $scope.timeline = angular.fromJson($stateParams.timeline);
+            console.log('timelien hellope', $scope.timeline);
+        } else {
+            $scope.isNew = true;
+            $scope.timeline = {
+                dates: []
+            };
+        }
 
-        $scope.date = {};
-        var startDate = String(Math.floor(1900 + (Math.random() * 200)));
-        console.log('start date', startDate);
+        $scope.isAddingDate = false;
+        $scope.showAddDate = function () {
+            $scope.date = {};
+            // var startDate = String(Math.floor(1900 + (Math.random() * 200)));
+            // $scope.date.startDate = startDate;
+            $scope.isAddingDate = true;
+        };
 
-        $scope.date.startDate = startDate;
+        /**
+         * Adds a new date to the timeline
+         * @param {[type]} date [description]
+         */
+        $scope.addDate = function (date) {
+            if (!date.startDate || date.startDate.length === 0) {
+
+            }
+            // Setup the asset image
+            if (date.entity) {
+                date.asset = {
+                    media: 'images/icon.png',
+                    thumbnail: 'images/icon.png',
+                    caption: '<h4><a href="#/' + date.entity.type + '/' + date.entity.encodedUri + '">' + date.entity.name + '</a></h4>'
+                };
+                if (date.entity.picture) {
+                    date.asset.media = Uris.FILE_ROOT + date.entity.picture[Uris.QA_SYSTEM_LOCATION];
+                    date.asset.thumbnail = Uris.THUMB_ROOT + date.entity.picture[Uris.QA_SYSTEM_LOCATION];
+                }
+            }
+            $scope.timeline.dates.push(date);
+            $scope.isAddingDate = false;
+
+            $location.search({
+                timeline: angular.toJson($scope.timeline)
+            });
+        };
+
+        $scope.hideAddDate = function () {
+            $scope.isAddingDate = false;
+        };
+
 
         // Setup the select boxes
         $scope.entitySelectOptions = {
-            placeholder: 'Subject',
+            placeholder: 'Who or what is this about?',
             dropdownAutoWidth: true,
             minimumInputLength: 2,
             query: function (options) {
@@ -37,6 +80,7 @@ angular.module('angularApp')
                 });
             }
         };
+
 
         $scope.add = function () {
 

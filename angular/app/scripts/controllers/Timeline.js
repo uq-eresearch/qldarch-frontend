@@ -32,6 +32,7 @@ angular.module('angularApp')
                     timelineDate.text = '<p></p>';
                 }
                 // Get an image
+                var url = '';
                 if (relationship.subject.uri === entity.uri) {
                     // Use the object
                     timelineDate.asset = {
@@ -41,7 +42,7 @@ angular.module('angularApp')
                             relationship.object.type + '/' + relationship.object.encodedUri + '">' + relationship.object.name + '</a></h3>'
                     };
                     if (angular.isDefined(relationship.object.picture)) {
-                        var url = Uris.FILE_ROOT + relationship.object.picture[Uris.QA_SYSTEM_LOCATION];
+                        url = Uris.FILE_ROOT + relationship.object.picture[Uris.QA_SYSTEM_LOCATION];
                         timelineDate.asset.thumbnail = url;
                         timelineDate.asset.media = url;
                     }
@@ -54,7 +55,7 @@ angular.module('angularApp')
                             relationship.subject.type + '/' + relationship.subject.encodedUri + '">' + relationship.subject.name + '</a></h3>'
                     };
                     if (angular.isDefined(relationship.subject.picture)) {
-                        var url = Uris.FILE_ROOT + relationship.subject.picture[Uris.QA_SYSTEM_LOCATION];
+                        url = Uris.FILE_ROOT + relationship.subject.picture[Uris.QA_SYSTEM_LOCATION];
                         timelineDate.asset.thumbnail = url;
                         timelineDate.asset.media = url;
                     }

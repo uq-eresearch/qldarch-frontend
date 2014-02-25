@@ -168,9 +168,10 @@ var myApp = angular.module('angularApp', [
                 template: '<ui-view></ui-view>'
             })
             .state('create.timeline', {
-                url: '/timeline',
+                url: '/timeline?timeline',
                 templateUrl: 'views/create/timeline.html',
-                controller: 'CreateTimelineCtrl'
+                controller: 'CreateTimelineCtrl',
+                reloadOnSearch: false
             })
             .state('create.map', {
                 url: '/map'
