@@ -2,29 +2,29 @@
 
 angular.module('angularApp')
     .factory('Request', function Request(Uris, $http, $q, GraphHelper) {
-        // AngularJS will instantiate a singleton by calling "new" on this function
+        // AngularJS will instantiate a singleton by calling 'new' on this function
 
         var request = {
             http: function (url, params, cache) {
-                var paramString = "";
+                var paramString = '';
                 angular.forEach(params, function (param, key) {
-                    paramString += key + "=";
+                    paramString += key + '=';
                     if (angular.isArray(param)) {
                         // its an array, use comma separated value
                         angular.forEach(param, function (paramPart, index) {
                             paramString += encodeURIComponent(paramPart);
-                            if (index != param.length - 1) {
-                                paramString += ",";
+                            if (index !== param.length - 1) {
+                                paramString += ',';
                             }
-                        })
+                        });
                     } else {
                         paramString += encodeURIComponent(param);
                     }
-                    paramString += "&";
+                    paramString += '&';
                 });
                 var urlString = url;
                 if (paramString.length) {
-                    urlString += "?" + paramString;
+                    urlString += '?' + paramString;
                 }
                 return $http.get(urlString, {
                     cache: cache
@@ -36,7 +36,7 @@ angular.module('angularApp')
             getUri: function (resource, uri, summary) {
                 return request.getIndexForUris(resource, [uri], summary).then(function (items) {
                     return GraphHelper.encodeUri(items[uri]);
-                })
+                });
             },
             /**
              *
@@ -67,7 +67,7 @@ angular.module('angularApp')
                 }, true).then(function (data) {
                     return GraphHelper.encodeUris(data);
                 });
-                //				return $http.get(Uris.JSON_ROOT + resource + "/" + summaryText + "/" + encodeURIComponent(type) + "?INCSUBCLASS=" + subclassText, {cache: true}).then(function (response) {
+                //				return $http.get(Uris.JSON_ROOT + resource + '/' + summaryText + '/' + encodeURIComponent(type) + '?INCSUBCLASS=' + subclassText, {cache: true}).then(function (response) {
                 //					return GraphHelper.encodeUris(response.data);
                 //				});
             },
@@ -87,34 +87,34 @@ angular.module('angularApp')
                 var perRequest = 50;
                 // Build up the url
 
-                var detailLevel = "description";
-                if (resource == "file") {
+                var detailLevel = 'description';
+                if (resource === 'file') {
                     // Special case, thanks AM!
-                    detailLevel = "summary";
+                    detailLevel = 'summary';
                 }
                 var requestUrl;
-                if (resource == "annotation/evidence") {
+                if (resource === 'annotation/evidence') {
                     requestUrl = Uris.JSON_ROOT + resource + '/' + '?IDLIST=';
                 } else {
                     requestUrl = Uris.JSON_ROOT + resource + '/' + detailLevel + '?SUMMARY=' + summary + '&IDLIST=';
                 }
 
-                var idList = "";
+                var idList = '';
 
                 angular.forEach(uris, function (entity, index) {
 
                     idList += encodeURIComponent(entity);
-                    if (index != uris.length - 1 || index % perRequest) {
-                        idList += ",";
+                    if (index !== uris.length - 1 || index % perRequest) {
+                        idList += ',';
                     }
 
                     // do X requests at a time, or, stop if we are at the end
-                    if ((index + 1) % perRequest == 0 || index == uris.length - 1) {
+                    if ((index + 1) % perRequest === 0 || index === uris.length - 1) {
                         // We hit the limit (or the end), send it off
                         var request = $http.get(requestUrl + idList, {
                             cache: true
                         });
-                        idList = "";
+                        idList = '';
                         requests.push(request);
                     }
                 });

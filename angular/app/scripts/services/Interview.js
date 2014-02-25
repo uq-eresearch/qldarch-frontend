@@ -46,7 +46,7 @@ angular.module('angularApp')
              * @param uri
              * @returns {Promise | Object}
              */
-            load: function (uri, includeTranscript) {
+            load: function (uri) {
                 return Expression.load(uri, 'qldarch:Interview').then(function (interview) {
                     return addArchitectsToInterviews([interview]).then(function (interviews) {
 
@@ -86,7 +86,7 @@ angular.module('angularApp')
                     // Get the ones with this interviewee
                     var filteredInterviews = [];
                     angular.forEach(interviews, function (interview) {
-                        if (interview[Uris.QA_INTERVIEWEE] == intervieweeUri) {
+                        if (interview[Uris.QA_INTERVIEWEE] === intervieweeUri) {
                             filteredInterviews.push(interview);
                         }
                     });
@@ -109,10 +109,10 @@ angular.module('angularApp')
                         return Expression.loadList(interviews, 'qldarch:Interview').then(function (interviews) {
                             var otherInterviews = [];
                             angular.forEach(interviews, function (interview) {
-                                if (interview[Uris.QA_INTERVIEWEE] != mentionedUri) {
+                                if (interview[Uris.QA_INTERVIEWEE] !== mentionedUri) {
                                     otherInterviews.push(interview);
                                 }
-                            })
+                            });
                             return addArchitectsToInterviews(otherInterviews);
                         });
                     });

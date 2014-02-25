@@ -23,6 +23,7 @@
         "d3": true,
         "google": true,
         "alert": true,
-        "createStoryJS": true
+        "createStoryJS": true,
+        "jQuery": true
     }
 }

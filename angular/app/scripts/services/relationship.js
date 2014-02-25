@@ -49,25 +49,48 @@ angular.module('angularApp')
                     return relationships;
                 });
             },
+
+            // http://qldarch.net/users/patriciadowling/Evidence#61562987181
+            // http://qldarch.net/users/patriciadowling/Evidence#61725990004
+            // 
             getData: function (relationships) {
-                var entities = GraphHelper.getAttributeValuesUnique(relationships, [Uris.QA_SUBJECT, Uris.QA_OBJECT]);
-                var relatedRequests = [Entity.loadList(entities), Ontology.loadAllProperties()];
 
-                return $q.all(relatedRequests).then(function (relatedData) {
-                    var entities = relatedData[0];
-                    var properties = relatedData[1];
+                // loadList: function (uris, summary) {
+                // Load the evidences
+                var evidences = GraphHelper.getAttributeValuesUnique(relationships, Uris.QA_EVIDENCE);
 
-                    // Insert that data
-                    angular.forEach(relationships, function (relationship) {
-                        relationship.subject = entities[relationship[Uris.QA_SUBJECT]];
-                        relationship.object = entities[relationship[Uris.QA_OBJECT]];
-                        relationship.predicate = properties[relationship[Uris.QA_PREDICATE]];
+                // Get all the evidences so we can read their interview property
+                return Request.getIndexForUris('annotation/evidence', evidences).then(function (evidences) {
+                    angular.forEach(evidences, function (evidence) {
+                        evidence.encodedDocumentedBy = GraphHelper.encodeUriString(evidence[Uris.QA_DOCUMENTED_BY]);
                     });
+                    var entitiesUris = GraphHelper.getAttributeValuesUnique(relationships, [Uris.QA_SUBJECT, Uris.QA_OBJECT]);
+                    var relatedRequests = [Entity.loadList(entitiesUris), Ontology.loadAllProperties()];
 
-                    return {
-                        relationships: relationships,
-                        entities: entities
-                    };
+                    return $q.all(relatedRequests).then(function (relatedData) {
+                        var entities = relatedData[0];
+                        var properties = relatedData[1];
+
+                        // Insert that data
+                        angular.forEach(relationships, function (relationship) {
+                            relationship.subject = entities[relationship[Uris.QA_SUBJECT]];
+                            relationship.object = entities[relationship[Uris.QA_OBJECT]];
+                            relationship.predicate = properties[relationship[Uris.QA_PREDICATE]];
+                            if (relationship.predicate.name) {
+                                relationship.predicate.name = relationship.predicate.name.toLowerCase();
+                            }
+                            if (relationship.predicate[Uris.QA_LABEL]) {
+                                relationship.predicate[Uris.QA_LABEL] = relationship.predicate[Uris.QA_LABEL].toLowerCase();
+                            }
+
+                            relationship.evidence = evidences[relationship[Uris.QA_EVIDENCE]];
+                        });
+
+                        return {
+                            relationships: relationships,
+                            entities: entities
+                        };
+                    });
                 });
             }
         };

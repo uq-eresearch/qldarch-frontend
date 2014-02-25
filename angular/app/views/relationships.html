@@ -78,15 +78,17 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Selected relationships -->
                 <ul class="list-group">
                     <li class="list-group-item" ng-repeat="relationship in selectedRelationships">
                         <!--<i class="fa fa-bars"> </i>-->
-                        <a href="#/{{ relationship.subject.type }}/{{ relationship.subject.encodedUri }}" ng-bind-html="relationship.subject.name || '' | highlight:transcriptSearchInput"></a>
-
-                        <span style="text-transform: lowercase" ng-bind-html="relationship.predicate[Uris.QA_LABEL] || relationship.predicate.name || '' | highlight:transcriptSearchInput">
-                        </span>
-
-                        <a href="#/{{ relationship.object.type }}/{{ relationship.object.encodedUri }}" ng-bind-html="relationship.object.name || '' | highlight:transcriptSearchInput"></a>
+                        <!-- ({interviewId: relationship.evidence.encodedDocumentedBy, time: relationship.evidence[Uris.QA_TIME_FROM]} -->
+                        <a ui-sref="interview({interviewId: relationship.evidence.encodedDocumentedBy, time: relationship.evidence[Uris.QA_TIME_FROM] })" >
+                            {{ relationship.subject.name }}
+                            <em>{{ relationship.predicate.name || relationship.predicate[Uris.QA_LABEL] }}</em> 
+                            {{ relationship.object.name }}
+                        </a>
 
                         <!-- Date -->
                         {{ relationship[Uris.QA_START_DATE] }}
@@ -96,11 +98,9 @@
                         <div style="font-style: italic">
                             {{ relationship[Uris.QA_TEXTUAL_NOTE] }}
                         </div>
-
-
                     </li>
                 </ul>
-
+                <!-- /Selected relationships -->
             </div>
         </div>
     </div>

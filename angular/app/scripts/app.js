@@ -37,16 +37,18 @@ var myApp = angular.module('angularApp', [
         $rootScope.globalSearchString = '';
         // Adds the slim progress bar
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-            // ngProgress.reset();
+            ngProgress.reset();
             ngProgress.color('#ea1d5d');
             ngProgress.start();
+            console.log('state start');
         });
         $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
-            ngProgress.stop();
             ngProgress.complete();
             $rootScope.globalSearchString = '';
+            console.log('state success');
         });
         $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+            ngProgress.reset();
             console.log('State change error', event, toState, toParams, fromState, fromParams, error);
             console.log('State change error message:', error.message);
             ngProgress.reset();
@@ -256,7 +258,10 @@ var myApp = angular.module('angularApp', [
                             var architectUri = GraphHelper.decodeUriString($stateParams.architectId);
                             // Get all the relationships
                             return Relationship.findByEntityUri(architectUri).then(function (relationships) {
-                                return Relationship.getData(relationships);
+                                return Relationship.getData(relationships).then(function (data) {
+                                    console.log('data', data);
+                                    return data;
+                                });
                             });
                         }
                     ]
@@ -287,10 +292,31 @@ var myApp = angular.module('angularApp', [
                 },
                 controller: 'TimelineCtrl'
             })
+            .state('interview', {
+                url: '/interview/:interviewId?time',
+                resolve: {
+                    interview: ['Interview', '$state', '$stateParams', 'ngProgress',
+                        function (Interview, $state, $stateParams, ngProgress) {
+                            var interviewUri = atob($stateParams.interviewId);
+                            ngProgress.reset();
+                            return Interview.load(interviewUri).then(function (interview) {
+                                var interviewee = interview.interviewees[0];
+                                $state.go('architect.interview', {
+                                    architectId: interviewee.encodedUri,
+                                    interviewId: $stateParams.interviewId,
+                                    time: $stateParams.time
+                                });
+
+                            });
+                        }
+                    ]
+                }
+            })
             .state('architect.interview', {
-                url: '/interview/:interviewId',
+                url: '/interview/:interviewId?time',
                 templateUrl: 'views/architect/interview.html',
                 controller: 'InterviewCtrl',
+                reloadOnSearch: false,
                 resolve: {
                     interview: ['$http', '$stateParams', '$q', 'Uris', 'Architect', 'Interview', 'Transcript', 'Relationship', 'GraphHelper', 'Entity', 'Ontology',
                         function ($http, $stateParams, $q, Uris, Architect, Interview, Transcript, Relationship, GraphHelper, Entity, Ontology) {

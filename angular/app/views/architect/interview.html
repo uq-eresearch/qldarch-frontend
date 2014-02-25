@@ -83,7 +83,7 @@
     <!-- end of interview player -->
 
     <!-- interview transcript -->
-    <div class="interview-transcript" ng-show="isShowingTranscript">
+    <div class="interview-transcript" ng-show="isShowingTranscript" id="transcript">
         <div class="container">
             <div class="row">
                 <div class="col-sm-12" >
@@ -125,8 +125,8 @@
             <div infinite-scroll="addMoreExchanges()" class="interview-exchanges" style="margin-top: 24px;">
                 <div ng-repeat="exchange in interview.transcript.exchanges | filter:{'transcript': transcriptSearchInput} | filter:timeFilter | limitTo:exchangeDisplayCount"
                      class="row exchange"
-                     ng-class="{'exchange-searching': isSearching}">
-
+                     ng-class="{'exchange-searching': isSearching}" 
+                     id="{{ exchange.startTime }}">
                     <!-- transcript -->
                     <div class="col-sm-6">
                         <div class="media">
@@ -156,7 +156,7 @@
                                     </strong>
                                     <span class="pull-right" ng-show="isSearching">{{ exchange.time }}</span>
                                 </div>
-                                <p ng-bind-html="exchange.transcript | highlight:transcriptSearchInput">
+                                <p ng-bind-html="exchange.transcript | highlight:transcriptSearchInput" ng-class="{ highlight: startTime == exchange.startTime }">
                                 </p>
                             </div>
                         </div>
@@ -186,7 +186,7 @@
                                 <!-- /Control Buttons -->
 
                                 <!-- New relationship -->
-                                <form role="form" ng-show="exchange.isAddingRelationship">
+                                <form role="form" ng-if="exchange.isAddingRelationship">
                                     <div class="form-group">
                                         <label>Subject</label>
                                         <div ui-select2="entitySelectOptions" ng-model="exchange.newRelationship.subject" class="form-control"></div>

@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('CreateTimelineCtrl', function ($scope, Entity, Uris, $stateParams, $location) {
+    .controller('CreateTimelineCtrl', function ($scope, Entity, Uris, $stateParams, $location, $http, ENV) {
         $scope.isEditing = false;
         if ($stateParams.timeline) {
             $scope.isNew = false;
             $scope.timeline = angular.fromJson($stateParams.timeline);
-            console.log('timelien hellope', $scope.timeline);
+            shortenUrl();
         } else {
             $scope.isNew = true;
             $scope.timeline = {
@@ -45,9 +45,7 @@ angular.module('angularApp')
             $scope.timeline.dates.push(date);
             $scope.isAddingDate = false;
 
-            $location.search({
-                timeline: angular.toJson($scope.timeline)
-            });
+            updateUrl();
         };
         $scope.removeDate = function (date) {
             var index = $scope.timeline.dates.indexOf(date);
@@ -55,14 +53,42 @@ angular.module('angularApp')
             if ($scope.timeline.dates.length === 0) {
                 $scope.isEditing = false;
             }
-            $location.search({
-                timeline: angular.toJson($scope.timeline)
-            });
+            updateUrl();
         };
 
         $scope.hideAddDate = function () {
             $scope.isAddingDate = false;
         };
+
+        function shortenUrl() {
+            $scope.shortUrl = null;
+            var absUrl = '';
+            if (ENV.name === 'development') {
+                absUrl += Uris.DEV_URL;
+            } else {
+                absUrl += Uris.PROD_URL;
+            }
+            absUrl += '#/create/timeline?timeline=' + encodeURIComponent(angular.toJson($scope.timeline));
+            $http.post('https://www.googleapis.com/urlshortener/v1/url', {
+                longUrl: absUrl
+            }).then(function (response) {
+                $scope.shortUrl = response.data.id;
+            });
+        }
+
+        /**
+         * Updates the url to include timeline data
+         *
+         * Updates the timeline url and gets a shortened url from google
+         * @return {[type]} [description]
+         */
+        function updateUrl() {
+            $location.search({
+                timeline: angular.toJson($scope.timeline)
+            });
+            shortenUrl();
+        }
+
 
 
         // Setup the select boxes

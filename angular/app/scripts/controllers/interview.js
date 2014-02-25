@@ -2,8 +2,11 @@
 
 angular.module('angularApp')
 // interview, transcript, evidences
-.controller('InterviewCtrl', function ($scope, interview, $http, Uris, Entity, Ontology, architect, interviews) {
+.controller('InterviewCtrl', function ($scope, interview, $http, Uris, Entity, Ontology, architect, interviews, $stateParams, $location, $anchorScroll, $timeout) {
     // Setup
+
+
+
     $scope.sub = 'interviews';
     $scope.interviews = interviews;
     $scope.architect = architect;
@@ -36,7 +39,30 @@ angular.module('angularApp')
 
     // Amount of exchanges to display
     var exchangeDisplayCountDefault = 10;
-    $scope.exchangeDisplayCount = exchangeDisplayCountDefault;
+    if ($stateParams.time) {
+        $scope.startTime = $stateParams.time;
+        angular.forEach(interview.transcript.exchanges, function (exchange, index) {
+            if (exchange.startTime.toString() === $stateParams.time.toString()) {
+                console.log('once');
+                $scope.exchangeDisplayCount = index + 20;
+            }
+        });
+
+        setTimeout(function () {
+            // $location.hash($stateParams.time);
+            // $anchorScroll();
+
+            jQuery('html, body').animate({
+                scrollTop: jQuery('#' + $stateParams.time).offset().top - 20
+            }, 2000);
+
+            console.log('there is a time', $stateParams.time);
+        }, 0);
+
+    } else {
+        $scope.exchangeDisplayCount = exchangeDisplayCountDefault;
+    }
+
 
     /**
      * Sets the current exchange based on the current time
@@ -207,10 +233,10 @@ angular.module('angularApp')
         annotation[Uris.QA_OBJECT] = relationship.object.uri;
 
         if (relationship.startYear && relationship.startYear.length) {
-            annotation[Uris.QA_START_DATE] = relationship.startYear + "-01-01";
+            annotation[Uris.QA_START_DATE] = relationship.startYear + '-01-01';
         }
         if (relationship.endYear && relationship.endYear.length) {
-            annotation[Uris.QA_END_DATE] = relationship.endYear + "-01-01";
+            annotation[Uris.QA_END_DATE] = relationship.endYear + '-01-01';
         }
         if (relationship.note && relationship.note.length) {
             annotation[Uris.QA_TEXTUAL_NOTE] = relationship.note;
@@ -230,7 +256,6 @@ angular.module('angularApp')
         exchange.newRelationship = {};
 
         $http.post('/ws/rest/annotation', annotation).then(function (response) {
-            console.log("got response", response.data);
             // Merge the response in, with our new annotation object
             angular.extend(relationship, response.data);
         });
@@ -271,7 +296,7 @@ angular.module('angularApp')
         //				angular.extend(relationship, response.data);
         //			});
 
-    }
+    };
 
     /**
      * Show exchanges that haven't already been spoken
@@ -280,7 +305,7 @@ angular.module('angularApp')
      */
     $scope.timeFilter = function (exchange) {
         if ($scope.isSyncing && !$scope.isSearching) {
-            if ($scope.audioPlayer.currentTime == 0) {
+            if ($scope.audioPlayer.currentTime === 0) {
                 return true
             } else {
                 return $scope.audioPlayer.currentTime < exchange.endTime;
@@ -288,7 +313,7 @@ angular.module('angularApp')
         } else {
             return true;
         }
-    }
+    };
 
     /**
      * Search for text in the exchanges
@@ -316,6 +341,11 @@ angular.module('angularApp')
         playing();
 
         $scope.audioPlayer.play();
+
+        console.log('scrolling to top');
+        jQuery('html, body').animate({
+            scrollTop: jQuery('#transcript').offset().top - 20
+        }, 1000);
     };
 
 

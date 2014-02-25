@@ -10,6 +10,9 @@ angular.module('angularApp')
         this.FILE_ROOT = 'http://qldarch-test.metadata.net/omeka/archive/files/';
         this.THUMB_ROOT = 'http://qldarch-test.metadata.net/omeka/archive/square_thumbnails/';
 
+        this.PROD_URL = 'http://qldarch-test.metadata.net/beta/';
+        this.DEV_URL = 'http://localhost:8080/qldarch/';
+
         this.QA_NS = 'http://qldarch.net/ns/rdf/2012-06/terms#';
         this.OWL_NS = 'http://www.w3.org/2002/07/owl#';
         this.RDF_NS = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';

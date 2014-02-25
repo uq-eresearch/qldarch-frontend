@@ -12,10 +12,6 @@
 		</div>
 		<div class="row">
 			<div class="col-md-6">
-				<form action="">
-				</form>
-			</div>
-			<div class="col-md-6 col-md-offset-3">
 				<form role="form">
 					<div class="form-group">
 						<label for="headline">Title</label>
@@ -30,18 +26,17 @@
 						<div class="panel-heading">
 							<div ng-hide="isAddingDate">
 								<span ng-hide="isEditing">
-									<button class="btn btn-default btn-xs" ng-click="showAddDate()"><i class="fa fa-plus"></i></button>
-									<button 
-										class="btn btn-default btn-xs" 
-										ng-click="isEditing = true"
-										ng-show="timeline.dates.length">
-											<i class="fa fa-pencil" ></i>
-									</button>
+								<button class="btn btn-default btn-xs" ng-click="showAddDate()"><i class="fa fa-plus"></i></button>
+								<button
+								class="btn btn-default btn-xs"
+								ng-click="isEditing = true"
+								ng-show="timeline.dates.length">
+								<i class="fa fa-pencil" ></i>
+								</button>
 								</span>
 								
 								<button ng-show="isEditing" class="btn btn-primary btn-xs" ng-click="isEditing = false"><i class="fa fa-check"></i></button>
 							</div>
-
 							<!-- New event form -->
 							<div ng-if="isAddingDate">
 								<div class="form-group">
@@ -71,9 +66,9 @@
 								</div>
 								<div class="form-group">
 									<!-- <div class="btn-group">
-												<button type="button" class="btn btn-primary" ng-model="radioModel" btn-radio="'Left'">Entity</button>
-												<button type="button" class="btn btn-primary" ng-model="radioModel" btn-radio="'Middle'">Photograph</button>
-												<button type="button" class="btn btn-primary" ng-model="radioModel" btn-radio="'Right'">Location</button>
+															<button type="button" class="btn btn-primary" ng-model="radioModel" btn-radio="'Left'">Entity</button>
+															<button type="button" class="btn btn-primary" ng-model="radioModel" btn-radio="'Middle'">Photograph</button>
+															<button type="button" class="btn btn-primary" ng-model="radioModel" btn-radio="'Right'">Location</button>
 									</div> -->
 									<label class="control-label">Entity</label>
 									<div ui-select2="entitySelectOptions" ng-model="date.entity" class="form-control"></div>
@@ -96,7 +91,6 @@
 									</a>
 									<div class="media-body">
 										<button ng-show="isEditing" class="btn btn-danger btn-xs pull-right" ng-click="removeDate(date)"><i class="fa fa-trash-o"></i></button>
-
 										<p>{{ date.headline }}</p>
 										<p>
 										{{ date.startDate }} <span ng-show="date.endDate">- {{ date.endDate }}</span>
@@ -108,6 +102,15 @@
 					</div>
 					<!-- <button type="submit" class="btn btn-primary" ng-click="add()">Create</button> -->
 				</form>
+			</div>
+			<div class="col-md-6">
+				<div ng-hide="isNew && !shortUrl" style="margin-bottom: 10px;">
+					<h5>
+					Share URL
+					<i class="fa fa-refresh fa-spin" ng-show="!shortUrl"></i>
+					</h5>
+					<input type="text" ng-model="shortUrl" class="form-control" ng-show="shortUrl">
+				</div>
 			</div>
 		</div>
 	</div>
