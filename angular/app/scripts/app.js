@@ -39,17 +39,13 @@ angular.module('angularApp', [
             ngProgress.reset();
             ngProgress.color('#ea1d5d');
             ngProgress.start();
-            console.log('state start');
         });
         $rootScope.$on('$stateChangeSuccess', function () {
             ngProgress.complete();
             $rootScope.globalSearchString = '';
-            console.log('state success');
         });
-        $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+        $rootScope.$on('$stateChangeError', function () {
             ngProgress.reset();
-            console.log('State change error', event, toState, toParams, fromState, fromParams, error);
-            console.log('State change error message:', error.message);
             ngProgress.reset();
         });
 
