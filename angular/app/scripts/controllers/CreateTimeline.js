@@ -1,20 +1,96 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('CreateTimelineCtrl', function ($scope, Entity, Uris, $stateParams, $location, $http, ENV) {
+    .controller('CreateTimelineCtrl', function ($scope, Entity, Uris, $stateParams, $location, $http, ENV, $filter, Relationship, GraphHelper, $q) {
+
+        $scope.relationships = [];
+
+        // Setup the select boxes
+        $scope.entitySelectOptions = {
+            placeholder: 'Who or what is this about?',
+            dropdownAutoWidth: true,
+            multiple: true,
+            // minimumInputLength: 2,
+            query: function (options) {
+                Entity.findByName(options.term, false).then(function (entities) {
+                    var data = {
+                        results: []
+                    };
+
+                    angular.forEach(entities, function (entity) {
+                        data.results.push({
+                            id: entity.uri,
+                            uri: entity.uri,
+                            text: entity.name,
+                            type: entity.type,
+                            name: entity.name,
+                            encodedUri: entity.encodedUri,
+                            picture: entity.picture
+                        });
+                    });
+                    options.callback(data);
+                });
+            }
+        };
+
+        $scope.$watch('entities', function (entities) {
+
+            var returnRelationships = {};
+
+            var promises = [];
+
+            // We need to do a query for all the time data about this entity
+            angular.forEach(entities, function (entity) {
+                console.log('entity', entity);
+                var promise = Relationship.findByEntityUri(entity.uri).then(function (relationships) {
+                    console.log('got relationsihps', relationships);
+
+                    var relationshipsWithDates = $filter('filter')(relationships, function (relationship) {
+                        return angular.isDefined(relationship[Uris.QA_START_DATE]);
+                    });
+                    return Relationship.getData(relationshipsWithDates);
+                });
+                promises.push(promise);
+            });
+
+            $q.all(promises).then(function (relationshipsArray) {
+                console.log('relationships', relationshipsArray);
+                angular.forEach(relationshipsArray, function (data) {
+                    var relationships = data.relationships;
+                    angular.forEach(relationships, function (relationship) {
+                        returnRelationships[relationship.uri] = relationship;
+                    });
+                });
+                $scope.relationships = GraphHelper.graphValues(returnRelationships);
+            });
+
+        });
+
+        $scope.addToTimeline = function (entity) {
+
+        };
+
+        $scope.orderByStart = function (relationship) {
+            return relationship[Uris.QA_START_DATE] || '0';
+        };
+
+
+        // Setup state
         $scope.isEditing = false;
-        if ($stateParams.timeline) {
-            $scope.isNew = false;
-            $scope.timeline = angular.fromJson($stateParams.timeline);
-            shortenUrl();
-        } else {
-            $scope.isNew = true;
+        $scope.isAddingDate = false;
+        $scope.isNew = true;
+
+        if (!$stateParams.timeline) {
             $scope.timeline = {
                 dates: []
             };
+        } else {
+            $scope.isNew = false;
+            $scope.timeline = angular.fromJson($stateParams.timeline);
+            shortenUrl();
         }
 
-        $scope.isAddingDate = false;
+
         $scope.showAddDate = function () {
             $scope.date = {};
             // var startDate = String(Math.floor(1900 + (Math.random() * 200)));
@@ -91,31 +167,7 @@ angular.module('angularApp')
 
 
 
-        // Setup the select boxes
-        $scope.entitySelectOptions = {
-            placeholder: 'Who or what is this about?',
-            dropdownAutoWidth: true,
-            minimumInputLength: 2,
-            query: function (options) {
-                Entity.findByName(options.term, false).then(function (entities) {
-                    var data = {
-                        results: []
-                    };
-                    angular.forEach(entities, function (entity) {
-                        data.results.push({
-                            id: entity.uri,
-                            uri: entity.uri,
-                            text: entity.name,
-                            type: entity.type,
-                            name: entity.name,
-                            encodedUri: entity.encodedUri,
-                            picture: entity.picture
-                        });
-                    });
-                    options.callback(data);
-                });
-            }
-        };
+
 
 
         $scope.add = function () {
@@ -125,19 +177,7 @@ angular.module('angularApp')
                 'thumbnail': Uris.THUMB_ROOT + $scope.date.entity.picture[Uris.QA_SYSTEM_LOCATION],
                 'caption': '<h4>' + $scope.date.entity.name + '</h4>'
             };
-            // 'endDate': '2011,12,11',
-            // 'text': '<p>Body text goes here, some HTML is OK</p>',
-            // 'tag': 'This is Optional',
-            // 'classname': 'optionaluniqueclassnamecanbeaddedhere',
-            // 'asset': {
-            // 'media': 'http://twitter.com/ArjunaSoriano/status/164181156147900416',
-            // 'credit': 'Credit Name Goes Here',
-            // 'caption': 'Caption text goes here'
-            // }
-            // };
-
             $scope.dates.push($scope.date);
-
             console.log($scope.dates);
             $scope.date = {};
         };

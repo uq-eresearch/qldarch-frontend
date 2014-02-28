@@ -22,7 +22,11 @@ angular.module('angularApp')
                         structure.lat = structure[Uris.GEO_LAT];
                     }
                 }
+                if (angular.isDefined(structure[Uris.QA_LOCATION])) {
+                    structure.locations = GraphHelper.asArray(structure[Uris.QA_LOCATION]);
+                }
             });
+
 
             // Setup pictures
             return Expression.findByBuildingUris(uris, 'qldarch:Photograph').then(function (pictures) {
@@ -44,36 +48,13 @@ angular.module('angularApp')
                     angular.forEach(structures, function (structure) {
                         structure.buildingTypologies = [];
                         angular.forEach(GraphHelper.asArray(structure[Uris.QA_BUILDING_TYPOLOGY_P]), function (buildingTypologyUri) {
-                            console.log('uri', buildingTypologyUri, 'from', buildingTypologies);
                             structure.buildingTypologies.push(buildingTypologies[buildingTypologyUri]);
                         });
                     });
                     return structures;
                 });
-                // angular.forEach(GraphHelper.asArray(structure[Uris.QA_BUILDING_TYPOLOGY_P]), function(typologyUri) {
-                // 	requests.push(Entity.load(typologyUri, true));
-                // })
-
-                // 			return $q.all(requests).then(function(typologies) {
-
-                // 				structure.buildingTypologies = [];
-                // 				angular.forEach(typologies, function(typology) {
-                // 					structure.buildingTypologies.push(typology);
-                // 				});
-                // 				console.log("got to here", structure[Uris.QA_ASSOCIATED_FIRM]);
-                // 				if(angular.isDefined(structure[Uris.QA_ASSOCIATED_FIRM])) {
-                // 					return Entity.load(structure[Uris.QA_ASSOCIATED_FIRM], true).then(function(firm) {
-                // 						structure.firm = firm;
-                // 						return structure;
-                // 					});
-                // 				} else {
-                // 					return structure;
-                // 				}
-                // 			})
-
-
             });
-        }
+        };
 
         // Public API here
         return {
@@ -93,6 +74,16 @@ angular.module('angularApp')
                     return postProcess($filter('filter')(structures, buildingTypologyUri));
                 });
             },
+
+            findByAssociatedFirmUri: function (associatedFirmUri) {
+                return Entity.loadAll('qldarch:Structure', false).then(function (structures) {
+                    structures = GraphHelper.graphValues(structures);
+                    return postProcess($filter('filter')(structures, function (structure) {
+                        return structure[Uris.QA_ASSOCIATED_FIRM] === associatedFirmUri;
+                    }));
+                });
+            },
+
 
             /**
              * Loads a single Architect

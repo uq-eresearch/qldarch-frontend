@@ -6,8 +6,8 @@
             <p ng-show="!structure[Uris.QA_SUMMARY].length">No summary.</p>
 
             <h5>Location</h5>
-            <p>{{ structure[Uris.QA_LOCATION] }} </p>
-            <p ng-show="!structure[Uris.QA_LOCATION]">No location.</p>
+            <p ng-show="structure.locations.length">{{ structure.locations[0] }} </p>
+            <p ng-hide="structure.locations.length">No location.</p>
 
             <h5>Typology</h5>
             <ul>
@@ -26,7 +26,7 @@
                     <img class="media-object img-responsive img-circle" ng-if="structure.firm.picture" ng-src="{{ Uris.FILE_ROOT + structure.firm.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ structure.firm.name }}" style="width:32px; height: 32px;">
                 </a>
                 <div class="media-body">
-                    <a ng-href="#/{{ structure.firm.type }}/{{ structure.firm.encodedUri }}">
+                    <a ng-href="#/firm/{{ structure.firm.encodedUri }}">
                         {{ structure.firm.name }}
                     </a>
                 </div>

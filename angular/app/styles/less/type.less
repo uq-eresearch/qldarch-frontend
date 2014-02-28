@@ -16,7 +16,7 @@ h1 {
     padding-top: @line-height-computed;
     padding-bottom: ((@line-height-computed / 2) - 1);
     margin: 0 0 @line-height-computed;
-    margin-bottom:0px;
+    
     border-bottom: none;
     background-color: darken(@brand-green, 5%);
     h1 {
@@ -24,6 +24,13 @@ h1 {
     }
     small a {
         color: desaturate(lighten(@brand-green, 30%), 40%);
+    }
+
+    &.page-header-timeline {
+        background-color: @brand-timeline;
+    }
+    &.has-subnav {
+        margin-bottom:0px;
     }
 }
 

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .factory('Entity', function (Uris, $q, $http, Request, GraphHelper, Expression) {
+    .factory('Entity', function (Uris, $q, $http, Request, GraphHelper, Expression, $filter) {
         // Service logic
         // ...
 
@@ -80,7 +80,16 @@ angular.module('angularApp')
                     });
                     // Go through and add in the names
                     //					console.log("FINDING BY NAME");
-                    return setupPicturesAndTypes(results);
+                    return setupPicturesAndTypes(results).then(function (entities) {
+                        entities = $filter('orderBy')(entities, function (entity) {
+                            if (angular.isDefined(entity[Uris.FOAF_LAST_NAME])) {
+                                return entity[Uris.FOAF_LAST_NAME] + entity[Uris.FOAF_FIRST_NAME];
+                            } else {
+                                return entity.name;
+                            }
+                        });
+                        return entities;
+                    });
                 });
             },
 

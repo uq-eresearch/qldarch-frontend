@@ -25,6 +25,9 @@
                     <h4>
                         <a href="#/article/{{ article.encodedUri }}">{{ article.title }}</a>
                     </h4>
+                    <pre>
+                        {{ article | json }}
+                    </pre>
                     <p ng-bind-html="article.snippet"></p>
                 </div>
             </div>

@@ -6094,7 +6094,6 @@ h1 {
   padding-top: 24px;
   padding-bottom: 11px;
   margin: 0 0 24px;
-  margin-bottom: 0px;
   border-bottom: none;
   background-color: #0faca0;
 }
@@ -6104,20 +6103,27 @@ h1 {
 .page-header small a {
   color: #97d6d2;
 }
+.page-header.page-header-timeline {
+  background-color: #ccda6a;
+}
+.page-header.has-subnav {
+  margin-bottom: 0px;
+}
 .highlight {
   background-color: yellow;
 }
 .navbar-inverse .input-group input {
   border: none;
-  background-color: #3c3c3c;
+  background-color: #555555;
   color: white;
+  font-size: 14px;
 }
 .navbar-inverse .input-group input:focus {
   box-shadow: none;
 }
 .navbar-inverse .input-group .input-group-addon {
   border: none;
-  background-color: #2f2f2f;
+  background-color: #3c3c3c;
 }
 .navbar-inverse .input-group .dropdown-menu {
   background-color: #3c3c3c;

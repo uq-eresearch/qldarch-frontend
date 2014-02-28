@@ -173,9 +173,31 @@ angular.module('angularApp', [
             })
             .state('create.map', {
                 url: '/map?map',
+                // views: {
+                //     'dog@create.map': {
+                //         template: 'bark'
+                //     },
+                //     'cat@create.map': {
+                //         template: 'purr'
+                //     },
+                //     '': {
+                //         templateUrl: 'views/create/map.html'
+                //     }
+                // },
                 templateUrl: 'views/create/map.html',
                 controller: 'CreateMapCtrl',
                 reloadOnSearch: false
+            })
+            .state('create.map.add', {
+                url: '/add',
+                views: {
+                    dog: {
+                        template: 'woof'
+                    },
+                    cat: {
+                        template: 'meow'
+                    }
+                }
             })
             .state('create.textAnalysis', {
                 url: '/text-analysis'
@@ -470,15 +492,22 @@ angular.module('angularApp', [
                     structures: ['$stateParams', 'GraphHelper', 'Uris', 'Structure', 'Relationship',
                         function ($stateParams, GraphHelper, Uris, Structure, Relationship) {
                             var firmUri = GraphHelper.decodeUriString($stateParams.firmId);
-
                             return Relationship.findBySubjectPredicateObject({
                                 predicate: 'qldarch:designedBy',
                                 object: firmUri
                             }).then(function (relationships) {
                                 // Get all the architects
                                 var structureUris = GraphHelper.getAttributeValuesUnique(relationships, Uris.QA_SUBJECT);
+
                                 return Structure.loadList(structureUris, true).then(function (structures) {
-                                    return GraphHelper.graphValues(structures);
+                                    var relationshipStructures = GraphHelper.graphValues(structures);
+
+                                    // Get the associated firms...this is awful
+                                    // should be all relationships or nothing!
+                                    return Structure.findByAssociatedFirmUri(firmUri).then(function (firmStructures) {
+                                        var structures = angular.extend(relationshipStructures, firmStructures);
+                                        return GraphHelper.graphValues(structures);
+                                    });
                                 });
                             });
                         }
