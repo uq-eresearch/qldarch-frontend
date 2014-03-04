@@ -1,21 +1,23 @@
 <div class="content">
 	<div class="page-header page-header-timeline">
 		<div class="container">
-			<h1>Create a Timeline</h1>
+			<h1><i class="fa fa-clock-o"></i> Timeline Builder</h1>
 		</div>
 	</div>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
+				<p class="text-muted">Search for architects, buildings or firms to overlay their timelines.</p>
 				<div ui-select2="entitySelectOptions" ng-model="entities" class="form-control"></div>
-			</div>
-			<!-- <div class="col-md-1">
-				<button class="btn btn-primary btn-sm" ng-click="addToTimeline(entity)"><i class="fa fa-plus"></i></button>
-			</div> -->
+			</div>			
 		</div>
-		<div class="row" ng-repeat="relationship in relationships | orderBy:orderByStart">
+		<div class="row">
+			<div class="col-md-12">
+				<timeline headline="{{ timeline.headline }}" subtitle="{{ timeline.subtitle }}" dates="timeline.dates"></timeline>
+			</div>
+		</div>
+		<!--<div class="row" ng-repeat="relationship in relationships | orderBy:orderByStart">
 			<div class="col-md-1">
-				<!-- Date -->
 				<strong>
 				{{ relationship[Uris.QA_START_DATE] }}
 				<span ng-show="relationship[Uris.QA_START_DATE] && relationship[Uris.QA_END_DATE]"> - </span>
@@ -30,7 +32,6 @@
 								<div>
 									<img ng-if="!relationship.subject.picture" ng-src="images/icon.png" class="img-full">
 									<img ng-if="relationship.subject.picture" ng-src="{{ Uris.THUMB_ROOT + relationship.subject.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ selected.name }}" class="img-full">
-									
 								</div>
 							</div>
 							<div class="col-md-8">
@@ -43,6 +44,7 @@
 								<p>
 								{{ relationship[Uris.QA_TEXTUAL_NOTE] }}
 								</p>
+								<a target="_blank" ui-sref="interview({interviewId: relationship.evidence.encodedDocumentedBy, time: relationship.evidence[Uris.QA_TIME_FROM] })"><i class="fa fa-microphone"></i></a>
 							</div>
 							<div class="col-md-2">
 								<img ng-if="!relationship.object.picture" ng-src="images/icon.png" class="img-full">
@@ -52,6 +54,6 @@
 					</li>
 				</ul>
 			</div>
-		</div>
+		</div>-->
 	</div>
 </div>

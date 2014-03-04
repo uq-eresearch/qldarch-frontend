@@ -1,33 +1,11 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('TimelineCtrl', function ($scope, entity, data, Uris, $state) {
-
-        $scope.isShowingTimeline = false;
-        $scope.entity = entity;
-
-        /**
-         * Opens this timeline in the timeline creator
-         * @return {[type]} [description]
-         */
-        $scope.openInTimelineBuilder = function () {
-            console.log('opening in timeline creator');
-            $state.go('create.timeline', {
-                uris: angular.toJson([entity.uri])
-            });
-        };
-
-        if (data.relationships.length) {
-            $scope.isShowingTimeline = true;
-
-            if (angular.isDefined(entity.picture)) {
-                $scope.asset = {
-                    'media': Uris.FILE_ROOT + entity.picture[Uris.QA_SYSTEM_LOCATION]
-                };
-            }
-
+    .service('Timeline', function Timeline(Uris) {
+        // AngularJS will instantiate a singleton by calling "new" on this function
+        this.relationshipsToEvents = function (relationships, entity) {
             var dates = [];
-            angular.forEach(data.relationships, function (relationship) {
+            angular.forEach(relationships, function (relationship) {
 
                 var timelineDate = {};
                 timelineDate.startDate = relationship[Uris.QA_START_DATE].substring(0, 4);
@@ -44,7 +22,7 @@ angular.module('angularApp')
                 }
                 // Get an image
                 var url = '';
-                if (relationship.subject.uri === entity.uri) {
+                if (entity && relationship.subject.uri === entity.uri) {
                     // Use the object
                     timelineDate.asset = {
                         media: 'images/icon.png',
@@ -73,9 +51,6 @@ angular.module('angularApp')
                 }
                 dates.push(timelineDate);
             });
-            $scope.dates = dates;
-
-
-        }
-
+            return dates;
+        };
     });

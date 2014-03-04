@@ -166,7 +166,7 @@ angular.module('angularApp', [
                 template: '<ui-view></ui-view>'
             })
             .state('create.timeline', {
-                url: '/timeline?timeline',
+                url: '/timeline?uris',
                 templateUrl: 'views/create/timeline.html',
                 controller: 'CreateTimelineCtrl',
                 reloadOnSearch: false

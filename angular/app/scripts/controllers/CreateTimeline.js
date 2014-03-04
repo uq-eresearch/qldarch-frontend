@@ -1,13 +1,42 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('CreateTimelineCtrl', function ($scope, Entity, Uris, $stateParams, $location, $http, ENV, $filter, Relationship, GraphHelper, $q) {
+    .controller('CreateTimelineCtrl', function ($scope, Entity, Uris, $stateParams, $location, $http, ENV, $filter, Relationship, GraphHelper, $q, Timeline) {
 
         $scope.relationships = [];
+        $scope.timeline = {};
+
+        $scope.entities = [];
+
+        if ($stateParams.uris) {
+            var uris = angular.fromJson($stateParams.uris);
+            // Get the entities for these uris
+            Entity.loadList(uris, true).then(function (loadedEntities) {
+                var entities = [];
+                angular.forEach(loadedEntities, function (loadedEntity) {
+                    var entity = {
+                        id: loadedEntity.uri,
+                        uri: loadedEntity.uri,
+                        text: loadedEntity.name,
+                        type: loadedEntity.type,
+                        name: loadedEntity.name,
+                        encodedUri: loadedEntity.encodedUri,
+                        picture: loadedEntity.picture
+                    };
+                    entities.push(entity);
+                });
+                $scope.entities = entities;
+            });
+        }
+
+        // Check if we have entities in the url
+        // if ($location.search('uris')) {
+        //     console.log('$location search', $location.search('uris'));
+        // }
 
         // Setup the select boxes
         $scope.entitySelectOptions = {
-            placeholder: 'Who or what is this about?',
+            placeholder: 'Architect, Building or Firm',
             dropdownAutoWidth: true,
             multiple: true,
             // minimumInputLength: 2,
@@ -33,42 +62,52 @@ angular.module('angularApp')
             }
         };
 
+        /**
+         * Watches for new entities being added
+         * @param  {Array} entities     Entities selected
+         * @return {[type]}          [description]
+         */
         $scope.$watch('entities', function (entities) {
 
-            var returnRelationships = {};
+            if (entities) {
+                var promises = [];
 
-            var promises = [];
-
-            // We need to do a query for all the time data about this entity
-            angular.forEach(entities, function (entity) {
-                console.log('entity', entity);
-                var promise = Relationship.findByEntityUri(entity.uri).then(function (relationships) {
-                    console.log('got relationsihps', relationships);
-
-                    var relationshipsWithDates = $filter('filter')(relationships, function (relationship) {
-                        return angular.isDefined(relationship[Uris.QA_START_DATE]);
+                // We need to do a query for all the time data about this entity
+                angular.forEach(entities, function (entity) {
+                    // Get the relationships
+                    var promise = Relationship.findByEntityUri(entity.uri).then(function (relationships) {
+                        var relationshipsWithDates = $filter('filter')(relationships, function (relationship) {
+                            return angular.isDefined(relationship[Uris.QA_START_DATE]);
+                        });
+                        return Relationship.getData(relationshipsWithDates);
                     });
-                    return Relationship.getData(relationshipsWithDates);
+                    promises.push(promise);
                 });
-                promises.push(promise);
-            });
 
-            $q.all(promises).then(function (relationshipsArray) {
-                console.log('relationships', relationshipsArray);
-                angular.forEach(relationshipsArray, function (data) {
-                    var relationships = data.relationships;
-                    angular.forEach(relationships, function (relationship) {
-                        returnRelationships[relationship.uri] = relationship;
+                $q.all(promises).then(function (datas) {
+                    var dates = [];
+                    angular.forEach(datas, function (data) {
+                        var relationships = data.relationships;
+                        var newDates = Timeline.relationshipsToEvents(relationships);
+                        dates = dates.concat(newDates);
                     });
+                    $scope.timeline.dates = dates;
                 });
-                $scope.relationships = GraphHelper.graphValues(returnRelationships);
-            });
 
+                // Setup the URL
+                if (entities.length) {
+                    var uris = GraphHelper.getAttributeValuesUnique(entities, 'uri');
+                    $location.search({
+                        uris: angular.toJson(uris)
+                    });
+                } else {
+                    // $location.search({});
+                }
+
+                console.log(($location.search()).uris);
+            }
         });
 
-        $scope.addToTimeline = function (entity) {
-
-        };
 
         $scope.orderByStart = function (relationship) {
             return relationship[Uris.QA_START_DATE] || '0';
