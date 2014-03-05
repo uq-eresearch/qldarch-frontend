@@ -29,7 +29,9 @@ angular.module('angularApp')
              */
             findWithUrl: function (url) {
                 if (ENV.name === 'development') {
-                    url = 'http://localhost:8080/qldarch/scripts/SCG_InterviewWithGrahamBligh.json';
+                    // http://qldarch-test.metadata.net/static/transcripts/json/SCG_InterviewWithGrahamBligh.json
+                    url = url.substring('http://qldarch-test.metadata.net'.length);
+                    // url = 'http://localhost:8080/qldarch/scripts/SCG_InterviewWithGrahamBligh.json';
                 }
                 console.log('transcript url', url);
                 console.log('env name', ENV);

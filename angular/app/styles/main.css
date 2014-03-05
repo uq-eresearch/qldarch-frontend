@@ -4390,7 +4390,8 @@ a.list-group-item.active > .badge,
     font-size: 72px;
   }
 }
-.thumbnail {
+.thumbnail,
+.bthumbnail {
   display: block;
   padding: 0px;
   margin-bottom: 24px;
@@ -4465,6 +4466,9 @@ a.thumbnail.active {
 }
 .alert-info .alert-link {
   color: #245269;
+}
+.alert-info a {
+  font-weight: bold;
 }
 .alert-warning {
   background-color: #fcf8e3;
@@ -5913,7 +5917,8 @@ section {
 section .thumbnail {
   margin-bottom: 0;
 }
-.thumbnail {
+.thumbnail,
+.bthumbnail {
   position: relative;
   border: none;
 }

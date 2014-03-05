@@ -3,7 +3,7 @@
 angular.module('angularApp')
     .directive('timeline', function ($timeout) {
         var TIMELINE_HEIGHT = 600;
-        var UPDATE_DELAY = 2000;
+        var UPDATE_DELAY = 500;
         return {
             template: '<div></div>',
             restrict: 'E',
@@ -15,6 +15,8 @@ angular.module('angularApp')
                 dates: '='
             },
             link: function postLink($scope, element) {
+
+                // element.height(TIMELINE_HEIGHT).css('border', '1px solid #DDD').css('border-radius', '3px').css('background-color', '#EEE');
                 // Generate a random id since we cant use jquery selectors
                 // to initialize this timeline (annoying!)
                 var id = 'timeline' + (new Date()).getTime();
@@ -42,7 +44,7 @@ angular.module('angularApp')
                 var subtitleTimer = null;
                 $scope.$watch('subtitle', function (subtitle, subtitleOld) {
                     if (subtitle !== subtitleOld) {
-                        if (headlineTimer) {
+                        if (subtitleTimer) {
                             $timeout.cancel(subtitleTimer);
                         }
                         subtitleTimer = $timeout(function () {
@@ -51,20 +53,34 @@ angular.module('angularApp')
                     }
                 });
 
+
+                var datesTimer = null;
+                /**
+                 * Watches dates for changes.
+                 * Waits for a set delay before updating the dates.
+                 *
+                 * @param  {[type]} dates
+                 * @return {[type]}       [description]
+                 */
                 $scope.$watch('dates', function (dates) {
-                    if (dates && dates.length) {
-                        // Clear a timeline if its there, and create a new one
-                        restart();
-                    } else if (dates) {
-                        // No dates recorded, make no timeline
-                        reset();
+                    if (datesTimer) {
+                        $timeout.cancel(datesTimer);
                     }
+                    datesTimer = $timeout(function () {
+                        if (dates && dates.length) {
+                            // Clear a timeline if its there, and create a new one
+                            restart();
+                        } else if (dates) {
+                            // No dates recorded, make no timeline
+                            reset();
+                        }
+                    }, UPDATE_DELAY);
                 }, true);
 
                 function reset() {
                     console.log('clearing timeline');
                     element.removeClass();
-                    element.removeAttr('style');
+                    // element.removeAttr('style');
                     element.html('');
                 }
 

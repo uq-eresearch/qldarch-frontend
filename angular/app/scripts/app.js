@@ -163,13 +163,22 @@ angular.module('angularApp', [
             .state('create', {
                 abstract: true,
                 url: '/create',
-                template: '<ui-view></ui-view>'
+                template: '<ui-view autoscroll="false"></ui-view>'
             })
             .state('create.timeline', {
                 url: '/timeline?uris',
                 templateUrl: 'views/create/timeline.html',
                 controller: 'CreateTimelineCtrl',
                 reloadOnSearch: false
+            })
+            .state('create.timeline.add', {
+                url: '/add',
+            })
+            .state('create.timeline.add.import', {
+                url: '/import',
+            })
+            .state('create.timeline.add.event', {
+                url: '/event',
             })
             .state('create.map', {
                 url: '/map?map',
@@ -203,7 +212,24 @@ angular.module('angularApp', [
                 url: '/text-analysis'
             })
             .state('architects', {
+                abstract: true,
                 url: '/architects',
+                template: '<ui-view autoscroll="false"></ui-view>'
+            })
+            .state('architects.queensland', {
+                url: '',
+                templateUrl: 'views/architects.html',
+                controller: 'ArchitectsCtrl',
+                resolve: {
+                    architects: ['Architect',
+                        function (Architect) {
+                            return Architect.loadAll();
+                        }
+                    ]
+                }
+            })
+            .state('architects.other', {
+                url: '/other',
                 templateUrl: 'views/architects.html',
                 controller: 'ArchitectsCtrl',
                 resolve: {

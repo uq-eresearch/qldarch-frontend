@@ -5,55 +5,153 @@
 		</div>
 	</div>
 	<div class="container">
-		<div class="row">
+		<div class="row" ng-if="!timeline.dates.length && !$state.includes('create.timeline.add')">
 			<div class="col-md-12">
-				<p class="text-muted">Search for architects, buildings or firms to overlay their timelines.</p>
-				<div ui-select2="entitySelectOptions" ng-model="entities" class="form-control"></div>
-			</div>			
+				<div class="alert alert-info" style="margin-bottom: 0px;">
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+					<strong>Let's start building!</strong> 
+					Try <a href ui-sref="create.timeline.add.event">adding an event</a> or <a href ui-sref="create.timeline.add.import">importing events</a> from an architect, building or firm to the timeline.
+				</div>
+			</div>
 		</div>
-		<div class="row">
+		<div class="row" ng-if="timeline.dates.length">
 			<div class="col-md-12">
 				<timeline headline="{{ timeline.headline }}" subtitle="{{ timeline.subtitle }}" dates="timeline.dates"></timeline>
 			</div>
 		</div>
-		<!--<div class="row" ng-repeat="relationship in relationships | orderBy:orderByStart">
-			<div class="col-md-1">
-				<strong>
-				{{ relationship[Uris.QA_START_DATE] }}
-				<span ng-show="relationship[Uris.QA_START_DATE] && relationship[Uris.QA_END_DATE]"> - </span>
-				{{ relationship[Uris.QA_END_DATE] }}
-				</strong>
-			</div>
-			<div class="col-md-11">
-				<ul class="list-group">
+
+		<div class="row">
+			<div class="col-md-12">
+				<div style="margin-bottom: 10px; overflow: auto">
+					<span class="pull-right">
+						<button class="btn btn-default" ui-sref="create.timeline.add.event" >
+							<i class="fa fa-plus"></i> Add Event
+						</button>	
+						<button class="btn btn-default" ui-sref="create.timeline.add.import">
+
+							<i class="fa fa-clock-o"></i> Import Events
+						</button>
+					</span>
+
+					<h3>Events</h3>
+				</div>
+				
+				<ul class="list-group" ng-show="$state.includes('create.timeline.add.import')">
 					<li class="list-group-item">
-						<div class="row">
-							<div class="col-md-2">
-								<div>
-									<img ng-if="!relationship.subject.picture" ng-src="images/icon.png" class="img-full">
-									<img ng-if="relationship.subject.picture" ng-src="{{ Uris.THUMB_ROOT + relationship.subject.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ selected.name }}" class="img-full">
-								</div>
-							</div>
-							<div class="col-md-8">
-								<h5>
-									<a href="#/{{ relationship.subject.type }}/{{ relationship.subject.encodedUri }}" ng-bind-html="relationship.subject.name || '' | highlight:transcriptSearchInput"></a>
-									<span ng-bind-html="relationship.predicate[Uris.QA_LABEL] || relationship.predicate.name || '' | highlight:transcriptSearchInput">
-									</span>
-									<a href="#/{{ relationship.object.type }}/{{ relationship.object.encodedUri }}" ng-bind-html="relationship.object.name || '' | highlight:transcriptSearchInput"></a>
-								</h5>
-								<p>
-								{{ relationship[Uris.QA_TEXTUAL_NOTE] }}
-								</p>
-								<a target="_blank" ui-sref="interview({interviewId: relationship.evidence.encodedDocumentedBy, time: relationship.evidence[Uris.QA_TIME_FROM] })"><i class="fa fa-microphone"></i></a>
-							</div>
-							<div class="col-md-2">
-								<img ng-if="!relationship.object.picture" ng-src="images/icon.png" class="img-full">
-									<img ng-if="relationship.object.picture" ng-src="{{ Uris.THUMB_ROOT + relationship.object.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ selected.name }}" class="img-full">
-							</div>
+						<p>Search for architects, buildings or firms to import their timeline events.</p>
+						<div ui-select2="importEventSelect" ng-model="entities" class="form-control"></div>
+						<div style="margin-top: 10px;">
+							<button class="btn btn-primary" ng-click="importEvents(entities)">Import</button>
+							<button class="btn btn-default" >Cancel</button>
 						</div>
 					</li>
 				</ul>
+
+
+				<ul class="list-group">
+					<li class="list-group-item" ng-if="!timeline.dates.length && !$state.includes('create.timeline.add')">
+						<div class="text-muted">No events added.</div>
+					</li>
+					<li class="list-group-item" ng-if="$state.includes('create.timeline.add.event')">
+						<form action="">
+							<div class="form-group">
+								<label class="control-label" for="dateHeadline">
+									Title
+									<i class="fa fa-asterisk" style="font-size: 10px; color: red;"></i>
+								</label>
+								<input ng-model="date.headline" name="dateHeadline" type="text" class="form-control" id="dateHeadline" placeholder="Title" required>
+							</div>
+							<div class="form-group">
+								<label class="control-label" for="yourcomments">Description</label>
+								<textarea ng-model="date.text" name="comments" class="form-control" id="yourcomments" placeholder="Text"></textarea>
+							</div>
+							<div class="form-group">
+								<label>
+									Dates
+									<i class="fa fa-asterisk" style="font-size: 10px; color: red;"></i>
+								</label>
+								<div class="row">
+									<div class="col-sm-6">
+										<input type="text" class="form-control" placeholder="Start Year" ng-model="date.startDate" required/>
+									</div>
+									<div class="col-sm-6">
+										<input type="text" class="form-control" placeholder="End Year" ng-model="date.endDate" required/>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label">Related Architect, Buidling or Firm</label>
+								<div ui-select2="relatedSelect" ng-model="date.entity" class="form-control"></div>
+							</div>
+
+							<button type="submit" class="btn btn-primary" ng-click="addDate(date)">Add</button>
+							<button class="btn btn-default" ui-sref="create.timeline">Cancel</button>
+						</form>
+					</li>
+					<li class="list-group-item list-group-item-default" ng-repeat="date in timeline.dates | orderBy:orderByStart">
+						<div class="media">
+							<a class="pull-left" href="#/{{ date.entity.type }}/{{ date.entity.encodedUri }}">
+								<img class="media-object img-responsive img-circle" ng-if="!date.entity.picture" ng-src="images/icon.png" style="display:block; width:32px">
+								<img class="media-object img-responsive img-circle" ng-if="date.entity.picture" ng-src="{{ Uris.FILE_ROOT + date.entity.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ date.entity.name }}" style="width:32px">
+							</a>
+							<div class="media-body">
+								<button class="btn btn-danger btn-xs pull-right" ng-click="removeDate(date)"><i class="fa fa-trash-o"></i></button>
+								<p>
+									<strong style="display: inline-block; width: 90px; margin-right: 15px;">
+										{{ date.startDate }} <span ng-show="date.endDate">- {{ date.endDate }}</span>
+									</strong> 
+									{{ date.headline }}
+								</p>
+
+							</div>
+						</div>
+					</li>
+					<!-- <li class="list-group-item" ng-show="timeline.dates.length > DEFAULT_EVENT_DISPLAY_COUNT">
+						<button class="btn btn-default" ng-click="showAllEvents()">Show All</button>
+					</li> -->
+				</ul>
 			</div>
-		</div>-->
-	</div>
-</div>
+		</div>
+		
+		
+		<!--<div class="row" ng-repeat="relationship in relationships | orderBy:orderByStart">
+					<div class="col-md-1">
+								<strong>
+								{{ relationship[Uris.QA_START_DATE] }}
+								<span ng-show="relationship[Uris.QA_START_DATE] && relationship[Uris.QA_END_DATE]"> - </span>
+								{{ relationship[Uris.QA_END_DATE] }}
+								</strong>
+					</div>
+					<div class="col-md-11">
+								<ul class="list-group">
+											<li class="list-group-item">
+														<div class="row">
+																	<div class="col-md-2">
+																				<div>
+																							<img ng-if="!relationship.subject.picture" ng-src="images/icon.png" class="img-full">
+																							<img ng-if="relationship.subject.picture" ng-src="{{ Uris.THUMB_ROOT + relationship.subject.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ selected.name }}" class="img-full">
+																				</div>
+																	</div>
+																	<div class="col-md-8">
+																				<h5>
+																					<a href="#/{{ relationship.subject.type }}/{{ relationship.subject.encodedUri }}" ng-bind-html="relationship.subject.name || '' | highlight:transcriptSearchInput"></a>
+																					<span ng-bind-html="relationship.predicate[Uris.QA_LABEL] || relationship.predicate.name || '' | highlight:transcriptSearchInput">
+																					</span>
+																					<a href="#/{{ relationship.object.type }}/{{ relationship.object.encodedUri }}" ng-bind-html="relationship.object.name || '' | highlight:transcriptSearchInput"></a>
+																				</h5>
+																				<p>
+																				{{ relationship[Uris.QA_TEXTUAL_NOTE] }}
+																				</p>
+																				<a target="_blank" ui-sref="interview({interviewId: relationship.evidence.encodedDocumentedBy, time: relationship.evidence[Uris.QA_TIME_FROM] })"><i class="fa fa-microphone"></i></a>
+																	</div>
+																	<div class="col-md-2">
+																				<img ng-if="!relationship.object.picture" ng-src="images/icon.png" class="img-full">
+																					<img ng-if="relationship.object.picture" ng-src="{{ Uris.THUMB_ROOT + relationship.object.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ selected.name }}" class="img-full">
+																	</div>
+														</div>
+											</li>
+								</ul>
+					</div>
+				</div>-->
+			</div>
+		</div>
