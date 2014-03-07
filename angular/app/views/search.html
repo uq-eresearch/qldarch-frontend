@@ -29,44 +29,39 @@
                     </div>
                 </div>
                 <div class="col-md-8">
-                    <h3>
+                    <h4>
+                        <!-- Title -->
                         <a ng-href="{{ result.link }}">
-                            <!-- Title -->
-                            {{ result.title }}</a>
-                            <!-- /Title -->
+                            {{ result.title }}
+                        </a>
+                        <!-- /Title -->
+                    </h4>
+                    <h5>
+                        <!-- Authors -->
+                        <span ng-show="result.authors">{{ result.authors }}, </span>
+                        <!-- /Authors -->
 
-                            <small>
-                                <!-- Type -->
-                                {{ result.type == 'interview' && 'Interview' || 'Article' }} 
-                                <!-- /Type -->
+                        <!-- Periodical Title -->
+                        {{ result.periodicalTitle }} 
+                        <!-- /Periodical Title -->
 
-                                <!-- Authors -->
-                                <span ng-show="result.authors">- {{ result.authors }}</span>
-                                <!-- /Authors -->
-                            </small>
-                        </h3>
-                        <h5>
-                            <!-- Periodical Title -->
-                            {{ result.periodicalTitle }} 
-                            <!-- /Periodical Title -->
+                        <span ng-show="result.volumne || result.issue">-</span> 
 
-                            <span ng-show="result.volumne || result.issue">-</span> 
+                        <!-- Volume -->
+                        <span ng-show="result.volume">Volume {{ result.volume }},</span> 
+                        <!-- /Volume -->
 
-                            <!-- Volume -->
-                            <span ng-show="result.volume">Volume {{ result.volume }},</span> 
-                            <!-- /Volume -->
+                        <!-- Issue -->
+                        <span ng-show="result.issue">Issue {{ result.issue }}</span>
+                        <!-- /Issue -->
+                    </h5>
 
-                            <!-- Issue -->
-                            <span ng-show="result.issue">Issue {{ result.issue }}</span>
-                            <!-- /Issue -->
-                        </h5>
-
-                        <!-- Result: Snippet -->
-                        <div ng-bind-html="result.snippet">
-                        </div>
+                    <!-- Result: Snippet -->
+                    <div ng-bind-html="result.snippet">
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-    </div>
+</div>
