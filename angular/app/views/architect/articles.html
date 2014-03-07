@@ -39,23 +39,18 @@
             </div>
             <div class="col-md-8">
                 <!-- Article Details -->
-                <h3>
+                <h4>
+                    <!-- /Title -->
                     <a ng-href="{{ article.link }}">
-                        <!-- Title -->
-                        {{ article.title }}</a>
-                        <!-- /Title -->
-
-                        <small>
-                            <!-- Type -->
-                            Article
-                            <!-- /Type -->
-
-                            <!-- Authors -->
-                            <span ng-show="article.authors">- {{ article.authors }}</span>
-                            <!-- /Authors -->
-                        </small>
-                </h3>
+                        {{ article.title }}
+                    </a>
+                    <!-- Title -->
+                </h4>
                 <h5>
+                    <!-- Author -->
+                    <span ng-show="article.authors">{{ article.authors }}, </span>
+                    <!-- /Author -->
+
                     <!-- Periodical Title -->
                     {{ article.periodicalTitle }} 
                     <!-- /Periodical Title -->
