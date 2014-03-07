@@ -553,7 +553,7 @@ angular.module('angularApp', [
                 ]
             })
             .state('firm.structures', {
-                url: '/structures',
+                url: '/projects',
                 templateUrl: 'views/firm/structures.html',
                 resolve: {
                     structures: ['$stateParams', 'GraphHelper', 'Uris', 'Structure', 'Relationship',
@@ -675,7 +675,7 @@ angular.module('angularApp', [
                 controller: 'TimelineCtrl'
             })
             .state('structures', {
-                url: '/structures',
+                url: '/projects',
                 templateUrl: 'views/structures.html',
                 controller: 'StructuresCtrl',
                 resolve: {
@@ -688,7 +688,7 @@ angular.module('angularApp', [
             })
             .state('structure', {
                 abstract: true,
-                url: '/structure/:structureId',
+                url: '/project/:structureId',
                 templateUrl: 'views/structure/layout.html',
                 resolve: {
                     structure: ['$http', '$stateParams', 'Uris', 'Structure', 'GraphHelper',

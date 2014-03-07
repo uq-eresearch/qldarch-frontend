@@ -1,13 +1,13 @@
 <div class="thumbnail" >
-    <a ng-href="#/structure/{{ structure.encodedUri }}" class="thumbnail-image">
+    <a ng-href="#/project/{{ structure.encodedUri }}" class="thumbnail-image">
         <img ng-if="!structure.picture" src="images/icon.png" style="display:block; width:100%">
         <img ng-if="structure.picture" ng-src="{{ Uris.THUMB_ROOT + structure.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ structure.name }}">
     </a>
 
     <div class="caption">
-        <h4><a ng-href="#/structure/{{ structure.encodedUri }}">
+        <h4><a ng-href="#/project/{{ structure.encodedUri }}">
             {{ structure.name }}
         </a></h4>
-        <p><a ng-href="#/structure/{{ structure.encodedUri }}" class="btn btn-primary btn-sm" role="button">Go</a></p>
+        <p><a ng-href="#/project/{{ structure.encodedUri }}" class="btn btn-primary btn-sm" role="button">Go</a></p>
     </div>
 </div>
