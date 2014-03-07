@@ -587,7 +587,7 @@ angular.module('angularApp', [
                     }
                 ]
             })
-            .state('firm.lineDrawings', {
+        /*.state('firm.lineDrawings', {
                 url: '/line-drawings',
                 templateUrl: 'views/firm/linedrawings.html',
                 resolve: {
@@ -603,35 +603,35 @@ angular.module('angularApp', [
                         $scope.lineDrawingRows = LayoutHelper.group(lineDrawings, 6);
                     }
                 ]
-            })
-            .state('firm.lineDrawing', {
-                url: '/line-drawing/:lineDrawingId',
-                templateUrl: 'views/linedrawing.html',
-                resolve: {
-                    lineDrawing: ['Expression', '$stateParams', 'GraphHelper', 'Uris', 'Firm',
-                        function (Expression, $stateParams, GraphHelper, Uris, Firm) {
-                            var lineDrawingUri = GraphHelper.decodeUriString($stateParams.lineDrawingId);
-                            console.log('loading firm');
-                            return Expression.load(lineDrawingUri, 'qldarch:LineDrawing').then(function (lineDrawing) {
-                                // Loading building if its there
-                                if (angular.isDefined(lineDrawing[Uris.QA_DEPICTS_BUILDING])) {
-                                    return Firm.load(lineDrawing[Uris.QA_DEPICTS_BUILDING]).then(function (structure) {
-                                        lineDrawing.building = structure;
-                                        return lineDrawing;
-                                    });
-                                } else {
+            })*/
+        .state('firm.lineDrawing', {
+            url: '/line-drawing/:lineDrawingId',
+            templateUrl: 'views/linedrawing.html',
+            resolve: {
+                lineDrawing: ['Expression', '$stateParams', 'GraphHelper', 'Uris', 'Firm',
+                    function (Expression, $stateParams, GraphHelper, Uris, Firm) {
+                        var lineDrawingUri = GraphHelper.decodeUriString($stateParams.lineDrawingId);
+                        console.log('loading firm');
+                        return Expression.load(lineDrawingUri, 'qldarch:LineDrawing').then(function (lineDrawing) {
+                            // Loading building if its there
+                            if (angular.isDefined(lineDrawing[Uris.QA_DEPICTS_BUILDING])) {
+                                return Firm.load(lineDrawing[Uris.QA_DEPICTS_BUILDING]).then(function (structure) {
+                                    lineDrawing.building = structure;
                                     return lineDrawing;
-                                }
-                            });
-                        }
-                    ]
-                },
-                controller: ['$scope', 'lineDrawing',
-                    function ($scope, lineDrawing) {
-                        $scope.lineDrawing = lineDrawing;
+                                });
+                            } else {
+                                return lineDrawing;
+                            }
+                        });
                     }
                 ]
-            })
+            },
+            controller: ['$scope', 'lineDrawing',
+                function ($scope, lineDrawing) {
+                    $scope.lineDrawing = lineDrawing;
+                }
+            ]
+        })
             .state('firm.relationships', {
                 url: '/relationships',
                 templateUrl: 'views/relationships.html',

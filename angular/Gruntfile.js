@@ -15,6 +15,33 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-ng-constant');
 
     grunt.initConfig({
+        secret: grunt.file.readJSON('secret.json'),
+        sftp: {
+            deploy: {
+                files: {
+                    './': 'dist/**'
+                },
+                options: {
+                    path: '/var/www/html/beta/',
+                    srcBasePath: 'dist/',
+                    host: '<%= secret.host %>',
+                    username: '<%= secret.username %>',
+                    password: '<%= secret.password %>',
+                    port: 6666,
+                    // showProgress: true
+                }
+            }
+        },
+        // sshexec: {
+        //     test: {
+        //         command: 'ssh -L 6666:qldarch-test:22 uqcmcna1@gladys',
+        //         options: {
+        //             host: '<%= secret.host %>',
+        //             username: '<%= secret.username %>',
+        //             password: '<%= secret.password %>'
+        //         }
+        //     }
+        // },
         yeoman: {
             // configurable paths
             app: require('./bower.json').appPath || 'app',
@@ -416,7 +443,8 @@ module.exports = function (grunt) {
         'cssmin',
         'uglify',
         'rev',
-        'usemin'
+        'usemin',
+        'sftp:deploy'
     ]);
 
     grunt.registerTask('default', [
