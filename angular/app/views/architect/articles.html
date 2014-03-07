@@ -19,16 +19,60 @@
     </div>
 
     <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div ng-repeat="article in articles">
-                    <h4>
-                        <a href="#/article/{{ article.encodedUri }}">{{ article.title }}</a>
-                    </h4>
-                    <pre>
-                        {{ article | json }}
-                    </pre>
-                    <p ng-bind-html="article.snippet"></p>
+        
+        <div ng-repeat="article in articles" class="row">
+            <div class="col-md-1">
+                <!-- Icon Square -->
+                <div class="square" ng-class="{'square-interview': article.type=='interview', 'square-architect': article.type == 'article'}">
+                    <div class="square-inner">
+                        <div class="square-inner-content">
+                            <div class="square-inner-content-center">
+                                <!-- Icon -->
+                                <i class="fa fa-book" ng-show="article.type == 'article'"></i>  
+                                <i class="fa fa-microphone" ng-show="article.type == 'interview'"></i>  
+                                <!-- /Icon -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Icon Square -->
+            </div>
+            <div class="col-md-8">
+                <!-- Article Details -->
+                <h3>
+                    <a ng-href="{{ article.link }}">
+                        <!-- Title -->
+                        {{ article.title }}</a>
+                        <!-- /Title -->
+
+                        <small>
+                            <!-- Type -->
+                            Article
+                            <!-- /Type -->
+
+                            <!-- Authors -->
+                            <span ng-show="article.authors">- {{ article.authors }}</span>
+                            <!-- /Authors -->
+                        </small>
+                </h3>
+                <h5>
+                    <!-- Periodical Title -->
+                    {{ article.periodicalTitle }} 
+                    <!-- /Periodical Title -->
+
+                    <span ng-show="article.volumne || article.issue">-</span> 
+                    
+                    <!-- Volume -->
+                    <span ng-show="article.volume">Volume {{ article.volume }},</span> 
+                    <!-- /Volume -->
+        
+                    <!-- Issue -->
+                    <span ng-show="article.issue">Issue {{ article.issue }}</span>
+                    <!-- /Issue -->
+                </h5>
+
+                <!-- Result: Snippet -->
+                <div ng-bind-html="article.snippet">
                 </div>
             </div>
         </div>

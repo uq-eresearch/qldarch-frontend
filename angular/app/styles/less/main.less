@@ -29,6 +29,39 @@ body {
   background-color: white;
 }
 
+.square {
+  width:100%;
+  padding-bottom:100%;
+  position: relative;
+  background: @brand-green;
+  border-radius: 3px;
+  display: table;
+  .square-inner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    .square-inner-content {
+      position: relative;
+      display: table;
+      height: 100%;
+      width: 100%;
+      .square-inner-content-center {
+        display: table-cell;
+        vertical-align: middle;
+        color: white;
+        text-align: center;
+        font-size: 24px;
+      }
+    }
+  }
+  &.square-article {
+    background-color: @brand-article;
+  }
+  &.square-interview {
+    background-color: @brand-interview;
+  }
+}
+
 section.gray {
   background-color: @gray-lighter;
 }

@@ -64,6 +64,7 @@ angular.module('angularApp')
         this.QA_DEPICTS_BUILDING = this.QA_NS + 'depictsBuilding';
 
         this.QA_ISSUE = this.QA_NS + 'issue';
+        this.QA_VOLUME = this.QA_NS + 'volume';
         this.QA_PERIODICAL_TITLE = this.QA_NS + 'periodicalTitle';
         this.QA_PAGES = this.QA_NS + 'pages';
         this.QA_AUTHORS = this.QA_NS + 'authors';

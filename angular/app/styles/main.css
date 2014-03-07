@@ -6115,7 +6115,7 @@ h1 {
   margin-bottom: 0px;
 }
 .highlight {
-  background-color: yellow;
+  background-color: #e7e9e7;
 }
 .navbar-inverse .input-group input {
   border: none;
@@ -6161,6 +6161,38 @@ h1 {
 }
 body {
   background-color: white;
+}
+.square {
+  width: 100%;
+  padding-bottom: 100%;
+  position: relative;
+  background: #11c3b6;
+  border-radius: 3px;
+  display: table;
+}
+.square .square-inner {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.square .square-inner .square-inner-content {
+  position: relative;
+  display: table;
+  height: 100%;
+  width: 100%;
+}
+.square .square-inner .square-inner-content .square-inner-content-center {
+  display: table-cell;
+  vertical-align: middle;
+  color: white;
+  text-align: center;
+  font-size: 24px;
+}
+.square.square-article {
+  background-color: #33b3ab;
+}
+.square.square-interview {
+  background-color: #da3f68;
 }
 section.gray {
   background-color: #eeeeee;

@@ -75,8 +75,10 @@ angular.module('angularApp')
              * @returns {*}
              */
             load: function (uri, type) {
+                console.log('hello?', type, uri);
                 if (!type) {
-                    throw ("you need to include type, hopefully this will be fixed in the future");
+                    console.log('throw dude');
+                    throw ('you need to include type, hopefully this will be fixed in the future');
                 }
                 return Request.getIndex('expression', type, false, false).then(function (expressions) {
                     var expression = expressions[uri];
@@ -88,7 +90,7 @@ angular.module('angularApp')
 
             loadAll: function (type) {
                 if (!type) {
-                    throw ("you need to include type, hopefully this will be fixed in the future");
+                    throw ('you need to include type, hopefully this will be fixed in the future');
                 }
 
                 return Request.getIndex('expression', type, true).then(function (expressions) {
@@ -102,14 +104,17 @@ angular.module('angularApp')
              * @param type
              * @returns {*}
              */
-            loadList: function (uris, type) {
+            loadList: function (uris, type, summary) {
                 // Because its broken, we need to do a getIndex and filter
                 // IDLIST isn't working like it should
 
                 if (!type) {
-                    throw ("you need to include type, hopefully this will be fixed in the future");
+                    throw ('you need to include type, hopefully this will be fixed in the future');
                 }
-                return Request.getIndex('expression', type, true).then(function (expressions) {
+                if (!angular.isDefined(summary)) {
+                    summary = true;
+                }
+                return Request.getIndex('expression', type, summary).then(function (expressions) {
                     var filteredExpressions = {};
                     angular.forEach(uris, function (uri) {
                         filteredExpressions[uri] = expressions[uri];

@@ -113,7 +113,7 @@ module.exports = function (grunt) {
                 context: '/ws',
                 host: 'localhost',
                 port: 8080,
-                changeOrigin: true
+                changeOrigin: false
             }, {
                 context: '/solr',
                 host: 'qldarch-test.metadata.net',

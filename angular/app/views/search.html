@@ -15,25 +15,58 @@
     <section>
         <div class="container">
             <!--<div ng-include="'views/searchbox.html'"></div>-->
-            <div ng-repeat="result in results | orderBy:'-rank'" class="row">
-                <div class="col-md-6">
-                    <h3>
-
-                        <a ng-href="#/{{ result.type }}/{{ result.encodedUri }}">{{ result.title }}</a>
-                        <small><a ng-href="#/{{ result.type == 'interview' && 'interviews' || 'articles' }}">{{ result.type == 'interview' && 'Interview' || 'Article' }}</a></small>
-                    </h3>
-
-                    <!-- Result: type -->
-                    <div>
-
+            <div ng-repeat="result in results | orderBy:'-score'" class="row">
+                <div class="col-md-1">
+                    <div class="square" ng-class="{'square-interview': result.type=='interview', 'square-architect': result.type == 'article'}">
+                        <div class="square-inner">
+                            <div class="square-inner-content">
+                                <div class="square-inner-content-center">
+                                    <i class="fa fa-book" ng-show="result.type == 'article'"></i>  
+                                    <i class="fa fa-microphone" ng-show="result.type == 'interview'"></i>  
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </div>
+                <div class="col-md-8">
+                    <h3>
+                        <a ng-href="{{ result.link }}">
+                            <!-- Title -->
+                            {{ result.title }}</a>
+                            <!-- /Title -->
 
-                    <!-- Result: Snippet -->
-                    <div ng-bind-html="result.snippet">
+                            <small>
+                                <!-- Type -->
+                                {{ result.type == 'interview' && 'Interview' || 'Article' }} 
+                                <!-- /Type -->
+
+                                <!-- Authors -->
+                                <span ng-show="result.authors">- {{ result.authors }}</span>
+                                <!-- /Authors -->
+                            </small>
+                        </h3>
+                        <h5>
+                            <!-- Periodical Title -->
+                            {{ result.periodicalTitle }} 
+                            <!-- /Periodical Title -->
+
+                            <span ng-show="result.volumne || result.issue">-</span> 
+
+                            <!-- Volume -->
+                            <span ng-show="result.volume">Volume {{ result.volume }},</span> 
+                            <!-- /Volume -->
+
+                            <!-- Issue -->
+                            <span ng-show="result.issue">Issue {{ result.issue }}</span>
+                            <!-- /Issue -->
+                        </h5>
+
+                        <!-- Result: Snippet -->
+                        <div ng-bind-html="result.snippet">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-</div>
+    </div>
