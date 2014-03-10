@@ -42,7 +42,47 @@ Notes related resources of the **Notes API**
             user: "",
             auth: false
         }
+        
+# Group Entities
 
+## Entities List [/entity/{summary}/{type}]
+### List all entities of a type [GET]
++ Parameters
+    + summary (required, string) ... Either `summary` or `detail`.
+    + type (required, URI or short, `qldarch:Architect`) ... URI of type
+
++ Response 200 (application/json)
+
+        {
+            http://qldarch.net/users/patriciadowling/Architect#62953961802: {
+            uri: "http://qldarch.net/users/patriciadowling/Architect#62953961802",
+            http://xmlns.com/foaf/0.1/lastName: "MacLurkin",
+            http://xmlns.com/foaf/0.1/firstName: "Charles"
+            },
+            ...
+        }
+        
+## Entity Description [/entity/description{?ID}{?IDLIST}{?SUMMARY}]
+### Retrieve an entity or a list of entities [GET]
+Either ID or IDLIST parameters are required, not both.
+
++ Parameters
+    + ID (required, URI, `http://qldarch.net/users/patriciadowling/Architect#62953961802`) ... The URI of the entity to describe
+    + IDLIST (required, String - Comma Separated URIs) ... A list of URIs of the entity to describe comma separated
+    + SUMMARY (optional, boolean, `true`) ... URI of type.
+
++ Response 200 (application/json)
+
+        {
+            http://qldarch.net/users/patriciadowling/Architect#62953961802: {
+                uri: "http://qldarch.net/users/patriciadowling/Architect#62953961802",
+                http://xmlns.com/foaf/0.1/lastName: "MacLurkin",
+                http://qldarch.net/ns/rdf/2012-06/terms#evidence: "http://qldarch.net/users/patriciadowling/Evidence#62953961768",
+                http://www.w3.org/1999/02/22-rdf-syntax-ns#type: "http://qldarch.net/ns/rdf/2012-06/terms#Architect",
+                http://xmlns.com/foaf/0.1/firstName: "Charles"
+            }
+        }
+        
 # Group Expressions
 Notes related resources of the **Expressions API**
 
@@ -233,3 +273,6 @@ Consumes file in multipart/form - uses apache file uploader library to upload fi
             }, 
             ... 
         }
+
+
+
