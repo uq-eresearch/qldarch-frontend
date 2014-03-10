@@ -82,6 +82,45 @@ Either ID or IDLIST parameters are required, not both.
                 http://xmlns.com/foaf/0.1/firstName: "Charles"
             }
         }
+
+### Update an entity [PUT]
+Only ID is required. Do not include other query parameters.
+
++ Parameters
+    + ID (required, URI, `http://qldarch.net/rdf/2012-12/resources/people/6`) ... The URI of the entity to describe
+
++ Request (application/json)
+
+        {
+            "uri":"http://qldarch.net/rdf/2012-12/resources/people/6",
+            "http://xmlns.com/foaf/0.1/lastName":"Mills2",
+            "http://qldarch.net/ns/rdf/2012-06/terms#preferredImage":"http://qldarch.net/omeka/items/show/1793","http://www.w3.org/1999/02/22-rdf-syntax-ns#type":["http://www.w3.org/2000/01/rdf-schema#Resource","http://qldarch.net/ns/rdf/2012-06/terms#Entity","http://qldarch.net/ns/rdf/2012-06/terms#NonDigitalThing","http://qldarch.net/ns/rdf/2012-06/terms#StructureOrAgent","http://xmlns.com/foaf/0.1/Agent","http://xmlns.com/foaf/0.1/Person","http://qldarch.net/ns/rdf/2012-06/terms#Architect","http://qldarch.net/ns/rdf/2012-06/terms#Evincible","http://qldarch.net/ns/rdf/2012-06/terms#StructureOrAgentOrTopic"],"http://qldarch.net/ns/rdf/2012-06/terms#label":"Helen Mills","http://xmlns.com/foaf/0.1/firstName":"Helen","http://qldarch.net/ns/rdf/2012-06/terms#practicedInQueensland":true,"http://qldarch.net/ns/rdf/2012-06/terms#relatedTo":["http://qldarch.net/omeka/items/show/1793","http://qldarch.net/omeka/items/show/1769"],
+            "http://www.w3.org/2000/01/rdf-schema#label":"Helen Mills"
+        }
+        
++ Response 200 (application/json)
+
+        {
+            "uri":"http://qldarch.net/rdf/2012-12/resources/people/6",
+            "http://xmlns.com/foaf/0.1/lastName":"Mills2",
+            "http://qldarch.net/ns/rdf/2012-06/terms#preferredImage":"http://qldarch.net/omeka/items/show/1793",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
+                "http://qldarch.net/ns/rdf/2012-06/terms#NonDigitalThing",
+                "http://qldarch.net/ns/rdf/2012-06/terms#StructureOrAgent",
+                "http://xmlns.com/foaf/0.1/Agent",
+                "http://www.w3.org/2000/01/rdf-schema#Resource",
+                "http://qldarch.net/ns/rdf/2012-06/terms#Entity",
+                "http://xmlns.com/foaf/0.1/Person",
+                "http://qldarch.net/ns/rdf/2012-06/terms#StructureOrAgentOrTopic",
+                "http://qldarch.net/ns/rdf/2012-06/terms#Architect",
+                "http://qldarch.net/ns/rdf/2012-06/terms#Evincible"
+            ],
+            "http://qldarch.net/ns/rdf/2012-06/terms#label":"Helen Mills","http://xmlns.com/foaf/0.1/firstName":"Helen","http://qldarch.net/ns/rdf/2012-06/terms#practicedInQueensland":true,"http://www.w3.org/2000/01/rdf-schema#label":"Helen Mills",
+            "http://qldarch.net/ns/rdf/2012-06/terms#relatedTo": [
+                "http://qldarch.net/omeka/items/show/1769",
+                "http://qldarch.net/omeka/items/show/1793"
+            ]
+        }
         
 # Group Expressions
 Notes related resources of the **Expressions API**
