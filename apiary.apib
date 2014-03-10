@@ -150,23 +150,86 @@ Consumes file in multipart/form - uses apache file uploader library to upload fi
 # Group Ontology
 
 ## Relationships [/ontology/relationships]
-
-## Note [/notes/{id}]
-A single Note object with all its details
-
-+ Parameters
-    + id (required, number, `1`) ... Numeric `id` of the Note to perform action with. Has example value.
-
-### Retrieve a Note [GET]
+### Retrieve all relationships [GET]
 + Response 200 (application/json)
 
-    + Header
+        {
+            http://qldarch.net/ns/rdf/2012-06/terms#InfluencedByRelation: {
+            uri: "http://qldarch.net/ns/rdf/2012-06/terms#InfluencedByRelation",
+            http://qldarch.net/ns/rdf/2012-06/terms#impliesRelationship: "http://qldarch.net/ns/rdf/2012-06/terms#influencedBy",
+            http://www.w3.org/2000/01/rdf-schema#subClassOf: [
+            "http://www.w3.org/2000/01/rdf-schema#Resource",
+            "http://qldarch.net/ns/rdf/2012-06/terms#Relationship",
+            "http://qldarch.net/ns/rdf/2012-06/terms#RelatedToRelation",
+            "http://qldarch.net/ns/rdf/2012-06/terms#Evincible",
+            "http://qldarch.net/ns/rdf/2012-06/terms#InfluencedByRelation"
+            ],
+            http://www.w3.org/1999/02/22-rdf-syntax-ns#type: [
+            "http://www.w3.org/2000/01/rdf-schema#Resource",
+            "http://qldarch.net/ns/rdf/2012-06/terms#Relationship",
+            "http://www.w3.org/2002/07/owl#Class",
+            "http://www.w3.org/2000/01/rdf-schema#Class",
+            "http://qldarch.net/ns/rdf/2012-06/terms#Evincible"
+            ],
+            http://qldarch.net/ns/rdf/2012-06/terms#label: "Influenced By",
+            http://www.w3.org/2000/01/rdf-schema#label: "Influenced By"
+            },
+            ...
+        }
 
-            X-My-Header: The Value
+## Properties [/ontology/properties]
+### Retrieve all properties [GET]
++ Response 200 (application/json)
 
-    + Body
+        {
+            http://qldarch.net/ns/rdf/2012-06/terms#mimeType: {
+            uri: "http://qldarch.net/ns/rdf/2012-06/terms#mimeType",
+            http://www.w3.org/2000/01/rdf-schema#domain: "http://qldarch.net/ns/rdf/2012-06/terms#DigitalFile",
+            http://qldarch.net/ns/rdf/2012-06/terms#display: false,
+            http://www.w3.org/1999/02/22-rdf-syntax-ns#type: [
+            "http://www.w3.org/2000/01/rdf-schema#Resource",
+            "http://www.w3.org/2002/07/owl#DatatypeProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://qldarch.net/ns/rdf/2012-06/terms#AttributeProperty"
+            ],
+            http://qldarch.net/ns/rdf/2012-06/terms#label: "Mime Type",
+            http://www.w3.org/2000/01/rdf-schema#range: "http://www.w3.org/2001/XMLSchema#string",
+            http://www.w3.org/2000/01/rdf-schema#label: "Mime Type",
+            http://qldarch.net/ns/rdf/2012-06/terms#editable: false
+            },
+            ...
+        }
+        
+        
+## Entities [/ontology/entities/{type}{?INCSUBCLASS}{?INCSUPERCLASS}]
++ Parameters
+    + type (required, string, `qldarch:Architect`) ... Type of entity
+    + INCSUBCLASS (optional, boolean, `true`) ... Entity and all sub-classes
+    + INCSUPERCLASS (optional, boolean, `true`) ... Entity and all super-classes
 
-            { "id": 2, "title": "Pick-up posters from post-office" }
-
-### Remove a Note [DELETE]
-+ Response 204
+### Retrieve all entity types [GET]
++ Response 200 (application/json)
+        
+        {
+            http://qldarch.net/ns/rdf/2012-06/terms#InfluencedByRelation: {
+            uri: "http://qldarch.net/ns/rdf/2012-06/terms#InfluencedByRelation",
+            http://qldarch.net/ns/rdf/2012-06/terms#impliesRelationship: "http://qldarch.net/ns/rdf/2012-06/terms#influencedBy",
+            http://www.w3.org/2000/01/rdf-schema#subClassOf: [
+            "http://www.w3.org/2000/01/rdf-schema#Resource",
+            "http://qldarch.net/ns/rdf/2012-06/terms#Relationship",
+            "http://qldarch.net/ns/rdf/2012-06/terms#RelatedToRelation",
+            "http://qldarch.net/ns/rdf/2012-06/terms#Evincible",
+            "http://qldarch.net/ns/rdf/2012-06/terms#InfluencedByRelation"
+            ],
+            http://www.w3.org/1999/02/22-rdf-syntax-ns#type: [
+            "http://www.w3.org/2000/01/rdf-schema#Resource",
+            "http://qldarch.net/ns/rdf/2012-06/terms#Relationship",
+            "http://www.w3.org/2002/07/owl#Class",
+            "http://www.w3.org/2000/01/rdf-schema#Class",
+            "http://qldarch.net/ns/rdf/2012-06/terms#Evincible"
+            ],
+            http://qldarch.net/ns/rdf/2012-06/terms#label: "Influenced By",
+            http://www.w3.org/2000/01/rdf-schema#label: "Influenced By"
+            }, 
+            ... 
+        }
