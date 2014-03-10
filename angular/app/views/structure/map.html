@@ -4,12 +4,5 @@
             <h3>{{ structure[Uris.QA_LOCATION] }} </h3>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <div ui-map="$parent.myMap" class="map-canvas map"
-                 ui-event="mapEvents"
-                 ui-options="mapOptions">
-            </div>
-        </div>
-    </div>
+    <project-map structures="[structure]"></project-map>
 </div>

@@ -67,6 +67,7 @@ angular.module('angularApp')
         this.QA_VOLUME = this.QA_NS + 'volume';
         this.QA_PERIODICAL_TITLE = this.QA_NS + 'periodicalTitle';
         this.QA_PAGES = this.QA_NS + 'pages';
+        this.QA_DATE_PUBLISHED = this.QA_NS + 'datePublished';
         this.QA_AUTHORS = this.QA_NS + 'authors';
         this.QA_SOURCE_FILENAME = this.QA_NS + 'sourceFilename';
 
@@ -103,6 +104,8 @@ angular.module('angularApp')
         this.QA_FIRM_NAME = this.QA_NS + 'firmName';
         this.QA_LOCATION = this.QA_NS + 'location';
         this.QA_ASSOCIATED_FIRM = this.QA_NS + 'associatedFirm';
+        this.QA_PRACTICED_IN_QUEENSLAND = this.QA_NS + 'practicedInQueensland';
+        this.QA_AUSTRALIAN = this.QA_NS + 'australian';
 
         this.QA_BUILDING_TYPOLOGY = this.QA_NS + 'BuildingTypology';
         this.QA_BUILDING_TYPOLOGY_P = this.QA_NS + 'buildingTypology';

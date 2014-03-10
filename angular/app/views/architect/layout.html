@@ -11,7 +11,7 @@
 	        <div class="row">
 	            <div class="col-md-12">
 	                <ul class="nav nav-pills">
-	                    <li ui-sref-active="active">
+	                    <li ng-class="{'active': $state.includes('architect.summary')}">
 	                    	<a href ui-sref="architect.summary({ architectId: architect.encodedUri })">Summary</a>
                     	</li>
 						<li ui-sref-active="active" ng-if="interviews.length == 1">
@@ -28,7 +28,7 @@
 	                        </ul>
 	                    </li>
 	                    <li ui-sref-active="active">
-	                    	<a href ui-sref="architect.structures({ architectId: architect.encodedUri })">Structures</a>
+	                    	<a href ui-sref="architect.structures({ architectId: architect.encodedUri })">Projects</a>
 	                    </li>
 	                    <li ui-sref-active="active">
 	                    	<a href ui-sref="architect.articles({ architectId: architect.encodedUri })">Articles</a>

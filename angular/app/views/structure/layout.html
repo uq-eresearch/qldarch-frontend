@@ -1,7 +1,7 @@
 <div class="content">
     <div class="page-header has-subnav">
         <div class="container">
-            <small><a href ui-sref="structures">Projects »</a></small>
+            <small><a href ui-sref="structures.australian">Projects »</a></small>
             <h1>{{ structure.name }}</h1>
         </div>
     </div>
@@ -23,6 +23,9 @@
                         <li ng-class="{active: $state.includes('structure.map'), disabled: !structure.lat}">
                             <a href ui-sref="structure.map({ structureId: structure.encodedUri })" ng-show="structure.lat">Map</a>
                             <a href ng-show="!structure.lat" tooltip="No location stored.">Map</a>
+                        </li>
+                        <li ui-sref-active="active">
+                            <a href ui-sref="structure.articles({ structureId: structure.encodedUri })">Articles</a>
                         </li>
                         <li ui-sref-active="active">
                             <a href ui-sref="structure.timeline({ structureId: structure.encodedUri })">Timeline</a>

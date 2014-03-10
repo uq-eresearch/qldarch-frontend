@@ -6,10 +6,10 @@ angular.module('angularApp')
         // ...
 
         var getName = function (entity) {
-            return entity[Uris.QA_LABEL] ||
-                entity[Uris.QA_FIRM_NAME] ||
+            return entity[Uris.QA_FIRM_NAME] ||
                 entity[Uris.FOAF_NAME] ||
-                entity[Uris.FOAF_FIRST_NAME] + " " + entity[Uris.FOAF_LAST_NAME];
+                entity[Uris.FOAF_FIRST_NAME] + ' ' + entity[Uris.FOAF_LAST_NAME] ||
+                entity[Uris.QA_LABEL];
         };
 
         var setupNames = function (entities) {

@@ -3,6 +3,7 @@
         <h1>Architects</h1>
     </div>
 </div>
+
 <div class="subnav">
     <div class="container">
         <div class="row">
@@ -19,8 +20,9 @@
         </div>
     </div>
 </div>
-<div class="container">
-    <div class="row" ng-repeat="architectRow in architectRows">
+
+<div class="container" infinite-scroll="addMoreArchitectRows()">
+    <div class="row" ng-repeat="architectRow in architectRows | limitTo:architectRowDisplayCount">
         <div class="col-sm-2" ng-repeat="architect in architectRow">
             <div ng-include="'views/thumbs/architect.html'"></div>
         </div>

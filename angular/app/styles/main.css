@@ -6197,9 +6197,6 @@ body {
 section.gray {
   background-color: #eeeeee;
 }
-.row + .row {
-  margin-top: 24px;
-}
 .img-full {
   display: block;
   max-width: 100%;

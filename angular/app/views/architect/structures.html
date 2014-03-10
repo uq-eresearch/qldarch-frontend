@@ -1,27 +1,21 @@
 <div>
      <div class="container" >
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-default" style="margin-bottom: 0px;">
-                    <div class="panel-body">
-                      <span class="text-muted">Filters</span>
-                        <label ng-repeat="buildingTypology in buildingTypologies" class="text-muted">
-                            {{ buildingTypology.name }}
-                            <input type="checkbox" disabled checked>
-                        </label> 
-                    </div>
-                </div>
+
+        <div ng-if="isShowingMap">
+            <project-map structures="structures"></project-map>
+        </div>
+
+        <div class="panel panel-default" style="margin-bottom: 0px;">
+            <div class="panel-body">
+              <span class="text-muted">Filters</span>
+                <label ng-repeat="buildingTypology in buildingTypologies" class="text-muted">
+                    {{ buildingTypology.name }}
+                    <input type="checkbox" disabled checked>
+                </label> 
             </div>
         </div>
 
-        <div class="row"  ng-if="isShowingMap">
-            <div class="col-md-12">
-                 <div ui-map="$parent.myMap" class="map-canvas map"
-                     ui-event="mapEvents"
-                     ui-options="mapOptions">
-                </div>
-            </div>
-        </div>
+
         <div class="row">
             <div class="col-md-12">
                 <div class="row" ng-repeat="structureRow in structureRows">

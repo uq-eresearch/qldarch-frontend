@@ -1,23 +1,4 @@
 <div>
-    <div class="container" ng-show="isShowingMap">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-
-                    </div>
-                    <div class="panel-body">
-                        word cloud
-                        <!--<div ui-map="$parent.myMap" class="map-canvas map"
-                             ui-event="mapEvents"
-                             ui-options="mapOptions">
-                        </div>-->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="container">
         
         <div ng-repeat="article in articles" class="row">
@@ -55,6 +36,10 @@
                     {{ article.periodicalTitle }} 
                     <!-- /Periodical Title -->
 
+                    <!-- Date Published -->
+                    <span ng-show="article.datePublished">({{ article.datePublished }})</span>
+                    <!-- /Date Published -->
+
                     <span ng-show="article.volumne || article.issue">-</span> 
                     
                     <!-- Volume -->
@@ -64,7 +49,9 @@
                     <!-- Issue -->
                     <span ng-show="article.issue">Issue {{ article.issue }}</span>
                     <!-- /Issue -->
+
                 </h5>
+
 
                 <!-- Result: Snippet -->
                 <div ng-bind-html="article.snippet">

@@ -9,7 +9,6 @@ angular.module('angularApp')
             // Look at title
             var titleIndexes = indexesOf(title, [query]);
             var score = titleIndexes.length * 100;
-            console.log('title indexes', title, titleIndexes, titleIndexes.length);
 
             // Look at body text
             var textIndexes = indexesOf(text, query.split(separator));
@@ -88,7 +87,6 @@ angular.module('angularApp')
                     return '<span class="highlight">' + match + '</span>';
                 });
             });
-            console.log('text', text);
 
             return text;
         }
@@ -107,7 +105,6 @@ angular.module('angularApp')
                 return $q.when(results);
             }
 
-            console.log('loading articles', articleUris);
             return Expression.loadList(articleUris, 'qldarch:Article', false).then(function (articles) {
                 angular.forEach(docs, function (doc) {
                     if (angular.isDefined(doc.article)) {
@@ -115,7 +112,6 @@ angular.module('angularApp')
                         result.uri = doc.id;
                         result.link = Uris.FILE_ROOT + doc['system_location'];
                         result.encodedUri = btoa(doc.id);
-                        console.log('articles', articles, doc.id);
                         result.title = doc.title[0];
                         result.type = 'article';
                         result.text = doc.article;
@@ -125,18 +121,16 @@ angular.module('angularApp')
                         result.description = articles[doc.id][Uris.DCT_DESCRIPTION];
                         result.volume = articles[doc.id][Uris.QA_VOLUME];
                         result.authors = articles[doc.id][Uris.QA_AUTHORS];
+                        result.datePublished = articles[doc.id][Uris.QA_DATE_PUBLISHED];
 
-                        console.log('result', result, articles[doc.id]);
-                        console.log(result);
                         // Create the text snippet
-                        result.snippet = createSnippet(result.text, query.split(' '));
+                        result.snippet = createSnippet(result.text, query.split(' ')).substring(0, 1000);
 
                         // // Calculate the ranking based on terms
                         result.score = createScore(result.title, result.text, query, ' ');
                         results.push(result);
                     }
                 });
-                console.log('results are', results);
                 return results;
             });
         }

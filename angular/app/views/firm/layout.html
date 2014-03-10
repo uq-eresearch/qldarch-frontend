@@ -1,7 +1,7 @@
 <div class="content">
     <div class="page-header has-subnav">
         <div class="container">
-            <small><a ng-href="#/firms">Firms »</a></small>
+            <small><a href ui-sref="firms.australian">Firms »</a></small>
             <h1>{{ firm.name }}</h1>
         </div>
     </div>
@@ -20,9 +20,9 @@
                         <li ui-sref-active="active">
                             <a href ui-sref="firm.structures({ firmId: firm.encodedUri })">Projects</a>
                         </li>
-                        <!-- <li ui-sref-active="active">
-                            <a href ui-sref="firm.lineDrawings({ firmId: firm.encodedUri })">Line Drawings</a>
-                        </li> -->
+                        <li ui-sref-active="active">
+                            <a href ui-sref="firm.articles({ firmId: firm.encodedUri })">Articles</a>
+                        </li>
                         <li ui-sref-active="active">
                             <a href ui-sref="firm.relationships({ firmId: firm.encodedUri })">Relationships</a>
                         </li>

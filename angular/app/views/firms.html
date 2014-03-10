@@ -1,15 +1,30 @@
-<div class="page-header">
+<div class="page-header has-subnav">
     <div class="container">
         <h1>Firms</h1>
     </div>
 </div>
 
-<section>
+<div class="subnav">
     <div class="container">
-        <div class="row" ng-repeat="firmRow in firmRows">
-            <div class="col-sm-2" ng-repeat="firm in firmRow">
-                <div ng-include="'views/thumbs/firm.html'"></div>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-pills">
+                    <li ui-sref-active="active">
+                        <a href ui-sref="firms.australian">Australian</a>
+                    </li>
+                    <li ui-sref-active="active">
+                        <a href href ui-sref="firms.other">Other</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
-</section>
+</div>
+
+<div class="container" infinite-scroll="addMoreFirmRows()">
+    <div class="row" ng-repeat="firmRow in firmRows | limitTo:firmRowDisplayCount">
+        <div class="col-sm-2" ng-repeat="firm in firmRow">
+            <div ng-include="'views/thumbs/firm.html'"></div>
+        </div>
+    </div>
+</div>

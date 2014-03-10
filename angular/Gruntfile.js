@@ -138,9 +138,8 @@ module.exports = function (grunt) {
             },
             proxies: [{
                 context: '/ws',
-                host: 'localhost',
-                port: 8080,
-                changeOrigin: false
+                host: 'qldarch-test.metadata.net',
+                changeOrigin: true
             }, {
                 context: '/solr',
                 host: 'qldarch-test.metadata.net',
