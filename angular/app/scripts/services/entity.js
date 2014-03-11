@@ -6,10 +6,12 @@ angular.module('angularApp')
         // ...
 
         var getName = function (entity) {
-            return entity[Uris.QA_FIRM_NAME] ||
-                entity[Uris.FOAF_NAME] ||
-                entity[Uris.FOAF_FIRST_NAME] + ' ' + entity[Uris.FOAF_LAST_NAME] ||
-                entity[Uris.QA_LABEL];
+            if (entity[Uris.FOAF_FIRST_NAME] || entity[Uris.FOAF_LAST_NAME]) {
+                return entity[Uris.FOAF_FIRST_NAME] + ' ' + entity[Uris.FOAF_LAST_NAME];
+            } else {
+                return entity[Uris.QA_FIRM_NAME] || entity[Uris.FOAF_NAME] || entity[Uris.QA_LABEL];
+            }
+
         };
 
         var setupNames = function (entities) {
@@ -52,6 +54,30 @@ angular.module('angularApp')
 
         // Public API here
         var entity = {
+
+            update: function (uri, data) {
+                var payload = angular.copy(data);
+                // Remove any extra information
+                // This causes the web server to die
+                delete payload.encodedUri;
+                delete payload.name;
+                delete payload.type;
+                delete payload.picture;
+                delete payload.buildingTypologies;
+                delete payload.locations;
+                delete payload.firm;
+                delete payload.lat;
+                delete payload.lon;
+
+                var url = '/ws/rest/entity/description?ID=' + encodeURIComponent(uri);
+
+                return $http.put(url, payload, {
+                    withCredentials: true
+                }).then(function (response) {
+                    angular.extend(data, response.data);
+                    setupNames([data]);
+                });
+            },
 
             /**
              * Finds an entity by name

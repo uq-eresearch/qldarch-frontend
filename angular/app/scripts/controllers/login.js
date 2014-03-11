@@ -22,6 +22,7 @@ angular.module('angularApp')
                 console.log('going to main!');
                 $state.go('main');
             }, function (error) {
+                alert('Sorry, that email and password is incorrect.');
                 console.log('failed to log in', error);
             });
         };

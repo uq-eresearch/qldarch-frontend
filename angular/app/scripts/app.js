@@ -468,7 +468,7 @@ angular.module('angularApp', [
                 resolve: {
                     firms: ['Firm', '$filter', 'GraphHelper', 'Uris',
                         function (Firm, $filter, GraphHelper, Uris) {
-                            return Firm.loadAll().then(function (firms) {
+                            return Firm.loadAll(false).then(function (firms) {
                                 firms = GraphHelper.graphValues(firms);
                                 return $filter('filter')(firms, function (firm) {
                                     return firm[Uris.QA_AUSTRALIAN] === true;
@@ -485,7 +485,7 @@ angular.module('angularApp', [
                 resolve: {
                     firms: ['Firm', '$filter', 'GraphHelper', 'Uris',
                         function (Firm, $filter, GraphHelper, Uris) {
-                            return Firm.loadAll().then(function (firms) {
+                            return Firm.loadAll(false).then(function (firms) {
                                 firms = GraphHelper.graphValues(firms);
                                 return $filter('filter')(firms, function (firm) {
                                     return firm[Uris.QA_AUSTRALIAN] !== true;
@@ -517,11 +517,10 @@ angular.module('angularApp', [
             .state('firm.summary', {
                 url: '',
                 templateUrl: 'views/firm/summary.html',
-                controller: ['$scope', 'firm',
-                    function ($scope, firm) {
-                        $scope.firm = firm;
-                    }
-                ]
+                controller: 'FirmCtrl'
+            })
+            .state('firm.summary.edit', {
+                url: '/edit'
             })
             .state('firm.employees', {
                 url: '/employees',
@@ -666,8 +665,9 @@ angular.module('angularApp', [
                 resolve: {
                     structures: ['Structure', '$filter', 'GraphHelper', 'Uris',
                         function (Structure, $filter, GraphHelper, Uris) {
-                            return Structure.loadAll().then(function (structures) {
+                            return Structure.loadAll(false).then(function (structures) {
                                 structures = GraphHelper.graphValues(structures);
+                                console.log('got structures', structures);
                                 return $filter('filter')(structures, function (structure) {
                                     return structure[Uris.QA_AUSTRALIAN] === true;
                                 });
@@ -683,7 +683,7 @@ angular.module('angularApp', [
                 resolve: {
                     structures: ['Structure', '$filter', 'GraphHelper', 'Uris',
                         function (Structure, $filter, GraphHelper, Uris) {
-                            return Structure.loadAll().then(function (structures) {
+                            return Structure.loadAll(false).then(function (structures) {
                                 structures = GraphHelper.graphValues(structures);
                                 return $filter('filter')(structures, function (structure) {
                                     return structure[Uris.QA_AUSTRALIAN] !== true;
@@ -733,12 +733,10 @@ angular.module('angularApp', [
                         }
                     ]
                 },
-                controller: ['$scope', 'structure', 'designers',
-                    function ($scope, structure, designers) {
-                        $scope.structure = structure;
-                        $scope.designers = designers;
-                    }
-                ]
+                controller: 'StructureCtrl'
+            })
+            .state('structure.summary.edit', {
+                url: '/edit'
             })
             .state('structure.map', {
                 url: '/map',

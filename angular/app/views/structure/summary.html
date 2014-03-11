@@ -1,6 +1,10 @@
 <div class="container">
-    <div class="row">
+    <div class="row" ng-hide="$state.includes('structure.summary.edit')">
         <div class="col-sm-7">
+            <span ng-show="Auth.auth">
+                <button class="btn btn-default btn-xs pull-right" ui-sref="structure.summary.edit({ structureId: structure.encodedUri })"><i class="fa fa-pencil"></i> Edit</button>    
+            </span>
+
             <h5>Summary</h5>
             <p>{{ structure[Uris.QA_SUMMARY] }}</p>
             <p ng-show="!structure[Uris.QA_SUMMARY].length">No summary.</p>
@@ -59,6 +63,41 @@
             <img ng-if="structure.picture" class="img-responsive" ng-src="{{ Uris.FILE_ROOT + structure.picture[Uris.QA_SYSTEM_LOCATION] }}" alt=""/>
             <img ng-if="!structure.picture" ng-src="images/icon.png" style="display:block; width:100%">
         </div>
-
+    </div>
+    <div class="row" ng-show="$state.includes('structure.summary.edit')">
+        <div class="col-sm-7">
+            <form action="" ng-submit="updateStructure(structure)">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="form-control" ng-model="structure[Uris.QA_LABEL]">
+                </div>
+                <div class="form-group">
+                    <label>Summary</label>
+                    <textarea rows="10" id="summary" class="form-control" placeholder="Summary" ng-model="structure[Uris.QA_SUMMARY]"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="biography">Location</label>
+                    <input type="text" ng-model="structure[Uris.QA_LOCATION]" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Coordinates</label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" placeholder="Latitude" ng-model="structure[Uris.GEO_LAT]" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" placeholder="Longitude" ng-model="structure[Uris.GEO_LONG]" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-model="structure[Uris.QA_AUSTRALIAN]"> Australian Project
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button class="btn btn-default" ui-sref="structure.summary({ structureId: structure.encodedUri })">Cancel</button>
+            </form>
+        </div>
     </div>
 </div>

@@ -1,10 +1,7 @@
 <div class="container">
     <div class="row" ng-hide="$state.includes('architect.summary.edit')">
-        <div class="col-md-12" ng-show="Auth.auth">
-            
-        </div> 
         <div class="col-sm-7">
-            <span>
+            <span ng-show="Auth.auth">
                 <button class="btn btn-default btn-xs pull-right" ui-sref="architect.summary.edit({ architectId: architect.encodedUri })"><i class="fa fa-pencil"></i> Edit</button>    
             </span>
             

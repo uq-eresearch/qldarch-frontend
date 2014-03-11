@@ -3,7 +3,7 @@
 angular.module('angularApp')
     .directive('projectMap', function () {
         return {
-            template: '<div style="margin-bottom: 20px;"><div class="map"></div></div>',
+            template: '<div style="margin-bottom: 20px;" ng-show="markers.length"><div class="map"></div></div>',
             restrict: 'E',
             replace: true,
             scope: {
@@ -11,14 +11,14 @@ angular.module('angularApp')
             },
             link: function postLink(scope, element) {
                 var DEFAULT_HEIGHT = '600px';
-                var markers = [];
+                scope.markers = [];
 
                 var mapOptions = {
                     zoom: 8,
                     center: new google.maps.LatLng(-34.397, 150.644),
                     scrollwheel: false
                 };
-
+                console.log('making a new map');
                 // bounds.extend(latlng);
 
                 var $map = element.find('.map');
@@ -31,9 +31,10 @@ angular.module('angularApp')
                 scope.$watch('structures', function (structures) {
                     if (structures) {
                         // Remove all markers
-                        angular.forEach(markers, function (marker) {
+                        angular.forEach(scope.markers, function (marker) {
                             marker.setMap(null);
                         });
+                        scope.markers = [];
 
                         // Get a bounds ready
                         var bounds = new google.maps.LatLngBounds();
@@ -53,6 +54,8 @@ angular.module('angularApp')
                                 marker.setMap(map);
                                 // Expand the map to fit the marker
                                 bounds.extend(position);
+                                // Store the marker
+                                scope.markers.push(marker);
 
                                 // Create an info window
                                 var infowindow = new google.maps.InfoWindow({
@@ -64,7 +67,10 @@ angular.module('angularApp')
                                 });
                             }
                         });
-                        map.fitBounds(bounds);
+                        console.log('bounds', bounds);
+                        setTimeout(function () {
+                            map.fitBounds(bounds);
+                        }, 0);
                     }
                 });
 

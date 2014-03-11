@@ -1,15 +1,39 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('StructureCtrl', function ($scope, structure, Uris, LayoutHelper, GraphHelper, photographs, designers) {
+    .controller('StructureCtrl', function ($scope, structure, designers, Entity, $state, Uris) {
         $scope.structure = structure;
+        $scope.designers = designers;
+
+
+        $scope.updateStructure = function (structure) {
+            Entity.update(structure.uri, structure).then(function () {
+                // Set the location stuff again
+                if (angular.isDefined(structure[Uris.QA_LOCATION])) {
+                    structure.locations = [structure[Uris.QA_LOCATION]];
+                }
+            }, function (reason) {
+                alert('Failed to save');
+                console.log('Failed to save', reason);
+                $state.go('structure.summary.edit', {
+                    structureId: structure.encodedUri
+                });
+            });
+
+            $state.go('structure.summary', {
+                structure: structure.encodedUri
+            });
+        };
+
+
+        // $scope.structure = structure;
         // $scope.photographRows = LayoutHelper.group(photographs, 6);
-        $scope.designers = GraphHelper.graphValues(designers);
+        // $scope.designers = GraphHelper.graphValues(designers);
         // $scope.designerRows = LayoutHelper.group(GraphHelper.graphValues(designers), 6);
 
         // Structure lat lon
-    // var position = new google.maps.LatLng($scope.structure.lat, $scope.structure.lon);
-    // var marker;
+        // var position = new google.maps.LatLng($scope.structure.lat, $scope.structure.lon);
+        // var marker;
         // $scope.myMarkers = [];
 
         // $scope.mapOptions = {

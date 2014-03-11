@@ -22,6 +22,14 @@ angular.module('angularApp')
                         structure.lat = structure[Uris.GEO_LAT];
                     }
                 }
+
+                if (angular.isDefined(structure.lat) && angular.isDefined(structure.lon)) {
+                    if (-44.902578 < structure.lat && structure.lat < -9.102097 &&
+                        104.765625 < structure.lon && structure.lon < 159.697266) {
+                        structure[Uris.QA_AUSTRALIAN] = true;
+                    }
+                }
+
                 if (angular.isDefined(structure[Uris.QA_LOCATION])) {
                     structure.locations = GraphHelper.asArray(structure[Uris.QA_LOCATION]);
                 }
@@ -119,7 +127,7 @@ angular.module('angularApp')
                             var requests = [];
                             angular.forEach(GraphHelper.asArray(structure[Uris.QA_BUILDING_TYPOLOGY_P]), function (typologyUri) {
                                 requests.push(Entity.load(typologyUri, true));
-                            })
+                            });
 
                             return $q.all(requests).then(function (typologies) {
 
@@ -127,7 +135,7 @@ angular.module('angularApp')
                                 angular.forEach(typologies, function (typology) {
                                     structure.buildingTypologies.push(typology);
                                 });
-                                console.log("got to here", structure[Uris.QA_ASSOCIATED_FIRM]);
+                                console.log('got to here', structure[Uris.QA_ASSOCIATED_FIRM]);
                                 if (angular.isDefined(structure[Uris.QA_ASSOCIATED_FIRM])) {
                                     return Entity.load(structure[Uris.QA_ASSOCIATED_FIRM], true).then(function (firm) {
                                         structure.firm = firm;
@@ -148,8 +156,11 @@ angular.module('angularApp')
              * Loads all the entities of a certain type
              * @returns {Promise | Object} All architects
              */
-            loadAll: function () {
-                return Entity.loadAll('qldarch:Structure').then(function (structures) {
+            loadAll: function (summary) {
+                if (!angular.isDefined(summary)) {
+                    summary = true;
+                }
+                return Entity.loadAll('qldarch:Structure', summary).then(function (structures) {
                     // get the uris
                     return postProcess(structures);
                 });

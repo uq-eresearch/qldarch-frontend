@@ -1,6 +1,10 @@
 <div class="container">
-    <div class="row">
+    <div class="row" ng-hide="$state.includes('firm.summary.edit')">
         <div class="col-sm-7">
+            <span ng-show="Auth.auth">
+                <button class="btn btn-default btn-xs pull-right" ui-sref="firm.summary.edit({ firmId: firm.encodedUri })"><i class="fa fa-pencil"></i> Edit</button>    
+            </span>
+
             <h5>Summary</h5>
             <p>{{ firm[Uris.QA_SUMMARY] }}</p>
             <p ng-show="!firm[Uris.QA_SUMMARY].length">
@@ -10,6 +14,28 @@
         <div class="col-sm-5">
             <img ng-if="firm.picture" class="img-responsive" ng-src="{{ Uris.FILE_ROOT + firm.picture[Uris.QA_SYSTEM_LOCATION] }}" alt=""/>
             <img ng-if="!firm.picture" ng-src="images/icon.png" style="display:block; width:100%">
+        </div>
+    </div>
+    <div class="row" ng-show="$state.includes('firm.summary.edit')">
+        <div class="col-md-7">
+            <form action="" ng-submit="updateFirm(firm)">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="form-control" ng-model="firm[Uris.QA_FIRM_NAME]">
+                </div>
+                <div class="form-group">
+                    <label>Summary</label>
+                    <textarea rows="10" id="summary" class="form-control" placeholder="Summary" ng-model="firm[Uris.QA_SUMMARY]"></textarea>
+                </div>
+
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-model="firm[Uris.QA_AUSTRALIAN]"> Australian Firm
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button class="btn btn-default" ui-sref="firm.summary({firmId: firm.encodedUri })">Cancel</button>
+            </form>
         </div>
     </div>
 </div>

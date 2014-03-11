@@ -1,34 +1,23 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('ArchitectCtrl', function ($scope, architect, interviews, $http, $state, Uris) {
+    .controller('ArchitectCtrl', function ($scope, architect, interviews, $http, $state, Uris, Entity) {
 
         $scope.architect = architect;
         $scope.interviews = interviews;
 
         $scope.updateArchitect = function (architect) {
-            var payload = angular.copy(architect);
-            delete payload.encodedUri;
-            delete payload.name;
-            delete payload.type;
-            delete payload.picture;
-
-            $state.go('architect.summary', {
-                architectId: architect.encodedUri
-            });
-
-            var url = '/ws/rest/entity/description?ID=' + encodeURIComponent(architect.uri);
-
-            $http.put(url, payload, {
-                withCredentials: true
-            }).then(function (response) {
-                angular.extend($scope.architect, response.data);
-                $scope.architect.name = $scope.architect[Uris.FOAF_FIRST_NAME] + ' ' + $scope.architect[Uris.FOAF_LAST_NAME];
-            }, function () {
+            Entity.update(architect.uri, architect).
+            catch (function (error) {
                 alert('Failed to save');
+                console.log('Failed to save', error);
                 $state.go('architect.summary.edit', {
                     architectId: architect.encodedUri
                 });
+            });
+
+            $state.go('architect.summary', {
+                architectId: architect.encodedUri
             });
         };
 
