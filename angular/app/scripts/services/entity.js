@@ -108,6 +108,8 @@ angular.module('angularApp')
                     //					console.log("FINDING BY NAME");
                     return setupPicturesAndTypes(results).then(function (entities) {
                         entities = $filter('orderBy')(entities, function (entity) {
+                            // Sort by last name, first name (if its a thing with a last name)
+                            // otherwise just use its name label
                             if (angular.isDefined(entity[Uris.FOAF_LAST_NAME])) {
                                 return entity[Uris.FOAF_LAST_NAME] + entity[Uris.FOAF_FIRST_NAME];
                             } else {
