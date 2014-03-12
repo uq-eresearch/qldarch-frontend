@@ -2,14 +2,14 @@
     <div class="row" ng-repeat="photographRow in photographRows">
         <div class="col-sm-2" ng-repeat="photograph in photographRow">
             <div class="thumbnail" >
-                <a ng-href="#/structure/{{ structure.encodedUri }}/photograph/{{ photograph.encodedUri }}" class="thumbnail-image">
+                <a href ui-sref="structure.photograph({structureId: structure.encodedUri, photographId: photograph.encodedUri})" class="thumbnail-image">
                     <img ng-if="photograph.file" class="img-responsive" ng-src="{{ Uris.FILE_ROOT + photograph.file[Uris.QA_SYSTEM_LOCATION] }}" alt=""/>
                     <img ng-if="!photograph.file" ng-src="images/icon.png" style="display:block; width:100%">
                 </a>
 
                 <div class="caption">
                     <h4>
-                        <a ng-href="#/structure/{{ structure.encodedUri }}//photograph/{{ photograph.encodedUri }}">
+                        <a href ui-sref="structure.photograph({structureId: structure.encodedUri, photographId: photograph.encodedUri})">
                             {{ photograph[Uris.DCT_TITLE] }}
                         </a>
                     </h4>

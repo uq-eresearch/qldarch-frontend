@@ -475,7 +475,10 @@ angular.module('angularApp', [
                                 });
                             });
                         }
-                    ]
+                    ],
+                    australian: function () {
+                        return true;
+                    }
                 },
                 controller: 'FirmsCtrl'
             })
@@ -492,7 +495,10 @@ angular.module('angularApp', [
                                 });
                             });
                         }
-                    ]
+                    ],
+                    australian: function () {
+                        return false;
+                    }
                 },
                 controller: 'FirmsCtrl'
             })
