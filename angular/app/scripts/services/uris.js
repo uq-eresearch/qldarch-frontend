@@ -106,6 +106,7 @@ angular.module('angularApp')
         this.QA_ASSOCIATED_FIRM = this.QA_NS + 'associatedFirm';
         this.QA_PRACTICED_IN_QUEENSLAND = this.QA_NS + 'practicedInQueensland';
         this.QA_AUSTRALIAN = this.QA_NS + 'australian';
+        this.QA_PREF_LABEL = this.QA_NS + 'prefLabel';
 
         this.QA_BUILDING_TYPOLOGY = this.QA_NS + 'BuildingTypology';
         this.QA_BUILDING_TYPOLOGY_P = this.QA_NS + 'buildingTypology';

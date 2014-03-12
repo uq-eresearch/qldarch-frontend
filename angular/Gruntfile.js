@@ -28,7 +28,7 @@ module.exports = function (grunt) {
                     username: '<%= secret.username %>',
                     password: '<%= secret.password %>',
                     port: 6666,
-                    // showProgress: true
+                    showProgress: true
                 }
             }
         },

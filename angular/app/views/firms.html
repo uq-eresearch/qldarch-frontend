@@ -22,10 +22,12 @@
 </div>
 
 <div class="container" infinite-scroll="addMoreFirmRows()">
+    
+    <div id="example1" style="height: 600px;"></div>
     <!-- <pre>
         {{ timeline.dates | json }}
     </pre> -->
-    <timeline headline="Firms" subtitle="All firms" asset="timeline.asset" dates="timeline.dates"></timeline>
+    <!-- <timeline headline="Firms" subtitle="All firms" asset="timeline.asset" dates="timeline.dates"></timeline> -->
 
     <div class="row" ng-repeat="firmRow in firmRows | limitTo:firmRowDisplayCount">
         <div class="col-sm-2" ng-repeat="firm in firmRow">

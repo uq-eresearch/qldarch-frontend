@@ -25,6 +25,30 @@ angular.module('angularApp')
             dates: []
         };
 
+        var container = document.getElementById('example1');
+
+        var chart = new google.visualization.Timeline(container);
+
+        var dataTable = new google.visualization.DataTable();
+
+        dataTable.addColumn({
+            type: 'string',
+            id: 'President'
+        });
+        dataTable.addColumn({
+            type: 'string',
+            id: 'Name'
+        });
+        dataTable.addColumn({
+            type: 'date',
+            id: 'Start'
+        });
+        dataTable.addColumn({
+            type: 'date',
+            id: 'End'
+        });
+
+
         $http.get('files/firms.json').then(function (response) {
 
             var years = response.data[0];
@@ -53,21 +77,32 @@ angular.module('angularApp')
                             } else {
                                 // Create a new date
                                 date.startDate = cellYear;
+                                date.endDate = cellYear;
                                 date.headline = cell;
                                 hasFirm = true;
                             }
                         }
                     }
                 }
-                // console.log('has firm?', hasFirm);
                 if (hasFirm) {
-                    if (i < 100) {
-                        $scope.timeline.dates.push(date);
-                    }
+                    // if (i < 500) {
+                    var rowData = [date.headline, date.headline, new Date(date.startDate, 0, 1), new Date(date.endDate, 11, 31)];
+                    // console.log('rowData', rowData);
+                    dataTable.addRow(rowData);
+
+                    // $scope.timeline.dates.push(date);
+                    // }
                 }
             }
-            // console.log('dates', $scope.timeline);
+            var options = {
+                timeline: {
+                    colorByRowLabel: true
+                }
+            };
+            chart.draw(dataTable, options);
         });
+
+
 
         // $http.get('files/firms.csv').then(function (response) {
         //     var data = new jQuery.csv.toArrays(response.data);
