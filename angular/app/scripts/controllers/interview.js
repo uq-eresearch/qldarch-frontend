@@ -25,7 +25,11 @@ angular.module('angularApp')
     $scope.audioPlayerPlaylist = [{
         src: interview[Uris.QA_EXTERNAL_LOCATION],
         type: 'audio/ogg'
+    }, {
+        src: interview[Uris.QA_EXTERNAL_LOCATION].substring(0, interview[Uris.QA_EXTERNAL_LOCATION].length - 3) + 'mp3',
+        type: 'audio/mp3'
     }];
+    console.log('playlist is', $scope.audioPlayerPlaylist);
     // $scope.audioPlayerPlaylist = [{
     //     src: 'audio/bligh.mp3',
     //     type: 'audio/mp3'
