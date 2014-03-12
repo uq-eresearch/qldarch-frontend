@@ -29,7 +29,7 @@ angular.module('angularApp')
         // Australian firms, show the timeline
         if (australian) {
             var container = document.getElementById('chart');
-            jQuery(container).css('height', '600px').css('border', '10px solid red');
+            jQuery(container).css('height', '600px');
 
             var chart = new google.visualization.Timeline(container);
 
