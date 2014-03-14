@@ -39,7 +39,8 @@ angular.module('angularApp', [
             angular.extend(Auth, status.data);
         });
 
-        $rootScope.globalSearchString = '';
+        $rootScope.globalSearch = {};
+        $rootScope.globalSearch.query = '';
         // Adds the slim progress bar
         $rootScope.$on('$stateChangeStart', function () {
             ngProgress.reset();
@@ -83,16 +84,25 @@ angular.module('angularApp', [
          * @param $model
          * @param $label
          */
-        $rootScope.globalSearchOnSelect = function ($item) {
+        $rootScope.globalSearchOnSelect = function ($item, $model) {
             // $rootScope.globalSearchOnSelect = function ($item, $model, $label) {
             if ($item.type === 'search') {
                 // special case
-                console.log('should be searching for', $item.query);
+                $rootScope.globalSearch.query = $item.query;
+                $model = $item.query;
                 $location.path('/search');
                 $location.search('query', $item.query);
             } else {
                 // already a result
-                $location.path('/' + $item.type + '/' + $item.encodedUri);
+                console.log('path is', $item.type);
+                var url;
+                if ($item.type === 'structure') {
+                    url = '/project/' + $item.encodedUri;
+                } else {
+                    url = '/' + $item.type + '/' + $item.encodedUri;
+                }
+
+                $location.path(url);
             }
         };
 
@@ -463,7 +473,8 @@ angular.module('angularApp', [
                 template: '<ui-view autoscroll="false"></ui-view>'
             })
             .state('firms.australian', {
-                url: '',
+                url: '?index',
+                reloadOnSearch: false,
                 templateUrl: 'views/firms.html',
                 resolve: {
                     firms: ['Firm', '$filter', 'GraphHelper', 'Uris',

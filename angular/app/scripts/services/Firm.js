@@ -11,7 +11,7 @@ angular.module('angularApp')
              * @returns {Promise| Object} All architects that match
              */
             findByName: function (name) {
-                return Entity.findByName(name, 'qldarch:Firm');
+                return Entity.findByName(name, true, 'qldarch:Firm');
             },
 
             /**
@@ -31,6 +31,7 @@ angular.module('angularApp')
                 if (!angular.isDefined(summary)) {
                     summary = true;
                 }
+
                 return Entity.loadAll('qldarch:Firm', summary);
             },
 

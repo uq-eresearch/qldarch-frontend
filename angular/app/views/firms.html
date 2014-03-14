@@ -28,6 +28,21 @@
 
 <div class="container" infinite-scroll="addMoreFirmRows()">
     
+    <div class="chart-index" style="margin-bottom: 20px;">
+        <button class="btn btn-default" style="margin-right:1px;" 
+            ng-click="goToIndex(null)"
+            ng-class="{'btn-primary': $stateParams.index == null}">
+                All
+        </button>
+        <button style="margin-right:1px;" 
+            ng-repeat="(index, exists) in indexes"
+            class="btn btn-default" 
+            ng-class="{'btn-primary': $stateParams.index === index}" 
+            ng-disabled="!exists"
+            ng-click="goToIndex(index)">
+                {{ index }}
+        </button>
+    </div>
     <div id="chart"></div>
     <!-- <pre>
         {{ timeline.dates | json }}

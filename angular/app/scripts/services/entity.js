@@ -95,6 +95,7 @@ angular.module('angularApp')
                 }
 
                 return Request.getIndex('entity', type, summary, true).then(function (nonDigitalThings) {
+
                     // Create name labels for them so we can use them for our search
                     setupNames(nonDigitalThings);
                     GraphHelper.setupTypes(nonDigitalThings);
@@ -102,6 +103,7 @@ angular.module('angularApp')
 
                     var results = [];
                     angular.forEach(nonDigitalThings, function (thing) {
+                        console.log('checking the names', thing.name, name);
                         if (thing.type && thing.name.toLowerCase().indexOf(name.toLowerCase()) !== -1) {
                             results.push(thing);
                         }

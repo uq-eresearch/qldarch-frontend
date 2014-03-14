@@ -1,12 +1,45 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('FirmsCtrl', function ($scope, firms, Uris, GraphHelper, LayoutHelper, $http, ENV, australian) {
-        var DEFAULT_FIRM_ROW_COUNT = 5;
+    .controller('FirmsCtrl', function ($scope, firms, Uris, GraphHelper, LayoutHelper, $http, ENV, australian, $stateParams, $state, $location, $timeout, $filter, Firm) {
+
+        var DEFAULT_FIRM_ROW_COUNT = 5,
+            data = null;
         $scope.firmRowDisplayCount = DEFAULT_FIRM_ROW_COUNT;
         $scope.australian = australian;
+        $scope.$stateParams = $stateParams;
+        $scope.indexes = {
+            'A': false,
+            'B': false,
+            'C': false,
+            'D': false,
+            'E': false,
+            'F': false,
+            'G': false,
+            'H': false,
+            'I': false,
+            'J': false,
+            'K': false,
+            'L': false,
+            'M': false,
+            'N': false,
+            'O': false,
+            'P': false,
+            'Q': false,
+            'R': false,
+            'S': false,
+            'T': false,
+            'U': false,
+            'V': false,
+            'W': false,
+            'X': false,
+            'Y': false,
+            'Z': false
+        };
 
-        $scope.firms = firms;
+        firms = $filter('orderBy')(GraphHelper.graphValues(firms), function (firm) {
+            return firm.name;
+        });
         $scope.firmRows = LayoutHelper.group(GraphHelper.graphValues(firms), 6);
 
         /**
@@ -14,6 +47,19 @@ angular.module('angularApp')
          */
         $scope.addMoreFirmRows = function () {
             $scope.firmRowDisplayCount += 5;
+        };
+
+        $scope.goToIndex = function (index) {
+            $location.search({
+                index: index
+            });
+            $stateParams.index = index;
+
+            $timeout(function () {
+                $timeout(function () {
+                    makeChart(data);
+                });
+            }, 0);
         };
 
 
@@ -28,8 +74,28 @@ angular.module('angularApp')
 
         // Australian firms, show the timeline
         if (australian) {
+
+            var url;
+            if (ENV.name === 'development') {
+                url = 'files/firms.json';
+            } else {
+                url = 'files/firms.json';
+            }
+
+            $http.get(url).then(function (response) {
+                data = response.data;
+                if (!data.length) {
+                    return;
+                }
+                makeChart(data);
+            });
+        }
+
+        function makeChart(data) {
+            // Setup the chart 
             var container = document.getElementById('chart');
-            jQuery(container).css('height', '600px');
+            var $container = jQuery(container);
+            $container.css('height', '600px');
 
             var chart = new google.visualization.Timeline(container);
 
@@ -52,54 +118,41 @@ angular.module('angularApp')
                 id: 'End'
             });
 
-            // setTimeout(function () {
-            //     console.log('ready to listen');
-            //     var $container = jQuery(container);
-            //     $container.find('rect').click(function (event) {
-            //         console.log('got a click');
-            //         setTimeout(function () {
-            //             // find rect with stroke
-            //             var $rect = $container.find('rect[stroke-width="3"]');
-            //             var text = $rect.next().html();
-            //             alert(text);
-            //         }, 0);
-            //     });
-            // }, 3000);
-            // 
-            var url;
-            if (ENV.name === 'development') {
-                url = 'files/firms.json';
-            } else {
-                url = 'files/firms.json';
-            }
+            // Process the data
+            var years = data[0];
+            var hasData = false;
 
-            $http.get(url).then(function (response) {
+            for (var i = 1; i < data.length; i++) {
+                var row = data[i];
+                var date = {
+                    'endDate': '1949',
+                    'headline': 'my headline',
+                    'text': '<p>Body text goes here, some HTML is OK</p>',
+                    'tag': 'This is Optional',
+                    'classname': 'optionaluniqueclassnamecanbeaddedhere',
+                };
+                var hasFirm = false;
+                for (var j = 0; j < row.length; j++) {
+                    var cell = row[j];
+                    var cellYear = years[j].split('-')[0];
+                    if (cell) {
+                        // Not empty cell
+                        if (cell !== '') {
+                            // we have some value
+                            // @todo: check if its the current data
+                            if (date.startDate) {
+                                // Set the end date
+                                date.endDate = cellYear;
+                            } else {
+                                // Enable indexes because we have a firm that starts with that letter
+                                if (cell.length) {
+                                    var startLetter = cell.substring(0, 1).toUpperCase();
+                                    $scope.indexes[startLetter] = true;
+                                }
 
-                var years = response.data[0];
-
-                for (var i = 1; i < response.data.length; i++) {
-                    var row = response.data[i];
-                    var date = {
-                        'endDate': '1949',
-                        'headline': 'my headline',
-                        'text': '<p>Body text goes here, some HTML is OK</p>',
-                        'tag': 'This is Optional',
-                        'classname': 'optionaluniqueclassnamecanbeaddedhere',
-                    };
-                    var hasFirm = false;
-                    for (var j = 0; j < row.length; j++) {
-                        var cell = row[j];
-                        var cellYear = years[j].split('-')[0];
-                        if (cell) {
-                            // Not empty cell
-                            if (cell !== '') {
-                                // we have some value
-                                // @todo: check if its the current data
-                                if (date.startDate) {
-                                    // Set the end date
-                                    date.endDate = cellYear;
-                                } else {
+                                if (!$stateParams.index || ($stateParams.index && cell.substring(0, 1) === $stateParams.index)) {
                                     // Create a new date
+                                    hasData = true;
                                     date.startDate = cellYear;
                                     date.endDate = cellYear;
                                     date.headline = cell;
@@ -108,22 +161,41 @@ angular.module('angularApp')
                             }
                         }
                     }
-                    if (hasFirm) {
-                        // if (i < 70) {
-                        var rowData = [date.headline, date.headline, new Date(date.startDate, 0, 1), new Date(date.endDate, 11, 31)];
-                        // console.log('rowData', rowData);
-                        dataTable.addRow(rowData);
-
-                        // $scope.timeline.dates.push(date);
-                        // }
-                    }
                 }
-                var options = {
-                    timeline: {
-                        colorByRowLabel: true
-                    }
-                };
+                if (hasFirm) {
+                    // if (i < 70) {
+                    var rowData = [date.headline, date.headline, new Date(date.startDate, 0, 1), new Date(date.endDate, 11, 31)];
+                    // console.log('rowData', rowData);
+                    dataTable.addRow(rowData);
+
+                    // $scope.timeline.dates.push(date);
+                    // }
+                }
+            }
+            var options = {
+                timeline: {
+                    colorByRowLabel: true
+                }
+            };
+            if (hasData) {
                 chart.draw(dataTable, options);
-            });
+                $timeout(function () {
+                    // Wait for the chart to be drawing
+                    $container.find('text').click(function () {
+                        var name = this.innerHTML;
+                        Firm.findByName(name).then(function (firms) {
+                            console.log('got firms', firms);
+                            firms = GraphHelper.graphValues(firms);
+                            if (firms.length) {
+                                var firm = firms[0];
+                                $state.go('firm.summary', {
+                                    firmId: firm.encodedId
+                                });
+                            }
+                        });
+                        // alert(name);
+                    });
+                }, 0);
+            }
         }
     });

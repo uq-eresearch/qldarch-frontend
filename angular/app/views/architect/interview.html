@@ -72,7 +72,7 @@
                     <div class="row">
                         <div class="col-md-12 test">
                             <audio data-player-control="audioPlayer" data-playlist="audioPlayerPlaylist" data-player-name="audioPlayer" audio-player id="audio1" controls="controls">
-                                
+
                             </audio>
                         </div>
                     </div>
@@ -127,7 +127,7 @@
                 <div ng-repeat="exchange in interview.transcript.exchanges | filter:{'transcript': transcriptSearchInput} | filter:timeFilter | limitTo:exchangeDisplayCount"
                      class="row exchange"
                      ng-class="{'exchange-searching': isSearching}" 
-                     id="{{ exchange.startTime }}">
+                     id="{{ exchange.startTime }}" style="margin-bottom:20px" >
                     <!-- transcript -->
                     <div class="col-sm-6">
                         <div class="media">
@@ -166,8 +166,8 @@
 
                     <!-- relationships -->
                     <div class="col-sm-6">
-                        <div class="panel panel-default" ng-hide="isSearching && !exchange.relationships.length">
-                            <div class="panel-heading" ng-hide="isSearching">
+                        <div class="panel panel-default" ng-hide="(isSearching || !Auth.auth ) && !exchange.relationships.length">
+                            <div class="panel-heading" ng-if="Auth.auth && !isSearching">
 
                                 <!-- Control buttons -->
                                 <span ng-hide="exchange.isAddingRelationship || exchange.isEditingRelationships">
