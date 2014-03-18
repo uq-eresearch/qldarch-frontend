@@ -4,9 +4,32 @@ HOST: http://www.google.com
 # QLDArch
 All URLs are relative to either **http://qldarch.net/ws/rest/** or *http://qldarch-test.metadata.net/ws/rest/*
 
-# Group Login
+# Group User
 Notes related resources of the **Notes API**
 
+## User [/user]
+### Create a new user [POST]
+**Kludge alert!** In the `username` field, we are storing a user's
+*email address*. In the `email` field, we are storing a users 
+*display name*. 
+
++ Request (application/x-www-form-urlencoded)
+
+        {
+            "username" : "cmcnamara87@gmail.com",
+            "email" : "Craig McNamara",
+            "password" : "example123",
+            "confirmPassword" : "example123"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "user":"cmcnamara87@gmail.com",
+            "auth":true,
+            "email": "Craig McNamara"
+        }
+        
 ## Login Status [/login/status]
 ### Current login status object [GET]
 + Response 200 (application/json)
@@ -31,7 +54,8 @@ Notes related resources of the **Notes API**
 
         {
             "user":"admin",
-            "auth":true
+            "auth":true,
+            "email": "Craig McNamara"
         }
 
 ## Logout [/logout]
