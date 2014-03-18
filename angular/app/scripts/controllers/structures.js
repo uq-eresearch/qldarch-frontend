@@ -5,7 +5,7 @@ angular.module('angularApp')
         var DEFAULT_STRUCTURE_ROW_COUNT = 5;
         $scope.structureRowDisplayCount = DEFAULT_STRUCTURE_ROW_COUNT;
 
-        structures = $filter('orderBy')(GraphHelper.graphValues(structures), function (structure) {
+        $scope.structures = $filter('orderBy')(GraphHelper.graphValues(structures), function (structure) {
             return structure.name;
         });
         $scope.structureRows = LayoutHelper.group(GraphHelper.graphValues(structures), 6);

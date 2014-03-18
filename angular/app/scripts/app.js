@@ -160,6 +160,7 @@ angular.module('angularApp', [
             .state('register', {
                 url: '/register',
                 templateUrl: 'views/register.html',
+                controller: 'RegisterCtrl'
             })
             .state('login', {
                 url: '/login',

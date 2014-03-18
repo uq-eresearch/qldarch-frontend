@@ -10,7 +10,7 @@ angular.module('angularApp')
                 structures: '='
             },
             link: function postLink(scope, element) {
-                var DEFAULT_HEIGHT = '600px';
+                var DEFAULT_HEIGHT = '400px';
                 scope.markers = [];
 
                 var mapOptions = {

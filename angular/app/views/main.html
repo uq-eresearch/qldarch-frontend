@@ -20,10 +20,8 @@
 
     <div class="jumbotron">
         <div class="container">
-            <h1>Explore Queensland architecture & design history</h1>
-            <p>Use this multimedia resource on Queensland architecture<br/>
-            and design to visually map the connections that bind<br/>
-            oral histories to research materials.</p>
+            <h1>Explore Queensland Mid-century Architecture</h1>
+            <p>Search for architects, firms and projects or use the interactive tools</p>
         </div>
     </div> 
 
@@ -56,8 +54,27 @@
 
     <div class="l-frame ">
         <div class="container">
+            <div class="overview">
+                <div class="overview-header overview-header-about">
+                    <h2>Hot Modernism</h2>
+                    <small>Queensland Architecture 1945-1975</small>    
+                </div>
+                
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <p>This digital archive of Queensland architecture offers a wealth of information on the region's design history. Currently focussed primarily on the period 1945-1975, the database comprises thousands of audiovisual and textual files that allows you to explore relationships between people, projects and firms in the post-war period.</p>
+                        <p>Make sure to also test the research tools to build your customised map, timeline, compound object or word cloud and gain a deeper understanding of Queensland's architectural history.</p>
+                    </div>
+                    <div class="col-sm-6">
+                        
+                    </div>
+                </div>
+                
+            </div>
+            
+            <!-- 
             <div class="row">
-                <div class="col-md-2">
+                <!--<div class="col-md-2">
                     <div class="l-dateball">
                         <div class="dateball">
                             <div class="dateball-content">
@@ -71,27 +88,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-10">
-                    <div class="about">
-                        <h2>Architectural Practice in Postwar Queensland</h2>
-                        <small>Building and Interpreting an Oral History Archive</small>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p>
-                                    The story of Queensland's postwar architecture is largely a tacit one. The architects who worked and studied at this time possess knowledge of the key events, buildings, practices and institutions of the period.
-                                </p>
-                                <p>
-                                    While this information is often spoken, most commonly within the confines of the architectural community, it remains unrecorded. Documenting these histories using the oral history interview/digital story, this website aims to make this tacit historical knowledge explicit for the first time.
-                                </p>
-                            </div>
-                            <div class="col-md-6">
-                                <p>
-                                    Using innovating semantic web technologies, mapping applications, timeline generators, etc. this website allows you to visually map the connections that bind these oral histories to related materials, such as drawings, photographs, books and manuscripts and thus contribute to the development of a new multi-media resource on Queensland architecture and design.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                </div>-->
+                <div class="col-md-12">
+                    
                 </div>
             </div>
         </div>
@@ -100,11 +99,30 @@
     <div class="l-frame l-frame-highlight">
         <div class="container">
             <div class="overview">
-                <h2>Architects</h2>
-                <div class="row" ng-repeat="architectRow in architectRows | limitTo:1">
-                    <div class="col-sm-2" ng-repeat="architect in architectRow">
-                        <div ng-include="'views/thumbs/architect.html'"></div>
+                <div class="overview-header">
+                    <h2>Start Exploring</h2>
+                    <p>Listen to interviews with prominent Queensland architects</p>    
+                </div>
+                
+                <div class="row" ng-repeat="architectRow in architectRows | slice:architectsStart:architectsEnd">
+                    <div class="carousel">
+                        <div class="col-sm-1" class="hidden-phone">
+                            <div class="carousel-nav carousel-nav-left" ng-click="prevArchitects()" ng-hide="architectsStart === 0">
+                                <i class="fa fa-chevron-left"></i>      
+                            </div>
+                        </div>
+                        <div class="col-sm-2" ng-repeat="architect in architectRow">
+                            <div ng-include="'views/thumbs/architect.html'"></div>
+                        </div>
+                        <div class="col-sm-1" class="hidden-phone">
+                            <div class="carousel-nav carousel-nav-right" ng-click="nextArchitects()" ng-hide="architectsEnd === architectRows.length">
+                                <i class="fa fa-chevron-right"></i>
+                            </div>
+                        </div>    
                     </div>
+                </div>
+                <div style="text-align: center; font-weight: bold;" class="hidden-phone">
+                    {{ architectsStart + 1 }} / {{ architectRows.length }}
                 </div>
             </div>
         </div>
@@ -113,34 +131,132 @@
     <div class="l-frame">
         <div class="container">
             <div class="overview">
-                <h2>Research Tools</h2>
-                <div class="row l-row-sameheight">
-                    <div class="col-sm-3">
-                        <div class="toolsquare toolsquare-map">
+                <div class="overview-header">
+                    <h2>Start Building</h2>    
+                    <p>Create your customised map, timeline, compound object or word cloud</p>
+                </div>
+                
+                <!-- Creative Commons – Attribution (CC BY 3.0)  http://creativecommons.org/licenses/by/3.0/us/legalcode
+                    Map by Simple Icons from the Noun Project -->
+                <div class="row">
+                    <div class="col-sm-2 col-sm-offset-2">
+                        <a href>
+                            <div class="square square-map square-tool">
+                                <div class="square-content">
+                                    <div class="center">
+                                        <div class="center-content">
+                                            <img src="images/icon_32152.svg"/>
+                                            <h3>Create a Map</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        
+                        <!-- <a class="toolsquare toolsquare-map" href>
+                            <div class="square">
+                                <div class="square-content">
+                                    <div class="center">
+                                        <div class="center-content">
+                                            <img src="images/icon_32152.svg"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <h3>Create a Map</h3>
-                            <p>Plot data on a map to find geographical relationships between them.</p>    
-                        </div>
+                        </a> -->
+                        <p>Plot data on a map and build geographical relationships</p>   
                     </div>
-                    <div class="col-sm-3">
-                        <div class="toolsquare toolsquare-timeline">
+
+                     <div class="col-sm-2">
+                        <a href>
+                            <div class="square square-wordcloud square-tool">
+                                <div class="square-content">
+                                    <div class="center">
+                                        <div class="center-content">
+                                            <img src="images/icon_22989.svg"/>
+                                            <h3>Create a Word Cloud</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        
+
+                        <!-- <a class="toolsquare toolsquare-wordcloud" href>
+                            <div class="square">
+                                <div class="square-content">
+                                    <div class="center">
+                                        <div class="center-content">
+                                            <img src="images/icon_22989.svg"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h3>Create a Word Cloud</h3>
+                        </a> -->
+                        <p>Select textual data to build a semantic text analysis</p>
+                    </div>
+
+
+                    <div class="col-sm-2">
+                        <a href ui-sref="create.timeline">
+                            <div class="square square-timeline square-tool">
+                                <div class="square-content">
+                                    <div class="center">
+                                        <div class="center-content">
+                                            <img src="images/icon_32180.svg"/>
+                                            <h3>Create a Timeline</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        
+                        <!-- <a class="toolsquare toolsquare-timeline" href>
+                            <div class="square">
+                                <div class="square-content">
+                                    <div class="center">
+                                        <div class="center-content">
+                                            <img src="images/icon_32180.svg" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <h3>Create a Timeline</h3>
-                            <p>Add data to a timeline to create a chronological research tool.</p>
-                        </div>
+                        </a> -->
+                        <p>Plot data on a timeline and build temporal relationships</p>
                     </div>
-                    <div class="col-sm-3">
-                        <div class="toolsquare toolsquare-compoundobject">
+                    <div class="col-sm-2">
+                        <a href>
+                            <div class="square square-compoundobject square-tool">
+                                <div class="square-content">
+                                    <div class="center">
+                                        <div class="center-content">
+                                            <img src="images/icon_8454.svg"/>
+                                            <h3>Create a Compound Object</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <!-- <a class="toolsquare toolsquare-compoundobject" href>
+                            <div class="square">
+                                <div class="square-content">
+                                    <div class="center">
+                                        <div class="center-content">
+                                            <img src="images/icon_8454.svg"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <h3>Create a Compound Object</h3>
-                            <p>Add data like photographs, articles, interviews and architects to create a research objects
-                            that explores a research question.</p>    
-                        </div>
+                        </a> -->
+                        <p>Build a visual outline of your personal research trajectory</p>    
                         
                     </div>
-                    <div class="col-sm-3">
-                        <div class="toolsquare toolsquare-wordcloud">
-                            <h3>Create a Word Cloud</h3>
-                            <p>Create clouds of key words from articles.</p>
-                        </div>
-                    </div>
+                   
                 </div>
             </div>
         </div>
@@ -149,73 +265,123 @@
     <div class="l-frame l-frame-highlight">
         <div class="container">
             <div class="overview">
-                <h2>Gallery</h2>
+                <div class="overview-header">
+                    <h2>Gallery</h2>    
+                </div>
+                
                 <div class="row">
-                    <div class="col-sm-2">
-                        <div class="thumbnail">
-                            <div class="square"></div>
+                    <div class="carousel">
+                        <div class="col-sm-1" class="hidden-phone">
+                            <!-- <div class="carousel-nav carousel-nav-left">
+                                <i class="fa fa-chevron-left"></i>      
+                            </div> -->
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="thumbnail">
+                                <div class="square square-timeline square-svg">
+                                    <div class="square-content">
+                                        <div class="center">
+                                            <div class="center-content">
+                                                <img src="images/icon_32180.svg"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                            <div class="caption">
-                                <h3><a href="#">
-                                    gallery item
-                                </a></h3>
+                                <div class="caption">
+                                    <h3><a href="#">
+                                        gallery item
+                                    </a></h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="thumbnail">
-                            <div class="square"></div>
+                        <div class="col-sm-2">
+                            <div class="thumbnail">
+                                <div class="square square-map square-svg">
+                                    <div class="square-content">
+                                        <div class="center">
+                                            <div class="center-content">
+                                                <img src="images/icon_32152.svg"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                            <div class="caption">
-                                <h3><a href="#">
-                                    gallery item
-                                </a></h3>
+                                <div class="caption">
+                                    <h3><a href="#">
+                                        gallery item
+                                    </a></h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="thumbnail">
-                            <div class="square"></div>
+                        <div class="col-sm-2">
+                            <div class="thumbnail">
+                                <div class="square square-map square-svg">
+                                    <div class="square-content">
+                                        <div class="center">
+                                            <div class="center-content">
+                                                <img src="images/icon_32152.svg"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                            <div class="caption">
-                                <h3><a href="#">
-                                    gallery item
-                                </a></h3>
+                                <div class="caption">
+                                    <h3><a href="#">
+                                        gallery item
+                                    </a></h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="thumbnail">
-                            <div class="square"></div>
+                        <div class="col-sm-2">
+                            <div class="thumbnail">
+                                <div class="square square-wordcloud square-svg">
+                                    <div class="square-content">
+                                        <div class="square-spacer">
+                                            
+                                        </div>
+                                        <div class="center">
+                                            <div class="center-content">
+                                                <img src="images/icon_22989.svg"/>
+                                            </div>  
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="caption">
+                                    <h3><a href="#">
+                                        gallery item
+                                    </a></h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="thumbnail">
+                                <div class="square square-compoundobject square-svg">
+                                    <div class="square-content">
+                                        <div class="center">
+                                            <div class="center-content">
+                                                <img src="images/icon_8454.svg"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                            <div class="caption">
-                                <h3><a href="#">
-                                    gallery item
-                                </a></h3>
+                                <div class="caption">
+                                    <h3><a href="#">
+                                        gallery item
+                                    </a></h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="thumbnail">
-                            <div class="square"></div>
-                            <div class="caption">
-                                <h3><a href="#">
-                                    gallery item
-                                </a></h3>
-                            </div>
+                        <div class="col-sm-1" class="hidden-phone">
+                            <!-- <div class="carousel-nav carousel-nav-right">
+                                <i class="fa fa-chevron-right"></i>      
+                            </div> -->
                         </div>
                     </div>
-                    <div class="col-sm-2">
-                        <div class="thumbnail">
-                            <div class="square"></div>
-
-                            <div class="caption">
-                                <h3><a href="#">
-                                    gallery item
-                                </a></h3>
-                            </div>
-                        </div>
-                    </div>
+                </div>
+                <div style="text-align: center; font-weight: bold;" class="hidden-phone">
+                    {{ 1 }} / {{ 1 }}
                 </div>
             </div>
         </div>
@@ -224,11 +390,49 @@
     <div class="l-frame ">
         <div class="container">
             <div class="overview">
-                <h2>Get in touch.</h2>
-                <ul>
-                    <li>Facebook</li>
-                    <li>Email</li>
-                </ul>
+                <div class="overview-header">
+                    <h2>Get in touch</h2>    
+                </div>
+                <div class="row">
+                    <div class="col-sm-1 col-sm-offset-5">
+                        <a class="thumbnail" href>
+                            <div class="square square-facebook square-icon">
+                                <div class="square-content">
+                                    <div class="center">
+                                        <div class="center-content">
+                                            <i class="fa fa-facebook"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="caption">
+                                <h3>
+                                    Facebook
+                                </h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-sm-1">
+                        <a class="thumbnail" href>
+                            <div class="square square-email square-icon">
+                                <div class="square-content">
+                                    <div class="center">
+                                        <div class="center-content">
+                                            <i class="fa fa-envelope-o"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="caption">
+                                <h3>
+                                    Email
+                                </h3>
+                            </div>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

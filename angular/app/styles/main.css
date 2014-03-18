@@ -2156,8 +2156,8 @@ fieldset[disabled] .btn-success.active {
 }
 .btn-info {
   color: #ffffff;
-  background-color: #ea1d5d;
-  border-color: #d91452;
+  background-color: #e42962;
+  border-color: #d81b55;
 }
 .btn-info:hover,
 .btn-info:focus,
@@ -2165,8 +2165,8 @@ fieldset[disabled] .btn-success.active {
 .btn-info.active,
 .open .dropdown-toggle.btn-info {
   color: #ffffff;
-  background-color: #cb134c;
-  border-color: #a10f3d;
+  background-color: #cb1a50;
+  border-color: #a21440;
 }
 .btn-info:active,
 .btn-info.active,
@@ -2188,11 +2188,11 @@ fieldset[disabled] .btn-info:active,
 .btn-info.disabled.active,
 .btn-info[disabled].active,
 fieldset[disabled] .btn-info.active {
-  background-color: #ea1d5d;
-  border-color: #d91452;
+  background-color: #e42962;
+  border-color: #d81b55;
 }
 .btn-info .badge {
-  color: #ea1d5d;
+  color: #e42962;
   background-color: #ffffff;
 }
 .btn-warning {
@@ -4296,11 +4296,11 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   background-color: #449d44;
 }
 .label-info {
-  background-color: #ea1d5d;
+  background-color: #e42962;
 }
 .label-info[href]:hover,
 .label-info[href]:focus {
-  background-color: #c21249;
+  background-color: #c2184c;
 }
 .label-warning {
   background-color: #f0ad4e;
@@ -4390,8 +4390,7 @@ a.list-group-item.active > .badge,
     font-size: 72px;
   }
 }
-.thumbnail,
-.bthumbnail {
+.thumbnail {
   display: block;
   padding: 0px;
   margin-bottom: 24px;
@@ -4548,7 +4547,7 @@ a.thumbnail.active {
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
 .progress-bar-info {
-  background-color: #ea1d5d;
+  background-color: #e42962;
 }
 .progress-striped .progress-bar-info {
   background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
@@ -5778,6 +5777,7 @@ button.close {
   }
 }
 /*#11c3b6*/
+/*#ea1d5d;*/
 /**
  *  - spray
  *  - green pea
@@ -5926,11 +5926,11 @@ section {
 section .thumbnail {
   margin-bottom: 0;
 }
-.thumbnail,
-.bthumbnail {
+.thumbnail {
   position: relative;
   border: none;
   border-radius: 0;
+  background-color: #11c3b6;
 }
 .thumbnail .thumbnail-image {
   display: block;
@@ -5941,6 +5941,7 @@ section .thumbnail {
   background-color: #eeeeee;
   border: 1px solid #e2e2e2;
   text-align: center;
+  transition: opacity 0.25s;
 }
 .thumbnail .thumbnail-image img {
   position: absolute;
@@ -5948,10 +5949,15 @@ section .thumbnail {
   width: auto;
   max-width: none;
 }
+.thumbnail:hover .thumbnail-image {
+  opacity: 0.8;
+}
+.thumbnail:hover a {
+  color: #11c3b6 !important;
+}
 .thumbnail .caption {
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  background-color: transparent;
+  background-color: white;
   border-radius: 0;
   text-transform: capitalize;
 }
@@ -5965,6 +5971,7 @@ section .thumbnail {
   font-weight: normal;
   color: #555555;
   line-height: 24px;
+  transition: color 0.25s;
 }
 .thumbnail .caption .btn {
   display: none;
@@ -6112,13 +6119,13 @@ h1 {
   padding-bottom: 11px;
   margin: 0 0 24px;
   border-bottom: none;
-  background-color: #29938b;
+  background-color: #0faca0;
 }
 .page-header h1 {
   color: white;
 }
 .page-header small a {
-  color: #acc3c1;
+  color: #97d6d2;
 }
 .page-header.page-header-timeline {
   background-color: #ccda6a;
@@ -6183,7 +6190,7 @@ body {
  * Holds content on front page
  */
 .l-frame {
-  padding: 48px 0;
+  padding: 36px 0;
 }
 .l-frame.l-frame-highlight {
   background-color: #ebebeb;
@@ -6210,18 +6217,15 @@ body {
   position: relative;
   overflow: auto;
 }
-.l-row-sameheight [class*="col-"] > div {
-  position: relative;
-  height: 100%;
-  width: 100%;
-}
 /**
  * ======================
  * Modules 
  * ======================
  */
 .jumbotron {
-  background: url('../images/header.jpg') no-repeat;
+  background-image: url('../images/header.jpg');
+  background-repeat: no-repeat;
+  background-position: 50% 100%;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -6229,17 +6233,17 @@ body {
   color: white;
   text-align: center;
   text-shadow: 0px 1px 1px black;
-  padding: 48px 0;
+  padding: 84px 0;
   margin: 0;
   /**
    * Components
    */
 }
 .jumbotron h1 {
-  font-size: 32px;
+  font-size: 24px;
 }
 .jumbotron p {
-  font-size: 24px;
+  font-size: 16px;
   font-weight: normal;
 }
 /**
@@ -6270,7 +6274,8 @@ body {
  */
 .about h2 {
   font-weight: bold;
-  font-size: 32px;
+  font-size: 24px;
+  text-align: center;
 }
 .about small {
   font-weight: bold;
@@ -6278,6 +6283,7 @@ body {
   font-size: 16px;
   display: block;
   margin-bottom: 24px;
+  text-align: center;
 }
 /**
  * Front page dates in a ball
@@ -6304,11 +6310,26 @@ body {
 .dateball .dateball-content .dateball-end {
   text-align: right;
 }
-.overview h2 {
-  font-size: 32px;
+.overview .overview-header {
+  margin-bottom: 36px;
+}
+.overview .overview-header h2 {
+  font-size: 24px;
   font-weight: bold;
   text-align: center;
-  margin-bottom: 36px;
+}
+.overview .overview-header p {
+  text-align: center;
+}
+.overview .overview-header small {
+  font-weight: bold;
+  font-style: italic;
+  font-size: 16px;
+  display: block;
+  text-align: center;
+}
+.overview .overview-header.overview-header-about {
+  margin-bottom: 24px;
 }
 /**
  * Centers text vertically and horizontally
@@ -6323,6 +6344,8 @@ body {
   display: table-cell;
   vertical-align: middle;
   text-align: center;
+  width: 100%;
+  height: 100%;
 }
 /**
  * Square Module
@@ -6331,7 +6354,6 @@ body {
   width: 100%;
   padding-bottom: 100%;
   position: relative;
-  background: #2fa79e;
   display: table;
   /**
    * ======================
@@ -6353,8 +6375,48 @@ body {
   width: 100%;
   height: 100%;
 }
+.square path {
+  fill: white;
+}
+.square.square-tool {
+  margin-bottom: 16px;
+  transition: background-color 0.25s;
+  padding-bottom: 150%;
+}
+.square.square-tool h3 {
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  padding: 0 16px;
+}
+.square.square-tool img {
+  margin: 8px;
+  margin-bottom: 16px;
+  height: 40%;
+  transition: height 0.25s;
+}
+.square.square-tool:hover img {
+  height: 45%;
+}
+.square.square-tool:hover.square-map {
+  background-color: #0fa678;
+}
+.square.square-tool:hover.square-timeline {
+  background-color: #d3e270;
+}
+.square.square-tool:hover.square-compoundobject {
+  background-color: #7ec9e2;
+}
+.square.square-tool:hover.square-wordcloud {
+  background-color: #e74073;
+}
+.square.square-svg img {
+  max-width: 70%;
+  max-height: 70%;
+}
 .square.square-icon {
   font-size: 24px;
+  color: white;
 }
 .square.square-article {
   background-color: #33b3ab;
@@ -6364,26 +6426,69 @@ body {
   background-color: #da3f68;
   color: white;
 }
+.square.square-map {
+  background-color: #0d8f67;
+}
+.square.square-timeline {
+  background-color: #cdde5b;
+}
+.square.square-compoundobject {
+  background-color: #69c0dd;
+}
+.square.square-wordcloud {
+  background-color: #e42962;
+}
+.square.square-facebook {
+  background-color: #3b5998;
+}
+.square.square-email {
+  background-color: #517fa4;
+}
+/**
+ * Carousel
+ */
+.carousel .carousel-nav {
+  margin-top: 60px;
+  font-size: 40px;
+}
+.carousel .carousel-nav.carousel-nav-left {
+  text-align: right;
+}
+.carousel .carousel-nav.carousel-nav-right {
+  text-align: left;
+}
 .toolsquare {
+  display: block;
   color: white;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
   padding: 24px;
-  height: 100%;
+  margin-bottom: 16px;
+  /**
+   * Subclasses
+   */
 }
 .toolsquare h3 {
   font-size: 16px;
   font-weight: bold;
+  text-align: center;
 }
-.toolsquare-map {
-  background-color: #2c5b45;
+.toolsquare .square img {
+  width: 50%;
 }
-.toolsquare-timeline {
+.toolsquare:hover {
+  color: white;
+  text-decoration: none;
+}
+.toolsquare.toolsquare-map {
+  background-color: #0d8f67;
+}
+.toolsquare.toolsquare-timeline {
   background-color: #cdde5b;
-  color: #555555;
 }
-.toolsquare-compoundobject {
-  background-color: #2fa79e;
+.toolsquare.toolsquare-compoundobject {
+  background-color: #69c0dd;
 }
-.toolsquare-wordcloud {
+.toolsquare.toolsquare-wordcloud {
   background-color: #e42962;
 }
 .img-full {

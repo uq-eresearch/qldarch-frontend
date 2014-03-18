@@ -5,13 +5,31 @@
 		</div>
 	</div>
 	<div class="container">
+		<!-- Header -->
+		<form action="">
+			<div class="form-group">
+				<label class="form-label">Title</label>
+				<input type="text" class="form-control" value="New Timeline">		
+			</div>
+			
+		</form>
+		
+		<!-- <button class="btn btn-primary">Save</button> -->
+
+		<!-- Timeline content -->
+		<div>
+			Timeline goes here 	
+		</div>
+		
+	</div>
+	<div class="container">
 		<div class="row" ng-if="!timeline.dates.length && !$state.includes('create.timeline.add')">
 			<div class="col-md-12">
-				<div class="alert alert-info" style="margin-bottom: 0px;">
+				<!--<div class="alert alert-info" style="margin-bottom: 16px;">
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 					<strong>Let's start building!</strong> 
 					Try <a href ui-sref="create.timeline.add.event">adding an event</a> or <a href ui-sref="create.timeline.add.import">importing events</a> from an architect, building or firm to the timeline.
-				</div>
+				</div>-->
 			</div>
 		</div>
 		<div class="row" ng-if="timeline.dates.length">
@@ -23,9 +41,12 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div style="margin-bottom: 10px; overflow: auto">
-					<span class="pull-right">
+					
+
+					<h3>Events
+<span>
 						<button class="btn btn-default" ui-sref="create.timeline.add.event" >
-							<i class="fa fa-plus"></i> Add Event
+							<i class="fa fa-plus"></i> New Event
 						</button>	
 						<button class="btn btn-default" ui-sref="create.timeline.add.import">
 
@@ -33,7 +54,7 @@
 						</button>
 					</span>
 
-					<h3>Events</h3>
+					</h3>
 				</div>
 				
 				<ul class="list-group" ng-show="$state.includes('create.timeline.add.import')">

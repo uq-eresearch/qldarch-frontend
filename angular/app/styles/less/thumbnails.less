@@ -1,11 +1,13 @@
 //
 // Thumbnails
 // --------------------------------------------------
-
 .thumbnail {
+  // &:extend(.thumbnail);
+
   position: relative;
   border: none;
   border-radius: 0;
+  background-color: @brand-green;
 
   .thumbnail-image {
     display: block;
@@ -16,6 +18,7 @@
     background-color: @gray-lighter;
     border: 1px solid darken(@gray-lighter, 5);
     text-align: center;
+    transition: opacity 0.25s;
     img {
       position: absolute;
       height: 100%;
@@ -25,10 +28,18 @@
     }
   }
 
+  &:hover {
+    .thumbnail-image {
+      opacity: 0.8;
+    }
+    a {
+      color: @brand-green !important;
+    }
+  }
+
   .caption {
     width: 100%;
-    background-color: rgba(0,0,0,0.8);
-    background-color: transparent;
+    background-color: white;
     border-radius: 0;
     text-transform: capitalize;
 //    position: absolute;
@@ -44,15 +55,12 @@
       font-weight: normal;
       color: @gray;
       line-height: 24px;
+      transition: color 0.25s;
     }
     .btn {
       display: none;
     }
   }
-}
-
-.bthumbnail {
-  &:extend(.thumbnail);
 }
 
 //// Mixin and adjust the regular image class
