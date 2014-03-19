@@ -209,15 +209,13 @@ angular.module('angularApp', [
                 reloadOnSearch: false
             })
             .state('create.map.add', {
-                url: '/add',
-                views: {
-                    dog: {
-                        template: 'woof'
-                    },
-                    cat: {
-                        template: 'meow'
-                    }
-                }
+                url: '/add'
+            })
+            .state('create.map.add.import', {
+                url: '/import',
+            })
+            .state('create.map.add.location', {
+                url: '/location',
             })
             .state('create.textAnalysis', {
                 url: '/text-analysis'

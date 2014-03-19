@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .factory('Expression', function (Request, GraphHelper, Uris, File) {
+    .factory('Expression', function (Request, GraphHelper, Uris, File, $filter) {
         // Service logic
 
         /**
@@ -67,6 +67,22 @@ angular.module('angularApp')
                 });
             },
 
+
+            /**
+             * Finds all photos that have an associated firm
+             * @param firmUris  Array of firm uris
+             */
+            findByArchitectUris: function (architectUris, type) {
+                if (!angular.isDefined(type)) {
+                    throw ('Type needs to be defined');
+                }
+                return Request.getIndex('expression', type, false, false).then(function (expressions) {
+                    var photographs = $filter('filter')(GraphHelper.graphValues(expressions), function (expression) {
+                        return architectUris.indexOf(expression[Uris.QA_RELATED_TO]) >= 0;
+                    });
+                    return attachFiles(photographs);
+                });
+            },
 
             /**
              * Loads a single entity

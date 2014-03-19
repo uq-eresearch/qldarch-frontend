@@ -31,7 +31,7 @@ angular.module('angularApp')
                             relationship.object.type + '/' + relationship.object.encodedUri + '">' + relationship.object.name + '</a></h3>'
                     };
                     if (angular.isDefined(relationship.object.picture)) {
-                        url = Uris.FILE_ROOT + relationship.object.picture[Uris.QA_SYSTEM_LOCATION];
+                        url = Uris.THUMB_ROOT + relationship.object.picture[Uris.QA_SYSTEM_LOCATION];
                         timelineDate.asset.thumbnail = url;
                         timelineDate.asset.media = url;
                     }
@@ -44,7 +44,7 @@ angular.module('angularApp')
                             relationship.subject.type + '/' + relationship.subject.encodedUri + '">' + relationship.subject.name + '</a></h3>'
                     };
                     if (angular.isDefined(relationship.subject.picture)) {
-                        url = Uris.FILE_ROOT + relationship.subject.picture[Uris.QA_SYSTEM_LOCATION];
+                        url = Uris.THUMB_ROOT + relationship.subject.picture[Uris.QA_SYSTEM_LOCATION];
                         timelineDate.asset.thumbnail = url;
                         timelineDate.asset.media = url;
                     }

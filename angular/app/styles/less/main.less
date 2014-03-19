@@ -72,11 +72,41 @@ body {
   }
 }
 
+.builder {
+  .builder-inputoutput {
+    margin-bottom: @line-height-computed * 1.5;
+    h2 {
+      font-size: 24px;
+    }
+    h3 {
+      font-size: 18px;
+      font-weight: bold;
+    }
+  }
+  .builder-input {
+    margin-top: 24px;
+    padding-bottom: 8px;
+  }
+  .builder-buttons {
+    margin-bottom: 8px;
+  }
+  .builder-list-item {
+    margin-top: 16px;
+  }
+}
+
+
 /**
  * ======================
  * Modules 
  * ======================
  */
+.btn {
+  &.btn-default {
+    border: 1px solid @btn-default-border;
+  }
+  border: none;
+}
 .jumbotron {
   // Background image
   background-image: url('../images/header.jpg');

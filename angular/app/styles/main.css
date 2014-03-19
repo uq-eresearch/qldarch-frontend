@@ -436,11 +436,11 @@ h6 .small,
 }
 h1,
 .h1 {
-  font-size: 36px;
+  font-size: 40px;
 }
 h2,
 .h2 {
-  font-size: 27px;
+  font-size: 32px;
 }
 h3,
 .h3 {
@@ -6103,6 +6103,7 @@ h2,
 h3 {
   margin-top: 0;
   margin-bottom: 12px;
+  font-weight: bold;
 }
 h4,
 h5,
@@ -6110,9 +6111,6 @@ h6 {
   margin-top: 0;
   margin-bottom: 12px;
   font-weight: bold;
-}
-h1 {
-  font-size: 35px;
 }
 .page-header {
   padding-top: 24px;
@@ -6129,6 +6127,9 @@ h1 {
 }
 .page-header.page-header-timeline {
   background-color: #ccda6a;
+}
+.page-header.page-header-map {
+  background-color: #0d8f67;
 }
 .page-header.has-subnav {
   margin-bottom: 0px;
@@ -6217,11 +6218,37 @@ body {
   position: relative;
   overflow: auto;
 }
+.builder .builder-inputoutput {
+  margin-bottom: 36px;
+}
+.builder .builder-inputoutput h2 {
+  font-size: 24px;
+}
+.builder .builder-inputoutput h3 {
+  font-size: 18px;
+  font-weight: bold;
+}
+.builder .builder-input {
+  margin-top: 24px;
+  padding-bottom: 8px;
+}
+.builder .builder-buttons {
+  margin-bottom: 8px;
+}
+.builder .builder-list-item {
+  margin-top: 16px;
+}
 /**
  * ======================
  * Modules 
  * ======================
  */
+.btn {
+  border: none;
+}
+.btn.btn-default {
+  border: 1px solid #cccccc;
+}
 .jumbotron {
   background-image: url('../images/header.jpg');
   background-repeat: no-repeat;

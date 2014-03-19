@@ -25,7 +25,25 @@ angular.module('angularApp')
             }
         });
 
-
+        /*
+        =====================================================
+            New Place
+        =====================================================
+         */
+        $scope.addLocation = function (location) {
+            // Create a map marker
+            var position = new google.maps.LatLng(structure.lat, structure.lon);
+            // Create a marker
+            var marker = new google.maps.Marker({
+                position: position,
+                title: structures.name,
+                animation: google.maps.Animation.DROP
+            });
+            // Add the marker to the map
+            marker.setMap($scope.myMap);
+            // Expand the map to fit the marker
+            // bounds.extend(position);
+        };
 
         $scope.showAddlocation = function () {
             console.log('go?');

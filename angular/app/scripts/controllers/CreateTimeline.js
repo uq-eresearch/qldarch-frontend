@@ -1,28 +1,29 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('CreateTimelineCtrl', function ($scope, Entity, Uris, $stateParams, $location, $http, ENV, $filter, Relationship, GraphHelper, $q, Timeline, $state) {
+    .controller('CreateTimelineCtrl', function ($scope, Entity, Uris, $stateParams, $location, $http, ENV, $filter, Relationship, GraphHelper, $q, Timeline, $state, Expression, LayoutHelper) {
 
-
+        var DEFAULT_IMPORT = {
+            entity: null,
+            dates: null
+        };
         $scope.relationships = [];
         $scope.timeline = {
             dates: []
         };
-        $scope.date = {};
-
-        $scope.DEFAULT_EVENT_DISPLAY_COUNT = 4;
-        $scope.eventDisplayCount = $scope.DEFAULT_EVENT_DISPLAY_COUNT;
-        $scope.showAllEvents = function () {
-            $scope.eventDisplayCount = $scope.timeline.dates.length;
+        $scope.date = {
+            photo: {}
         };
+        $scope.import = angular.copy(DEFAULT_IMPORT);
 
-        $scope.entities = [];
 
-        // Setup the select boxes
-        $scope.importEventSelect = {
-            placeholder: 'Architect, Building or Firm',
+        $scope.importEventsEntity = null;
+
+        // Setup the entity select boxes
+        $scope.architectStructureFirmSelect = {
+            placeholder: 'Architect, Project or Firm',
             dropdownAutoWidth: true,
-            multiple: true,
+            multiple: false,
             // minimumInputLength: 2,
             query: function (options) {
                 Entity.findByName(options.term, false).then(function (entities) {
@@ -45,9 +46,9 @@ angular.module('angularApp')
                 });
             }
         };
-
-        $scope.relatedSelect = {
-            placeholder: 'Architect, Building or Firm',
+        // Setup the entity select boxes
+        $scope.architectStructureSelect = {
+            placeholder: 'Architect, or Project',
             dropdownAutoWidth: true,
             multiple: false,
             // minimumInputLength: 2,
@@ -56,7 +57,10 @@ angular.module('angularApp')
                     var data = {
                         results: []
                     };
-
+                    // Only show architects and structures (projects)
+                    entities = $filter('filter')(GraphHelper.graphValues(entities), function (entity) {
+                        return entity.type === 'architect' || entity.type === 'structure';
+                    });
                     angular.forEach(entities, function (entity) {
                         data.results.push({
                             id: entity.uri,
@@ -95,67 +99,121 @@ angular.module('angularApp')
             });
         }
 
-        $scope.importEvents = function (entities) {
-            var promises = [];
-
-            // We need to do a query for all the time data about this entity
-            angular.forEach(entities, function (entity) {
-                // Get the relationships
-                var promise = Relationship.findByEntityUri(entity.uri).then(function (relationships) {
-                    var relationshipsWithDates = $filter('filter')(relationships, function (relationship) {
-                        return angular.isDefined(relationship[Uris.QA_START_DATE]);
+        /*
+        =====================================================
+            New Date
+        =====================================================
+         */
+        /**
+         * Loads expressions to match entity for date
+         * @param  {[type]} entity [description]
+         * @return {[type]}        [description]
+         */
+        $scope.$watch('date.photo.entity', function (entity) {
+            if (entity) {
+                if (entity.type === 'structure') {
+                    Expression.findByBuildingUris([entity.uri], 'qldarch:Photograph').then(function (expressions) {
+                        $scope.date.photo.expressionRows = LayoutHelper.group(GraphHelper.graphValues(expressions), 6);
+                        $scope.date.photo.expressions = expressions;
                     });
-                    return Relationship.getData(relationshipsWithDates);
-                });
-                promises.push(promise);
+                } else if (entity.type === 'architect') {
+                    Expression.findByArchitectUris([entity.uri], 'qldarch:Photograph').then(function (expressions) {
+                        $scope.date.photo.expressionRows = LayoutHelper.group(GraphHelper.graphValues(expressions), 6);
+                        $scope.date.photo.expressions = expressions;
+                    });
+                }
+                // } else if (entity.type === 'firm') {
+                //     Expression.findByFirmUris([entity.uri], 'qldarch:Photograph').then(function (expressions) {
+                //         $scope.date.photo.expressionRows = LayoutHelper.group(GraphHelper.graphValues(expressions), 6);
+                //         $scope.date.photo.expressions = expressions;
+                //     });
+                // }
+            }
+        });
+        /**
+         * Sets an expression to be the selected asset shown for a date
+         * @param {[type]} expression [description]
+         * @param {[type]} date       [description]
+         */
+        $scope.addExpressionToDate = function (expression, date) {
+            angular.forEach(date.photo.expressions, function (expression) {
+                expression.selected = false;
             });
+            expression.selected = true;
+            date.asset = {
+                media: Uris.FILE_ROOT + expression.file[Uris.QA_SYSTEM_LOCATION],
+                thumbnail: Uris.THUMB_ROOT + expression.file[Uris.QA_SYSTEM_LOCATION],
+            };
+        };
+        $scope.addDate = function (date) {
+            $scope.timeline.dates.push(date);
+            $scope.date = {
+                photo: {}
+            };
 
-            $q.all(promises).then(function (datas) {
-                var dates = [];
-                angular.forEach(datas, function (data) {
-                    var relationships = data.relationships;
-                    var newDates = Timeline.relationshipsToEvents(relationships);
-                    dates = dates.concat(newDates);
-                });
-                console.log('timeline', $scope.timeline);
-                $scope.timeline.dates = $scope.timeline.dates.concat(dates);
-                console.log('timeline', $scope.timeline);
-            });
-
+            // Leave this state
             $state.go('create.timeline');
+        };
 
-            $scope.entities = [];
-            $scope.isImportingEvents = false;
+
+        /*
+        =====================================================
+            Import Dates
+        =====================================================
+         */
+        $scope.$watch('import.entity', function (entity) {
+            if (!entity) {
+                return;
+            }
+
+            Relationship.findByEntityUri(entity.uri).then(function (relationships) {
+                var relationshipsWithDates = $filter('filter')(relationships, function (relationship) {
+                    return angular.isDefined(relationship[Uris.QA_START_DATE]);
+                });
+                return Relationship.getData(relationshipsWithDates);
+            }).then(function (data) {
+                var relationships = data.relationships;
+                var importDates = Timeline.relationshipsToEvents(relationships, entity);
+                $scope.import.dates = importDates;
+            });
+        });
+        $scope.importEvents = function (dates) {
+            dates = $filter('filter')(dates, function (date) {
+                return date.selected;
+            });
+            $scope.timeline.dates = $scope.timeline.dates.concat(dates);
+            $scope.import = angular.copy(DEFAULT_IMPORT);
+            $state.go('create.timeline');
         };
 
         /**
          * Adds a new date to the timeline
          * @param {[type]} date [description]
          */
-        $scope.addDate = function (date) {
-            if (!date.startDate || date.startDate.length === 0) {
-                console.log('No date');
-            }
+        // $scope.addDate = function (date) {
+        //     if (!date.startDate || date.startDate.length === 0) {
+        //         console.log('No date');
+        //     }
 
-            // Setup the asset image
-            if (date.entity) {
-                console.log('has entity', date.entity);
-                date.asset = {
-                    media: 'images/icon.png',
-                    thumbnail: 'images/icon.png',
-                    caption: '<h4><a href="#/' + date.entity.type + '/' + date.entity.encodedUri + '">' + date.entity.name + '</a></h4>'
-                };
-                if (date.entity.picture) {
-                    date.asset.media = Uris.FILE_ROOT + date.entity.picture[Uris.QA_SYSTEM_LOCATION];
-                    date.asset.thumbnail = Uris.THUMB_ROOT + date.entity.picture[Uris.QA_SYSTEM_LOCATION];
-                }
-            }
-            $scope.timeline.dates.push(date);
-            $scope.date = {};
+        //     // Setup the asset image
+        //     if (date.entity) {
+        //         console.log('has entity', date.entity);
+        //         date.asset = {
+        //             media: 'images/icon.png',
+        //             thumbnail: 'images/icon.png',
+        //             caption: '<h4><a href="#/' + date.entity.type + '/' + date.entity.encodedUri + '">' + date.entity.name + '</a></h4>'
+        //         };
+        //         if (date.entity.picture) {
+        //             date.asset.media = Uris.FILE_ROOT + date.entity.picture[Uris.QA_SYSTEM_LOCATION];
+        //             date.asset.thumbnail = Uris.THUMB_ROOT + date.entity.picture[Uris.QA_SYSTEM_LOCATION];
+        //         }
+        //     }
+        //     $scope.timeline.dates.push(date);
+        //     $scope.date = {};
 
-            // Leave this state
-            $state.go('create.timeline');
-        };
+        //     // Leave this state
+        //     $state.go('create.timeline');
+        // };
         $scope.removeDate = function (date) {
             var index = $scope.timeline.dates.indexOf(date);
             $scope.timeline.dates.splice(index, 1);
