@@ -30,7 +30,7 @@
 				<p>Create a new location, import locations from projects built by architects or firms; or import locations of a particular typology.</p>
 
 				<!-- Location controls -->
-				<div ng-hide="$state.includes('create.timeline.add')" class="builder-buttons">
+				<div ng-hide="$state.includes('create.map.add')" class="builder-buttons">
 					<button class="btn btn-default" ui-sref="create.map.add.location" >
 						<i class="fa fa-plus"></i> New
 					</button>	
@@ -47,10 +47,10 @@
 							<h4>New Location</h4>
 							<div class="form-group">
 								<label class="control-label" for="dateHeadline">
-									Title
+									Name
 									<i class="fa fa-asterisk" style="font-size: 10px; color: red;"></i>
 								</label>
-								<input ng-model="date.headline" name="dateHeadline" type="text" class="form-control" id="dateHeadline" placeholder="Title" required>
+								<input ng-model="location.name" name="dateHeadline" type="text" class="form-control" id="dateHeadline" placeholder="Title" required>
 							</div>
 							<div class="form-group">
 								<label>
@@ -67,15 +67,55 @@
 								</div>
 							</div>
 
-							<button type="submit" class="btn btn-primary" ng-click="addPlace(place)">Add</button>
+							<button type="submit" class="btn btn-primary" ng-click="addLocation(location)">Add</button>
 							<button class="btn btn-default" ui-sref="create.map">Cancel</button>
 						</div>
 					</div>
 				</div>
 			</div>
+			<!-- / New location -->
+
+			<!-- Import events -->
+			<div class="panel panel-default" ng-show="$state.includes('create.map.add.import')">
+				<div class="panel-body">
+					<p>Search for architects, buildings or firms to import dates from their timeline.</p>
+					<div 
+						ui-select2="architectStructureFirmTypologySelect" 
+						ng-model="import.entity" 
+						class="form-control">
+					</div>
+
+					<div ng-show="import.dates && !import.dates.length">
+						No dates found.
+					</div>
+					<div ng-repeat="date in import.dates" class="row" style="margin-top: 8px;">
+						<label style="display: block;">
+							<div class="col-sm-1">
+								<input type="checkbox" ng-model="date.$selected" ng-change="importSelectionChanged()">
+						    </label>
+							</div>
+							<div class="col-sm-1">
+								<img ng-src="{{ date.asset.thumbnail }}" alt="thumbnail" class="img-responsive">
+							</div>
+							<div class="col-sm-10">
+								<strong>{{ date.startDate }} <span ng-show="date.endDate">- {{ date.endDate }}</span></strong> 
+								{{ date.headline }}
+							</div>
+						</label>
+					</div>
+
+
+					<div style="margin-top: 10px;">
+						<button class="btn btn-primary" ng-click="importEvents(import.locations)" ng-show="import.locations.length">Add to timeline ({{ import.numberToImport }})</button>
+						<button class="btn btn-default" ui-sref="create.map" >Cancel</button>
+					</div>
+				</div>
+			</div>
+			<!-- Import events -->
+
 		</div>
 
-		<div class="builder-inputoutput">
+		<div class="builder-inputoutput" ng-show="map.locations.length">
 			<h2>Preview</h2>
 			<div ui-map="myMap" class="map-canvas map"
 				ui-options="mapOptions">

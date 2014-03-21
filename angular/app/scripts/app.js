@@ -145,6 +145,13 @@ angular.module('angularApp', [
                                 });
                             });
                         }
+                    ],
+                    content: ['$http', 'Uris',
+                        function ($http, Uris) {
+                            $http.get(Uris.JSON_ROOT + 'compoundObject/user?username=cmcnamara87@gmail.com').then(function (response) {
+                                console.log('got back response', response);
+                            });
+                        }
                     ]
                 },
                 templateUrl: 'views/main.html'
@@ -170,6 +177,11 @@ angular.module('angularApp', [
             .state('logout', {
                 url: '/logout',
                 controller: 'LogoutCtrl'
+            })
+            .state('content', {
+                abstract: true,
+                url: '/content',
+                template: '<ui-view autoscroll="false"></ui-view>'
             })
             .state('create', {
                 abstract: true,

@@ -7,11 +7,19 @@
 
 	<div class="container builder">
 		<div class="builder-inputoutput">
-			<button class="btn btn-primary pull-right" ng-disabled="!timeline.headline || !timeline.dates.length">Save Timeline</button>
+			<button class="btn btn-primary pull-right" 
+					ng-disabled="!timeline.headline || !timeline.dates.length"
+					ng-click="saveTimeline(timeline)"
+					ng-show="Auth.auth">Save Timeline</button>
 			<!-- <h2>New Timeline</h2> -->
 			
+			
+			<div class="alert alert-info alert-dismissable" ng-hide="Auth.auth">
+  				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  				<strong>Remember!</strong> You need to <a href ui-sref="login" class="alert-link">sign in</a> now to be able to save your timeline.
+			</div>
 
-			<h2>What's your timeline about?</h2>
+			<!-- <h2>What's your timeline about?</h2> -->
 			<p>
 				Plot dates on a timeline and build temporal relationships.
 			</p>
@@ -113,7 +121,7 @@
 				<!-- Import events -->
 				<div class="panel panel-default" ng-show="$state.includes('create.timeline.add.import')">
 					<div class="panel-body">
-						<p>Search for architects, buildings or firms to import dates from their timeline.</p>
+						<p>Search for architects, projects or firms to import dates from their timeline.</p>
 						<div 
 							ui-select2="architectStructureFirmSelect" 
 							ng-model="import.entity" 
@@ -123,10 +131,10 @@
 						<div ng-show="import.dates && !import.dates.length">
 							No dates found.
 						</div>
-						<div ng-repeat="date in import.dates" class="row">
+						<div ng-repeat="date in import.dates" class="row" style="margin-top: 8px;">
 							<label style="display: block;">
 								<div class="col-sm-1">
-									<input type="checkbox" ng-model="date.selected">
+									<input type="checkbox" ng-model="date.$selected" ng-change="importSelectionChanged()">
 							    </label>
 								</div>
 								<div class="col-sm-1">
@@ -140,8 +148,8 @@
 						</div>
 
 
-						<div style="margin-top: 10px;">
-							<button class="btn btn-primary" ng-click="importEvents(import.dates)" ng-disabled="!import.dates.length">Import</button>
+						<div style="margin-top: 10px;" >
+							<button class="btn btn-primary" ng-click="importEvents(import.dates)" ng-show="import.dates.length">Add to timeline ({{ import.numberToImport }})</button>
 							<button class="btn btn-default" ui-sref="create.timeline" >Cancel</button>
 						</div>
 					</div>

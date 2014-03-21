@@ -1,16 +1,20 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('CreateTimelineCtrl', function ($scope, Entity, Uris, $stateParams, $location, $http, ENV, $filter, Relationship, GraphHelper, $q, Timeline, $state, Expression, LayoutHelper) {
+    .controller('CreateTimelineCtrl', function ($scope, Entity, Uris, $stateParams, $location, $http, ENV, $filter, Relationship, GraphHelper, $q, Timeline, $state, Expression, LayoutHelper, Auth) {
 
         var DEFAULT_IMPORT = {
             entity: null,
             dates: null
         };
+        var saved = false;
         $scope.relationships = [];
         $scope.timeline = {
             dates: []
         };
+        if (Auth.auth) {
+            $scope.timeline.subtitle = 'Created by ' + Auth.email;
+        }
         $scope.date = {
             photo: {}
         };
@@ -32,15 +36,23 @@ angular.module('angularApp')
                     };
 
                     angular.forEach(entities, function (entity) {
-                        data.results.push({
-                            id: entity.uri,
-                            uri: entity.uri,
-                            text: entity.name,
-                            type: entity.type,
-                            name: entity.name,
-                            encodedUri: entity.encodedUri,
-                            picture: entity.picture
-                        });
+                        if (entity.type === 'architect' || entity.type === 'firm' || entity.type === 'structure') {
+
+                            var label = entity.name + ' (' + entity.type.charAt(0).toUpperCase() + entity.type.slice(1) + ')';
+                            if (entity.type === 'structure') {
+                                label = entity.name + ' (Project)';
+                            }
+
+                            data.results.push({
+                                id: entity.uri,
+                                uri: entity.uri,
+                                text: label,
+                                type: entity.type,
+                                name: entity.name,
+                                encodedUri: entity.encodedUri,
+                                picture: entity.picture
+                            });
+                        }
                     });
                     options.callback(data);
                 });
@@ -62,15 +74,22 @@ angular.module('angularApp')
                         return entity.type === 'architect' || entity.type === 'structure';
                     });
                     angular.forEach(entities, function (entity) {
-                        data.results.push({
-                            id: entity.uri,
-                            uri: entity.uri,
-                            text: entity.name,
-                            type: entity.type,
-                            name: entity.name,
-                            encodedUri: entity.encodedUri,
-                            picture: entity.picture
-                        });
+                        if (entity.type === 'architect' || entity.type === 'structure') {
+
+                            var label = entity.name + ' (' + entity.type.charAt(0).toUpperCase() + entity.type.slice(1) + ')';
+                            if (entity.type === 'structure') {
+                                label = entity.name + ' (Project)';
+                            }
+                            data.results.push({
+                                id: entity.uri,
+                                uri: entity.uri,
+                                text: label,
+                                type: entity.type,
+                                name: entity.name,
+                                encodedUri: entity.encodedUri,
+                                picture: entity.picture
+                            });
+                        }
                     });
                     options.callback(data);
                 });
@@ -122,12 +141,6 @@ angular.module('angularApp')
                         $scope.date.photo.expressions = expressions;
                     });
                 }
-                // } else if (entity.type === 'firm') {
-                //     Expression.findByFirmUris([entity.uri], 'qldarch:Photograph').then(function (expressions) {
-                //         $scope.date.photo.expressionRows = LayoutHelper.group(GraphHelper.graphValues(expressions), 6);
-                //         $scope.date.photo.expressions = expressions;
-                //     });
-                // }
             }
         });
         /**
@@ -165,6 +178,7 @@ angular.module('angularApp')
             if (!entity) {
                 return;
             }
+            $scope.import.numberToImport = 0;
 
             Relationship.findByEntityUri(entity.uri).then(function (relationships) {
                 var relationshipsWithDates = $filter('filter')(relationships, function (relationship) {
@@ -173,60 +187,78 @@ angular.module('angularApp')
                 return Relationship.getData(relationshipsWithDates);
             }).then(function (data) {
                 var relationships = data.relationships;
+                // Convert the relationships to dates
                 var importDates = Timeline.relationshipsToEvents(relationships, entity);
+                // Set all the dates as selected
+                angular.forEach(importDates, function (importDate) {
+                    importDate.$selected = true;
+                });
+                $scope.import.numberToImport = importDates.length;
                 $scope.import.dates = importDates;
             });
         });
+        $scope.importSelectionChanged = function () {
+            var selectedDates = $filter('filter')($scope.import.dates, function (date) {
+                return date.$selected;
+            });
+            $scope.import.numberToImport = selectedDates.length;
+        };
         $scope.importEvents = function (dates) {
             dates = $filter('filter')(dates, function (date) {
-                return date.selected;
+                return date.$selected;
             });
             $scope.timeline.dates = $scope.timeline.dates.concat(dates);
             $scope.import = angular.copy(DEFAULT_IMPORT);
             $state.go('create.timeline');
         };
 
-        /**
-         * Adds a new date to the timeline
-         * @param {[type]} date [description]
+
+        /*
+        =====================================================
+            Delete dates
+        =====================================================
          */
-        // $scope.addDate = function (date) {
-        //     if (!date.startDate || date.startDate.length === 0) {
-        //         console.log('No date');
-        //     }
-
-        //     // Setup the asset image
-        //     if (date.entity) {
-        //         console.log('has entity', date.entity);
-        //         date.asset = {
-        //             media: 'images/icon.png',
-        //             thumbnail: 'images/icon.png',
-        //             caption: '<h4><a href="#/' + date.entity.type + '/' + date.entity.encodedUri + '">' + date.entity.name + '</a></h4>'
-        //         };
-        //         if (date.entity.picture) {
-        //             date.asset.media = Uris.FILE_ROOT + date.entity.picture[Uris.QA_SYSTEM_LOCATION];
-        //             date.asset.thumbnail = Uris.THUMB_ROOT + date.entity.picture[Uris.QA_SYSTEM_LOCATION];
-        //         }
-        //     }
-        //     $scope.timeline.dates.push(date);
-        //     $scope.date = {};
-
-        //     // Leave this state
-        //     $state.go('create.timeline');
-        // };
         $scope.removeDate = function (date) {
             var index = $scope.timeline.dates.indexOf(date);
             $scope.timeline.dates.splice(index, 1);
         };
 
-        // Check if we have entities in the url
-        // if ($location.search('uris')) {
-        //     console.log('$location search', $location.search('uris'));
-        // }
-
+        /*
+        =====================================================
+            Order dates 
+        =====================================================
+         */
         $scope.orderByStart = function (date) {
             return date.startDate || '0';
         };
+
+
+        /*
+        =====================================================
+            Save timeline 
+        =====================================================
+         */
+        $scope.saveTimeline = function (timeline) {
+            if (!saved) {
+                var compoundObject = {};
+                compoundObject.title = timeline.headline;
+                compoundObject.user = Auth;
+                compoundObject.type = 'timeline';
+                compoundObject.data = timeline;
+
+                var hello = angular.toJson(compoundObject);
+                console.log('json string', hello);
+                console.log('going back', angular.fromJson(hello));
+                $http.post(Uris.JSON_ROOT + 'compoundObject', compoundObject).then(function (response) {
+                    console.log('response', response);
+                });
+                saved = true;
+            } else {
+                alert('need to do put');
+            }
+
+        };
+
 
 
         // // Setup state

@@ -79,7 +79,8 @@ angular.module('angularApp')
                     Uris.QA_ARCHITECT_TYPE,
                     Uris.QA_FIRM_TYPE,
                     Uris.QA_STRUCTURE_TYPE,
-                    Uris.QA_PHOTOGRAPH_TYPE
+                    Uris.QA_PHOTOGRAPH_TYPE,
+                    Uris.QA_BUILDING_TYPOLOGY
                 ];
 
                 angular.forEach(typeUris, function (typeUri) {
