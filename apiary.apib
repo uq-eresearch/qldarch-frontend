@@ -4,6 +4,60 @@ HOST: http://www.google.com
 # QLDArch
 All URLs are relative to either **http://qldarch.net/ws/rest/** or *http://qldarch-test.metadata.net/ws/rest/*
 
+# Group Compound Objects
+
+## Compound Objects [/compoundObject]
+### Create a new compound object [POST]
+Any data sent in the post request is stored for the timeline.
++ Request (application/x-www-form-urlencoded)
+    
+        { }
+
++ Response 200 (application/json)
+
+        { }
+
+### Update a compound object [PUT]
+Need to find out from simon how does the PUT work
++ Request (application/x-www-form-urlencoded)
+    
+        { }
+
++ Response 200 (application/json)
+
+        { }
+
+### List all compound object [GET]
++ Response 200 (application/json)
+
+        { }
+
+## Individual Compound Objects [/compoundObject{?ID}]
+### Get all compound objects for a user [GET]
++ Parameters
+    + ID (required, string, `http%3A%2F%2Fqldarch.net%2Fusers%2Fuqsmcnau%2FTimeline%2367101677794`) ... The `uri` of the compound object
+ 
++ Response 200 (application/json)
+
+        { }   
+
+### Delete a compound object [DELETE]
++ Parameters
+    + ID (required, string, `http%3A%2F%2Fqldarch.net%2Fusers%2Fuqsmcnau%2FTimeline%2367101677794`) ... The `uri` of the compound object
+ 
++ Response 200 (application/json)
+
+        { }   
+
+## User Compound Objects [/compoundObject/user{?username}]
+### Get all compound objects for a user [GET]
++ Parameters
+    + username (required, string) ... The username of the user `cmcnamara87@gmail.com`.
+ 
++ Response 200 (application/json)
+
+        { }   
+
 # Group User
 Notes related resources of the **Notes API**
 
