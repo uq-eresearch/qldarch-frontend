@@ -146,11 +146,9 @@ angular.module('angularApp', [
                             });
                         }
                     ],
-                    content: ['$http', 'Uris',
-                        function ($http, Uris) {
-                            $http.get(Uris.JSON_ROOT + 'compoundObject/user?username=cmcnamara87@gmail.com').then(function (response) {
-                                console.log('got back response', response);
-                            });
+                    compoundObjects: ['CompoundObject',
+                        function (CompoundObject) {
+                            return CompoundObject.loadAll();
                         }
                     ]
                 },
@@ -178,10 +176,23 @@ angular.module('angularApp', [
                 url: '/logout',
                 controller: 'LogoutCtrl'
             })
+            .state('contents', {
+                abstract: true,
+                url: '/contents',
+                template: '<ui-view autoscroll="false"></ui-view>'
+            })
+            .state('contents.user', {
+                url: '/user/:username',
+                template: '<div>hello world</div>'
+            })
             .state('content', {
                 abstract: true,
                 url: '/content',
                 template: '<ui-view autoscroll="false"></ui-view>'
+            })
+            .state('content.timeline', {
+                url: '/timeline/:contentId',
+                template: '<div>my timeline here</div>'
             })
             .state('create', {
                 abstract: true,

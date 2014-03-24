@@ -72,6 +72,7 @@
                             <li class="dropdown" ng-show="Auth.auth">
                                 <a href class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{ Auth.email }} <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
+                                    <li><a ui-sref="contents.user({username: Auth.user})">My Content</a></li>
                                     <li><a ui-sref="logout">Sign out</a></li>
                                 </ul>
                             </li>

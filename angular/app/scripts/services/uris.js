@@ -133,4 +133,7 @@ angular.module('angularApp')
 
         this.GEO_LAT = this.GEO_NS + 'lat';
         this.GEO_LONG = this.GEO_NS + 'long';
+
+        // Compound object
+        this.QA_JSON_DATA = this.QA_NS + 'jsonData';
     });

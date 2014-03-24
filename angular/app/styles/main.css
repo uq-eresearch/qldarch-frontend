@@ -6196,8 +6196,21 @@ body {
 .l-frame.l-frame-highlight {
   background-color: #ebebeb;
 }
+.l-frame.l-frame-dark {
+  background-color: #DDD;
+}
+.l-frame.l-frame-divided {
+  border-bottom: 1px solid #eee;
+}
 .l-frame.l-frame-tight {
   padding: 24px 0;
+}
+.l-frame.l-frame-tighter {
+  padding: 16px 0;
+}
+.l-frame.l-frame-media {
+  background-color: #222222;
+  color: white;
 }
 /**
  * Holds the dateball

@@ -269,14 +269,14 @@
                     <h2>Gallery</h2>    
                 </div>
                 
-                <div class="row">
+                <div class="row" ng-repeat="compoundObjectRow in compoundObjectRows">
                     <div class="carousel">
                         <div class="col-sm-1" class="hidden-phone">
-                            <!-- <div class="carousel-nav carousel-nav-left">
+                            <div class="carousel-nav carousel-nav-left">
                                 <i class="fa fa-chevron-left"></i>      
-                            </div> -->
+                            </div>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-sm-2" ng-repeat="compoundObject in compoundObjectRow">
                             <div class="thumbnail">
                                 <div class="square square-timeline square-svg">
                                     <div class="square-content">
@@ -290,12 +290,12 @@
 
                                 <div class="caption">
                                     <h3><a href="#">
-                                        gallery item
+                                        {{ compoundObject.jsonData.title }}
                                     </a></h3>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-2">
+                        <!--<div class="col-sm-2">
                             <div class="thumbnail">
                                 <div class="square square-map square-svg">
                                     <div class="square-content">
@@ -372,16 +372,16 @@
                                     </a></h3>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                         <div class="col-sm-1" class="hidden-phone">
-                            <!-- <div class="carousel-nav carousel-nav-right">
+                            <div class="carousel-nav carousel-nav-right">
                                 <i class="fa fa-chevron-right"></i>      
-                            </div> -->
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div style="text-align: center; font-weight: bold;" class="hidden-phone">
-                    {{ 1 }} / {{ 1 }}
+                    {{ 1 }} / {{ compoundObjectRows.length }}
                 </div>
             </div>
         </div>

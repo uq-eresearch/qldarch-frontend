@@ -1,126 +1,180 @@
 <div class="content">
-	<div class="page-header page-header-map">
+	<div class="page-header page-header-map has-subnav">
 		<div class="container">
 			<h1><img src="images/icon_32152.svg" style="width: 50px; margin-right: 8px;" /> Create a Map</h1>
 		</div>
 	</div>
-	<div class="container builder">
+	<div class="l-frame l-frame-divided l-frame-tighter">
+		<div class="container">
+			<i class="fa fa-info-circle"></i> Plot data on a map and build geographical relationships.	
+		</div>
 		
-		<div class="builder-inputoutput">
-			<!-- Save button -->
-			<div class="pull-right">
-				<button class="btn btn-primary">Save Map</button>
+	</div>
+	<div class="l-frame l-frame-tighter l-frame-divided">
+		<div class="container">
+			<div>
+				<button class="btn btn-default" ui-sref="create.map.add.location" >
+					<i class="fa fa-plus"></i> Add New Location
+				</button>	
+				<button class="btn btn-default" ui-sref="create.map.add.import">
+					<i class="fa fa-download"></i> Import from Architect, Firm or Project
+				</button>
 			</div>
-			<!-- /Save button -->
+			
+			<!-- New Location -->
+			<div ng-show="$state.includes('create.map.add.location')" style="margin-top: 24px">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<h4>New Location</h4>
+						<div class="form-group">
+							<label class="control-label" for="dateHeadline">
+								Name
+								<i class="fa fa-asterisk" style="font-size: 10px; color: red;"></i>
+							</label>
+							<input ng-model="map.$tempLocation.name" name="dateHeadline" type="text" class="form-control" id="dateHeadline" placeholder="Title" required>
+						</div>
+						<div class="form-group">
+							<label>
+								Position
+								<i class="fa fa-asterisk" style="font-size: 10px; color: red;"></i>
+							</label>
+							<div class="row">
+								<div class="col-sm-6">
+									<input type="text" class="form-control" placeholder="Latitude" ng-model="map.$tempLocation.lat" required/>
+								</div>
+								<div class="col-sm-6">
+									<input type="text" class="form-control" placeholder="Longitude" ng-model="map.$tempLocation.lon" required/>
+								</div>
+							</div>
+						</div>
 
-			<!-- Description -->
-			<h2>What's your map about?</h2>
-			<p class="builder-description">Plot data on a map and build geographical relationships</p>
-			<!-- /Description -->
-
-			<div class="builder-input">
-				<h3>Title</h3>
-				<input type="text" class="form-control" placeholder="What is your map about?">
+						<button type="submit" class="btn btn-primary" ng-click="addLocation(map.$tempLocation)">Add</button>
+						<button class="btn btn-default" ui-sref="create.map">Cancel</button>
+					</div>
+				</div>
 			</div>
-	
-			<div class="builder-input">
-				<h3>
-					Locations
-				</h3>
-				<p>Create a new location, import locations from projects built by architects or firms; or import locations of a particular typology.</p>
+			<!-- / New location -->
+
+			<!-- Import locations -->
+			<div class="panel panel-default" ng-show="$state.includes('create.map.add.import')" style="margin-top: 24px">
+				<div class="panel-body">
+					<p>Search for architects, buildings or firms to import dates from their timeline.</p>
+					<div 
+						ui-select2="architectStructureFirmTypologySelect" 
+						ng-model="map.$import.entity" 
+						class="form-control">
+					</div>
+					<div ng-show="map.$import.entity && map.$import.locations == null" style="text-align: center;">
+						<i class="fa fa-spin fa-refresh"></i>
+					</div>
+					<div ng-show="map.$import.locations && !map.$import.locations.length">
+						No locations found.
+					</div>
+					<div ng-repeat="location in map.$import.locations" class="row" style="margin-top: 8px;">
+						<div>
+							<div class="col-sm-1" style="text-align: right">
+								<input type="checkbox" ng-model="location.$selected" ng-change="importSelectionChanged()">
+							</div>
+							<div class="col-sm-11" ng-click="expression">
+								<p><strong>{{ location.name }}</strong> ({{ location.lat }} {{ location.lon }})</p> 
+							</div>
+						</div>
+					</div>
+
+
+					<div style="margin-top: 10px;">
+						<button class="btn btn-primary" ng-click="import(map.$import.locations)" ng-show="map.$import.locations.length">Add to Map ({{ map.$import.numberToImport }})</button>
+						<button class="btn btn-default" ui-sref="create.map" >Cancel</button>
+					</div>
+				</div>
+			</div>
+			<!-- Import locations -->
+
+			<!-- <h3>
+				Locations
+			</h3> -->
+
+			<!-- Location list -->
+			<div style="margin-top: 24px;">
+				<div class="text-muted" ng-hide="map.locations.length">No locations added. Try adding some locations.</div>
+				<!--  | slice:currentPage:currentPage+10 -->
+				<div ng-repeat="location in map.locations" class="builder-list-item">
+					<div class="row">
+						<div class="col-sm-12">
+							<button class="btn btn-default btn-xs pull-right" ng-click="remove(location)">
+								<i class="fa fa-trash-o"></i>
+							</button>
+							<p>
+								<strong>{{ location.name }}</strong> ({{ location.lat }} {{ location.lon }})
+							</p>
+						</div>
+					</div>
+				</div>
+				<!-- <div ng-show="map.locations.length" style="text-align: center">
+					<pagination total-items="map.locations.length" page="currentPage"></pagination>	
+				</div> -->
+			</div>
+			<!-- /Location List -->
+		</div>
+	</div>
+
+	<div class="l-frame l-frame-tighter" ng-show="map.locations.length">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-10">
+					<input type="text" class="form-control" placeholder="Title: What is your map about?" ng-model="map.title">
+				</div>
+				<div class="col-sm-2">
+					<button class="btn btn-primary form-control" ng-click="save()"
+						ng-disabled="!map.title || !map.locations.length"
+						ng-click="save()"
+						ng-show="Auth.auth">Save Map</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="l-frame l-frame-media" ng-show="map.locations.length">
+		<div class="container">
+			<h3 style="text-align: center; margin-bottom: 24px;" ng-show="map.title.length">
+				{{ map.title }}<br/>
+				<small>By {{ Auth.email }}</small>
+			</h3>
+			<div ui-map="myMap" class="map-canvas map"
+				ui-options="mapOptions">
+			</div>	
+		</div>
+	</div>
+	<!-- <div class="container builder">
+		<div class="builder-inputoutput">	 -->
+			<!-- <div class="builder-input"> -->
+				
+				
 
 				<!-- Location controls -->
-				<div ng-hide="$state.includes('create.map.add')" class="builder-buttons">
+				<!-- <div ng-hide="$state.includes('create.map.add')" class="builder-buttons">
 					<button class="btn btn-default" ui-sref="create.map.add.location" >
 						<i class="fa fa-plus"></i> New
 					</button>	
 					<button class="btn btn-default" ui-sref="create.map.add.import">
 						<i class="fa fa-download"></i> Import from Architect, Firm or Project
 					</button>
-				</div>
+				</div> -->
 				<!-- /Location controls -->
 
-				<!-- New Location -->
-				<div ng-show="$state.includes('create.map.add.location')">
-					<div class="panel panel-default">
-						<div class="panel-body">
-							<h4>New Location</h4>
-							<div class="form-group">
-								<label class="control-label" for="dateHeadline">
-									Name
-									<i class="fa fa-asterisk" style="font-size: 10px; color: red;"></i>
-								</label>
-								<input ng-model="location.name" name="dateHeadline" type="text" class="form-control" id="dateHeadline" placeholder="Title" required>
-							</div>
-							<div class="form-group">
-								<label>
-									Position
-									<i class="fa fa-asterisk" style="font-size: 10px; color: red;"></i>
-								</label>
-								<div class="row">
-									<div class="col-sm-6">
-										<input type="text" class="form-control" placeholder="Latitude" ng-model="location.lat" required/>
-									</div>
-									<div class="col-sm-6">
-										<input type="text" class="form-control" placeholder="Longitude" ng-model="location.lon" required/>
-									</div>
-								</div>
-							</div>
 
-							<button type="submit" class="btn btn-primary" ng-click="addLocation(location)">Add</button>
-							<button class="btn btn-default" ui-sref="create.map">Cancel</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- / New location -->
+			<!-- </div> -->
+			
 
-			<!-- Import events -->
-			<div class="panel panel-default" ng-show="$state.includes('create.map.add.import')">
-				<div class="panel-body">
-					<p>Search for architects, buildings or firms to import dates from their timeline.</p>
-					<div 
-						ui-select2="architectStructureFirmTypologySelect" 
-						ng-model="import.entity" 
-						class="form-control">
-					</div>
-
-					<div ng-show="import.dates && !import.dates.length">
-						No dates found.
-					</div>
-					<div ng-repeat="date in import.dates" class="row" style="margin-top: 8px;">
-						<label style="display: block;">
-							<div class="col-sm-1">
-								<input type="checkbox" ng-model="date.$selected" ng-change="importSelectionChanged()">
-						    </label>
-							</div>
-							<div class="col-sm-1">
-								<img ng-src="{{ date.asset.thumbnail }}" alt="thumbnail" class="img-responsive">
-							</div>
-							<div class="col-sm-10">
-								<strong>{{ date.startDate }} <span ng-show="date.endDate">- {{ date.endDate }}</span></strong> 
-								{{ date.headline }}
-							</div>
-						</label>
-					</div>
-
-
-					<div style="margin-top: 10px;">
-						<button class="btn btn-primary" ng-click="importEvents(import.locations)" ng-show="import.locations.length">Add to timeline ({{ import.numberToImport }})</button>
-						<button class="btn btn-default" ui-sref="create.map" >Cancel</button>
-					</div>
-				</div>
-			</div>
-			<!-- Import events -->
-
-		</div>
-
+			
+			<!-- / Event list -->				
+		<!-- </div>
+	
 		<div class="builder-inputoutput" ng-show="map.locations.length">
 			<h2>Preview</h2>
 			<div ui-map="myMap" class="map-canvas map"
 				ui-options="mapOptions">
 			</div>
-		</div>
+		</div> -->
 		
 
 
@@ -128,5 +182,5 @@
 			ui-options="mapOptions">
 		</div> -->
 		
-	</div>
+	<!-- </div> -->
 </div>

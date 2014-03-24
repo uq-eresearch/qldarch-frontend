@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('CreateTimelineCtrl', function ($scope, Entity, Uris, $stateParams, $location, $http, ENV, $filter, Relationship, GraphHelper, $q, Timeline, $state, Expression, LayoutHelper, Auth) {
+    .controller('CreateTimelineCtrl', function ($scope, Entity, Uris, $stateParams, $location, $http, ENV, $filter, Relationship, GraphHelper, $q, Timeline, $state, Expression, LayoutHelper, Auth, CompoundObject) {
 
         var DEFAULT_IMPORT = {
             entity: null,
@@ -246,17 +246,16 @@ angular.module('angularApp')
                 compoundObject.type = 'timeline';
                 compoundObject.data = timeline;
 
-                var hello = angular.toJson(compoundObject);
-                console.log('json string', hello);
-                console.log('going back', angular.fromJson(hello));
-                $http.post(Uris.JSON_ROOT + 'compoundObject', compoundObject).then(function (response) {
-                    console.log('response', response);
+                CompoundObject.store(compoundObject).then(function (data) {
+                    console.log('response', data);
+                    $state.go('content.timeline', {
+                        contentId: data.encodedUri
+                    });
                 });
                 saved = true;
             } else {
                 alert('need to do put');
             }
-
         };
 
 

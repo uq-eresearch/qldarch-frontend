@@ -132,10 +132,9 @@
 							No dates found.
 						</div>
 						<div ng-repeat="date in import.dates" class="row" style="margin-top: 8px;">
-							<label style="display: block;">
-								<div class="col-sm-1">
+							<div ng-click="date.$selected = !date.$selected">
+								<div class="col-sm-1" style="text-align: right">
 									<input type="checkbox" ng-model="date.$selected" ng-change="importSelectionChanged()">
-							    </label>
 								</div>
 								<div class="col-sm-1">
 									<img ng-src="{{ date.asset.thumbnail }}" alt="thumbnail" class="img-responsive">
@@ -144,7 +143,7 @@
 									<strong>{{ date.startDate }} <span ng-show="date.endDate">- {{ date.endDate }}</span></strong> 
 									{{ date.headline }}
 								</div>
-							</label>
+							</div>
 						</div>
 
 
@@ -157,13 +156,7 @@
 				<!-- Import events -->
 
 				<!-- Event list -->
-				<div>
-					<!--<div ng-if="!timeline.dates.length && !$state.includes('create.timeline.add')">
-						<div class="text-muted">
-							Try <a href ui-sref="create.timeline.add.event">adding an event</a> or <a href ui-sref="create.timeline.add.import">importing events</a> from an architect, building or firm to start off your timeline.
-						</div>
-					</div>-->
-					
+				<div>				
 					<div ng-repeat="date in timeline.dates | orderBy:orderByStart" class="builder-list-item">
 						<div class="row">
 							<div class="col-sm-1">

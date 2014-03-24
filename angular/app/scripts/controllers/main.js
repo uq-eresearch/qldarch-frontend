@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('MainCtrl', function ($scope, $location, Uris, Entity, interviews, architects, LayoutHelper, GraphHelper) {
+    .controller('MainCtrl', function ($scope, $location, Uris, Entity, interviews, architects, LayoutHelper, GraphHelper, compoundObjects) {
         $scope.searchType = 'entities';
         $scope.query = '';
 
@@ -21,6 +21,9 @@ angular.module('angularApp')
             $scope.architectsStart--;
             $scope.architectsEnd--;
         };
+
+        $scope.compoundObjectRows = LayoutHelper.group(compoundObjects, 5);
+        console.log('compoundObjects', compoundObjects, $scope.compoundObjectRows);
         // $scope.end = $scope.index + $scope.length;
         // $scope.prevArchitects = function () {
         //     $scope.index = Math.max($scope.index - $scope.length, 0);
