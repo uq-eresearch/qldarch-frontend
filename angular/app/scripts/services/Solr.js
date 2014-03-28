@@ -241,8 +241,9 @@ angular.module('angularApp')
                     return getArticlesFromDocs(response.data.response.docs, args.query).then(function (articles) {
                         return getInterviewsFromDocs(response.data.response.docs, args.query).then(function (interviews) {
                             var results = articles.concat(interviews);
-                            return results;
-                            // return $filter('orderBy')(results, '-score');
+                            return $filter('orderBy')(results, '-score');
+                            // return results;
+
                         });
                     });
                     // Create the results

@@ -1,38 +1,15 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('CreateMapCtrl', function ($scope, Entity, $state, Relationship, Structure, GraphHelper, Uris, $filter, Auth, CompoundObject) {
+    .controller('MapBuilderCtrl', function ($scope, compoundObject, Entity, Uris, Relationship, GraphHelper, Structure, $filter, $state, Auth, CompoundObject) {
+        $scope.compoundObject = compoundObject.jsonData;
+        $scope.map = compoundObject.jsonData.data;
+        if (!compoundObject.uri) {
+            $scope.map.locations = [];
+            $scope.compoundObject.user = Auth;
+            $scope.compoundObject.type = 'map';
+        }
 
-        var saved = false;
-        // The object we are going to be posting
-        $scope.map = {
-            locations: [],
-            $markers: [],
-            $import: {
-                entity: null,
-                locations: null,
-                numberToImport: 0
-            },
-            $tempLocation: {}
-        };
-
-        // Setup the map
-        $scope.mapOptions = {
-            zoom: 15,
-            maxZoom: 16,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-
-        $scope.$watch('myMap', function (myMap) {
-            console.log('is showing map', $scope.isShowingMap);
-            if (myMap) {
-                console.log('we have a map', myMap);
-                var bounds = new google.maps.LatLngBounds();
-                var latlng = new google.maps.LatLng(18.547324589827422, -72.388916015625);
-                bounds.extend(latlng);
-                myMap.fitBounds(bounds);
-            }
-        });
 
         /*
         =====================================================
@@ -196,11 +173,12 @@ angular.module('angularApp')
                 return location.$selected;
             });
             $scope.map.locations = locations.concat($scope.map.locations);
+            console.log('locations', $scope.map.locations);
             $scope.map.$import = {
                 entity: null,
                 locations: []
             };
-            $state.go('create.map');
+            $state.go('ugc.map.edit');
         };
 
         /*
@@ -213,7 +191,7 @@ angular.module('angularApp')
             $scope.map.locations.unshift(location);
             // Clear the entry
             $scope.map.$tempLocation = {};
-            $state.go('create.map');
+            $state.go('ugc.map.edit');
         };
 
         /*
@@ -232,21 +210,18 @@ angular.module('angularApp')
         =====================================================
          */
         $scope.save = function () {
-            if (!saved) {
-                var compoundObject = {};
-                compoundObject.title = $scope.map.title;
-                compoundObject.user = Auth;
-                compoundObject.type = 'map';
-                compoundObject.data = $scope.map;
-
-                CompoundObject.store(compoundObject).then(function (data) {
-                    $state.go('content.map', {
-                        contentId: data.encodedUri
+            if (!compoundObject.uri) {
+                CompoundObject.store($scope.compoundObject).then(function (data) {
+                    $state.go('ugc.map', {
+                        id: data.encodedUri
                     });
                 });
-                saved = true;
             } else {
-                alert('need to do put');
+                CompoundObject.update(compoundObject.uri, $scope.compoundObject).then(function (data) {
+                    $state.go('ugc.map', {
+                        id: data.encodedUri
+                    });
+                });
             }
         };
 
@@ -275,5 +250,14 @@ angular.module('angularApp')
                 });
             }
         };
-
     });
+
+
+//     'use strict';
+
+// angular.module('angularApp')
+//     .controller('CreateMapCtrl', function ($scope, Entity, $state, Relationship, Structure, GraphHelper, Uris, $filter, Auth, CompoundObject) {
+
+
+
+//     });

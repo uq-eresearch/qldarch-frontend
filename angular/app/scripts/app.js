@@ -176,27 +176,114 @@ angular.module('angularApp', [
                 url: '/logout',
                 controller: 'LogoutCtrl'
             })
-            .state('contents', {
+            .state('ugcs', {
                 abstract: true,
-                url: '/contents',
+                url: '/',
                 template: '<ui-view autoscroll="false"></ui-view>'
             })
-            .state('contents.user', {
+            .state('ugcs.user', {
                 url: '/user/:username',
                 template: '<div>hello world</div>'
             })
-            .state('content', {
+            .state('ugc', {
                 abstract: true,
-                url: '/content',
+                url: '/ugc?id',
+                resolve: {
+                    compoundObject: ['$stateParams', 'GraphHelper', 'CompoundObject',
+                        function ($stateParams, GraphHelper, CompoundObject) {
+                            if ($stateParams.id) {
+                                var mapUri = GraphHelper.decodeUriString($stateParams.id);
+                                return CompoundObject.load(mapUri);
+                            } else {
+                                return {
+                                    jsonData: {
+                                        data: {}
+                                    }
+                                };
+                            }
+                        }
+                    ]
+                },
+                templateUrl: 'views/ugc/ugc.html',
+            })
+            .state('ugc.timeline', {
+                url: '/timeline',
+                views: {
+                    header: {
+                        templateUrl: 'views/ugc/timeline.header.html'
+                    },
+                    builder: {
+                        template: ''
+                    },
+                    viewer: {
+                        templateUrl: 'views/ugc/timeline.viewer.html',
+                        controller: 'TimelineViewerCtrl'
+                    }
+                }
+            })
+            .state('ugc.timeline.edit', {
+                url: '/edit',
+                controller: 'TimelineBuilderCtrl',
+                reloadOnSearch: false,
+                views: {
+                    'builder@ugc': {
+                        templateUrl: 'views/ugc/timeline.builder.html',
+                        controller: 'TimelineBuilderCtrl'
+                    }
+                }
+
+            })
+            .state('ugc.timeline.edit.add', {
+                abstract: true,
+                url: '/add',
                 template: '<ui-view autoscroll="false"></ui-view>'
             })
-            .state('content.timeline', {
-                url: '/timeline/:contentId',
-                template: '<div>my timeline here</div>'
+            .state('ugc.timeline.edit.add.date', {
+                url: '/date'
+            })
+            .state('ugc.timeline.edit.add.import', {
+                url: '/import'
+            })
+            .state('ugc.map', {
+                // abstract: true,
+                url: '/map',
+                views: {
+                    header: {
+                        templateUrl: 'views/ugc/map.header.html'
+                    },
+                    builder: {
+                        template: ''
+                    },
+                    viewer: {
+                        templateUrl: 'views/ugc/map.viewer.html',
+                        controller: 'MapViewerCtrl'
+                    }
+                }
+            })
+            .state('ugc.map.edit', {
+                url: '/edit',
+                controller: 'CreateMapCtrl',
+                reloadOnSearch: false,
+                views: {
+                    'builder@ugc': {
+                        templateUrl: 'views/ugc/map.builder.html',
+                        controller: 'MapBuilderCtrl'
+                    }
+                }
+            })
+            .state('ugc.map.edit.add', {
+                abstract: true,
+                url: '/add',
+            })
+            .state('ugc.map.edit.add.location', {
+                url: '/location',
+            })
+            .state('ugc.map.edit.add.import', {
+                url: '/import',
             })
             .state('create', {
                 abstract: true,
-                url: '/create',
+                url: '/build',
                 template: '<ui-view autoscroll="false"></ui-view>'
             })
             .state('create.timeline', {
@@ -216,17 +303,6 @@ angular.module('angularApp', [
             })
             .state('create.map', {
                 url: '/map?map',
-                // views: {
-                //     'dog@create.map': {
-                //         template: 'bark'
-                //     },
-                //     'cat@create.map': {
-                //         template: 'purr'
-                //     },
-                //     '': {
-                //         templateUrl: 'views/create/map.html'
-                //     }
-                // },
                 templateUrl: 'views/create/map.html',
                 controller: 'CreateMapCtrl',
                 reloadOnSearch: false
@@ -241,7 +317,19 @@ angular.module('angularApp', [
                 url: '/location',
             })
             .state('create.textAnalysis', {
-                url: '/text-analysis'
+                url: '/text-analysis',
+                templateUrl: 'views/create/textanalysis.html',
+                controller: 'CreateTextAnalysisCtrl',
+                reloadOnSearch: false
+            })
+            .state('create.textAnalysis.add', {
+                url: '/add'
+            })
+            .state('create.textAnalysis.add.import', {
+                url: '/import',
+            })
+            .state('create.textAnalysis.add.new', {
+                url: '/document',
             })
             .state('architects', {
                 abstract: true,

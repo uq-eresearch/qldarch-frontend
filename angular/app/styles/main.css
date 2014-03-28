@@ -6131,6 +6131,9 @@ h6 {
 .page-header.page-header-map {
   background-color: #0d8f67;
 }
+.page-header.page-header-wordcloud {
+  background-color: #e42962;
+}
 .page-header.has-subnav {
   margin-bottom: 0px;
 }
@@ -6181,6 +6184,13 @@ h6 {
 }
 body {
   background-color: white;
+}
+.select2-thumb {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  position: relative;
+  top: -1px;
 }
 /**
  * Layout

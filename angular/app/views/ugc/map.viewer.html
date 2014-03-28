@@ -1,0 +1,24 @@
+<div class="l-frame l-frame-media" ng-show="map.locations.length">
+	
+	<div class="container">
+
+		<!-- Edit -->
+		<button class="btn btn-default pull-right" ui-sref="ugc.map.edit" ng-hide="$state.includes('ugc.map.edit')">
+			<i class="fa fa-pencil"></i> Edit
+		</button>
+		<!-- /Edit -->
+
+		<h3 style="text-align: center; margin-bottom: 24px;" ng-show="compoundObject.title.length">
+			<!-- Map title -->
+			{{ compoundObject.title }}<br/>
+			<!-- /Map title -->
+
+			<!-- Author name -->
+			<small ng-show="compoundObject.user">By {{ compoundObject.user.email }}</small>
+			<!-- /Author name -->
+		</h3>
+		<div ui-map="myMap" class="map-canvas map"
+			ui-options="mapOptions">
+		</div>	
+	</div>
+</div>

@@ -20,7 +20,8 @@
     "angular-bootstrap-affix": "~0.3.0",
     "ngInfiniteScroll": "BinaryMuse/ngInfiniteScroll#~1.0.0",
     "angular-ui-router": "0.2.8-bowratic-tedium",
-    "timelinejs": "~2.27.0"
+    "timelinejs": "~2.27.0",
+    "d3-cloud": "jasondavies/d3-cloud#~1.0.5"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",

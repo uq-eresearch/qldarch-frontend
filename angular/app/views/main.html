@@ -276,7 +276,10 @@
                                 <i class="fa fa-chevron-left"></i>      
                             </div>
                         </div>
-                        <div class="col-sm-2" ng-repeat="compoundObject in compoundObjectRow">
+                        <div class="" ng-repeat="compoundObject in compoundObjectRow">
+                            <pre>
+                                {{ compoundObject | json }}
+                            </pre>
                             <div class="thumbnail">
                                 <div class="square square-timeline square-svg">
                                     <div class="square-content">
@@ -289,9 +292,9 @@
                                 </div>
 
                                 <div class="caption">
-                                    <h3><a href="#">
-                                        {{ compoundObject.jsonData.title }}
-                                    </a></h3>
+                                    <h4><a ui-sref="ugc.map({id: compoundObject.encodedUri })">
+                                        {{ compoundObject.jsonData.title }} ({{ compoundObject.jsonData.type }})
+                                    </a></h4>
                                 </div>
                             </div>
                         </div>
