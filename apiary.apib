@@ -98,6 +98,16 @@ Notes related resources of the **Notes API**
             auth: true
         }
         
+## Roles [/user/role{?username}{?role}]
+### Assign an existing user a role [PUT]
++ Parameters
+    + username (required, string) ... The username of the user (email address)
+    + role (required, strong, `editor` or `authorized`) ... The role of the user
+
++ Response 200 (application/json)
+
+        { }
+
 ## Login [/login]
 ### Login [POST]
 + Request (application/x-www-form-urlencoded)
