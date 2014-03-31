@@ -6,33 +6,38 @@ All URLs are relative to either **http://qldarch.net/ws/rest/** or *http://qldar
 
 # Group Compound Objects
 
-## Compound Objects [/compoundObject]
-### Create a new compound object [POST]
-Any data sent in the post request is stored for the timeline.
-+ Request (application/x-www-form-urlencoded)
-    
-        { }
-
-+ Response 200 (application/json)
-
-        { }
-
-### Update a compound object [PUT]
-Need to find out from simon how does the PUT work
-+ Request (application/x-www-form-urlencoded)
-    
-        { }
-
-+ Response 200 (application/json)
-
-        { }
-
+## Compound Objects Index [/compoundObject{?ID}]
 ### List all compound object [GET]
 + Response 200 (application/json)
 
         { }
+        
+### Create a new compound object [POST]
+The request payload can be any JSON data. It does not have to allow the format below.
 
-## Individual Compound Objects [/compoundObject/id{?ID}]
++ Request (application/json)
+
+        {"data":{"locations":[{"name":"Location 1","lat":"-27","lon":"153"}]},"user":{"user":"cmcnamara87@gmail.com","auth":true,"email":"Craig McNamara"},"type":"map","title":"My Map"}
+
++ Response 200 (application/json)
+
+        {"uri":"http://qldarch.net/users/cmcnamara87@gmail.com/CompoundObject#68213848726","http://qldarch.net/ns/rdf/2012-06/terms#jsonData":"{\"data\":{\"locations\":[{\"name\":\"Location 1\",\"lat\":\"-27\",\"lon\":\"153\"}]},\"user\":{\"user\":\"cmcnamara87@gmail.com\",\"auth\":true,\"email\":\"Craig McNamara\"},\"type\":\"map\",\"title\":\"My Map\"}","http://www.w3.org/1999/02/22-rdf-syntax-ns#type":"http://qldarch.net/ns/rdf/2012-06/terms#CompoundObject"}
+
+### Update a compound object [PUT]
++ Parameters
+    + ID (required, string, `http%3A%2F%2Fqldarch.net%2Fusers%2Fuqsmcnau%2FTimeline%2367101677794`) ... The `uri` of the compound object
+ 
++ Request (application/x-www-form-urlencoded)
+    
+        {"data":{"locations":[{"name":"Location 1","lat":"-27","lon":"153"}]},"user":{"user":"cmcnamara87@gmail.com","auth":true,"email":"Craig McNamara"},"type":"map","title":"My Map"}
+
++ Response 200 (application/json)
+
+        {"uri":"http://qldarch.net/users/cmcnamara87@gmail.com/CompoundObject#68213848726","http://qldarch.net/ns/rdf/2012-06/terms#jsonData":"{\"data\":{\"locations\":[{\"name\":\"Location 1\",\"lat\":\"-27\",\"lon\":\"153\"}]},\"user\":{\"user\":\"cmcnamara87@gmail.com\",\"auth\":true,\"email\":\"Craig McNamara\"},\"type\":\"map\",\"title\":\"My Map\"}","http://www.w3.org/1999/02/22-rdf-syntax-ns#type":"http://qldarch.net/ns/rdf/2012-06/terms#CompoundObject"}
+
+
+
+## Compound Objects [/compoundObject/id{?ID}]
 ### Get all compound objects for a user [GET]
 + Parameters
     + ID (required, string, `http%3A%2F%2Fqldarch.net%2Fusers%2Fuqsmcnau%2FTimeline%2367101677794`) ... The `uri` of the compound object
@@ -40,6 +45,7 @@ Need to find out from simon how does the PUT work
 + Response 200 (application/json)
 
         { }   
+        
 
 ### Delete a compound object [DELETE]
 + Parameters
@@ -62,7 +68,7 @@ Need to find out from simon how does the PUT work
 Notes related resources of the **Notes API**
 
 ## User [/user]
-### Create a new user [POST]
+### Registers / creates a new user [POST]
 **Kludge alert!** In the `username` field, we are storing a user's
 *email address*. In the `email` field, we are storing a users 
 *display name*. 
@@ -83,7 +89,19 @@ Notes related resources of the **Notes API**
             "auth":true,
             "email": "Craig McNamara"
         }
+
+## Roles [/user/role{?username}{?role}]
+### Assign a role to an existing user [PUT]
++ Parameters
+    + username (required, string) ... The username of the user (email address)
+    + role (required, strong, `editor` or `authorized`) ... The role of the user
+
++ Response 200 (application/json)
+
+        { }
         
+# Group Authentication
+
 ## Login Status [/login/status]
 ### Current login status object [GET]
 + Response 200 (application/json)
@@ -98,15 +116,7 @@ Notes related resources of the **Notes API**
             auth: true
         }
         
-## Roles [/user/role{?username}{?role}]
-### Assign an existing user a role [PUT]
-+ Parameters
-    + username (required, string) ... The username of the user (email address)
-    + role (required, strong, `editor` or `authorized`) ... The role of the user
 
-+ Response 200 (application/json)
-
-        { }
 
 ## Login [/login]
 ### Login [POST]
