@@ -28,7 +28,7 @@ module.exports = function (grunt) {
                     username: '<%= secret.username %>',
                     password: '<%= secret.password %>',
                     port: 6666,
-                    showProgress: true
+                    showProgress: false
                 }
             }
         },
@@ -277,7 +277,8 @@ module.exports = function (grunt) {
                     cwd: '<%= yeoman.app %>/images',
                     src: '{,*/}*.{png,jpg,jpeg}',
                     dest: '<%= yeoman.dist %>/images'
-                }]
+                }],
+                cache: false
             }
         },
         svgmin: {
@@ -337,6 +338,7 @@ module.exports = function (grunt) {
                         '.htaccess',
                         'bower_components/**/*',
                         'images/{,*/}*.{gif,webp}',
+                        'images/header.jpg',
                         'fonts/*',
                         'files/*'
                     ]

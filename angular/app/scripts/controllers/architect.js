@@ -7,18 +7,38 @@ angular.module('angularApp')
         $scope.interviews = interviews;
 
         $scope.updateArchitect = function (architect) {
-            Entity.update(architect.uri, architect).
-            catch (function (error) {
-                alert('Failed to save');
-                console.log('Failed to save', error);
-                $state.go('architect.summary.edit', {
+            if (architect.uri) {
+                // PUT
+                Entity.update(architect.uri, architect).
+                catch (function (error) {
+                    alert('Failed to save');
+                    console.log('Failed to save', error);
+                    $state.go('architect.summary.edit', {
+                        architectId: architect.encodedUri
+                    });
+                });
+
+                $state.go('architect.summary', {
                     architectId: architect.encodedUri
                 });
-            });
+            } else {
+                // POST
+                console.log('architect', architect);
 
-            $state.go('architect.summary', {
-                architectId: architect.encodedUri
-            });
+                Entity.create(architect, Uris.QA_ARCHITECT_TYPE).then(function (architect) {
+                    $state.go('architect.summary', {
+                        architectId: architect.encodedUri
+                    });
+                });
+            }
+        };
+
+        $scope.cancel = function () {
+            if (architect.uri) {
+                $state.go('architect.summary');
+            } else {
+                $state.go('architects.queensland');
+            }
         };
 
 

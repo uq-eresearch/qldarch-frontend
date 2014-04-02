@@ -27,8 +27,8 @@ angular.module('angularApp')
                     timelineDate.asset = {
                         media: 'images/icon.png',
                         thumbnail: 'images/icon.png',
-                        'caption': '<h3 style="text-transform: capitalize"><a href="#/' +
-                            relationship.object.type + '/' + relationship.object.encodedUri + '">' + relationship.object.name + '</a></h3>'
+                        'caption': '<h4 style="text-transform: capitalize"><a href="#/' +
+                            relationship.object.type + '?' + relationship.subject.type + 'Id=' + relationship.object.encodedUri + '">' + relationship.object.name + '</a></h4>'
                     };
                     if (angular.isDefined(relationship.object.picture)) {
                         url = Uris.THUMB_ROOT + relationship.object.picture[Uris.QA_SYSTEM_LOCATION];
@@ -40,8 +40,8 @@ angular.module('angularApp')
                     timelineDate.asset = {
                         media: 'images/icon.png',
                         thumbnail: 'images/icon.png',
-                        'caption': '<h3 style="text-transform: capitalize"><a href="#/' +
-                            relationship.subject.type + '/' + relationship.subject.encodedUri + '">' + relationship.subject.name + '</a></h3>'
+                        'caption': '<h4 style="text-transform: capitalize"><a href="#/' +
+                            relationship.subject.type + '?' + relationship.subject.type + 'Id=' + relationship.subject.encodedUri + '">' + relationship.subject.name + '</a></h4>'
                     };
                     if (angular.isDefined(relationship.subject.picture)) {
                         url = Uris.THUMB_ROOT + relationship.subject.picture[Uris.QA_SYSTEM_LOCATION];

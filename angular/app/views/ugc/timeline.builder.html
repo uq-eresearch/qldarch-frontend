@@ -56,10 +56,14 @@
 											class="form-control">
 										</div>
 									</li>
-									<li>
+									<li ng-show="timeline.$tempDate.$photo.entity">
 										<label>Choose a Photo</label>
 										<div ng-show="timeline.$tempDate.$photo.entity && timeline.$tempDate.$photo.expressions == null" style="text-align: center;">
 											<i class="fa fa-spin fa-refresh"></i>
+										</div>
+
+										<div ng-show="timeline.$tempDate.$photo.expressions && !timeline.$tempDate.$photo.expressions.length">
+											No photos found.
 										</div>
 
 										<div class="row" ng-repeat="expressionRow in timeline.$tempDate.$photo.expressionRows">
@@ -158,10 +162,6 @@
 			</div>
 		</div>
 		<!-- /Date List -->
-
-		<pre>
-			{{ timeline.$tempDate | json }}
-		</pre>
 	</div>
 </div>
 

@@ -7,7 +7,7 @@ angular.module('angularApp')
         if (!compoundObject.uri) {
             $scope.timeline.dates = [];
             $scope.compoundObject.user = Auth;
-            $scope.compoundObject.type = 'map';
+            $scope.compoundObject.type = 'timeline';
             $scope.timeline.$tempDate = {};
         }
 
@@ -211,41 +211,15 @@ angular.module('angularApp')
         $scope.save = function () {
             if (!compoundObject.uri) {
                 CompoundObject.store($scope.compoundObject).then(function (data) {
-                    $state.go('ugc.map', {
+                    $state.go('ugc.timeline', {
                         id: data.encodedUri
                     });
                 });
             } else {
                 CompoundObject.update(compoundObject.uri, $scope.compoundObject).then(function (data) {
-                    $state.go('ugc.map', {
+                    $state.go('ugc.timeline', {
                         id: data.encodedUri
                     });
-                });
-            }
-        };
-
-        // Setup the select boxes
-        $scope.locationSelectOptions = {
-            placeholder: 'Who or what is this about?',
-            dropdownAutoWidth: true,
-            minimumInputLength: 2,
-            query: function (options) {
-                Entity.findByName(options.term, false).then(function (entities) {
-                    var data = {
-                        results: []
-                    };
-                    angular.forEach(entities, function (entity) {
-                        data.results.push({
-                            id: entity.uri,
-                            uri: entity.uri,
-                            text: entity.name,
-                            type: entity.type,
-                            name: entity.name,
-                            encodedUri: entity.encodedUri,
-                            picture: entity.picture
-                        });
-                    });
-                    options.callback(data);
                 });
             }
         };

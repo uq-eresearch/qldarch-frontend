@@ -26,9 +26,20 @@ angular.module('angularApp', [
     'audioPlayer',
     'ui.utils',
     'infinite-scroll',
-    'ui.router'
+    'ui.router',
+    'angularFileUpload'
 ])
     .run(function ($rootScope, $route, $location, ngProgress, Uris, Entity, $http, GraphHelper, $state, $stateParams, Auth, $filter) {
+
+        // Fix bug with scrolling to top with ui-router changing
+        $rootScope.$on('$viewContentLoaded', function () {
+            var interval = setInterval(function () {
+                if (document.readyState === 'complete') {
+                    window.scrollTo(0, 0);
+                    clearInterval(interval);
+                }
+            }, 200);
+        });
 
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
@@ -127,32 +138,58 @@ angular.module('angularApp', [
                             console.log('resolving main');
                             return Interview.loadAll().then(function (interviews) {
                                 interviews = GraphHelper.graphValues(interviews);
+                                console.log('interview count', interviews);
                                 // Filter only the interviews with pictures
                                 // Looks better for the front page
-                                var interviewsWithPictures = $filter('filter')(interviews, function (interview) {
-                                    return angular.isDefined(interview.interviewees) && interview.interviewees.length && angular.isDefined(interview.interviewees[0].picture);
+                                var interviewsWithPictures = $filter('orderBy')(interviews, function (interview) {
+                                    if (angular.isDefined(interview.interviewees) && interview.interviewees.length && angular.isDefined(interview.interviewees[0].picture)) {
+                                        return 0;
+                                    } else {
+                                        return 1;
+                                    }
                                 });
                                 return interviewsWithPictures;
                             });
                         }
                     ],
-                    architects: ['Architect', 'GraphHelper', '$filter',
-                        function (Architect, GraphHelper, $filter) {
-                            return Architect.loadAll().then(function (architects) {
-                                architects = GraphHelper.graphValues(architects);
-                                return $filter('filter')(architects, function (architect) {
-                                    return angular.isDefined(architect.picture);
-                                });
+                    // architects: ['Architect', 'GraphHelper', '$filter',
+                    //     function (Architect, GraphHelper, $filter) {
+                    //         return Architect.loadAll().then(function (architects) {
+                    //             architects = GraphHelper.graphValues(architects);
+                    //             return $filter('filter')(architects, function (architect) {
+                    //                 return angular.isDefined(architect.picture);
+                    //             });
+                    //         });
+                    //     }
+                    // ],
+                    compoundObjects: ['CompoundObject', '$filter',
+                        function (CompoundObject, $filter) {
+                            return CompoundObject.loadAll().then(function (compoundObjects) {
+                                compoundObjects = $filter('orderBy')(compoundObjects, '-jsonData.modified');
+                                return compoundObjects;
                             });
-                        }
-                    ],
-                    compoundObjects: ['CompoundObject',
-                        function (CompoundObject) {
-                            return CompoundObject.loadAll();
                         }
                     ]
                 },
                 templateUrl: 'views/main.html'
+            })
+            .state('admin', {
+                abstract: true,
+                url: '/admin',
+                template: '<ui-view autoscroll="false"></ui-view>'
+            })
+            .state('admin.users', {
+                url: '/users',
+                resolve: {
+                    users: function (Uris, $http, GraphHelper) {
+                        // Gets all users in the system and their roles
+                        return $http.get(Uris.JSON_ROOT + 'user').then(function (response) {
+                            return GraphHelper.graphValues(response.data);
+                        });
+                    }
+                },
+                controller: 'AdminUsersCtrl',
+                templateUrl: 'views/admin/users.html'
             })
             .state('about', {
                 url: '/about',
@@ -178,12 +215,20 @@ angular.module('angularApp', [
             })
             .state('ugcs', {
                 abstract: true,
-                url: '/',
+                url: '/ugcs',
                 template: '<ui-view autoscroll="false"></ui-view>'
             })
             .state('ugcs.user', {
                 url: '/user/:username',
-                template: '<div>hello world</div>'
+                templateUrl: 'views/ugc/usercontent.html',
+                resolve: {
+                    compoundObjects: ['CompoundObject', 'Auth', '$stateParams',
+                        function (CompoundObject, Auth, $stateParams) {
+                            return CompoundObject.loadForUser($stateParams.username);
+                        }
+                    ]
+                },
+                controller: 'UserContentCtrl'
             })
             .state('ugc', {
                 abstract: true,
@@ -262,7 +307,6 @@ angular.module('angularApp', [
             })
             .state('ugc.map.edit', {
                 url: '/edit',
-                controller: 'CreateMapCtrl',
                 reloadOnSearch: false,
                 views: {
                     'builder@ugc': {
@@ -279,6 +323,43 @@ angular.module('angularApp', [
                 url: '/location',
             })
             .state('ugc.map.edit.add.import', {
+                url: '/import',
+            })
+            .state('ugc.wordcloud', {
+                // abstract: true,
+                url: '/wordcloud',
+                views: {
+                    header: {
+                        templateUrl: 'views/ugc/wordcloud.header.html'
+                    },
+                    builder: {
+                        template: ''
+                    },
+                    viewer: {
+                        templateUrl: 'views/ugc/wordcloud.viewer.html',
+                        controller: 'WordCloudViewerCtrl'
+                    }
+                }
+            })
+            .state('ugc.wordcloud.edit', {
+                url: '/edit',
+                controller: 'CreateMapCtrl',
+                reloadOnSearch: false,
+                views: {
+                    'builder@ugc': {
+                        templateUrl: 'views/ugc/wordcloud.builder.html',
+                        controller: 'WordCloudBuilderCtrl'
+                    }
+                }
+            })
+            .state('ugc.wordcloud.edit.add', {
+                abstract: true,
+                url: '/add',
+            })
+            .state('ugc.wordcloud.edit.add.document', {
+                url: '/document',
+            })
+            .state('ugc.wordcloud.edit.add.import', {
                 url: '/import',
             })
             .state('create', {
@@ -334,11 +415,12 @@ angular.module('angularApp', [
             .state('architects', {
                 abstract: true,
                 url: '/architects',
-                template: '<ui-view autoscroll="false"></ui-view>'
+                templateUrl: 'views/architects/layout.html'
+                //template: '<ui-view autoscroll="false"></ui-view>'
             })
             .state('architects.queensland', {
                 url: '',
-                templateUrl: 'views/architects.html',
+                templateUrl: 'views/architects/architects.html',
                 controller: 'ArchitectsCtrl',
                 resolve: {
                     architects: ['Architect', '$filter', 'Uris', 'GraphHelper',
@@ -355,7 +437,7 @@ angular.module('angularApp', [
             })
             .state('architects.other', {
                 url: '/other',
-                templateUrl: 'views/architects.html',
+                templateUrl: 'views/architects/architects.html',
                 controller: 'ArchitectsCtrl',
                 resolve: {
                     architects: ['Architect', '$filter', 'Uris', 'GraphHelper',
@@ -370,19 +452,29 @@ angular.module('angularApp', [
                     ]
                 }
             })
+            .state('architects.create', {
+                url: '/create',
+                templateUrl: 'views/architect/summary.html'
+            })
             .state('architect', {
                 abstract: true,
-                url: '/architect/:architectId',
+                url: '/architect?architectId',
                 templateUrl: 'views/architect/layout.html',
                 resolve: {
                     architect: ['Architect', '$stateParams', 'GraphHelper',
                         function (Architect, $stateParams, GraphHelper) {
+                            if (!$stateParams.architectId) {
+                                return {};
+                            }
                             var architectUri = GraphHelper.decodeUriString($stateParams.architectId);
                             return Architect.load(architectUri, false);
                         }
                     ],
                     interviews: ['Interview', '$stateParams', 'GraphHelper',
                         function (Interview, $stateParams, GraphHelper) {
+                            if (!$stateParams.architectId) {
+                                return null;
+                            }
                             var architectUri = GraphHelper.decodeUriString($stateParams.architectId);
                             return Interview.findByIntervieweeUri(architectUri);
                         }
@@ -396,7 +488,7 @@ angular.module('angularApp', [
                 ]
             })
             .state('architect.summary', {
-                url: '',
+                url: '/summary',
                 templateUrl: 'views/architect/summary.html',
                 controller: 'ArchitectCtrl'
             })
@@ -625,11 +717,14 @@ angular.module('angularApp', [
             })
             .state('firm', {
                 abstract: true,
-                url: '/firm/:firmId',
+                url: '/firm?firmId',
                 templateUrl: 'views/firm/layout.html',
                 resolve: {
                     firm: ['$stateParams', 'Firm', 'GraphHelper',
                         function ($stateParams, Firm, GraphHelper) {
+                            if (!$stateParams.firmId) {
+                                return {};
+                            }
                             var firmUri = GraphHelper.decodeUriString($stateParams.firmId);
                             return Firm.load(firmUri);
                         }
@@ -642,7 +737,7 @@ angular.module('angularApp', [
                 ]
             })
             .state('firm.summary', {
-                url: '',
+                url: '/summary',
                 templateUrl: 'views/firm/summary.html',
                 controller: 'FirmCtrl'
             })
@@ -823,13 +918,17 @@ angular.module('angularApp', [
             .state('structure', {
                 // http://qldarch-test.metadata.net/beta/#/project/aHR0cDovL3FsZGFyY2gubmV0L3JkZi8yMDEyLTEyL3Jlc291cmNlcy9idWlsZGluZ3MvMzE=
                 abstract: true,
-                url: '/project/:structureId',
+                url: '/project?structureId',
                 templateUrl: 'views/structure/layout.html',
                 resolve: {
                     structure: ['$http', '$stateParams', 'Uris', 'Structure', 'GraphHelper',
                         function ($http, $stateParams, Uris, Structure, GraphHelper) {
-                            var structureUri = GraphHelper.decodeUriString($stateParams.structureId);
-                            return Structure.load(structureUri);
+                            if ($stateParams.structureId) {
+                                var structureUri = GraphHelper.decodeUriString($stateParams.structureId);
+                                return Structure.load(structureUri);
+                            } else {
+                                return {};
+                            }
                         }
                     ]
                 },
@@ -840,11 +939,15 @@ angular.module('angularApp', [
                 ]
             })
             .state('structure.summary', {
-                url: '',
+                url: '/summary',
                 templateUrl: 'views/structure/summary.html',
                 resolve: {
                     designers: ['$stateParams', 'GraphHelper', 'Uris', 'Entity', 'Relationship',
                         function ($stateParams, GraphHelper, Uris, Entity, Relationship) {
+                            if (!$stateParams.structureId) {
+                                return [];
+                            }
+
                             var structureUri = GraphHelper.decodeUriString($stateParams.structureId);
 
                             return Relationship.findBySubjectPredicateObject({

@@ -1,8 +1,8 @@
 <div class="content">
     <div class="page-header has-subnav">
         <div class="container">
-            <small><a href ui-sref="structures.australian">Projects »</a></small>
-            <h1>{{ structure.name }}</h1>
+            <small ng-show="structure.uri"><a href ui-sref="structures.australian">Projects »</a></small>
+            <h1>{{ structure.name || 'New Project' }}</h1>
         </div>
     </div>
 
@@ -11,26 +11,26 @@
             <div class="row">
                 <div class="col-md-12">
                     <ul class="nav nav-pills">
-                        <li ui-sref-active="active">
+                        <li ng-class="{'active': $state.includes('structure.summary')}">
                             <a href ui-sref="structure.summary({ structureId: structure.encodedUri })">Summary</a>
                         </li>
-                        <li ng-class="{active: $state.includes('structure.photograph') || $state.includes('structure.photographs')}">
+                        <li ng-class="{active: $state.includes('structure.photograph') || $state.includes('structure.photographs')}" ng-show="structure.uri">
                             <a href ui-sref="structure.photographs({ structureId: structure.encodedUri })">Photographs</a>
                         </li>
-                        <li ng-class="{active: $state.includes('structure.lineDrawing') || $state.includes('structure.lineDrawings')}">
+                        <li ng-class="{active: $state.includes('structure.lineDrawing') || $state.includes('structure.lineDrawings')}" ng-show="structure.uri">
                             <a href ui-sref="structure.lineDrawings({ structureId: structure.encodedUri })">Line Drawings</a>
                         </li>
-                        <li ng-class="{active: $state.includes('structure.map'), disabled: !structure.lat}">
+                        <li ng-class="{active: $state.includes('structure.map'), disabled: !structure.lat}" ng-show="structure.uri">
                             <a href ui-sref="structure.map({ structureId: structure.encodedUri })" ng-show="structure.lat">Map</a>
                             <a href ng-show="!structure.lat" tooltip="No location stored.">Map</a>
                         </li>
-                        <li ui-sref-active="active">
+                        <li ui-sref-active="active" ng-show="structure.uri">
                             <a href ui-sref="structure.articles({ structureId: structure.encodedUri })">Articles</a>
                         </li>
-                        <li ui-sref-active="active">
+                        <li ui-sref-active="active" ng-show="structure.uri">
                             <a href ui-sref="structure.timeline({ structureId: structure.encodedUri })">Timeline</a>
                         </li>
-                        <li ui-sref-active="active">
+                        <li ui-sref-active="active" ng-show="structure.uri">
                             <a href ui-sref="structure.relationships({ structureId: structure.encodedUri })">Relationships</a>
                         </li>
                     </ul>

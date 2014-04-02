@@ -1,15 +1,14 @@
 <div class="thumbnail" >
     <!-- image -->
-    <a href="#/interview/{{ interview.encodedUri }}" class="thumbnail-image">
+    <a class="thumbnail-image" ui-sref="interview({interviewId: interview.encodedUri})">
         <img ng-if="!interview.interviewees[0].picture" src="images/icon.png" style="display:block; width:100%">
         <img ng-if="interview.interviewees[0].picture" ng-src="{{ Uris.THUMB_ROOT + interview.interviewees[0].picture[Uris.QA_SYSTEM_LOCATION] }}" alt="...">
     </a>
 
     <!-- caption -->
     <div class="caption">
-        <h4><a href="#/interview/{{ interview.encodedUri }}">
+        <h4><a ui-sref="interview({interviewId: interview.encodedUri})">
             {{ interview.interviewees[0].name || interview[Uris.DCT_TITLE] }}
         </a></h4>
-        <p><a href="#/interview/{{ interview.encodedUri }}" class="btn btn-primary btn-sm" role="button">Go</a></p>
     </div>
 </div>

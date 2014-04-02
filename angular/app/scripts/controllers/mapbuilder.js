@@ -2,8 +2,13 @@
 
 angular.module('angularApp')
     .controller('MapBuilderCtrl', function ($scope, compoundObject, Entity, Uris, Relationship, GraphHelper, Structure, $filter, $state, Auth, CompoundObject) {
-        $scope.compoundObject = compoundObject.jsonData;
-        $scope.map = compoundObject.jsonData.data;
+        /*
+        =====================================================
+            Setup
+        =====================================================
+         */
+        $scope.compoundObject = compoundObject.jsonData; // alias for convenience
+        $scope.map = compoundObject.jsonData.data; // alias for convenience
         if (!compoundObject.uri) {
             $scope.map.locations = [];
             $scope.compoundObject.user = Auth;

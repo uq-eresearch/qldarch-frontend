@@ -32,14 +32,14 @@
                     <h5>Interviewers</h5>
                     <ul class="media-list">
                         <li class="media" ng-repeat="interviewer in interview.interviewers">
-                            <a class="pull-left" href="#">
+                            <span class="pull-left" >
                                 <img class="media-object img-responsive img-circle" ng-if="!interviewer.picture" src="images/icon.png" style="display:block; width: 20px">
                                 <img class="media-object img-responsive img-circle" ng-if="interviewer.picture" ng-src="{{ Uris.FILE_ROOT + interviewer.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ interviewer.name }}" style="width: 20px">
-                            </a>
+                            </span>
                             <div class="media-body">
-                                <a ng-href="#/{{ interviewer.type }}/{{ interviewer.encodedUri }}">
+                                <!-- <a ng-href="#/{{ interviewer.type }}/{{ interviewer.encodedUri }}"> -->
                                     {{ interviewer.name }}
-                                </a>
+                                <!-- </a> -->
                             </div>
                         </li>
                     </ul>
@@ -132,7 +132,7 @@
                     <div class="col-sm-6">
                         <div class="media">
                             <div class="pull-left" style="text-align: center">
-                                <a href="#/{{ exchange.speaker.type }}/{{ exchange.speaker.encodedUri }}">
+                                <a href="#/{{ exchange.speaker.type }}/summary?{{ exchange.speaker.type }}Id={{ exchange.speaker.encodedUri }}">
                                     <img ng-if="exchange.speaker.picture" class="img-circle media-object" ng-src="{{ Uris.FILE_ROOT + exchange.speaker.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="" style="width: 32px"/>
                                     <img ng-if="!exchange.speaker.picture" class="img-circle media-object" src="images/icon.png" style="display:block; width:32px">
                                 </a>

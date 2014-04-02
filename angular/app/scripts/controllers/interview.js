@@ -42,6 +42,7 @@ angular.module('angularApp')
     $scope.isSearching = false;
 
     function scrollToTime(time, duration) {
+        console.log('scrolling to time!');
         if (!duration) {
             duration = 2000;
         }
@@ -368,6 +369,7 @@ angular.module('angularApp')
 
         $scope.audioPlayer.play();
 
+        console.log('play from exchange');
         jQuery('html, body').scrollTop(jQuery('#transcript').offset().top - 20);
     };
 

@@ -2,11 +2,9 @@
 
 angular.module('angularApp')
     .controller('MapViewerCtrl', function ($scope, compoundObject) {
-        console.log('compoundObject', compoundObject);
         $scope.compoundObject = compoundObject.jsonData;
         $scope.map = compoundObject.jsonData.data;
 
-        console.log('got a map viewer');
         // Setup the map
         $scope.mapOptions = {
             zoom: 15,
@@ -58,7 +56,7 @@ angular.module('angularApp')
                         var infowindow;
                         if (location.type === 'structure') {
                             infowindow = new google.maps.InfoWindow({
-                                content: '<a href="#/project/' + btoa(location.uri) + '">' + location.name + '</a>'
+                                content: '<a href="#/project/summary?structureId=' + btoa(location.uri) + '">' + location.name + '</a>'
                             });
                         } else {
                             infowindow = new google.maps.InfoWindow({

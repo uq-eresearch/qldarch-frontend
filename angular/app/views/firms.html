@@ -13,6 +13,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+                <button class="btn btn-default pull-right" ui-sref="firm.summary.edit" ng-show="Auth.role == 'editor' || Auth.role == 'root'"><i class="fa fa-plus"></i> Add Firm</button>
                 <ul class="nav nav-pills">
                     <li ui-sref-active="active">
                         <a href ui-sref="firms.australian">Australian</a>

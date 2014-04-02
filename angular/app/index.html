@@ -51,6 +51,9 @@
     <div ng-include="'views/footer.html'"></div>
 
 
+    <!-- shim for angular file upload -->
+    <script src="bower_components/angular-file-upload/dist/angular-file-upload-shim.js"></script> 
+
     <script src="bower_components/jquery/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
@@ -79,6 +82,7 @@
     <script src="bower_components/angular-ui-utils/ui-utils.min.js"></script>
     <script src="bower_components/angular-ui-select2/src/select2.js"></script>
     <script src="bower_components/ngprogress/build/ngProgress.js"></script>
+    <script src="bower_components/angular-file-upload/dist/angular-file-upload.js"></script>    
     <!-- endbuild -->   
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
@@ -147,6 +151,10 @@
     <script src="scripts/controllers/mapbuilder.js"></script>
     <script src="scripts/controllers/timelinebuilder.js"></script>
     <script src="scripts/controllers/timelineviewer.js"></script>
+    <script src="scripts/controllers/wordcloudbuilder.js"></script>
+    <script src="scripts/controllers/wordcloudviewer.js"></script>
+    <script src="scripts/controllers/adminusers.js"></script>
+    <script src="scripts/controllers/UserContent.js"></script>
     <!-- endbuild -->
 
 

@@ -1,0 +1,58 @@
+
+<div class="thumbnail" ng-switch on="compoundObject.jsonData.type">
+	<div ng-switch-when="timeline">
+		<a class="square square-timeline square-svg" ui-sref="ugc.timeline({id: compoundObject.encodedUri })">
+	        <div class="square-content">
+	            <div class="center">
+	                <div class="center-content">
+	                    <img src="images/icon_32180.svg"/>
+	                </div>
+	            </div>
+	        </div>
+	    </a>
+
+	    <div class="caption">
+	        <h4><a ui-sref="ugc.timeline({id: compoundObject.encodedUri })">
+	            {{ compoundObject.jsonData.title }}
+	        </a></h4>
+	    </div>
+	</div>
+
+	<div ng-switch-when="map">
+		<a class="square square-map square-svg" ui-sref="ugc.map({id: compoundObject.encodedUri })">
+	        <div class="square-content">
+	            <div class="center">
+	                <div class="center-content">
+	                    <img src="images/icon_32152.svg"/>
+	                </div>
+	            </div>
+	        </div>
+	    </a>
+
+	    <div class="caption">
+	        <h4><a ui-sref="ugc.map({id: compoundObject.encodedUri })">
+	            {{ compoundObject.jsonData.title }}
+	        </a></h4>
+	    </div>
+	</div>
+
+	<div ng-switch-when="wordcloud">
+		<a class="square square-wordcloud square-svg" ui-sref="ugc.wordcloud({id: compoundObject.encodedUri })">
+	        <div class="square-content">
+	            <div class="center">
+	                <div class="center-content">
+	                    <img src="images/icon_22989.svg"/>
+	                </div>
+	            </div>
+	        </div>
+	    </a>
+
+	    <div class="caption">
+	        <h4><a ui-sref="ugc.wordcloud({id: compoundObject.encodedUri })">
+	            {{ compoundObject.jsonData.title }}
+	        </a></h4>
+	    </div>
+	</div>
+</div>
+                        
+                     

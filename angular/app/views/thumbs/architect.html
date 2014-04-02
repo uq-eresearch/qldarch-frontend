@@ -1,12 +1,12 @@
-<div class="thumbnail">
+<div class="thumbnail thumbnail-fix">
 
-    <a ng-href="#/architect/{{ architect.encodedUri }}" class="thumbnail-image">
+    <a ui-sref="architect.summary({architectId: architect.encodedUri})" class="thumbnail-image">
         <img ng-if="!architect.picture" src="images/icon.png" style="display:block; width:100%">
         <img ng-if="architect.picture" ng-src="{{ Uris.THUMB_ROOT + architect.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ architect.name }}">
     </a>
 
     <div class="caption">
-        <h4><a ng-href="#/architect/{{ architect.encodedUri }}">
+        <h4><a ui-sref="architect.summary({architectId: architect.encodedUri})" >
             {{ architect.name }}
         </a></h4>
     </div>

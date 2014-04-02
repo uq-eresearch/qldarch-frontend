@@ -18,6 +18,7 @@ angular.module('angularApp')
             // Array or object
             angular.forEach(entities, function (entity) {
                 entity.name = getName(entity);
+                entity.encodedUri = GraphHelper.encodeUriString(entity.uri);
             });
             return entities;
         };
@@ -76,6 +77,33 @@ angular.module('angularApp')
                 }).then(function (response) {
                     angular.extend(data, response.data);
                     setupNames([data]);
+                });
+            },
+
+            create: function (data, rdfTypeUri) {
+                var payload = angular.copy(data);
+                // Remove any extra information
+                // This causes the web server to die
+                delete payload.encodedUri;
+                delete payload.name;
+                delete payload.type;
+                delete payload.picture;
+                delete payload.buildingTypologies;
+                delete payload.locations;
+                delete payload.firm;
+                delete payload.lat;
+                delete payload.lon;
+
+                var url = '/ws/rest/entity/description';
+
+                payload[Uris.RDF_TYPE] = rdfTypeUri;
+
+                return $http.post(url, payload, {
+                    withCredentials: true
+                }).then(function (response) {
+                    angular.extend(data, response.data);
+                    setupNames([data]);
+                    return data;
                 });
             },
 

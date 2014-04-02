@@ -4,26 +4,101 @@ angular.module('angularApp')
     .controller('StructureCtrl', function ($scope, structure, designers, Entity, $state, Uris) {
         $scope.structure = structure;
         $scope.designers = designers;
+        console.log('structure', structure);
 
 
         $scope.updateStructure = function (structure) {
-            Entity.update(structure.uri, structure).then(function () {
-                // Set the location stuff again
-                if (angular.isDefined(structure[Uris.QA_LOCATION])) {
-                    structure.locations = [structure[Uris.QA_LOCATION]];
-                }
-            }, function (reason) {
-                alert('Failed to save');
-                console.log('Failed to save', reason);
-                $state.go('structure.summary.edit', {
+            if (structure.uri) {
+                // PUT
+                Entity.update(structure.uri, structure).then(function () {
+                    // Set the location stuff again
+                    if (angular.isDefined(structure[Uris.QA_LOCATION])) {
+                        structure.locations = [structure[Uris.QA_LOCATION]];
+                    }
+                }, function (reason) {
+                    alert('Failed to save');
+                    console.log('Failed to save', reason);
+                    $state.go('structure.summary.edit', {
+                        structureId: structure.encodedUri
+                    });
+                });
+
+                $state.go('structure.summary', {
                     structureId: structure.encodedUri
                 });
-            });
-
-            $state.go('structure.summary', {
-                structure: structure.encodedUri
-            });
+            } else {
+                // POST
+                Entity.create(structure, Uris.QA_STRUCTURE_TYPE).then(function (structure) {
+                    console.log('sturcture', structure);
+                    $state.go('structure.summary', {
+                        structureId: structure.encodedUri
+                    });
+                });
+            }
         };
+
+        $scope.cancel = function () {
+            if (structure.uri) {
+                $state.go('structure.summary');
+            } else {
+                $state.go('structure.australian');
+            }
+        };
+
+
+        /**
+         * ======================================================
+         *
+         * Select Box for Typologies
+         *
+         * ======================================================
+         */
+        // Setup the entity select boxes
+        $scope.structure.$typology = null;
+        angular.forEach(structure.buildingTypologies, function (typology) {
+            $scope.structure.$typology = {
+                id: typology.uri,
+                uri: typology.uri,
+                text: typology[Uris.QA_LABEL],
+                name: typology[Uris.QA_LABEL],
+                encodedUri: typology.encodedUri,
+            };
+        });
+        $scope.$watch('structure.$typology', function (typology) {
+            // Delete all typologies on the structure
+            if (typology) {
+                console.log('typologies changed');
+                structure[Uris.QA_BUILDING_TYPOLOGY_P] = typology.uri;
+            }
+        });
+        $scope.typologySelect = {
+            placeholder: 'Select a Building Typology',
+            dropdownAutoWidth: true,
+            multiple: false,
+            query: function (options) {
+                Entity.loadAll('qldarch:BuildingTypology', true).then(function (typologies) {
+                    var data = {
+                        results: []
+                    };
+
+                    angular.forEach(typologies, function (typology) {
+                        data.results.push({
+                            id: typology.uri,
+                            uri: typology.uri,
+                            text: typology[Uris.QA_LABEL],
+                            name: typology[Uris.QA_LABEL],
+                            encodedUri: typology.encodedUri,
+                        });
+                    });
+                    options.callback(data);
+                });
+            }
+        };
+        // $scope.$watch('structure.$typology.uri', function (uri) {
+        //     if (uri) {
+        //         structure[Uris.QA_BUILDING_TYPOLOGY_P] = uri;
+        //     }
+        // });
 
 
         // $scope.structure = structure;
