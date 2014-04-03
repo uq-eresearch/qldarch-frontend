@@ -7,7 +7,11 @@ angular.module('angularApp')
 
         var getName = function (entity) {
             if (entity[Uris.FOAF_FIRST_NAME] || entity[Uris.FOAF_LAST_NAME]) {
-                return entity[Uris.FOAF_FIRST_NAME] + ' ' + entity[Uris.FOAF_LAST_NAME];
+                var personName = entity[Uris.FOAF_FIRST_NAME] + ' ' + entity[Uris.FOAF_LAST_NAME];
+                if (entity[Uris.QA_PREF_LABEL]) {
+                    // personName += ' (' + entity[Uris.QA_PREF_LABEL] + ')';
+                }
+                return personName;
             } else {
                 return entity[Uris.QA_FIRM_NAME] || entity[Uris.FOAF_NAME] || entity[Uris.QA_LABEL];
             }
@@ -45,7 +49,17 @@ angular.module('angularApp')
                         var expression = expressions[imageUri];
                         if (angular.isDefined(expression.file)) {
                             entity.picture = expression.file;
+                        } else {
+                            entity.picture = {
+                                file: 'images/icon.png',
+                                thumb: 'images/icon.png',
+                            };
                         }
+                    } else {
+                        entity.picture = {
+                            file: 'images/icon.png',
+                            thumb: 'images/icon.png',
+                        };
                     }
                 });
 

@@ -1,50 +1,51 @@
-<div class="container">
-    <div class="row" ng-hide="$state.includes('architect.summary.edit')">
-        <div class="col-sm-7">
-            <span ng-show="Auth.auth">
-                <button class="btn btn-default btn-xs pull-right" ui-sref="architect.summary.edit({ architectId: architect.encodedUri })"><i class="fa fa-pencil"></i> Edit</button>    
-            </span>
-            
-            <h5>
-                Biography 
-            </h5>
-            <p>{{ architect[Uris.QA_SUMMARY] }}</p>
-            <p ng-show="!architect[Uris.QA_SUMMARY].length">
-                No biography.
-            </p>
+<div class="l-frame l-frame-tight">
+    <div class="container">
+        <div class="row" ng-hide="$state.includes('architect.summary.edit')">
+            <div class="col-sm-7">
+                <span ng-show="Auth.auth">
+                    <button class="btn btn-default btn-xs pull-right" ui-sref="architect.summary.edit({ architectId: architect.encodedUri })"><i class="fa fa-pencil"></i> Edit</button>    
+                </span>
+                
+                <h5>
+                    Biography 
+                </h5>
+                <p>{{ architect[Uris.QA_SUMMARY] }}</p>
+                <p ng-show="!architect[Uris.QA_SUMMARY].length">
+                    No biography.
+                </p>
+            </div>
+            <div class="col-sm-5">
+                <img ng-if="architect.picture" class="img-responsive" ng-src="{{ architect.picture.file }}" alt=""/>
+            </div>
         </div>
-        <div class="col-sm-5">
-            <img ng-if="architect.picture" class="img-responsive" ng-src="{{ Uris.FILE_ROOT + architect.picture[Uris.QA_SYSTEM_LOCATION] }}" alt=""/>
-            <img ng-if="!architect.picture" ng-src="images/icon.png" style="display:block; width:100%">
+        <div class="row" ng-show="$state.includes('architect.summary.edit')">
+            <div class="col-md-12">
+                <form action="" ng-submit="updateArchitect(architect)">
+                    <div class="form-group">
+                        <label for="">First Name</label>
+                        <input type="text" class="form-control" placeholder="First Name" ng-model="architect[Uris.FOAF_FIRST_NAME]">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Last Name</label>
+                        <input type="text" class="form-control" placeholder="Last Name" ng-model="architect[Uris.FOAF_LAST_NAME]">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Also known as (optional) <i class="fa fa-info-circle" tooltip="Example: 'William Douglas' may be also known as 'Bill Douglas'"></i></label>
+                        <input type="text" class="form-control" placeholder="Also known as" ng-model="architect[Uris.QA_PREF_LABEL]">
+                    </div>
+                    <div class="form-group">
+                        <label for="biography">Biography</label>
+                        <textarea rows="10" id="biography" class="form-control" placeholder="Biography" ng-model="architect[Uris.QA_SUMMARY]"></textarea>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" ng-model="architect[Uris.QA_PRACTICED_IN_QUEENSLAND]"> Practiced in Queensland
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+                </form>
+            </div>
         </div>
-    </div>
-    <div class="row" ng-show="$state.includes('architect.summary.edit')">
-        <div class="col-md-7">
-            <form action="" ng-submit="updateArchitect(architect)">
-                <div class="form-group">
-                    <label for="">First Name</label>
-                    <input type="text" class="form-control" placeholder="First Name" ng-model="architect[Uris.FOAF_FIRST_NAME]">
-                </div>
-                <div class="form-group">
-                    <label for="">Last Name</label>
-                    <input type="text" class="form-control" placeholder="Last Name" ng-model="architect[Uris.FOAF_LAST_NAME]">
-                </div>
-                <div class="form-group">
-                    <label for="">Also known as (optional) <i class="fa fa-info-circle" tooltip="Example: 'William Douglas' may be also known as 'Bill Douglas'"></i></label>
-                    <input type="text" class="form-control" placeholder="Also known as" ng-model="architect[Uris.QA_PREF_LABEL]">
-                </div>
-                <div class="form-group">
-                    <label for="biography">Biography</label>
-                    <textarea rows="10" id="biography" class="form-control" placeholder="Biography" ng-model="architect[Uris.QA_SUMMARY]"></textarea>
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" ng-model="architect[Uris.QA_PRACTICED_IN_QUEENSLAND]"> Practiced in Queensland
-                    </label>
-                </div>
-                <button type="submit" class="btn btn-primary">Save</button>
-                <button class="btn btn-default" ng-click="cancel()">Cancel</button>
-            </form>
-        </div>
-    </div>
+    </div>    
 </div>

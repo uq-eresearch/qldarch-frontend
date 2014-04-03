@@ -41,7 +41,7 @@ angular.module('angularApp')
             if (structure.uri) {
                 $state.go('structure.summary');
             } else {
-                $state.go('structure.australian');
+                $state.go('structures.australian');
             }
         };
 

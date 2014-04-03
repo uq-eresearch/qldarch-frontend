@@ -44,64 +44,77 @@
 
 
 <!-- visualisation -->
+<div>
+    <div class="l-frame l-frame-media">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <force data="data" selected="nodeSelected(node)"></force>         
+                </div>
+                <div class="col-md-4" ng-show="selected">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="media">
+                                <a class="pull-left" ng-href="#/{{ selected.type }}/{{ selected.encodedUri }}">
+                                    <img class="media-object" ng-if="!selected.picture" ng-src="images/icon.png" style="display:block; width:60px;">
+                                    <img class="media-object" ng-if="selected.picture" ng-src="{{ Uris.THUMB_ROOT + selected.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ selected.name }}" style="width: 60px;">
+                                </a>
+                                <div class="media-body">
+                                    <h4 class="media-heading">
+                                        <a ng-href="#/{{ selected.type }}/{{ selected.encodedUri }}">
+                                            {{ selected.name }}
+                                        </a>
+                                    </h4>
+                                    <p style="text-transform: capitalize">
+                                        {{ selected.type }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Selected relationships -->
+                        <ul class="list-group">
+                            <li class="list-group-item" ng-repeat="relationship in selectedRelationships">
+                                <!--<i class="fa fa-bars"> </i>-->
+                                <!-- ({interviewId: relationship.evidence.encodedDocumentedBy, time: relationship.evidence[Uris.QA_TIME_FROM]} -->
+                                <a ui-sref="interview({interviewId: relationship.evidence.encodedDocumentedBy, time: relationship.evidence[Uris.QA_TIME_FROM] })" >
+                                    {{ relationship.subject.name }}
+                                    <em>{{ relationship.predicate.name || relationship.predicate[Uris.QA_LABEL] }}</em> 
+                                    {{ relationship.object.name }}
+                                </a>
+
+                                <!-- Date -->
+                                {{ relationship[Uris.QA_START_DATE] }}
+                                <span ng-show="relationship[Uris.QA_START_DATE] && relationship[Uris.QA_END_DATE]"> - </span>
+                                {{ relationship[Uris.QA_END_DATE] }}
+
+                                <div style="font-style: italic; color: black;">
+                                    {{ relationship[Uris.QA_TEXTUAL_NOTE] }}
+                                </div>
+                            </li>
+                        </ul>
+                        <!-- /Selected relationships -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="l-frame l-frame-tight l-frame-highlight">
+        <div class="container">
+            <span class="text-muted">Filters</span>    
+        </div>
+    </div>
+</div>
 <div class="container">
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default" style="margin-bottom: 0px;">
                 <div class="panel-body">
-                    <span class="text-muted">Filters</span>
+                    
                 </div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-8">
-            <force data="data" selected="nodeSelected(node)"></force>        
-        </div>
-        <div class="col-md-4" ng-show="selected">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="media">
-                        <a class="pull-left" ng-href="#/{{ selected.type }}/{{ selected.encodedUri }}">
-                            <img class="media-object" ng-if="!selected.picture" ng-src="images/icon.png" style="display:block; width:60px;">
-                            <img class="media-object" ng-if="selected.picture" ng-src="{{ Uris.THUMB_ROOT + selected.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ selected.name }}" style="width: 60px;">
-                        </a>
-                        <div class="media-body">
-                            <h4 class="media-heading">
-                                <a ng-href="#/{{ selected.type }}/{{ selected.encodedUri }}">
-                                    {{ selected.name }}
-                                </a>
-                            </h4>
-                            <p style="text-transform: capitalize">
-                                {{ selected.type }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Selected relationships -->
-                <ul class="list-group">
-                    <li class="list-group-item" ng-repeat="relationship in selectedRelationships">
-                        <!--<i class="fa fa-bars"> </i>-->
-                        <!-- ({interviewId: relationship.evidence.encodedDocumentedBy, time: relationship.evidence[Uris.QA_TIME_FROM]} -->
-                        <a ui-sref="interview({interviewId: relationship.evidence.encodedDocumentedBy, time: relationship.evidence[Uris.QA_TIME_FROM] })" >
-                            {{ relationship.subject.name }}
-                            <em>{{ relationship.predicate.name || relationship.predicate[Uris.QA_LABEL] }}</em> 
-                            {{ relationship.object.name }}
-                        </a>
-
-                        <!-- Date -->
-                        {{ relationship[Uris.QA_START_DATE] }}
-                        <span ng-show="relationship[Uris.QA_START_DATE] && relationship[Uris.QA_END_DATE]"> - </span>
-                        {{ relationship[Uris.QA_END_DATE] }}
-
-                        <div style="font-style: italic">
-                            {{ relationship[Uris.QA_TEXTUAL_NOTE] }}
-                        </div>
-                    </li>
-                </ul>
-                <!-- /Selected relationships -->
-            </div>
-        </div>
-    </div>
+    
 </div>

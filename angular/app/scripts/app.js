@@ -108,12 +108,16 @@ angular.module('angularApp', [
                 console.log('path is', $item.type);
                 var url;
                 if ($item.type === 'structure') {
-                    url = '/project/' + $item.encodedUri;
+                    url = '/project/summary?' + $item.type + 'Id=' + $item.encodedUri;
                 } else {
-                    url = '/' + $item.type + '/' + $item.encodedUri;
+                    url = '/' + $item.type + '/summary?' + $item.type + 'Id=' + $item.encodedUri;
                 }
 
-                $location.path(url);
+                var params = {};
+                params[$item.type + 'Id'] = $item.encodedUri;
+                $state.go($item.type + '.summary', params);
+                console.log('url is', url);
+                // $location.path(url);
             }
         };
 
@@ -229,6 +233,20 @@ angular.module('angularApp', [
                     ]
                 },
                 controller: 'UserContentCtrl'
+            })
+            .state('file', {
+                abstract: true,
+                url: '/file',
+                template: '<ui-view autoscroll="false"></ui-view>'
+            })
+            .state('file.photograph', {
+                url: '/photograph',
+                templateUrl: 'views/files/photograph.html',
+                controller: 'FilePhotographCtrl'
+            })
+            .state('file.lineDrawing', {
+                url: '/line-drawing',
+                templateUrl: 'views/files/linedrawing.html'
             })
             .state('ugc', {
                 abstract: true,

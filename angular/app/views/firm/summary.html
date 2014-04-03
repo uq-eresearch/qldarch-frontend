@@ -16,7 +16,7 @@
                 {{ firm[Uris.QA_START_DATE] }} 
                 <span ng-show="firm[Uris.QA_END_DATE]">- {{ firm[Uris.QA_END_DATE] }}</span>
             </p>
-            <p ng-hide="firm[Uris.QA_START_DATE].length" class="text-muted">>No operating years recorded.</p>
+            <p ng-hide="firm[Uris.QA_START_DATE].length" class="text-muted">No operating years recorded.</p>
 
 
         </div>
@@ -26,11 +26,11 @@
         </div>
     </div>
     <div class="row" ng-show="$state.includes('firm.summary.edit')">
-        <div class="col-md-7">
+        <div class="col-md-12">
             <form action="" ng-submit="updateFirm(firm)">
                 <div class="form-group">
                     <label>Name</label>
-                    <input type="text" class="form-control" ng-model="firm[Uris.QA_FIRM_NAME]">
+                    <input type="text" class="form-control" ng-model="firm[Uris.QA_FIRM_NAME]" placeholder="Firm Name">
                 </div>
                 <div class="form-group">
                     <label>Summary</label>
@@ -53,7 +53,7 @@
                     </label>
                 </div>
                 <button type="submit" class="btn btn-primary">Save</button>
-                <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+                <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
             </form>
         </div>
     </div>

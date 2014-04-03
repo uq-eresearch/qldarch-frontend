@@ -1,11 +1,14 @@
 <div class="interview">
-    <div class="interview-heading">
-        <div class="container">
-            <h4 ng-click="isShowingInterviewDetails = !isShowingInterviewDetails">
-                {{ title }} <i class="fa" ng-class="{'fa-chevron-down': !isShowingInterviewDetails, 'fa-chevron-up': isShowingInterviewDetails}"></i>
-            </h4>
+    <div class="l-frame l-frame-tight">
+        <div class="interview-heading">
+            <div class="container">
+                <h4 ng-click="isShowingInterviewDetails = !isShowingInterviewDetails" style="margin: 0; padding: 0;">
+                    {{ title }} <i class="fa" ng-class="{'fa-chevron-down': !isShowingInterviewDetails, 'fa-chevron-up': isShowingInterviewDetails}"></i>
+                </h4>
+            </div>
         </div>
     </div>
+    
     <div class="interview-details" ng-show="isShowingInterviewDetails">
         <div class="container">
             <div class="row">
@@ -15,7 +18,7 @@
                         <li class="media" ng-repeat="interviewee in interview.interviewees">
                             <a class="pull-left" href="#">
                                 <img class="media-object img-responsive img-circle" ng-if="!interviewee.picture" src="images/icon.png" style="display:block; width: 20px">
-                                <img class="media-object img-responsive img-circle" ng-if="interviewee.picture" ng-src="{{ Uris.FILE_ROOT + interviewee.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ interviewer.name }}" style="width: 20px">
+                                <img class="media-object img-responsive img-circle" ng-if="interviewee.picture" ng-src="{{ interviewee.picture.file }}" alt="{{ interviewer.name }}" style="width: 20px">
                             </a>
                             <div class="media-body">
                                 <a ng-href="#/{{ interviewee.type }}/{{ interviewee.encodedUri }}">
@@ -34,7 +37,7 @@
                         <li class="media" ng-repeat="interviewer in interview.interviewers">
                             <span class="pull-left" >
                                 <img class="media-object img-responsive img-circle" ng-if="!interviewer.picture" src="images/icon.png" style="display:block; width: 20px">
-                                <img class="media-object img-responsive img-circle" ng-if="interviewer.picture" ng-src="{{ Uris.FILE_ROOT + interviewer.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ interviewer.name }}" style="width: 20px">
+                                <img class="media-object img-responsive img-circle" ng-if="interviewer.picture" ng-src="{{ interviewer.picture.file }}" alt="{{ interviewer.name }}" style="width: 20px">
                             </span>
                             <div class="media-body">
                                 <!-- <a ng-href="#/{{ interviewer.type }}/{{ interviewer.encodedUri }}"> -->
@@ -58,8 +61,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-sm-4 col-sm-offset-4">
-                            <img class="media-object img-full" ng-if="!currentSpeaker.picture" src="images/icon.png">
-                            <img class="media-object img-full" ng-if="currentSpeaker.picture" ng-src="{{ Uris.FILE_ROOT + currentSpeaker.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ interviewer.name }}">
+                            <img class="media-object img-full"  ng-src="{{ currentSpeaker.picture.file }}" alt="{{ interviewer.name }}">
                         </div>
                     </div>
                 </div>
@@ -133,12 +135,11 @@
                         <div class="media">
                             <div class="pull-left" style="text-align: center">
                                 <a href="#/{{ exchange.speaker.type }}/summary?{{ exchange.speaker.type }}Id={{ exchange.speaker.encodedUri }}">
-                                    <img ng-if="exchange.speaker.picture" class="img-circle media-object" ng-src="{{ Uris.FILE_ROOT + exchange.speaker.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="" style="width: 32px"/>
-                                    <img ng-if="!exchange.speaker.picture" class="img-circle media-object" src="images/icon.png" style="display:block; width:32px">
+                                    <img ng-if="exchange.speaker.picture" class="media-object" ng-src="{{ exchange.speaker.picture.thumb }}" alt="" style="width: 32px"/>
                                 </a>
 
                                 <!-- play button -->
-                                <button class="btn btn-xs btn-default"
+                                <button class="btn btn-xs btn-default" style="width: 100%;" 
                                         ng-click="playFromExchange(exchange)"
                                         ng-show="currentExchange != exchange || isSearching" style="margin-top: 5px;">
                                     <i class="fa fa-play"></i>

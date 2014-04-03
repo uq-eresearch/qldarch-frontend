@@ -1,0 +1,68 @@
+<div class="content">
+	<div class="page-header has-subnav">
+	    <div class="container">
+	        <h1>New Photographs</h1>
+	    </div>
+	</div>
+
+	<div class="l-frame l-frame-media" ng-hide="expressions.length">
+        <div class="container">
+        	<form action="">
+        		<div class="form-group">
+	        		<div ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="optional-css-class"
+		            ng-show="dropSupported" style="border: 1px solid grey; height: 100px; line-height: 100px; text-align: center; margin-bottom: 21px;">Drop files here</div>
+		            
+		            <div ng-file-drop-available="dropSupported=true" 
+		            ng-show="!dropSupported">HTML5 Drop File is not supported!</div>
+
+		            <div ng-show="!dropSupported">
+		            	<input type="text" ng-model="myModelObj" class="form-control">
+	            		<input type="file" ng-file-select="onFileSelect($files)" class="form-control">
+	            		<input type="file" ng-file-select="onFileSelect($files)" multiple class="form-control">
+		            </div>
+        			
+        		</div>
+	            <!-- <button class="btn btn-default" ng-click="upload.abort()">Cancel Upload</button> -->
+        	</form>
+    	</div>
+	</div>
+	<div class="l-frame">
+		<div class="container">
+        	<div class="panel panel-default" ng-repeat="expression in expressions">
+        		<div class="panel-heading" ng-if="expression.$uploadFile.percent < 100">
+        			<div >
+        				<div class="row">
+        					<div class="col-md-2">
+        						<button class="btn btn-default form-control" ng-click="cancelUpload(expression)">Cancel Upload</button>
+        					</div>
+        					<div class="col-md-10">
+        						<div class="progress" >
+							  		<div class="progress-bar" role="progressbar" style="width: {{ expression.$uploadFile.percent }}%;">
+							    		{{ expression.$uploadFile.percent }}%
+							  		</div>
+								</div>	
+        					</div>
+        				</div>
+        			</div>
+        		</div>
+        		<div class="panel-body">
+        			<!-- Progress bar -->
+        			<form>
+        				<div class="form-group">
+        					<label for="" class="control-label">Title</label>
+        					<input type="text" class="form-control" ng-model="expression[Uris.DCT_TITLE]" placeholder="What is this a photograph of?"/>	
+        				</div>
+        				<div class="form-group">
+	        				<label class="control-label">Depicts</label>
+							<input type="text" ng-model="expression[Uris.QA_DEPICTS_BUILDING]" class="form-control" />
+	        			</div>
+
+		        		<button class="btn btn-primary" ng-click="saveExpression(expression)">Save</button>
+
+        			</form>
+        		</div>
+        	</div>
+        </div>
+        
+    </div>
+</div>

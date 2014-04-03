@@ -23,6 +23,7 @@ angular.module('angularApp')
                         expression.file = files[fileUris[0]];
                     }
                 });
+                console.log('expressions', expressions);
                 return expressions;
             });
         };

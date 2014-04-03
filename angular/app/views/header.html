@@ -60,6 +60,23 @@
                                 </ul>
                             </li>
 
+                            <li class="dropdown">
+                                <a href class="dropdown-toggle" data-toggle="dropdown">Contribute <b class="caret"></b></a>
+                                <ul class="dropdown-menu" ng-if="!Auth.auth">
+                                    <li><a ui-sref="contribute">Contact Us</a></li>
+                                </ul>
+
+                                <ul class="dropdown-menu" ng-if="Auth.auth">
+                                    <li><a ui-sref="architect.summary.edit({architectId:null})">New Architect</a></li>
+                                    <li><a ui-sref="firm.summary.edit({firmId:null})">New Firm</a></li>
+                                    <li><a ui-sref="structure.summary.edit({structureId:null})">New Project</a></li>
+                                     <li role="presentation" class="divider"></li>
+                                    <li><a ui-sref="file.photograph">New Photographs</a></li>
+                                    <li><a ui-sref="file.lineDrawing">New Line drawings</a></li>
+                                </ul>
+                            </li>
+
+
                             <!-- <li class=""><a href="#/about">about</a></li> -->
                             <!-- <li class=""><a href="#/contribute">contribute</a></li> -->
                             <li class="" ng-hide="Auth.auth"><a href="#/register"><i class="fa fa-plus"></i> Join</a></li>
@@ -69,9 +86,10 @@
                         <!-- Logged in user -->
                         <ul class="nav navbar-nav">
                             <li class="dropdown" ng-show="Auth.auth">
-                                <a href class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{ Auth.email }} <b class="caret"></b></a>
+                                <a href class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li><a ui-sref="ugcs.user({username: Auth.user})">My Content</a></li>
+                                    <li><a ui-sref="files.user">My Files</a></li>
                                     <li ng-show="Auth.user == 'admin'"><a ui-sref="admin.users">Manage Users</a></li>
                                     <li><a ui-sref="logout">Sign out</a></li>
                                 </ul>

@@ -362,15 +362,20 @@ angular.module('angularApp')
      * @param exchange
      */
     $scope.playFromExchange = function (exchange) {
-        audioPlayerDom.currentTime = exchange.startTime;
-        $scope.audioPlayer.currentTime = exchange.startTime;
-        $scope.isSyncing = true;
-        playing();
-
-        $scope.audioPlayer.play();
+        $scope.audioPlayer.pause();
 
         console.log('play from exchange');
-        jQuery('html, body').scrollTop(jQuery('#transcript').offset().top - 20);
+        // jQuery('html, body').scrollTop(jQuery('#transcript').offset().top - 20);
+        // 
+        jQuery('html, body').animate({
+            scrollTop: jQuery('.player').offset().top + 'px'
+        }, 500, 'swing', function () {
+            audioPlayerDom.currentTime = exchange.startTime;
+            $scope.audioPlayer.currentTime = exchange.startTime;
+            $scope.isSyncing = true;
+            playing();
+            $scope.audioPlayer.play();
+        });
     };
 
 

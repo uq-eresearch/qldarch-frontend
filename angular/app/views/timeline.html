@@ -1,16 +1,13 @@
-
-<div class="container">
-	<div class="row" ng-hide="dates.length">
-		<div class="col-md-12">
-			<p class="text-muted">No timeline information.</p>
+<div>
+	<div class="l-frame l-frame-media">
+		<div class="container" ng-if="dates.length">
+			<timeline headline="{{ entity.name }}" subtitle="" asset="asset" dates="dates"></timeline>	
 		</div>
 	</div>
-	<div class="row" ng-show="dates.length">
-		<div class="col-md-12">
-			<timeline headline="{{ entity.name }}" subtitle="" asset="asset" dates="dates"></timeline>
-		</div> 
-		<div class="col-md-12" style="margin-top: 10px;">
-			<a class="btn btn-default" ng-click="openInTimelineBuilder()"><i class="fa fa-clock-o"></i> Open in Timeline Builder</a>
+
+	<div class="l-frame">
+		<div class="container">
+			<p class="text-muted">No timeline information.</p>
 		</div>
 	</div>
 </div>

@@ -28,7 +28,8 @@ module.exports = function (grunt) {
                     username: '<%= secret.username %>',
                     password: '<%= secret.password %>',
                     port: 6666,
-                    showProgress: false
+                    showProgress: true,
+                    createDirectories: true
                 }
             }
         },
@@ -351,6 +352,18 @@ module.exports = function (grunt) {
                     ]
                 }]
             },
+            special: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    cwd: '<%= yeoman.app %>',
+                    dest: '<%= yeoman.dist %>',
+                    src: [
+                        'images/icon.png',
+                        'images/header.jpg',
+                    ]
+                }]
+            },
             styles: {
                 expand: true,
                 cwd: '<%= yeoman.app %>/styles',
@@ -446,6 +459,7 @@ module.exports = function (grunt) {
         'uglify',
         'rev',
         'usemin',
+        'copy:special',
         'sftp:deploy'
     ]);
 

@@ -1,7 +1,6 @@
 <div class="thumbnail" >
     <a href ui-sref="structure.summary({structureId: structure.encodedUri})" class="thumbnail-image">
-        <img ng-if="!structure.picture" src="images/icon.png" style="display:block; width:100%">
-        <img ng-if="structure.picture" ng-src="{{ Uris.THUMB_ROOT + structure.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ structure.name }}">
+        <img ng-src="{{ structure.picture.thumb }}" alt="{{ structure.name }}">
     </a>
 
     <div class="caption">

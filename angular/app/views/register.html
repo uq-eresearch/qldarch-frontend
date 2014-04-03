@@ -1,14 +1,23 @@
 <div class="content">
-    <div class="page-header">
+    <div class="page-header has-subnav">
         <div class="container">
             <h1>Join</h1>
         </div>
     </div>
 
-    <section>
+    <div class="l-frame l-frame-tight">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-4">
+            <div ng-show="hasRegistered">
+                <div class="alert alert-info">
+                    Thank you for registering. You will receive a confirmation email shortly.
+                    <div style="margin-top: 16px;">
+                        <button ui-sref="main" class="btn btn-primary">Keep Browsing</button>    
+                    </div>
+                </div>    
+            </div>
+            
+            <div class="row" ng-hide="hasRegistered">
+                <div class="col-lg-12">
                     <form role="form" ng-submit="createUser(user)">
                         <div class="form-group">
                             <label for="name">Display Name</label>
@@ -29,11 +38,8 @@
                         <button type="submit" class="btn btn-primary">Join</button>
                     </form>
                 </div>
-                <div class="col-lg-6">
-
-                </div>
             </div>
         </div>
-    </section>
+    </div>
 
 </div>

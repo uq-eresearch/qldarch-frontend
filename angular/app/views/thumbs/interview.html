@@ -2,7 +2,7 @@
     <!-- image -->
     <a class="thumbnail-image" ui-sref="interview({interviewId: interview.encodedUri})">
         <img ng-if="!interview.interviewees[0].picture" src="images/icon.png" style="display:block; width:100%">
-        <img ng-if="interview.interviewees[0].picture" ng-src="{{ Uris.THUMB_ROOT + interview.interviewees[0].picture[Uris.QA_SYSTEM_LOCATION] }}" alt="...">
+        <img ng-if="interview.interviewees[0].picture" ng-src="{{ interview.interviewees[0].picture.file }}" alt="...">
     </a>
 
     <!-- caption -->

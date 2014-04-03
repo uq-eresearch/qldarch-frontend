@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('MainCtrl', function ($scope, $location, Uris, Entity, interviews, LayoutHelper, GraphHelper, compoundObjects, $upload) {
+    .controller('MainCtrl', function ($scope, $location, Uris, Entity, interviews, LayoutHelper, GraphHelper, compoundObjects, $upload, $http) {
         $scope.searchType = 'entities';
         $scope.query = '';
 
@@ -59,6 +59,43 @@ angular.module('angularApp')
                 // }).success(function (data, status, headers, config) {
                 // file is uploaded successfully
                 console.log(data);
+
+                var expression = {};
+                expression[Uris.DCT_TITLE] = 'My file';
+                expression[Uris.RDF_TYPE] = 'http://qldarch.net/ns/rdf/2012-06/terms#Photograph';
+                expression[Uris.QA_HAS_FILE] = data.uri;
+                expression[Uris.QA_DEPICTS_BUILDING] = 'http://qldarch.net/users/cking/Structure#61816694616';
+
+                /**
+                 * uri: "http://qldarch.net/omeka/items/show/59",
+http://qldarch.net/ns/rdf/2012-06/terms#depictsBuilding: "http://qldarch.net/rdf/2012-12/resources/buildings/61",
+http://purl.org/dc/terms/rights: "Fryer Library, University of Queensland",
+http://purl.org/dc/terms/format: "image/jpeg",
+http://qldarch.net/ns/rdf/2012-06/terms#location: "125 The Esplanade, St Lucia, Brisbane, Queensland",
+http://www.w3.org/1999/02/22-rdf-syntax-ns#type: [
+"http://qldarch.net/ns/rdf/2012-06/terms#DigitalThing",
+"http://qldarch.net/ns/rdf/2012-06/terms#Entity",
+"http://qldarch.net/ns/rdf/2012-06/terms#DigitalObject",
+"http://qldarch.net/ns/rdf/2012-06/terms#Image",
+"http://qldarch.net/ns/rdf/2012-06/terms#Photograph",
+"http://purl.org/vocab/frbr/core#Expression",
+"http://qldarch.net/ns/rdf/2012-06/terms#Evincible"
+],
+http://qldarch.net/ns/rdf/2012-06/terms#hasFile: "http://qldarch.net/omeka/files/show/58",
+http://qldarch.net/ns/rdf/2012-06/terms#associatedFirm: "http://qldarch.net/rdf/2012-12/resources/firms/6",
+http://qldarch.net/ns/rdf/2012-06/terms#relatedTo: [
+"http://qldarch.net/rdf/2012-12/resources/firms/6",
+"http://qldarch.net/rdf/2012-12/resources/buildings/61"
+],
+http://purl.org/dc/terms/identifier: "UQFL278",
+http://purl.org/vocab/frbr/core#embodiment: "http://qldarch.net/omeka/files/show/58",
+http://purl.org/dc/terms/title: "Hayes House, St Lucia; view from living room to river"
+},
+                 */
+                // Lets create an expression
+                $http.post(Uris.JSON_ROOT + 'expression/description', expression).then(function (response) {
+                    console.log('response', response);
+                });
             });
 
 

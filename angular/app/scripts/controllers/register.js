@@ -11,6 +11,7 @@ angular.module('angularApp')
                 }
             }).then(function (response) {
                 console.log('response', response);
+                $scope.hasRegistered = true;
             });
             $scope.user = {};
         };

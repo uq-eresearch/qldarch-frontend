@@ -7,8 +7,10 @@ angular.module('angularApp')
 
         this.JSON_ROOT = '/ws/rest/';
         this.SOLR_ROOT = '/solr/collection1/';
-        this.FILE_ROOT = 'http://qldarch-test.metadata.net/omeka/archive/files/';
-        this.THUMB_ROOT = 'http://qldarch-test.metadata.net/omeka/archive/square_thumbnails/';
+        this.OMEKA_FILE_ROOT = 'http://qldarch-test.metadata.net/omeka/archive/files/';
+        this.OMEKA_THUMB_ROOT = 'http://qldarch-test.metadata.net/omeka/archive/square_thumbnails/';
+        this.SESAME_FILE_ROOT = 'http://qldarch-test.metadata.net/files/';
+        this.SESAME_THUMB_ROOT = 'http://qldarch-test.metadata.net/files/';
 
         this.PROD_URL = 'http://qldarch-test.metadata.net/beta/';
         this.DEV_URL = 'http://localhost:8080/qldarch/';
@@ -62,6 +64,7 @@ angular.module('angularApp')
         this.QA_TIME_TO = this.QA_NS + 'timeTo';
         this.QA_DOCUMENTED_BY = this.QA_NS + 'documentedBy';
         this.QA_DEPICTS_BUILDING = this.QA_NS + 'depictsBuilding';
+        this.QA_MANAGED_FILE = this.QA_NS + 'managedFile';
 
         this.QA_ISSUE = this.QA_NS + 'issue';
         this.QA_VOLUME = this.QA_NS + 'volume';

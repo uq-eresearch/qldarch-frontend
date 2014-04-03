@@ -1,8 +1,7 @@
 <div class="thumbnail thumbnail-fix">
 
     <a ui-sref="architect.summary({architectId: architect.encodedUri})" class="thumbnail-image">
-        <img ng-if="!architect.picture" src="images/icon.png" style="display:block; width:100%">
-        <img ng-if="architect.picture" ng-src="{{ Uris.THUMB_ROOT + architect.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ architect.name }}">
+        <img ng-src="{{ architect.picture.thumb }}" alt="{{ architect.name }}">
     </a>
 
     <div class="caption">
