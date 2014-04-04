@@ -6272,6 +6272,33 @@ body {
  * Modules 
  * ======================
  */
+.upload {
+  color: #777;
+  text-align: center;
+}
+.upload .upload-dropzone {
+  text-align: center;
+  border: 3px dashed #bbb;
+  padding: 48px;
+}
+.upload .upload-dropzone i {
+  font-size: 64px;
+  display: block;
+}
+.upload .upload-dropzone.upload-dropzone-dragover {
+  background-color: white;
+  border: 3px dashed #aaa;
+}
+.upload .upload-choose {
+  margin-top: 24px;
+}
+.upload .upload-choose .upload-choose-label {
+  margin-bottom: 16px;
+  font-weight: bold;
+}
+.upload input[type="file"] {
+  display: inline;
+}
 .btn {
   border: none;
 }

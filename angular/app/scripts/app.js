@@ -234,19 +234,10 @@ angular.module('angularApp', [
                 },
                 controller: 'UserContentCtrl'
             })
-            .state('file', {
-                abstract: true,
-                url: '/file',
-                template: '<ui-view autoscroll="false"></ui-view>'
-            })
-            .state('file.photograph', {
-                url: '/photograph',
+            .state('upload', {
+                url: '/upload',
                 templateUrl: 'views/files/photograph.html',
                 controller: 'FilePhotographCtrl'
-            })
-            .state('file.lineDrawing', {
-                url: '/line-drawing',
-                templateUrl: 'views/files/linedrawing.html'
             })
             .state('ugc', {
                 abstract: true,

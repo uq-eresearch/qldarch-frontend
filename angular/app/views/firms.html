@@ -26,9 +26,9 @@
     </div>
 </div>
 
-<div class="l-frame l-frame-media">
+<div class="l-frame l-frame-highlight l-frame-tight">
     <div class="container">
-        <div class="chart-index" style="margin-bottom: 20px;">
+        <div class="chart-index">
             <button class="btn btn-default" style="margin-right:1px;" 
                 ng-click="goToIndex(null)"
                 ng-class="{'btn-primary': $stateParams.index == null}">
@@ -43,6 +43,10 @@
                     {{ index }}
             </button>
         </div>
+    </div>    
+</div>
+<div class="l-frame l-frame-media" ng-hide="$state.includes('firms.other')">
+    <div class="container">
         <div id="chart"></div>
     </div>
 </div>

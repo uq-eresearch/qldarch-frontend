@@ -122,6 +122,36 @@ body {
  * Modules 
  * ======================
  */
+.upload {
+  color: #777;
+  text-align: center;
+  .upload-dropzone {
+    text-align: center;
+    border: 3px dashed #bbb;
+    padding: @line-height-computed * 2;
+
+    i {
+      font-size: 64px;
+      display: block;
+    }
+    &.upload-dropzone-dragover {
+      background-color: white;
+      border: 3px dashed #aaa;
+    }
+  }
+  .upload-choose {
+    margin-top: @line-height-computed;
+    .upload-choose-label {
+      margin-bottom: 16px;
+      font-weight: bold;
+    }
+  }
+  input[type="file"] {
+    display: inline;
+  }
+}
+
+
 .btn {
   &.btn-default {
     border: 1px solid @btn-default-border;

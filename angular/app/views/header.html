@@ -71,8 +71,7 @@
                                     <li><a ui-sref="firm.summary.edit({firmId:null})">New Firm</a></li>
                                     <li><a ui-sref="structure.summary.edit({structureId:null})">New Project</a></li>
                                      <li role="presentation" class="divider"></li>
-                                    <li><a ui-sref="file.photograph">New Photographs</a></li>
-                                    <li><a ui-sref="file.lineDrawing">New Line drawings</a></li>
+                                    <li><a ui-sref="upload">Upload Images</a></li>
                                 </ul>
                             </li>
 
@@ -89,7 +88,7 @@
                                 <a href class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li><a ui-sref="ugcs.user({username: Auth.user})">My Content</a></li>
-                                    <li><a ui-sref="files.user">My Files</a></li>
+                                    <!-- <li><a ui-sref="files.user">My Files</a></li> -->
                                     <li ng-show="Auth.user == 'admin'"><a ui-sref="admin.users">Manage Users</a></li>
                                     <li><a ui-sref="logout">Sign out</a></li>
                                 </ul>

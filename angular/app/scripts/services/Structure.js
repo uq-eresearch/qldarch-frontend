@@ -72,7 +72,7 @@ angular.module('angularApp')
              * @returns {Promise| Object} All architects that match
              */
             findByName: function (name) {
-                return Entity.findByName(name, 'qldarch:Structure');
+                return Entity.findByName(name, false, 'qldarch:Structure');
             },
 
             findByBuildingTypologyUri: function (buildingTypologyUri) {
