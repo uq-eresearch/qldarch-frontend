@@ -45,66 +45,69 @@
 
 <!-- visualisation -->
 <div>
-    <div class="l-frame l-frame-media">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8">
-                    <force data="data" selected="nodeSelected(node)"></force>         
-                </div>
-                <div class="col-md-4" ng-show="selected">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div class="media">
-                                <a class="pull-left" ng-href="#/{{ selected.type }}/{{ selected.encodedUri }}">
-                                    <img class="media-object" ng-if="!selected.picture" ng-src="images/icon.png" style="display:block; width:60px;">
-                                    <img class="media-object" ng-if="selected.picture" ng-src="{{ Uris.THUMB_ROOT + selected.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ selected.name }}" style="width: 60px;">
+    <div class="l-frame l-frame-highlight">
+        <div class="container" style="position: relative;">
+            
+            <div>
+                <force data="data" selected="nodeSelected(node)"></force>             
+            </div>
+
+            <div class="panel panel-default" style="width: 300px; position: absolute; top: 0; bottom: 0; right: 0; overflow: scroll;" ng-show="selected">
+                <div class="panel-heading" style="padding: 24px 16px;">
+                    <i class="fa fa-times pull-right" ng-click="selected = null"></i>
+                    <div class="media" style="margin-top: 0">
+                        <div class="pull-left">
+                            <img class="media-object img-circle" ng-src="{{ selected.picture.thumb }}" alt="{{ selected.name }}" style="width: 50px;">
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading">
+                                <a ng-href="{{ $state.href(selected.$state + '.relationships', selected.$stateParams) }}">
+                                    {{ selected.name }}
                                 </a>
-                                <div class="media-body">
-                                    <h4 class="media-heading">
-                                        <a ng-href="#/{{ selected.type }}/{{ selected.encodedUri }}">
-                                            {{ selected.name }}
-                                        </a>
-                                    </h4>
-                                    <p style="text-transform: capitalize">
-                                        {{ selected.type }}
-                                    </p>
-                                </div>
+                            </h4>
+                            <div style="text-transform: capitalize; color: black;">
+                                {{ selected.type }}
                             </div>
                         </div>
-
-                        <!-- Selected relationships -->
-                        <ul class="list-group">
-                            <li class="list-group-item" ng-repeat="relationship in selectedRelationships">
-                                <!--<i class="fa fa-bars"> </i>-->
-                                <!-- ({interviewId: relationship.evidence.encodedDocumentedBy, time: relationship.evidence[Uris.QA_TIME_FROM]} -->
-                                <a ui-sref="interview({interviewId: relationship.evidence.encodedDocumentedBy, time: relationship.evidence[Uris.QA_TIME_FROM] })" >
-                                    {{ relationship.subject.name }}
-                                    <em>{{ relationship.predicate.name || relationship.predicate[Uris.QA_LABEL] }}</em> 
-                                    {{ relationship.object.name }}
-                                </a>
-
-                                <!-- Date -->
-                                {{ relationship[Uris.QA_START_DATE] }}
-                                <span ng-show="relationship[Uris.QA_START_DATE] && relationship[Uris.QA_END_DATE]"> - </span>
-                                {{ relationship[Uris.QA_END_DATE] }}
-
-                                <div style="font-style: italic; color: black;">
-                                    {{ relationship[Uris.QA_TEXTUAL_NOTE] }}
-                                </div>
-                            </li>
-                        </ul>
-                        <!-- /Selected relationships -->
                     </div>
                 </div>
+
+                <!-- Selected relationships -->
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="relationship in selectedRelationships">
+                        <!--<i class="fa fa-bars"> </i>-->
+                        <!-- ({interviewId: relationship.evidence.encodedDocumentedBy, time: relationship.evidence[Uris.QA_TIME_FROM]} -->
+                        <h5 style="line-height: 24px;">
+                            <a ui-sref="interview({interviewId: relationship.evidence.encodedDocumentedBy, time: relationship.evidence[Uris.QA_TIME_FROM] })" >
+                                {{ relationship.subject.name }}
+                                <em>{{ relationship.predicate.name || relationship.predicate[Uris.QA_LABEL] }}</em> 
+                                {{ relationship.object.name }}
+                            </a>
+                        </h5>
+                        
+                        <!-- Date -->
+                        <div style="color: black;">
+                            {{ relationship[Uris.QA_START_DATE] }}
+                            <span ng-show="relationship[Uris.QA_START_DATE] && relationship[Uris.QA_END_DATE]"> -   </span>
+                            {{ relationship[Uris.QA_END_DATE] }}    
+                        </div>
+                        
+
+                        <div style="color: black; font-size: 14px;">
+                            {{ relationship[Uris.QA_TEXTUAL_NOTE] }}
+                        </div>
+                    </li>
+                </ul>
+                <!-- /Selected relationships -->
             </div>
         </div>
     </div>
     
-    <div class="l-frame l-frame-tight l-frame-highlight">
+    <!-- <div class="l-frame l-frame-tight l-frame-highlight">
         <div class="container">
             <span class="text-muted">Filters</span>    
         </div>
-    </div>
+    </div> -->
 </div>
 <div class="container">
     <div class="row">

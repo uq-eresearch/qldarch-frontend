@@ -8,6 +8,8 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+                <button class="btn btn-default pull-right" ui-sref="structure.summary.edit({structureId:null})" ng-show="Auth.role === 'editor' || Auth.role === 'root'"><i class="fa fa-plus"></i> New Project</button>
+
                 <ul class="nav nav-pills">
                     <li ui-sref-active="active">
                         <a href ui-sref="structures.australian">Australian</a>

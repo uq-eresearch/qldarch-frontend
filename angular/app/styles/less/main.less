@@ -498,7 +498,10 @@ body {
   cursor: pointer;
 }
 .interview-player {
-  margin-bottom: @line-height-computed;;
+  margin-bottom: 0;
+}
+.interview-details {
+  padding-top: @line-height-computed;
 }
 .player {
   background-color: @gray-darker;
@@ -521,6 +524,19 @@ body {
   &.exchange-searching {
     background-color: @gray-lighter;
     padding: @line-height-computed / 2 inherit;
+  }
+  .exchange-play {
+    display: none;
+    height: 32px;
+    width: 32px;
+  }
+  &:hover {
+    .exchange-play {
+      display: block;
+    }
+    .exchange-dp {
+      display: none;
+    }
   }
 }
 

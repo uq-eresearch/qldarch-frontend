@@ -5807,6 +5807,8 @@ header .navbar-wrapper .navbar-brand {
 }
 header .navbar-wrapper .navbar-nav {
   font-size: 12px;
+}
+header .navbar-wrapper .navbar-nav a {
   text-transform: uppercase;
 }
 header .navbar-wrapper .navbar-nav .dropdown-menu {
@@ -6594,7 +6596,10 @@ body {
   cursor: pointer;
 }
 .interview-player {
-  margin-bottom: 24px;
+  margin-bottom: 0;
+}
+.interview-details {
+  padding-top: 24px;
 }
 .player {
   background-color: #222222;
@@ -6612,6 +6617,17 @@ body {
 .exchange.exchange-searching {
   background-color: #eeeeee;
   padding: 12px inherit;
+}
+.exchange .exchange-play {
+  display: none;
+  height: 32px;
+  width: 32px;
+}
+.exchange:hover .exchange-play {
+  display: block;
+}
+.exchange:hover .exchange-dp {
+  display: none;
 }
 .subnav {
   padding: 12px 0;

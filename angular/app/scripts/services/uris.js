@@ -113,6 +113,7 @@ angular.module('angularApp')
 
         this.QA_BUILDING_TYPOLOGY = this.QA_NS + 'BuildingTypology';
         this.QA_BUILDING_TYPOLOGY_P = this.QA_NS + 'buildingTypology';
+        this.QA_DEMOLISHED = this.QA_NS + 'demolished';
 
         this.QA_TOPIC_TYPE = this.QA_NS + 'Topic';
         this.QA_TOPIC_HEADING = this.QA_NS + 'topicHeading';

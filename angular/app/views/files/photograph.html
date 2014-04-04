@@ -14,7 +14,19 @@
 	</div>
 	<!-- /Builder info -->
 
-	<div class="l-frame l-frame-highlight" >
+	<div class="l-frame l-frame-tight">
+		<div class="container">
+			<label class="control-label">Which project do the photos depict?</label>
+			<div 
+				ui-select2="structureSelect" 
+				ng-model="selectedProject" 
+				class="form-control">
+			</div>
+		</div>
+		
+	</div>
+
+	<div class="l-frame l-frame-highlight" ng-show="selectedProject">
         <div class="container">
         	<form action="">
         		<div class="form-group upload">
@@ -42,21 +54,15 @@
 		<div class="container">
         	<div class="panel panel-default" ng-repeat="expression in expressions">
         		<div class="panel-body">
-        			
         			<div class="row">
-        				
     					<div class="col-md-10">
-
     						<div ng-show="expression.uri">
     							<div class="row">
     								<div class="col-md-2">
     									<img ng-src="{{ expression.$file.thumb }}" alt="" class="img-responsive" ng-show="expression.$file">
     								</div>
     								<div class="col-md-10">
-    									<h4>Title</h4>
-    									<p>{{ expression[Uris.DCT_TITLE] }}</p>
-    									<h4>Depicts</h4>
-    									<p><a ng-href="{{ expression.$depictsLink }}">{{ expression.$depicts.name }}</a></p>
+    									<p><a ng-href="{{ expression.$depictsLink }}">{{ expression[Uris.DCT_TITLE] }}</a></p>
     								</div>
     							</div>
     						</div>
@@ -88,14 +94,14 @@
 												  <input type="radio" id="inlineCheckbox2" value="{{ Uris.QA_LINEDRAWING_TYPE }}" ng-model="expression[Uris.RDF_TYPE]"> Line Drawing
 												</label>
 					        				</div>
-					        				<div class="form-group">
+					        				<!--<div class="form-group">
 						        				<label class="control-label">Project</label>
 						        				<div 
 													ui-select2="structureSelect" 
 													ng-model="expression.$depicts" 
 													class="form-control">
 												</div>
-						        			</div>
+						        			</div>-->
 					        			</form>
 									</div>
 								</div>		
@@ -104,7 +110,7 @@
     					</div>
     					<div class="col-md-2">
     						<div ng-hide="expression.uri">
-    							<button style="margin-bottom: 8px;" class="btn btn-primary form-control" ng-click="publish(expression)" ng-disabled="!expression[Uris.DCT_TITLE] || !expression.$depicts">Publish</button>
+    							<button style="margin-bottom: 8px;" class="btn btn-primary form-control" ng-click="publish(expression)" ng-disabled="!expression[Uris.DCT_TITLE]">Publish</button>
 
     							<button class="btn btn-default form-control" ng-click="cancelUpload(expression)">Cancel</button>
     						</div>

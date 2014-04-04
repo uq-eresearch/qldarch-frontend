@@ -371,55 +371,46 @@ angular.module('angularApp', [
             .state('ugc.wordcloud.edit.add.import', {
                 url: '/import',
             })
-            .state('create', {
+            .state('other', {
                 abstract: true,
-                url: '/build',
-                template: '<ui-view autoscroll="false"></ui-view>'
+                url: '/other?otherId',
+                templateUrl: 'views/other/layout.html',
+                resolve: {
+                    other: ['Entity', '$stateParams', 'GraphHelper',
+                        function (Entity, $stateParams, GraphHelper) {
+                            var uri = GraphHelper.decodeUriString($stateParams.otherId);
+                            return Entity.load(uri, false);
+                        }
+                    ]
+                },
+                controller: ['$scope', 'other', 'Uris',
+                    function ($scope, other) {
+                        $scope.other = other;
+                    }
+                ]
             })
-            .state('create.timeline', {
-                url: '/timeline?uris',
-                templateUrl: 'views/create/timeline.html',
-                controller: 'CreateTimelineCtrl',
-                reloadOnSearch: false
+            .state('other.summary', {
+                url: '/summary',
+                templateUrl: 'views/other/summary.html'
             })
-            .state('create.timeline.add', {
-                url: '/add',
-            })
-            .state('create.timeline.add.import', {
-                url: '/import',
-            })
-            .state('create.timeline.add.event', {
-                url: '/event',
-            })
-            .state('create.map', {
-                url: '/map?map',
-                templateUrl: 'views/create/map.html',
-                controller: 'CreateMapCtrl',
-                reloadOnSearch: false
-            })
-            .state('create.map.add', {
-                url: '/add'
-            })
-            .state('create.map.add.import', {
-                url: '/import',
-            })
-            .state('create.map.add.location', {
-                url: '/location',
-            })
-            .state('create.textAnalysis', {
-                url: '/text-analysis',
-                templateUrl: 'views/create/textanalysis.html',
-                controller: 'CreateTextAnalysisCtrl',
-                reloadOnSearch: false
-            })
-            .state('create.textAnalysis.add', {
-                url: '/add'
-            })
-            .state('create.textAnalysis.add.import', {
-                url: '/import',
-            })
-            .state('create.textAnalysis.add.new', {
-                url: '/document',
+            .state('other.relationships', {
+                url: '/relationships',
+                templateUrl: 'views/relationships.html',
+                controller: 'RelationshipCtrl',
+                resolve: {
+                    data: ['Relationship', 'GraphHelper', 'Entity', '$stateParams',
+                        function (Relationship, GraphHelper, Entity, $stateParams) {
+                            var uri = GraphHelper.decodeUriString($stateParams.otherId);
+                            console.log('id is', $stateParams.otherId);
+                            // Get all the relationships
+                            return Relationship.findByEntityUri(uri).then(function (relationships) {
+                                return Relationship.getData(relationships).then(function (data) {
+                                    return data;
+                                });
+                            });
+                        }
+                    ]
+                }
             })
             .state('architects', {
                 abstract: true,
@@ -489,10 +480,15 @@ angular.module('angularApp', [
                         }
                     ]
                 },
-                controller: ['$scope', 'architect', 'interviews', 'Uris',
-                    function ($scope, architect, interviews) {
+                controller: ['$scope', 'architect', 'interviews', 'Uris', 'Entity', '$state',
+                    function ($scope, architect, interviews, Uris, Entity, $state) {
                         $scope.architect = architect;
                         $scope.interviews = interviews;
+                        $scope.delete = function (architect) {
+                            Entity.delete(architect.uri).then(function () {
+                                $state.go('architects.queensland');
+                            });
+                        };
                     }
                 ]
             })
@@ -739,9 +735,14 @@ angular.module('angularApp', [
                         }
                     ]
                 },
-                controller: ['$scope', 'firm',
-                    function ($scope, firm) {
+                controller: ['$scope', 'firm', 'Entity', '$state',
+                    function ($scope, firm, Entity, $state) {
                         $scope.firm = firm;
+                        $scope.delete = function (firm) {
+                            Entity.delete(firm.uri).then(function () {
+                                $state.go('firms.australian');
+                            });
+                        };
                     }
                 ]
             })
@@ -941,9 +942,14 @@ angular.module('angularApp', [
                         }
                     ]
                 },
-                controller: ['$scope', 'structure',
-                    function ($scope, structure) {
+                controller: ['$scope', 'structure', 'Entity', '$state',
+                    function ($scope, structure, Entity, $state) {
                         $scope.structure = structure;
+                        $scope.delete = function (firm) {
+                            Entity.delete(firm.uri).then(function () {
+                                $state.go('structures.australian');
+                            });
+                        };
                     }
                 ]
             })

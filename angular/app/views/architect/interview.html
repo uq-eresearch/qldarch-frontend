@@ -1,55 +1,5 @@
 <div class="interview">
-    <div class="l-frame l-frame-tight">
-        <div class="interview-heading">
-            <div class="container">
-                <h4 ng-click="isShowingInterviewDetails = !isShowingInterviewDetails" style="margin: 0; padding: 0;">
-                    {{ title }} <i class="fa" ng-class="{'fa-chevron-down': !isShowingInterviewDetails, 'fa-chevron-up': isShowingInterviewDetails}"></i>
-                </h4>
-            </div>
-        </div>
-    </div>
     
-    <div class="interview-details" ng-show="isShowingInterviewDetails">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>Interviewees</h5>
-                    <ul class="media-list">
-                        <li class="media" ng-repeat="interviewee in interview.interviewees">
-                            <a class="pull-left" href="#">
-                                <img class="media-object img-responsive img-circle" ng-if="!interviewee.picture" src="images/icon.png" style="display:block; width: 20px">
-                                <img class="media-object img-responsive img-circle" ng-if="interviewee.picture" ng-src="{{ interviewee.picture.file }}" alt="{{ interviewer.name }}" style="width: 20px">
-                            </a>
-                            <div class="media-body">
-                                <a ng-href="#/{{ interviewee.type }}/{{ interviewee.encodedUri }}">
-                                    {{ interviewee.name }}
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
-
-                    <h5>Location</h5>
-                    <p><i class="fa fa-map-marker"></i> <a href="http://maps.google.com/?q={{ interview[Uris.QA_LOCATION] }}" target="_blank">{{ interview[Uris.QA_LOCATION] }}</a></p>
-                </div>
-                <div class="col-md-6">
-                    <h5>Interviewers</h5>
-                    <ul class="media-list">
-                        <li class="media" ng-repeat="interviewer in interview.interviewers">
-                            <span class="pull-left" >
-                                <img class="media-object img-responsive img-circle" ng-if="!interviewer.picture" src="images/icon.png" style="display:block; width: 20px">
-                                <img class="media-object img-responsive img-circle" ng-if="interviewer.picture" ng-src="{{ interviewer.picture.file }}" alt="{{ interviewer.name }}" style="width: 20px">
-                            </span>
-                            <div class="media-body">
-                                <!-- <a ng-href="#/{{ interviewer.type }}/{{ interviewer.encodedUri }}"> -->
-                                    {{ interviewer.name }}
-                                <!-- </a> -->
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- end of details -->
 
 
@@ -85,174 +35,229 @@
     </div>
     <!-- end of interview player -->
 
-    <!-- Interview transcript -->
-    <div class="interview-transcript" ng-show="isShowingTranscript" id="transcript">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12" >
-                    <div class="btn-group pull-left">
-                        <button type="button" class="btn btn-default"
-                                ng-model="$parent.isSyncing"
-                                btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false"
-                                tooltip="Sync Transcript">
-                            <i class="fa fa-refresh"
-                               ng-class="{ 'fa-spin': isSyncing && audioPlayer.playing }">
-                           </i>
-                        </button>
-                        <!--<button type="button" class="btn btn-default" ng-model="sync" btn-radio="'full'" ng-click="transcriptSearchInput=''">Full Transcript</button>-->
-                        <!--<button type="button" class="btn btn-default" ng-model="sync" btn-radio="'search'">Search Transcript</button>-->
-                    </div>
+    <!-- Interview Details -->
+    <div class="l-frame l-frame-tight l-frame-highlight">
+        <div class="interview-heading">
+            <div class="container">
+                <h5 ng-click="isShowingInterviewDetails = !isShowingInterviewDetails" style="margin: 0; padding: 0;">
+                    <i class="fa fa-fw" ng-class="{'fa-chevron-right': !isShowingInterviewDetails, 'fa-chevron-down': isShowingInterviewDetails}"></i>   {{ title }}
+                </h5>
+            </div>
+        </div>
 
-                    <div class="btn-group pull-right">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-cloud-download"></i> Download <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href>Transcript</a></li>
-                            <li><a href>Audio</a></li>
+        <div class="interview-details" ng-show="isShowingInterviewDetails">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Interviewees</h5>
+                        <ul class="media-list">
+                            <li class="media" ng-repeat="interviewee in interview.interviewees">
+                                <a class="pull-left" href="#">
+                                    <img class="media-object img-responsive img-circle" ng-if="!interviewee.picture" src="images/icon.png" style="display:block; width: 20px">
+                                    <img class="media-object img-responsive img-circle" ng-if="interviewee.picture" ng-src="{{ interviewee.picture.file }}" alt="{{ interviewer.name }}" style="width: 20px">
+                                </a>
+                                <div class="media-body">
+                                    <a ng-href="#/{{ interviewee.type }}/{{ interviewee.encodedUri }}">
+                                        {{ interviewee.name }}
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <h5>Location</h5>
+                        <p><i class="fa fa-map-marker"></i> <a href="http://maps.google.com/?q={{ interview[Uris.QA_LOCATION] }}" target="_blank">{{ interview[Uris.QA_LOCATION] }}</a></p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Interviewers</h5>
+                        <ul class="media-list">
+                            <li class="media" ng-repeat="interviewer in interview.interviewers">
+                                <span class="pull-left" >
+                                    <img class="media-object img-responsive img-circle" ng-if="!interviewer.picture" src="images/icon.png" style="display:block; width: 20px">
+                                    <img class="media-object img-responsive img-circle" ng-if="interviewer.picture" ng-src="{{ interviewer.picture.file }}" alt="{{ interviewer.name }}" style="width: 20px">
+                                </span>
+                                <div class="media-body">
+                                    <!-- <a ng-href="#/{{ interviewer.type }}/{{ interviewer.encodedUri }}"> -->
+                                        {{ interviewer.name }}
+                                    <!-- </a> -->
+                                </div>
+                            </li>
                         </ul>
                     </div>
-
-
-                    <div class="input-group" style="padding: 0 15px; ">
-                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                        <input type="text" class="form-control" placeholder="Search transcript"
-                               ng-model="transcriptSearchInput"
-                               ng-change="transcriptSearchInputChanged(transcriptSearchInput)">
-                    </div>
-
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- exchanges -->
-            <div infinite-scroll="addMoreExchanges()" class="interview-exchanges" style="margin-top: 24px;">
-                <div ng-repeat="exchange in interview.transcript.exchanges | filter:{'transcript': transcriptSearchInput} | filter:timeFilter | limitTo:exchangeDisplayCount"
-                     class="row exchange"
-                     ng-class="{'exchange-searching': isSearching}" 
-                     id="{{ exchange.startTime }}" style="margin-bottom:20px" >
-                    <!-- transcript -->
-                    <div class="col-sm-6">
-                        <div class="media">
-                            <div class="pull-left" style="text-align: center">
-                                <a href="#/{{ exchange.speaker.type }}/summary?{{ exchange.speaker.type }}Id={{ exchange.speaker.encodedUri }}">
-                                    <img ng-if="exchange.speaker.picture" class="media-object" ng-src="{{ exchange.speaker.picture.thumb }}" alt="" style="width: 32px"/>
-                                </a>
 
-                                <!-- play button -->
-                                <button class="btn btn-xs btn-default" style="width: 100%;" 
-                                        ng-click="playFromExchange(exchange)"
-                                        ng-show="currentExchange != exchange || isSearching" style="margin-top: 5px;">
-                                    <i class="fa fa-play"></i>
-                                </button>
-                                <!-- end of play button -->
-                            </div>
-                            <div class="media-body">
-                                <div class="media-heading">
-                                    <strong>
-                                        <a ng-href="#/{{ exchange.speaker.type }}/{{ exchange.speaker.encodedUri }}">
-                                            {{ exchange.speaker.name }}
-                                        </a>
-                                <span ng-show="!exchange.speaker">
-                                    {{ exchange.speakerInitials }}
-                                </span>
-                                    </strong>
-                                    <span class="pull-right" ng-show="isSearching">{{ exchange.time }}</span>
+    <div class="l-frame l-frame-tight">
+        <!-- Interview transcript -->
+        <div class="interview-transcript" ng-show="isShowingTranscript" id="transcript">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12" >
+                        <div class="btn-group pull-left">
+                            <button type="button" class="btn btn-default"
+                                    ng-model="$parent.isSyncing"
+                                    btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false"
+                                    tooltip="Sync Transcript">
+                                <i class="fa fa-refresh"
+                                   ng-class="{ 'fa-spin': isSyncing && audioPlayer.playing }">
+                               </i>
+                            </button>
+                            <!--<button type="button" class="btn btn-default" ng-model="sync" btn-radio="'full'" ng-click="transcriptSearchInput=''">Full Transcript</button>-->
+                            <!--<button type="button" class="btn btn-default" ng-model="sync" btn-radio="'search'">Search Transcript</button>-->
+                        </div>
+
+                        <div class="btn-group pull-right">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-cloud-download"></i> Download <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href>Transcript</a></li>
+                                <li><a href>Audio</a></li>
+                            </ul>
+                        </div>
+
+
+                        <div class="input-group" style="padding: 0 15px; ">
+                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                            <input type="text" class="form-control" placeholder="Search transcript"
+                                   ng-model="transcriptSearchInput"
+                                   ng-change="transcriptSearchInputChanged(transcriptSearchInput)">
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- exchanges -->
+                <div infinite-scroll="addMoreExchanges()" class="interview-exchanges" style="margin-top: 24px;">
+                    <div ng-repeat="exchange in interview.transcript.exchanges | filter:{'transcript': transcriptSearchInput} | filter:timeFilter | limitTo:exchangeDisplayCount"
+                         class="row exchange"
+                         ng-class="{'exchange-searching': isSearching}" 
+                         id="{{ exchange.startTime }}" style="margin-bottom:20px" >
+                        <!-- transcript -->
+                        <div class="col-sm-6">
+                            <div class="media">
+                                <div class="pull-left" style="text-align: center">
+                                    <a href="#/{{ exchange.speaker.type }}/summary?{{ exchange.speaker.type }}Id={{ exchange.speaker.encodedUri }}" class="exchange-dp">
+                                        <img class="media-object img-circle" ng-src="{{ exchange.speaker.picture.thumb }}" alt="" style="width: 32px"/>
+                                    </a>
+
+                                    <!-- play button -->
+                                    <button class="btn btn-xs btn-default exchange-play" 
+                                            ng-click="playFromExchange(exchange)">
+                                        <i class="fa fa-play"></i>
+                                    </button>
+                                    <!-- end of play button -->
                                 </div>
-                                <p ng-bind-html="exchange.transcript | highlight:transcriptSearchInput" ng-class="{ highlight: startTime == exchange.startTime }">
-                                </p>
+                                <div class="media-body">
+                                    <div class="media-heading">
+                                        <strong>
+                                            <a ng-href="#/{{ exchange.speaker.type }}/{{ exchange.speaker.encodedUri }}">
+                                                {{ exchange.speaker.name }}
+                                            </a>
+                                    <span ng-show="!exchange.speaker">
+                                        {{ exchange.speakerInitials }}
+                                    </span>
+                                        </strong>
+                                        <span class="pull-right" ng-show="isSearching">{{ exchange.time }}</span>
+                                    </div>
+                                    <p ng-bind-html="exchange.transcript | highlight:transcriptSearchInput" ng-class="{ highlight: startTime == exchange.startTime }">
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- end of transcript -->
+                        <!-- end of transcript -->
 
-                    <!-- relationships -->
-                    <div class="col-sm-6">
-                        <div class="panel panel-default" ng-hide="(isSearching || !Auth.auth ) && !exchange.relationships.length">
-                            <div class="panel-heading" ng-if="Auth.auth && !isSearching">
+                        <!-- relationships -->
+                        <div class="col-sm-6">
+                            <div class="panel panel-default" ng-hide="(isSearching || !Auth.auth ) && !exchange.relationships.length">
+                                <div class="panel-heading" ng-if="Auth.auth && !isSearching">
 
-                                <!-- Control buttons -->
-                                <span ng-hide="exchange.isAddingRelationship || exchange.isEditingRelationships">
-                                    <button type="button" class="btn btn-default btn-xs"
-                                            ng-click="showAddRelationship(exchange)"
-                                            ><i class="fa fa-plus fa-fw"></i></button>    
+                                    <!-- Control buttons -->
+                                    <span ng-hide="exchange.isAddingRelationship || exchange.isEditingRelationships">
+                                        <button type="button" class="btn btn-default btn-xs"
+                                                ng-click="showAddRelationship(exchange)"
+                                                ><i class="fa fa-plus fa-fw"></i></button>    
 
-                                    <button type="button" 
-                                        class="btn btn-default btn-xs"
-                                        ng-click="showEditRelationships(exchange)"
-                                        ng-show="exchange.relationships.length"
-                                            ><i class="fa fa-pencil fa-fw"></i></button>
-                                </span>
-                                <button type="button" class="btn btn-primary btn-xs"
-                                            ng-click="hideEditRelationships(exchange)" ng-show="exchange.isEditingRelationships"
-                                            ><i class="fa fa-check fa-fw"></i></button>
-                                <!-- /Control Buttons -->
+                                        <button type="button" 
+                                            class="btn btn-default btn-xs"
+                                            ng-click="showEditRelationships(exchange)"
+                                            ng-show="exchange.relationships.length"
+                                                ><i class="fa fa-pencil fa-fw"></i></button>
+                                    </span>
+                                    <button type="button" class="btn btn-primary btn-xs"
+                                                ng-click="hideEditRelationships(exchange)" ng-show="exchange.isEditingRelationships"
+                                                ><i class="fa fa-check fa-fw"></i></button>
+                                    <!-- /Control Buttons -->
 
-                                <!-- New relationship -->
-                                <form role="form" ng-if="exchange.isAddingRelationship">
-                                    <div class="form-group">
-                                        <label>Subject</label>
-                                        <div ui-select2="entitySelectOptions" ng-model="exchange.newRelationship.subject" class="form-control"></div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Relationship</label>
-                                        <div ui-select2="relationshipSelectOptions" ng-model="exchange.newRelationship.predicate" class="form-control" ></div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Object</label>
-                                        <div ui-select2="entitySelectOptions" ng-model="exchange.newRelationship.object" class="form-control" ></div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Dates</label>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <input type="text" class="form-control" placeholder="Start Year" ng-model="exchange.newRelationship.startYear"/>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <input type="text" class="form-control" placeholder="End Year" ng-model="exchange.newRelationship.endYear"/>
+                                    <!-- New relationship -->
+                                    <form role="form" ng-if="exchange.isAddingRelationship">
+                                        <div class="form-group">
+                                            <label>Subject</label>
+                                            <div ui-select2="entitySelectOptions" ng-model="exchange.newRelationship.subject" class="form-control"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Relationship</label>
+                                            <div ui-select2="relationshipSelectOptions" ng-model="exchange.newRelationship.predicate" class="form-control" ></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Object</label>
+                                            <div ui-select2="entitySelectOptions" ng-model="exchange.newRelationship.object" class="form-control" ></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Dates</label>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <input type="text" class="form-control" placeholder="Start Year" ng-model="exchange.newRelationship.startYear"/>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <input type="text" class="form-control" placeholder="End Year" ng-model="exchange.newRelationship.endYear"/>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Note</label>
-                                        <textarea class="form-control" placeholder="Note" cols="30" rows="10" ng-model="exchange.newRelationship.note"></textarea>
-                                    </div>
+                                        <div class="form-group">
+                                            <label>Note</label>
+                                            <textarea class="form-control" placeholder="Note" cols="30" rows="10" ng-model="exchange.newRelationship.note"></textarea>
+                                        </div>
 
-                                    <button type="submit" class="btn btn-sm btn-primary" ng-click="addRelationshipToExchange(exchange.newRelationship, exchange)">Add</button>
-                                    <button class="btn btn-sm btn-default" ng-click="hideAddRelationship(exchange)">Cancel</button>
-                                </form>
+                                        <button type="submit" class="btn btn-sm btn-primary" ng-click="addRelationshipToExchange(exchange.newRelationship, exchange)">Add</button>
+                                        <button class="btn btn-sm btn-default" ng-click="hideAddRelationship(exchange)">Cancel</button>
+                                    </form>
+
+                                </div>
+
+                                <!-- Relationship List -->
+                                <ul class="list-group" ng-if="exchange.relationships.length">
+                                    <li class="list-group-item" ng-repeat="relationship in exchange.relationships">
+                                        
+                                        <button class="btn btn-xs btn-danger" ng-show="exchange.isEditingRelationships" style="margin-right: 5px;" ng-click="deleteRelationship(relationship, exchange)">
+                                            <i class="fa fa-trash-o fa-fw"></i>
+                                        </button>
+
+                                        <a ng-href="{{ $state.href(relationship.subject.$state + '.summary', relationship.subject.$stateParams) }}" ng-bind-html="relationship.subject.name || '' | highlight:transcriptSearchInput"></a>
+
+                                        <span ng-bind-html="relationship.predicate[Uris.QA_LABEL] || relationship.predicate.name || '' | highlight:transcriptSearchInput">
+                                        </span>
+
+                                        <a ng-href="{{ $state.href(relationship.object.$state + '.summary', relationship.object.$stateParams) }}" ng-bind-html="relationship.object.name || '' | highlight:transcriptSearchInput"></a>
+
+                                        <!-- Date -->
+                                        {{ relationship[Uris.QA_START_DATE] }}
+                                        <span ng-show="relationship[Uris.QA_START_DATE] && relationship[Uris.QA_END_DATE]"> - </span>
+                                        {{ relationship[Uris.QA_END_DATE] }}
+                                    </li>
+                                </ul>
+                                <!-- /Relationship List -->
 
                             </div>
-
-                            <!-- Relationship List -->
-                            <ul class="list-group" ng-if="exchange.relationships.length">
-                                <li class="list-group-item" ng-repeat="relationship in exchange.relationships">
-                                    
-                                    <button class="btn btn-xs btn-danger" ng-show="exchange.isEditingRelationships" style="margin-right: 5px;" ng-click="deleteRelationship(relationship, exchange)">
-                                        <i class="fa fa-trash-o fa-fw"></i>
-                                    </button>
-
-                                    <a href="#/{{ relationship.subject.type }}/{{ relationship.subject.encodedUri }}" ng-bind-html="relationship.subject.name || '' | highlight:transcriptSearchInput"></a>
-
-                                    <span ng-bind-html="relationship.predicate[Uris.QA_LABEL] || relationship.predicate.name || '' | highlight:transcriptSearchInput">
-                                    </span>
-
-                                    <a href="#/{{ relationship.object.type }}/{{ relationship.object.encodedUri }}" ng-bind-html="relationship.object.name || '' | highlight:transcriptSearchInput"></a>
-
-                                    <!-- Date -->
-                                    {{ relationship[Uris.QA_START_DATE] }}
-                                    <span ng-show="relationship[Uris.QA_START_DATE] && relationship[Uris.QA_END_DATE]"> - </span>
-                                    {{ relationship[Uris.QA_END_DATE] }}
-                                </li>
-                            </ul>
-                            <!-- /Relationship List -->
-
                         </div>
+                        <!-- end of relationships -->
                     </div>
-                    <!-- end of relationships -->
                 </div>
+
             </div>
 
         </div>
-
     </div>
 </div>

@@ -1,15 +1,24 @@
 <div class="content">
-    <div class="page-header">
+    <div class="page-header has-subnav">
         <div class="container">
             <h1>Sign In</h1>
         </div>
     </div>
 
-    <section>
+    <!-- info -->
+    <div class="alert alert-info" style="margin-bottom: 8px">
+        <div class="container">
+            <i class="fa fa-info-circle"></i> Log in with your existing account.
+        </div>
+    </div>
+    <!-- /info -->
+
+
+    <div class="l-frame">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4">
-                    <form role="form" ng-submit="login(credentials)">
+                <div class="col-md-7">
+                    <form role="form" ng-submit="login(credentials)" style="border-right: 1px solid #ccc; padding-right: 30px;">
                         <div class="form-group">
                             <label for="email">Email Address</label>
                             <input name="email" type="text"  class="form-control" id="email" placeholder="Email address" ng-model="credentials.username">
@@ -21,8 +30,16 @@
                         <button type="submit" class="btn btn-primary">Sign In</button>
                     </form>
                 </div>
+                <div class="col-md-4">
+                    <div>
+                        <h5>Don't have an account?</h5>
+                        <p>Join the Digital Archive of Queensland Architecture today.</p>
+                        <button class="btn btn-primary" ui-sref="register">Join</button>    
+                    </div>
+                    
+                </div>
             </div>
         </div>
-    </section>
+    </div>
 
 </div>

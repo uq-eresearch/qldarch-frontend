@@ -13,6 +13,13 @@
             <p ng-show="structure.locations.length">{{ structure.locations[0] }} </p>
             <p ng-hide="structure.locations.length">No location.</p>
 
+            <h5>Completion Date</h5>
+            <p ng-show="structure[Uris.DCT_CREATED].length">{{ structure[Uris.DCT_CREATED] }}</p>
+            <p ng-hide="structure[Uris.DCT_CREATED].length">No completion date.</p>
+
+            <h5>Demolished</h5>
+            <p>{{ structure[Uris.QA_DEMOLISHED] && 'Yes' || 'No' }}</p>
+
             <h5>Typology</h5>
             <ul>
                 <li ng-repeat="buildingTypology in structure.buildingTypologies">
@@ -75,6 +82,15 @@
                     <div ui-select2="typologySelect" ng-model="structure.$typology" class="form-control"></div>
                 </div>
                 <div class="form-group">
+                    <label>Completion Date</label>
+                    <input type="text" ng-model="structure[Uris.DCT_CREATED]" class="form-control" placeholder="Completion date of project" /> 
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-model="structure[Uris.QA_DEMOLISHED]"> Demolished
+                    </label>
+                </div>
+                <div class="form-group">
                     <label>Summary</label>
                     <textarea rows="10" id="summary" class="form-control" placeholder="Summary" ng-model="structure[Uris.QA_SUMMARY]"></textarea>
                 </div>
@@ -93,6 +109,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="checkbox">
                     <label>
                         <input type="checkbox" ng-model="structure[Uris.QA_AUSTRALIAN]"> Australian Project

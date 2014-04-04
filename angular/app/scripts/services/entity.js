@@ -94,6 +94,11 @@ angular.module('angularApp')
                 });
             },
 
+            delete: function (uri) {
+                var url = '/ws/rest/entity/description?ID=' + encodeURIComponent(uri);
+                return $http.delete(url);
+            },
+
             create: function (data, rdfTypeUri) {
                 var payload = angular.copy(data);
                 // Remove any extra information
@@ -145,7 +150,7 @@ angular.module('angularApp')
 
                     var results = [];
                     angular.forEach(nonDigitalThings, function (thing) {
-                        if (thing.type && thing.name.toLowerCase().indexOf(name.toLowerCase()) !== -1) {
+                        if (thing.type && thing.name && thing.name.toLowerCase().indexOf(name.toLowerCase()) !== -1) {
                             results.push(thing);
                         }
                     });

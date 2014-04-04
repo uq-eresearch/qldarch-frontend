@@ -83,16 +83,17 @@ angular.module('angularApp')
 
         $scope.publish = function (expression) {
             // Setup depicts
-            expression[Uris.QA_DEPICTS_BUILDING] = expression.$depicts.uri;
+            expression[Uris.QA_DEPICTS_BUILDING] = $scope.selectedProject.uri;
+            expression.$depicts = $scope.selectedProject;
             var params = {};
-            params[expression.$depicts.type + 'Id'] = expression.$depicts.encodedUri;
+            params.structureId = $scope.selectedProject.encodedUri;
             var uploadType;
             if (expression[Uris.RDF_TYPE] === Uris.QA_LINEDRAWING_TYPE) {
                 uploadType = 'lineDrawings';
             } else {
                 uploadType = 'photographs';
             }
-            expression.$depictsLink = $state.href(expression.$depicts.type + '.' + uploadType, params);
+            expression.$depictsLink = $state.href('structure' + '.' + uploadType, params);
 
             // Post it
             $http.post(Uris.JSON_ROOT + 'expression/description', expression).then(function (response) {
@@ -107,7 +108,14 @@ angular.module('angularApp')
             Select2 Boxes
         =====================================================
          */
-        // Setup the entity select boxes
+        $scope.$watch('selectedProject', function (project) {
+            if (project && project.id === 'new') {
+                $state.go('structure.summary.edit', {
+                    structureId: null
+                });
+            }
+        });
+
         // Setup the entity select boxes
         $scope.structureSelect = {
             placeholder: 'Select a Project',
@@ -117,7 +125,10 @@ angular.module('angularApp')
             query: function (options) {
                 Structure.findByName(options.term, false).then(function (entities) {
                     var data = {
-                        results: []
+                        results: [{
+                            id: 'new',
+                            text: 'Create a new Project'
+                        }]
                     };
 
                     angular.forEach(entities, function (entity) {
@@ -128,7 +139,7 @@ angular.module('angularApp')
                             label = entity.name + ' (Project)';
                         }
 
-                        data.results.push({
+                        data.results.unshift({
                             id: entity.uri,
                             uri: entity.uri,
                             text: label,

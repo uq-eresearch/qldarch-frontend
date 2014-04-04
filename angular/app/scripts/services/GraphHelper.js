@@ -73,6 +73,11 @@ angular.module('angularApp')
             // Setup the types
             angular.forEach(array, function (item) {
 
+                // Set a default
+                item.type = 'other';
+
+                // Now overwrite it if we can
+
                 // List of types we are matching
                 // Just entity types at the moment + the photograph type
                 var typeUris = [
@@ -93,6 +98,11 @@ angular.module('angularApp')
                         item.type = typeUri.substring(Uris.QA_NS.length).toLowerCase();
                     }
                 });
+
+                item.$state = item.type;
+                var params = {};
+                params[item.type + 'Id'] = item.encodedUri;
+                item.$stateParams = params;
             });
         };
 

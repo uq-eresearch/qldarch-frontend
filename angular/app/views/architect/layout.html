@@ -2,7 +2,10 @@
 	<div class="page-header has-subnav">
 	    <div class="container">
 	        <small ng-show="architect.uri"><a ng-href="#/architects">Architects »</a></small>
-	        <h1>{{ architect.name || 'New Architect' }}</h1>
+	        <h1>
+	        	<img ng-show="architect.uri" ng-src="{{ architect.picture.thumb }}" alt="" style="height: 40px; width: 40px; position: relative; top: -4px; margin-right: 1px; border: 3px solid white;" class="img-circle"> 
+	        	{{ architect.name || 'New Architect' }}
+	        </h1>
 	    </div>
 	</div>
 
@@ -10,6 +13,8 @@
 	    <div class="container">
 	        <div class="row">
 	            <div class="col-md-12">
+	            	<button class="btn btn-default pull-right" ng-click="delete(architect)" ng-show="Auth.role === 'root'"><i class="fa fa-trash-o"></i> Delete</button>
+
 	                <ul class="nav nav-pills">
 	                    <li ng-class="{'active': $state.includes('architect.summary')}">
 	                    	<a href ui-sref="architect.summary({ architectId: architect.encodedUri })">Summary</a>

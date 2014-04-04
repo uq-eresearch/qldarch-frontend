@@ -10,6 +10,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
+                    <button class="btn btn-default pull-right" ng-click="delete(firm)" ng-show="Auth.role === 'root'"><i class="fa fa-trash-o"></i> Delete</button>
+
                     <ul class="nav nav-pills">
                         <li ng-class="{'active': $state.includes('firm.summary')}">
                             <a href ui-sref="firm.summary({ firmId: firm.encodedUri })">Summary</a>
