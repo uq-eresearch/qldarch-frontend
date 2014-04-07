@@ -1,9 +1,22 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('MapViewerCtrl', function ($scope, compoundObject) {
+    .controller('MapViewerCtrl', function ($scope, compoundObject, CompoundObject, $state, Auth) {
         $scope.compoundObject = compoundObject.jsonData;
         $scope.map = compoundObject.jsonData.data;
+
+        $scope.isEditable = Auth.auth && ($scope.compoundObject.user.user === Auth.user || Auth.role === 'editor' || Auth.role === 'root');
+        $scope.isDeletable = Auth.auth && ($scope.compoundObject.user.user === Auth.user || Auth.role === 'root');
+
+        $scope.delete = function () {
+            var r = window.confirm('Delete this map?');
+            if (r === true) {
+                CompoundObject.delete(compoundObject.uri).then(function (data) {
+                    console.log('data is', data);
+                    $state.go('main');
+                });
+            }
+        };
 
         // Setup the map
         $scope.mapOptions = {

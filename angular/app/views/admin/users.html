@@ -14,11 +14,11 @@
 				<td><strong>{{ user.email }}</strong> ({{ user.username }})</td>	
 				<td>
 					<select ng-model="user.role" ng-hide="user.role == 'root'" ng-change="user.$isChanged = true">
-						<option value="editor">Editor</option>
-						<option value="authorized">Authorized</option>
+						<option value="editor">Editor - Build, Add, Upload</option>
+						<option value="authorized">Registered - Build</option>
 						<option value="disabled">Disabled</option>
 					</select>
-					<span ng-show="user.role == 'root'">Administrator</span>
+					<span ng-show="user.role == 'root'">Admin - Build, Add, Upload, Delete</span>
 					<span ng-hide="Auth.user == user.username || user.role == 'root'">
 						<button class="btn btn-primary btn-xs" ng-click="!user.$isSaving && saveUser(user)" ng-show="user.$isChanged">
 							<i class="fa fa-save"></i> 

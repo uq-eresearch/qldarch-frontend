@@ -21,8 +21,7 @@
 
         </div>
         <div class="col-sm-5">
-            <img ng-if="firm.picture" class="img-responsive" ng-src="{{ Uris.FILE_ROOT + firm.picture[Uris.QA_SYSTEM_LOCATION] }}" alt=""/>
-            <img ng-if="!firm.picture" ng-src="images/icon.png" style="display:block; width:100%">
+            <img ng-if="firm.picture" class="img-responsive" ng-src="{{ firm.picture.file }}" alt=""/>
         </div>
     </div>
     <div class="row" ng-show="$state.includes('firm.summary.edit')">

@@ -504,9 +504,12 @@ angular.module('angularApp', [
                         $scope.architect = architect;
                         $scope.interviews = interviews;
                         $scope.delete = function (architect) {
-                            Entity.delete(architect.uri).then(function () {
-                                $state.go('architects.queensland');
-                            });
+                            var r = window.confirm('Delete architect ' + architect.name + '?');
+                            if (r === true) {
+                                Entity.delete(architect.uri).then(function () {
+                                    $state.go('architects.queensland');
+                                });
+                            }
                         };
                     }
                 ]
@@ -758,9 +761,12 @@ angular.module('angularApp', [
                     function ($scope, firm, Entity, $state) {
                         $scope.firm = firm;
                         $scope.delete = function (firm) {
-                            Entity.delete(firm.uri).then(function () {
-                                $state.go('firms.australian');
-                            });
+                            var r = window.confirm('Delete firm ' + firm.name + '?');
+                            if (r === true) {
+                                Entity.delete(firm.uri).then(function () {
+                                    $state.go('firms.australian');
+                                });
+                            }
                         };
                     }
                 ]
@@ -964,10 +970,13 @@ angular.module('angularApp', [
                 controller: ['$scope', 'structure', 'Entity', '$state',
                     function ($scope, structure, Entity, $state) {
                         $scope.structure = structure;
-                        $scope.delete = function (firm) {
-                            Entity.delete(firm.uri).then(function () {
-                                $state.go('structures.australian');
-                            });
+                        $scope.delete = function (structure) {
+                            var r = window.confirm('Delete project ' + structure.name + '?');
+                            if (r === true) {
+                                Entity.delete(structure.uri).then(function () {
+                                    $state.go('structures.australian');
+                                });
+                            }
                         };
                     }
                 ]

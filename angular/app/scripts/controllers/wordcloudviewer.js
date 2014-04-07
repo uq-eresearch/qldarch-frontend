@@ -1,10 +1,22 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('WordCloudViewerCtrl', function ($scope, compoundObject) {
+    .controller('WordCloudViewerCtrl', function ($scope, compoundObject, Auth, CompoundObject, $state) {
         $scope.compoundObject = compoundObject.jsonData;
         $scope.wordcloud = compoundObject.jsonData.data;
 
+
+        $scope.isEditable = Auth.auth && ($scope.compoundObject.user.user === Auth.user || Auth.role === 'editor' || Auth.role === 'root');
+        $scope.isDeletable = Auth.auth && ($scope.compoundObject.user.user === Auth.user || Auth.role === 'root');
+
+        $scope.delete = function () {
+            var r = window.confirm('Delete this word cloud?');
+            if (r === true) {
+                CompoundObject.delete(compoundObject.uri).then(function () {
+                    $state.go('main');
+                });
+            }
+        };
 
         /*
         =====================================================

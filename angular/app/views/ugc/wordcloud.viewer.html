@@ -1,3 +1,17 @@
+<div class="l-frame l-frame-highlight l-frame-tighter" ng-show="!$state.includes('ugc.map.edit') && (isEditable || isDeletable)">
+	<div class="container">
+		<!-- Edit -->
+		<button class="btn btn-default" ui-sref="ugc.map.edit" ng-show="isEditable">
+			<i class="fa fa-pencil"></i> Edit
+		</button>
+		<!-- /Edit -->
+		<!-- Delete -->
+		<button class="btn btn-default" ng-click="delete()" ng-show="isDeletable">
+			<i class="fa fa-trash-o"></i> Delete
+		</button>
+		<!-- /Delete -->
+	</div>
+</div>
 <div class="l-frame l-frame-media" ng-show="wordcloud.documents.length">
 	<div class="container">
 

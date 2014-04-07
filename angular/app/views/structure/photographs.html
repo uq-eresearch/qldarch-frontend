@@ -1,4 +1,4 @@
-<div class="l-frame l-frame-tighter l-frame-highlight">
+<div class="l-frame l-frame-tighter l-frame-highlight" ng-show="Auth.role === 'editor' || Auth.role === 'root'">
     <div class="container">
         <button class="btn btn-default" ui-sref="upload({uri: structure.uri, name: structure.name })">Upload Image</button>
     </div>

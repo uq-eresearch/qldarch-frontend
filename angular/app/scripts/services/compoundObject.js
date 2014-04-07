@@ -62,7 +62,10 @@ angular.module('angularApp')
             },
 
             delete: function (uri) {
-                throw ('Delete is not implemented ' + uri);
+                return $http.delete(Uris.JSON_ROOT + 'compoundObject?ID=' + encodeURIComponent(uri)).then(function (response) {
+                    return response.data;
+                });
+
             }
         };
     });
