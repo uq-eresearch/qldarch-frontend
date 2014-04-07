@@ -82,7 +82,7 @@
                     <li class="list-group-item" ng-repeat="relationship in selectedRelationships">
                         <!--<i class="fa fa-bars"> </i>-->
                         <!-- ({interviewId: relationship.evidence.encodedDocumentedBy, time: relationship.evidence[Uris.QA_TIME_FROM]} -->
-                        <h5 style="line-height: 24px;">
+                        <h5 style="line-height: 24px; font-weight: normal; margin-bottom: 0;">
                             <a ui-sref="interview({interviewId: relationship.evidence.encodedDocumentedBy, time: relationship.evidence[Uris.QA_TIME_FROM] })" >
                                 {{ relationship.subject.name }}
                                 <em>{{ relationship.predicate.name || relationship.predicate[Uris.QA_LABEL] }}</em> 

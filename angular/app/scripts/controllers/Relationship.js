@@ -52,11 +52,14 @@ angular.module('angularApp')
         $scope.nodeSelected = function (node) {
             $scope.selected = node;
             $scope.selectedRelationships = [];
-            angular.forEach(data.relationships, function (relationship) {
-                if ((angular.isDefined(relationship.subject) && (relationship.subject.uri === node.uri)) ||
-                    (angular.isDefined(relationship.object) && (relationship.object.uri === node.uri))) {
-                    $scope.selectedRelationships.push(relationship);
-                }
-            });
+            if (node) {
+                angular.forEach(data.relationships, function (relationship) {
+                    if ((angular.isDefined(relationship.subject) && (relationship.subject.uri === node.uri)) ||
+                        (angular.isDefined(relationship.object) && (relationship.object.uri === node.uri))) {
+                        $scope.selectedRelationships.push(relationship);
+                    }
+                });
+            }
+
         };
     });

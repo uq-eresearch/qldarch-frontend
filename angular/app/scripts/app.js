@@ -74,10 +74,20 @@ angular.module('angularApp', [
          */
         $rootScope.globalSearch = function (val) {
             return Entity.findByName(val, false).then(function (entities) {
-                var results = GraphHelper.graphValues(entities).slice(0, 5);
+                var results = GraphHelper.graphValues(entities);
                 results = $filter('orderBy')(results, function (result) {
                     return result.name.length;
                 });
+                results = results.slice(0, 10);
+
+                angular.forEach(results, function (result) {
+                    var label = result.name + ' (' + result.type.charAt(0).toUpperCase() + result.type.slice(1) + ')';
+                    if (result.type === 'structure') {
+                        label = result.name + ' (Project)';
+                    }
+                    result.name = label;
+                });
+
 
                 var search = {
                     name: ' <i class="fa fa-search"></i> Search for \'' + val + '\'',

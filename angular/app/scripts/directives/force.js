@@ -99,7 +99,24 @@ angular.module('angularApp')
                     newNodesElements.attr('class', function (d) {
                         var classes = 'node ' + 'node-' + d.type;
                         return classes;
+                        // })
+                        // .on('mouseover', function (d) {
+                        //     // d3.selectAll('.node').classed('selected', false);
+                        //     // d3.select(this).classed('selected', true);
+                        //     $scope.$apply(function () {
+                        //         $scope.selected({
+                        //             node: d
+                        //         });
+                        //     });
+                        // }).on('mouseout', function (d) {
+                        //     // d3.selectAll('.node').classed('selected', false);
+                        //     $scope.$apply(function () {
+                        //         $scope.selected({
+                        //             node: null
+                        //         });
+                        //     });
                     }).on('click', function (d) {
+                        console.log('selected', d.$selected);
                         d3.selectAll('.node').classed('selected', false);
                         d3.select(this).classed('selected', true);
                         $scope.$apply(function () {
