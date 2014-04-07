@@ -1,17 +1,25 @@
-<div class="container">
-    <div class="row" ng-repeat="photographRow in photographRows">
-        <div class="col-sm-2" ng-repeat="photograph in photographRow">
-            <div class="thumbnail" >
-                <a href ui-sref="structure.photograph({structureId: structure.encodedUri, photographId: photograph.encodedUri})" class="thumbnail-image">
-                    <img class="img-responsive" ng-src="{{ photograph.file.thumb }}" alt=""/>
-                </a>
+<div class="l-frame l-frame-tighter l-frame-highlight">
+    <div class="container">
+        <button class="btn btn-default" ui-sref="upload({uri: structure.uri, name: structure.name })">Upload Image</button>
+    </div>
+</div>
+<div class="l-frame l-frame-tight">
+    <div class="container">
+        <p class="text-muted" ng-hide="photographRows.length">No photographs</p>
+        <div class="row" ng-repeat="photographRow in photographRows">
+            <div class="col-sm-2" ng-repeat="photograph in photographRow">
+                <div class="thumbnail" >
+                    <a href ui-sref="structure.photograph({structureId: structure.encodedUri, photographId: photograph.encodedUri})" class="thumbnail-image">
+                        <img class="img-responsive" ng-src="{{ photograph.file.thumb }}" alt=""/>
+                    </a>
 
-                <div class="caption">
-                    <h4>
-                        <a href ui-sref="structure.photograph({structureId: structure.encodedUri, photographId: photograph.encodedUri})">
-                            {{ photograph[Uris.DCT_TITLE] }}
-                        </a>
-                    </h4>
+                    <div class="caption">
+                        <h4>
+                            <a href ui-sref="structure.photograph({structureId: structure.encodedUri, photographId: photograph.encodedUri})">
+                                {{ photograph[Uris.DCT_TITLE] }}
+                            </a>
+                        </h4>
+                    </div>
                 </div>
             </div>
         </div>

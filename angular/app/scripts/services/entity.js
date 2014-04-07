@@ -9,7 +9,7 @@ angular.module('angularApp')
             if (entity[Uris.FOAF_FIRST_NAME] || entity[Uris.FOAF_LAST_NAME]) {
                 var personName = entity[Uris.FOAF_FIRST_NAME] + ' ' + entity[Uris.FOAF_LAST_NAME];
                 if (entity[Uris.QA_PREF_LABEL]) {
-                    // personName += ' (' + entity[Uris.QA_PREF_LABEL] + ')';
+                    personName += ' (' + entity[Uris.QA_PREF_LABEL] + ')';
                 }
                 return personName;
             } else {

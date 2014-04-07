@@ -82,6 +82,8 @@ angular.module('angularApp')
         function highlight(text, terms) {
             // Highlight the terms
             angular.forEach(terms, function (term) {
+                // Remove any weird characters from the term
+                term = term.replace(/[^\w\s]/gi, '');
                 var patt = new RegExp(term, 'gi');
                 text = text.replace(patt, function (match) {
                     return '<span class="highlight">' + match + '</span>';

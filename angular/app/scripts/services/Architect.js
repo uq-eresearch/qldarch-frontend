@@ -6,7 +6,6 @@ angular.module('angularApp')
         // ...
 
         var that = this;
-        var meaningOfLife = 42;
 
         // Public API here
         return {

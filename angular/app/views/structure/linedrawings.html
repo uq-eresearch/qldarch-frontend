@@ -1,18 +1,26 @@
-<div class="container">
-    <div class="row" ng-repeat="lineDrawingRow in lineDrawingRows">
-        <div class="col-sm-2" ng-repeat="lineDrawing in lineDrawingRow">
-            <div class="thumbnail" >
-                <a href ui-sref="structure.lineDrawing({structureId: structure.encodedUri, lineDrawingId: lineDrawing.encodedUri})">
-                    <img ng-if="lineDrawing.file" class="img-responsive" ng-src="{{ Uris.FILE_ROOT + lineDrawing.file[Uris.QA_SYSTEM_LOCATION] }}" alt=""/>
-                    <img ng-if="!lineDrawing.file" ng-src="images/icon.png" style="display:block; width:100%">
-                </a>
+<div class="l-frame l-frame-tighter l-frame-highlight">
+    <div class="container">
+        <button class="btn btn-default" ui-sref="upload({uri: structure.uri, name: structure.name })">Upload Image</button>
+    </div>
+</div>
+<div class="l-frame l-frame-tight">
+    <div class="container">
+        <p class="text-muted" ng-hide="lineDrawingRows.length">No line drawings.</p>
+        <div class="row" ng-repeat="lineDrawingRow in lineDrawingRows">
+            <div class="col-sm-2" ng-repeat="lineDrawing in lineDrawingRow">
+                <div class="thumbnail" >
+                    <a href ui-sref="structure.lineDrawing({structureId: structure.encodedUri, lineDrawingId: lineDrawing.encodedUri})">
+                        <img ng-if="lineDrawing.file" class="img-responsive" ng-src="{{ Uris.FILE_ROOT + lineDrawing.file[Uris.QA_SYSTEM_LOCATION] }}" alt=""/>
+                        <img ng-if="!lineDrawing.file" ng-src="images/icon.png" style="display:block; width:100%">
+                    </a>
 
-                <div class="caption">
-                    <h4>
-                        <a href ui-sref="structure.lineDrawing({structureId: structure.encodedUri, lineDrawingId: lineDrawing.encodedUri})">
-                            {{ lineDrawing[Uris.DCT_TITLE] }}
-                        </a>
-                    </h4>
+                    <div class="caption">
+                        <h4>
+                            <a href ui-sref="structure.lineDrawing({structureId: structure.encodedUri, lineDrawingId: lineDrawing.encodedUri})">
+                                {{ lineDrawing[Uris.DCT_TITLE] }}
+                            </a>
+                        </h4>
+                    </div>
                 </div>
             </div>
         </div>

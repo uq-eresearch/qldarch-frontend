@@ -9,7 +9,7 @@
     .node circle {
         fill: #ccc;
         stroke: #fff;
-        stroke-width: 1.5px;
+        stroke-width: 5px;
     }
 
     .node rect {
@@ -45,15 +45,20 @@
 
 <!-- visualisation -->
 <div>
-    <div class="l-frame l-frame-highlight">
+    <div class="l-frame l-frame-tight">
+        <div class="container">
+            <p class="text-muted" ng-hide="data.nodes.length">No relationships.</p>
+        </div>    
+    </div>
+    
+    <div class="l-frame l-frame-highlight" ng-show="data.nodes.length">
         <div class="container" style="position: relative;">
-            
             <div>
                 <force data="data" selected="nodeSelected(node)"></force>             
             </div>
 
             <div class="panel panel-default" style="width: 300px; position: absolute; top: 0; bottom: 0; right: 0; overflow: scroll;" ng-show="selected">
-                <div class="panel-heading" style="padding: 24px 16px;">
+                <div class="panel-heading" style="padding: 16px 16px;">
                     <i class="fa fa-times pull-right" ng-click="selected = null"></i>
                     <div class="media" style="margin-top: 0">
                         <div class="pull-left">
@@ -108,16 +113,4 @@
             <span class="text-muted">Filters</span>    
         </div>
     </div> -->
-</div>
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-default" style="margin-bottom: 0px;">
-                <div class="panel-body">
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-    
 </div>

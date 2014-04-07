@@ -235,7 +235,7 @@ angular.module('angularApp', [
                 controller: 'UserContentCtrl'
             })
             .state('upload', {
-                url: '/upload',
+                url: '/upload?uri&name',
                 templateUrl: 'views/files/photograph.html',
                 controller: 'FilePhotographCtrl'
             })
@@ -378,12 +378,19 @@ angular.module('angularApp', [
                 resolve: {
                     other: ['Entity', '$stateParams', 'GraphHelper',
                         function (Entity, $stateParams, GraphHelper) {
+                            console.log('loading other');
+                            if (!$stateParams.otherId) {
+                                console.log('no other id');
+                                return {};
+                            }
+                            console.log('getting uri');
                             var uri = GraphHelper.decodeUriString($stateParams.otherId);
+                            console.log('got to here');
                             return Entity.load(uri, false);
                         }
                     ]
                 },
-                controller: ['$scope', 'other', 'Uris',
+                controller: ['$scope', 'other',
                     function ($scope, other) {
                         $scope.other = other;
                     }
@@ -391,7 +398,19 @@ angular.module('angularApp', [
             })
             .state('other.summary', {
                 url: '/summary',
-                templateUrl: 'views/other/summary.html'
+                templateUrl: 'views/other/summary.html',
+                resolve: {
+                    types: ['Ontology',
+                        function (Ontology) {
+                            console.log('loading summary');
+                            return Ontology.loadAllEditableEntityTypes();
+                        }
+                    ]
+                },
+                controller: 'OtherCtrl'
+            })
+            .state('other.summary.edit', {
+                url: '/edit'
             })
             .state('other.relationships', {
                 url: '/relationships',

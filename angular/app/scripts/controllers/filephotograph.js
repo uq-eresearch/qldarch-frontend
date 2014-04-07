@@ -1,13 +1,23 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('FilePhotographCtrl', function ($scope, $upload, Uris, $http, Structure, File, $state) {
+    .controller('FilePhotographCtrl', function ($scope, $upload, Uris, $http, Structure, File, $state, $stateParams) {
 
         $scope.expressions = [];
 
         var tempExpression = {};
         tempExpression[Uris.DCT_TITLE] = 'file name';
         tempExpression[Uris.RDF_TYPE] = 'http://qldarch.net/ns/rdf/2012-06/terms#Photograph';
+
+        if ($stateParams.uri && $stateParams.name) {
+            $scope.selectedProject = {
+                id: $stateParams.uri,
+                uri: $stateParams.uri,
+                text: $stateParams.name,
+                name: $stateParams.name,
+                encodedUri: btoa($stateParams.uri)
+            };
+        }
 
         // tempExpression[Uris.QA_DEPICTS_BUILDING] = 'http://qldarch.net/users/cking/Structure#61816694616';
         // $scope.expressions.push(tempExpression);

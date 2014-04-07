@@ -29,7 +29,7 @@ module.exports = function (grunt) {
                     password: '<%= secret.password %>',
                     port: 6666,
                     showProgress: true,
-                    // createDirectories: false
+                    createDirectories: false
                 }
             }
         },

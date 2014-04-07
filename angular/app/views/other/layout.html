@@ -2,8 +2,8 @@
 	<div class="page-header has-subnav">
 	    <div class="container">
 	        <h1>
-	        	<img ng-src="{{ other.picture.thumb }}" alt="" style="height: 40px; width: 40px; position: relative; top: -4px; margin-right: 1px; border: 3px solid white;" class="img-circle">
-	        	{{ other.name }}
+	        	<img ng-src="{{ other.picture.thumb }}" alt="" style="height: 40px; width: 40px; position: relative; top: -4px; margin-right: 1px; border: 3px solid white;" class="img-circle" ng-show="other.uri">
+	        	{{ other.name || 'New Entity' }}
 	        </h1>
 	    </div>
 	</div>

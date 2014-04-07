@@ -1,11 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .factory('Ontology', function (Uris, Request) {
-        // Service logic
-        // ...
-
-        var meaningOfLife = 42;
+    .factory('Ontology', function (Uris, Request, $filter, GraphHelper) {
 
         var ontology = {
             /**
@@ -26,17 +22,32 @@ angular.module('angularApp')
             findPropertyByName: function (name) {
                 return ontology.loadAllProperties().then(function (properties) {
                     var results = [];
-                    angular.forEach(properties, function (property, uri) {
+                    angular.forEach(properties, function (property) {
                         if (angular.isDefined(property[Uris.QA_ENTAILS_RELATIONSHIP])) {
                             // its a relationship
-                            if (property[Uris.RDFS_LABEL].toLowerCase().indexOf(name.toLowerCase()) != -1) {
+                            if (property[Uris.RDFS_LABEL].toLowerCase().indexOf(name.toLowerCase()) !== -1) {
                                 results.push(property);
                                 property.name = property[Uris.RDFS_LABEL];
                             }
                         }
                     });
                     return results;
-                })
+                });
+            },
+            /**
+             * Gets back all the entities that the user can set an entity to be
+             * e.g. structure, academic, architect, etc
+             * @return {[type]} [description]
+             */
+            loadAllEditableEntityTypes: function () {
+                console.log('got to there?!!!');
+                return Request.http(Uris.JSON_ROOT + 'ontology/entities/qldarch:Entity', {
+                    'INCSUBCLASS': true
+                }, true).then(function (entities) {
+                    return $filter('filter')(GraphHelper.graphValues(entities), function (entity) {
+                        return entity['http://qldarch.net/ns/rdf/2012-06/terms#editable'] === true;
+                    });
+                });
             }
         };
 

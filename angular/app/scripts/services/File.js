@@ -19,7 +19,6 @@ angular.module('angularApp')
 
                 file.file = fileRoot + file[Uris.QA_SYSTEM_LOCATION];
                 file.thumb = thumbRoot + file[Uris.QA_SYSTEM_LOCATION];
-                console.log('setting up file', file.thumb);
             });
             return files;
         }

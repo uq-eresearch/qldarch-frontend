@@ -1,123 +1,123 @@
-<div class="container">
-    <div class="row" ng-hide="$state.includes('structure.summary.edit')">
-        <div class="col-sm-7">
-            <span ng-show="Auth.auth">
-                <button class="btn btn-default btn-xs pull-right" ui-sref="structure.summary.edit({ structureId: structure.encodedUri })"><i class="fa fa-pencil"></i> Edit</button>    
-            </span>
+<div class="l-frame l-frame-tight">
+    <div class="container">
+        <div class="row" ng-hide="$state.includes('structure.summary.edit')">
+            <div class="col-sm-7">
+                <span ng-show="Auth.auth">
+                    <button class="btn btn-default btn-xs pull-right" ui-sref="structure.summary.edit({ structureId: structure.encodedUri })"><i class="fa fa-pencil"></i> Edit</button>    
+                </span>
 
-            <h5>Summary</h5>
-            <p>{{ structure[Uris.QA_SUMMARY] }}</p>
-            <p ng-show="!structure[Uris.QA_SUMMARY].length">No summary.</p>
+                <h5>Summary</h5>
+                <p>{{ structure[Uris.QA_SUMMARY] }}</p>
+                <p ng-show="!structure[Uris.QA_SUMMARY].length">No summary.</p>
 
-            <h5>Location</h5>
-            <p ng-show="structure.locations.length">{{ structure.locations[0] }} </p>
-            <p ng-hide="structure.locations.length">No location.</p>
+                <h5>Location</h5>
+                <p ng-show="structure.locations.length">{{ structure.locations[0] }} </p>
+                <p ng-hide="structure.locations.length">No location.</p>
 
-            <h5>Completion Date</h5>
-            <p ng-show="structure[Uris.DCT_CREATED].length">{{ structure[Uris.DCT_CREATED] }}</p>
-            <p ng-hide="structure[Uris.DCT_CREATED].length">No completion date.</p>
+                <h5>Completion Date</h5>
+                <p ng-show="structure[Uris.DCT_CREATED].length">{{ structure[Uris.DCT_CREATED] }}</p>
+                <p ng-hide="structure[Uris.DCT_CREATED].length">No completion date.</p>
 
-            <h5>Demolished</h5>
-            <p>{{ structure[Uris.QA_DEMOLISHED] && 'Yes' || 'No' }}</p>
+                <h5>Demolished</h5>
+                <p>{{ structure[Uris.QA_DEMOLISHED] && 'Yes' || 'No' }}</p>
 
-            <h5>Typology</h5>
-            <ul>
-                <li ng-repeat="buildingTypology in structure.buildingTypologies">
-                    <a href="#/building-typology/{{ buildingTypology.encodedUri }}">{{ buildingTypology.name }}</a>
-                </li>
-            </ul>
-            <p ng-show="!structure.buildingTypologies.length">
-                No building typology.
-            </p>
+                <h5>Typology</h5>
+                <ul>
+                    <li ng-repeat="buildingTypology in structure.buildingTypologies">
+                        {{ buildingTypology.name }}
+                    </li>
+                </ul>
+                <p ng-show="!structure.buildingTypologies.length">
+                    No building typology.
+                </p>
 
-            <h5>Associated Firm</h5>
-            <div class="media" style="margin-bottom: 10px;" ng-show="structure.firm">
-                <a class="pull-left" href="#/firm/{{ structure.firm.encodedUri }}">
-                    <img class="media-object img-responsive img-circle" ng-if="!structure.firm.picture" ng-src="images/icon.png" style="display:block; width:32px">
-                    <img class="media-object img-responsive img-circle" ng-if="structure.firm.picture" ng-src="{{ Uris.FILE_ROOT + structure.firm.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ structure.firm.name }}" style="width:32px; height: 32px;">
-                </a>
-                <div class="media-body">
-                    <a ng-href="#/firm/{{ structure.firm.encodedUri }}">
-                        {{ structure.firm.name }}
-                    </a>
-                </div>
-            </div>
-            <p ng-show="!structure.firm">
-                No associated firm.
-            </p>
-
-            <h5>Architects</h5>
-            <div ng-show="!designers.length">
-                No associated architects.
-            </div>
-
-            <ul class="media-list">
-                <li class="media" ng-repeat="designer in designers">
-                    <a class="pull-left" href="#/{{ designer.type }}/{{ designer.encodedUri }}">
-                        <img class="media-object img-responsive img-circle" ng-if="!designer.picture" ng-src="images/icon.png" style="display:block; width:32px">
-                        <img class="media-object img-responsive img-circle" ng-if="designer.picture" ng-src="{{ Uris.FILE_ROOT + designer.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ designer.name }}" style="width:32px">
+                <h5>Associated Firm</h5>
+                <div class="media" style="margin-bottom: 10px;" ng-show="structure.firm">
+                    <a class="pull-left" ng-href="{{ $state.href(designer.$state + '.summary', designer.$stateParams) }}">
+                        <img class="media-object img-responsive img-circle" ng-src="{{ structure.firm.picture.file }}" alt="{{ structure.firm.name }}" style="width:32px; height: 32px;">
                     </a>
                     <div class="media-body">
-                        <a ng-href="#/{{ designer.type }}/{{ designer.encodedUri }}">
-                            {{ designer.name }}
+                        <a ng-href="{{ $state.href(designer.$state + '.summary', designer.$stateParams) }}">
+                            {{ structure.firm.name }}
                         </a>
                     </div>
-                </li>
-            </ul>
-        </div>
+                </div>
+                <p ng-show="!structure.firm">
+                    No associated firm.
+                </p>
 
-        <div class="col-sm-5">
-            <img ng-if="structure.picture" class="img-responsive" ng-src="{{ structure.picture.file }}" alt=""/>
-        </div>
-    </div>
-    <div class="row" ng-show="$state.includes('structure.summary.edit')">
-        <div class="col-sm-12">
-            <form action="" ng-submit="updateStructure(structure)">
-                <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" class="form-control" ng-model="structure[Uris.QA_LABEL]" placeholder="Project Name">
+                <h5>Architects</h5>
+                <div ng-show="!designers.length">
+                    No associated architects.
                 </div>
-                <div class="form-group">
-                    <label>Building Typology</label>
-                    <div ui-select2="typologySelect" ng-model="structure.$typology" class="form-control"></div>
-                </div>
-                <div class="form-group">
-                    <label>Completion Date</label>
-                    <input type="text" ng-model="structure[Uris.DCT_CREATED]" class="form-control" placeholder="Completion date of project" /> 
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" ng-model="structure[Uris.QA_DEMOLISHED]"> Demolished
-                    </label>
-                </div>
-                <div class="form-group">
-                    <label>Summary</label>
-                    <textarea rows="10" id="summary" class="form-control" placeholder="Summary" ng-model="structure[Uris.QA_SUMMARY]"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="biography">Address</label>
-                    <input type="text" ng-model="structure[Uris.QA_LOCATION]" class="form-control" placeholder="Address of the project"/>
-                </div>
-                <div class="form-group">
-                    <label>Coordinates</label>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <input type="text" placeholder="Latitude" ng-model="structure[Uris.GEO_LAT]" class="form-control">
+
+                <ul class="media-list">
+                    <li class="media" ng-repeat="designer in designers">
+                        <a class="pull-left" ng-href="{{ $state.href(designer.$state + '.summary', designer.$stateParams) }}">
+                            <img class="media-object img-responsive img-circle" ng-src="{{ designer.picture.file }}" style="display:block; width:32px">
+                        </a>
+                        <div class="media-body">
+                            <a ng-href="{{ $state.href(designer.$state + '.summary', designer.$stateParams) }}">
+                                {{ designer.name }}
+                            </a>
                         </div>
-                        <div class="col-md-6">
-                            <input type="text" placeholder="Longitude" ng-model="structure[Uris.GEO_LONG]" class="form-control">
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-sm-5">
+                <img ng-if="structure.picture" class="img-responsive" ng-src="{{ structure.picture.file }}" alt=""/>
+            </div>
+        </div>
+        <div class="row" ng-show="$state.includes('structure.summary.edit')">
+            <div class="col-sm-12">
+                <form action="" ng-submit="updateStructure(structure)">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" ng-model="structure[Uris.QA_LABEL]" placeholder="Project Name">
+                    </div>
+                    <div class="form-group">
+                        <label>Building Typology</label>
+                        <div ui-select2="typologySelect" ng-model="structure.$typology" class="form-control"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Completion Date</label>
+                        <input type="text" ng-model="structure[Uris.DCT_CREATED]" class="form-control" placeholder="Completion date of project" /> 
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" ng-model="structure[Uris.QA_DEMOLISHED]"> Demolished
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>Summary</label>
+                        <textarea rows="10" id="summary" class="form-control" placeholder="Summary" ng-model="structure[Uris.QA_SUMMARY]"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="biography">Address</label>
+                        <input type="text" ng-model="structure[Uris.QA_LOCATION]" class="form-control" placeholder="Address of the project"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Coordinates</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" placeholder="Latitude" ng-model="structure[Uris.GEO_LAT]" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" placeholder="Longitude" ng-model="structure[Uris.GEO_LONG]" class="form-control">
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" ng-model="structure[Uris.QA_AUSTRALIAN]"> Australian Project
-                    </label>
-                </div>
-                <button type="submit" class="btn btn-primary">Save</button>
-                <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
-            </form>
+                    
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" ng-model="structure[Uris.QA_AUSTRALIAN]"> Australian Project
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>

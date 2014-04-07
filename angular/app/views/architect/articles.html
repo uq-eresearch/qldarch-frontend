@@ -22,7 +22,7 @@
                 <!-- Article Details -->
                 <h4>
                     <!-- /Title -->
-                    <a ng-href="{{ article.link }}">
+                    <a ui-sref="article({ articleId: article.encodedUri })">
                         {{ article.title }}
                     </a>
                     <!-- Title -->
