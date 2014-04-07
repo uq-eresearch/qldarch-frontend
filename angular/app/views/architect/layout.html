@@ -17,7 +17,7 @@
 
 	                <ul class="nav nav-pills">
 	                    <li ng-class="{'active': $state.includes('architect.summary')}">
-	                    	<a href ui-sref="architect.summary({ architectId: architect.encodedUri })">Summary</a>
+	                    	<a href ui-sref="architect.summary({ architectId: architect.encodedUri })">Biography</a>
                     	</li>
 						<li ui-sref-active="active" ng-if="interviews.length == 1" ng-show="architect.uri">
 	                    	<a href href ui-sref="architect.interview({ architectId: architect.encodedUri, interviewId: interviews[0].encodedUri })">Interview</a>
