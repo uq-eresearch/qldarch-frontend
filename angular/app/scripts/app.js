@@ -170,6 +170,10 @@ angular.module('angularApp', [
                         function (CompoundObject, $filter) {
                             return CompoundObject.loadAll().then(function (compoundObjects) {
                                 compoundObjects = $filter('orderBy')(compoundObjects, '-jsonData.modified');
+                                compoundObjects = $filter('filter')(compoundObjects, function (compoundObject) {
+                                    return angular.isDefined(compoundObject.jsonData.type);
+                                });
+                                console.log('compoundObjects', compoundObjects);
                                 return compoundObjects;
                             });
                         }
