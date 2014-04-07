@@ -24,6 +24,7 @@ angular.module('angularApp')
     $scope.audioPlayer = {};
 
 
+
     // Look for our external locations
     angular.forEach(GraphHelper.asArray(interview[Uris.QA_EXTERNAL_LOCATION]), function (extLocation) {
         if (extLocation.indexOf('you') === -1) {
@@ -35,6 +36,9 @@ angular.module('angularApp')
                 src: extLocation.substring(0, extLocation.length - 3) + 'mp3',
                 type: 'audio/mp3'
             }];
+            $scope.download = {
+                mp3: extLocation.substring(0, extLocation.length - 3) + 'mp3'
+            };
         } else {
             // Deal with youtube here
         }

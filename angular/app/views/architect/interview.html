@@ -110,8 +110,8 @@
                                 <i class="fa fa-cloud-download"></i> Download <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href>Transcript</a></li>
-                                <li><a href>Audio</a></li>
+                                <!-- <li><a ng-href="{{ }}">Transcript</a></li> -->
+                                <li><a ng-href="{{ download.mp3 }}" target="_blank">Audio</a></li>
                             </ul>
                         </div>
 
@@ -169,7 +169,7 @@
                         <!-- relationships -->
                         <div class="col-sm-6">
                             <div class="panel panel-default" ng-hide="(isSearching || !Auth.auth ) && !exchange.relationships.length">
-                                <div class="panel-heading" ng-if="Auth.auth && !isSearching">
+                                <div class="panel-heading" ng-if="(Auth.role === 'editor' || Auth.role === 'root') && Auth.auth && !isSearching">
 
                                     <!-- Control buttons -->
                                     <span ng-hide="exchange.isAddingRelationship || exchange.isEditingRelationships">

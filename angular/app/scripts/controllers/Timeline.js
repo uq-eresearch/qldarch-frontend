@@ -22,7 +22,7 @@ angular.module('angularApp')
 
             if (angular.isDefined(entity.picture)) {
                 $scope.asset = {
-                    'media': Uris.FILE_ROOT + entity.picture[Uris.QA_SYSTEM_LOCATION]
+                    'media': entity.picture.thumb
                 };
             }
 
@@ -53,7 +53,7 @@ angular.module('angularApp')
                             relationship.object.type + '/' + relationship.object.encodedUri + '">' + relationship.object.name + '</a></h3>'
                     };
                     if (angular.isDefined(relationship.object.picture)) {
-                        url = Uris.FILE_ROOT + relationship.object.picture[Uris.QA_SYSTEM_LOCATION];
+                        url = relationship.object.picture.thumb;
                         timelineDate.asset.thumbnail = url;
                         timelineDate.asset.media = url;
                     }
@@ -66,7 +66,7 @@ angular.module('angularApp')
                             relationship.subject.type + '/' + relationship.subject.encodedUri + '">' + relationship.subject.name + '</a></h3>'
                     };
                     if (angular.isDefined(relationship.subject.picture)) {
-                        url = Uris.FILE_ROOT + relationship.subject.picture[Uris.QA_SYSTEM_LOCATION];
+                        url = relationship.subject.picture.thumb;
                         timelineDate.asset.thumbnail = url;
                         timelineDate.asset.media = url;
                     }

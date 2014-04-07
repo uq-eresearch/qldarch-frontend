@@ -125,17 +125,17 @@ angular.module('angularApp')
                                 referenceCount++;
                             }
                         });
-                        return 15 * d.count.clamp(1, 3);
+                        return 10 * d.count.clamp(1, 5);
                     });
                     newNodesElements.append('text')
-                        .attr('dx', function (d) {
+                        .attr('x', function (d) {
                             var referenceCount = 0;
                             angular.forEach($scope.data.links, function (link) {
                                 if (link.source === d || link.target === d) {
                                     referenceCount++;
                                 }
                             });
-                            return 0 - 15 * d.count.clamp(1, 3) + 5;
+                            return 10 * d.count.clamp(1, 5) + 5;
                         })
                         .attr('dy', '.35em')
                         .attr('fill', 'black')
