@@ -24,27 +24,29 @@ angular.module('angularApp')
                 var url = '';
                 if (entity && relationship.subject.uri === entity.uri) {
                     // Use the object
+                    var tempType = relationship.object.type === 'structure' ? 'project' : relationship.object.type;
                     timelineDate.asset = {
                         media: 'images/icon.png',
                         thumbnail: 'images/icon.png',
                         'caption': '<h4 style="text-transform: capitalize"><a href="#/' +
-                            relationship.object.type + '?' + relationship.subject.type + 'Id=' + relationship.object.encodedUri + '">' + relationship.object.name + '</a></h4>'
+                            tempType + '/summary?' + relationship.object.type + 'Id=' + relationship.object.encodedUri + '">' + relationship.object.name + '</a></h4>'
                     };
                     if (angular.isDefined(relationship.object.picture)) {
-                        url = Uris.THUMB_ROOT + relationship.object.picture[Uris.QA_SYSTEM_LOCATION];
+                        url = relationship.object.picture.thumb;
                         timelineDate.asset.thumbnail = url;
                         timelineDate.asset.media = url;
                     }
                 } else {
                     // Use the subject
+                    var tempType = relationship.subject.type === 'structure' ? 'project' : relationship.subject.type;
                     timelineDate.asset = {
                         media: 'images/icon.png',
                         thumbnail: 'images/icon.png',
                         'caption': '<h4 style="text-transform: capitalize"><a href="#/' +
-                            relationship.subject.type + '?' + relationship.subject.type + 'Id=' + relationship.subject.encodedUri + '">' + relationship.subject.name + '</a></h4>'
+                            tempType + '/summary?' + relationship.subject.type + 'Id=' + relationship.subject.encodedUri + '">' + relationship.subject.name + '</a></h4>'
                     };
                     if (angular.isDefined(relationship.subject.picture)) {
-                        url = Uris.THUMB_ROOT + relationship.subject.picture[Uris.QA_SYSTEM_LOCATION];
+                        url = relationship.subject.picture.thumb;
                         timelineDate.asset.thumbnail = url;
                         timelineDate.asset.media = url;
                     }

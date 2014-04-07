@@ -180,8 +180,8 @@ angular.module('angularApp')
             });
             expression.selected = true;
             date.asset = {
-                media: Uris.FILE_ROOT + expression.file[Uris.QA_SYSTEM_LOCATION],
-                thumbnail: Uris.THUMB_ROOT + expression.file[Uris.QA_SYSTEM_LOCATION],
+                media: expression.file.file,
+                thumbnail: expression.file.thumb,
             };
         };
         $scope.addDate = function (date) {
@@ -199,6 +199,7 @@ angular.module('angularApp')
         =====================================================
          */
         $scope.remove = function (date) {
+            console.log('removing date', date);
             var index = $scope.timeline.dates.indexOf(date);
             $scope.timeline.dates.splice(index, 1);
         };
