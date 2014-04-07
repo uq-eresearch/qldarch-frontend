@@ -35,6 +35,8 @@ angular.module('angularApp')
                 src: extLocation.substring(0, extLocation.length - 3) + 'mp3',
                 type: 'audio/mp3'
             }];
+        } else {
+            // Deal with youtube here
         }
     });
 

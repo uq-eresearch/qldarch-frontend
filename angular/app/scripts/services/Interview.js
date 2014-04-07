@@ -86,9 +86,11 @@ angular.module('angularApp')
                     // Get the ones with this interviewee
                     var filteredInterviews = [];
                     angular.forEach(interviews, function (interview) {
-                        if (interview[Uris.QA_INTERVIEWEE] === intervieweeUri) {
-                            filteredInterviews.push(interview);
-                        }
+                        angular.forEach(GraphHelper.asArray(interview[Uris.QA_INTERVIEWEE]), function (searchIntervieweeUri) {
+                            if (searchIntervieweeUri === intervieweeUri) {
+                                filteredInterviews.push(interview);
+                            }
+                        });
                     });
                     return addArchitectsToInterviews(filteredInterviews);
                 });
@@ -109,9 +111,14 @@ angular.module('angularApp')
                         return Expression.loadList(interviews, 'qldarch:Interview').then(function (interviews) {
                             var otherInterviews = [];
                             angular.forEach(interviews, function (interview) {
-                                if (interview[Uris.QA_INTERVIEWEE] !== mentionedUri) {
-                                    otherInterviews.push(interview);
-                                }
+                                angular.forEach(GraphHelper.asArray(interview[Uris.QA_INTERVIEWEE]), function (searchIntervieweeUri) {
+                                    if (searchIntervieweeUri === mentionedUri) {
+                                        otherInterviews.push(interview);
+                                    }
+                                });
+                                // if (interview[Uris.QA_INTERVIEWEE] !== mentionedUri) {
+                                //     otherInterviews.push(interview);
+                                // }
                             });
                             return addArchitectsToInterviews(otherInterviews);
                         });

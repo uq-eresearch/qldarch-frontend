@@ -495,7 +495,10 @@ angular.module('angularApp', [
                                 return null;
                             }
                             var architectUri = GraphHelper.decodeUriString($stateParams.architectId);
-                            return Interview.findByIntervieweeUri(architectUri);
+                            return Interview.findByIntervieweeUri(architectUri).then(function (interviews) {
+                                console.log('got interviews for', architectUri, interviews);
+                                return interviews;
+                            });
                         }
                     ]
                 },
@@ -503,6 +506,7 @@ angular.module('angularApp', [
                     function ($scope, architect, interviews, Uris, Entity, $state) {
                         $scope.architect = architect;
                         $scope.interviews = interviews;
+                        console.log('got interview', interviews);
                         $scope.delete = function (architect) {
                             var r = window.confirm('Delete architect ' + architect.name + '?');
                             if (r === true) {
