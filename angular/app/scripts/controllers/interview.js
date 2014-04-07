@@ -2,7 +2,7 @@
 
 angular.module('angularApp')
 // interview, transcript, evidences
-.controller('InterviewCtrl', function ($scope, interview, $http, Uris, Entity, Ontology, architect, interviews, $stateParams, $location, $anchorScroll, $timeout) {
+.controller('InterviewCtrl', function ($scope, interview, $http, Uris, Entity, Ontology, architect, interviews, $stateParams, $location, $anchorScroll, $timeout, GraphHelper) {
     // Setup
 
 
@@ -22,14 +22,22 @@ angular.module('angularApp')
     $scope.isSyncingTranscript = false;
     var audioPlayerDom = document.getElementById('audio1');
     $scope.audioPlayer = {};
-    $scope.audioPlayerPlaylist = [{
-        src: interview[Uris.QA_EXTERNAL_LOCATION],
-        type: 'audio/ogg'
-    }, {
-        src: interview[Uris.QA_EXTERNAL_LOCATION].substring(0, interview[Uris.QA_EXTERNAL_LOCATION].length - 3) + 'mp3',
-        type: 'audio/mp3'
-    }];
-    console.log('playlist is', $scope.audioPlayerPlaylist);
+
+
+    // Look for our external locations
+    angular.forEach(GraphHelper.asArray(interview[Uris.QA_EXTERNAL_LOCATION]), function (extLocation) {
+        if (extLocation.indexOf('you') === -1) {
+            // Not found, use this
+            $scope.audioPlayerPlaylist = [{
+                src: extLocation,
+                type: 'audio/ogg'
+            }, {
+                src: extLocation.substring(0, extLocation.length - 3) + 'mp3',
+                type: 'audio/mp3'
+            }];
+        }
+    });
+
     // $scope.audioPlayerPlaylist = [{
     //     src: 'audio/bligh.mp3',
     //     type: 'audio/mp3'
