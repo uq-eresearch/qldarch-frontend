@@ -2,7 +2,6 @@
 	<div class="page-header has-subnav">
 	    <div class="container">
 	        <h1>Upload Image</h1>
-	        <h1 ng-show="$stateParams.type === 'linedrawing'">New Line Drawings</h1>
 	    </div>
 	</div>
 
@@ -56,16 +55,6 @@
         		<div class="panel-body">
         			<div class="row">
     					<div class="col-md-10">
-    						<div ng-show="expression.uri">
-    							<div class="row">
-    								<div class="col-md-2">
-    									<img ng-src="{{ expression.$file.thumb }}" alt="" class="img-responsive" ng-show="expression.$file">
-    								</div>
-    								<div class="col-md-10">
-    									<p><a ng-href="{{ expression.$depictsLink }}">{{ expression[Uris.DCT_TITLE] }}</a></p>
-    								</div>
-    							</div>
-    						</div>
 
     						<div ng-hide="expression.uri">
 	    						<div class="progress" style="height: 38px;">
@@ -81,10 +70,7 @@
 			        				</div>
 									<div class="col-md-10">
 										<form>
-					        				<div class="form-group">
-					        					<label for="" class="control-label">Title</label>
-					        					<input type="text" class="form-control" ng-model="expression[Uris.DCT_TITLE]" placeholder="What is this a photograph of?"/>	
-					        				</div>
+											<!-- Type (Line drawing, photograph) -->
 					        				<div class="form-group">
 					        					<label class="control-label" style="display:block;">Type</label>
 					        					<label class="radio-inline">
@@ -94,6 +80,84 @@
 												  <input type="radio" id="inlineCheckbox2" value="{{ Uris.QA_LINEDRAWING_TYPE }}" ng-model="expression[Uris.RDF_TYPE]"> Line Drawing
 												</label>
 					        				</div>
+
+											<!-- Title -->
+					        				<div class="form-group">
+					        					<label for="" class="control-label">Title</label>
+					        					<input type="text" class="form-control" ng-model="expression[Uris.DCT_TITLE]" placeholder="What is this a photograph of?"/>	
+					        				</div>
+
+
+											<!-- Description -->
+					        				<div class="form-group">
+					        					<label>Description</label>
+					        					<textarea placeholder="Describe this item" ng-model="expression[Uris.DCT_DESCRIPTION]" class="form-control"></textarea>
+					        				</div>
+
+					        				<!-- Creator -->
+					        				<div class="form-group">
+					        					<label>Creator</label>
+					        					<div class="radio">
+													<label>
+														<input type="radio" ng-model="expression.$creator" value="creator" ng-change="expression[Uris.DCT_CREATOR] = Auth.email; expression[Uris.DCT_RIGHTS] = Auth.email; expression.$rights = 'owner'">
+														I am the creator
+													</label>
+												</div>
+												<div class="radio">
+													<label>
+														<input type="radio" ng-model="expression.$creator" value="other" ng-change="expression[Uris.DCT_CREATOR] = ''">
+														Other
+													</label>
+												</div>
+					        					<input type="text" placeholder="Who created this item?" ng-model="expression[Uris.DCT_CREATOR]" class="form-control" ng-show="expression.$creator === 'other'">
+					        				</div>
+
+					        				<!-- Created Date -->
+											<div class="form-group">
+					        					<label>Created Date</label>
+					        					<input type="text" placeholder="When was this created?" ng-model="expression[Uris.DCT_DCT_CREATED]" class="form-control">
+					        				</div>
+
+											<!-- Rights -->
+					        				<div class="form-group">
+					        					<label>Rights</label>
+					        					<div class="radio">
+													<label>
+														<input type="radio" value="owner" ng-model="expression.$rights" ng-change="expression[Uris.DCT_RIGHTS] = Auth.email;">
+														I own the rights
+													</label>
+												</div>
+												<div class="radio">
+													<label>
+														<input type="radio" value="permission" ng-model="expression.$rights" ng-change="expression[Uris.DCT_RIGHTS] = ''; expression.$permissionFrom = ''">
+														I have permission
+													</label>
+												</div>
+												<input type="text" placeholder="Who owns the rights to this item?" ng-model="expression.$permissionFrom" class="form-control" ng-show="expression.$rights == 'permission'" ng-change="expression[Uris.DCT_RIGHTS] = Auth.email + ' with permission from ' + expression.$permissionFrom">
+
+												<div class="radio">
+													<label>
+														<input type="radio" value="orphaned" ng-model="expression.$rights" ng-change="expression[Uris.DCT_RIGHTS] = 'Orphaned'">
+														It is orphaned
+													</label>
+												</div>
+
+												<div class="radio">
+													<label>
+														<input type="radio" value="other" ng-model="expression.$rights" ng-change="expression[Uris.DCT_RIGHTS] = ''">
+														Other
+													</label>
+												</div>
+					        					<input type="text" placeholder="Who owns the rights to this item?" ng-model="expression[Uris.DCT_RIGHTS]" class="form-control" ng-show="expression.$rights == 'other'">
+					        				</div>
+
+					        				<!-- External Identifier -->
+											<div class="form-group">
+					        					<label>External Identifier</label>
+					        					<input type="text" placeholder="Does this item have an external identifier?" ng-model="expression[Uris.DCT_IDENTIFIER]" class="form-control">
+					        				</div>
+					        	
+
 					        				<!--<div class="form-group">
 						        				<label class="control-label">Project</label>
 						        				<div 
@@ -107,6 +171,18 @@
 								</div>		
     						</div>
 						
+							<!-- Title after uploading -->
+    						<div ng-show="expression.uri">
+    							<div class="row">
+    								<div class="col-md-2">
+    									<img ng-src="{{ expression.$file.thumb }}" alt="" class="img-responsive" ng-show="expression.$file">
+    								</div>
+    								<div class="col-md-10">
+    									<p><a ng-href="{{ expression.$depictsLink }}">{{ expression[Uris.DCT_TITLE] }}</a></p>
+    								</div>
+    							</div>
+    						</div>
+    						
     					</div>
     					<div class="col-md-2">
     						<div ng-hide="expression.uri">

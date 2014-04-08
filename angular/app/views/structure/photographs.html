@@ -1,8 +1,9 @@
-<div class="l-frame l-frame-tighter l-frame-highlight" ng-show="Auth.role === 'editor' || Auth.role === 'root'">
+<div class="alert alert-warning" ng-show="Auth.role === 'editor' || Auth.role === 'root'" style="margin: 0;">
     <div class="container">
-        <button class="btn btn-default" ui-sref="upload({uri: structure.uri, name: structure.name })">Upload Image</button>
+        <button class="btn btn-default btn-sm" ui-sref="upload({uri: structure.uri, name: structure.name })"><i class="fa fa-cloud-upload"></i> Upload Image</button>       
     </div>
 </div>
+
 <div class="l-frame l-frame-tight">
     <div class="container">
         <p class="text-muted" ng-hide="photographRows.length">No photographs</p>

@@ -10,7 +10,7 @@
 				<th>User</th>
 				<th>Role</th>
 			</tr>
-			<tr ng-repeat="user in users | orderBy:'-role'">
+			<tr ng-repeat="user in users | orderBy:'email'">
 				<td><strong>{{ user.email }}</strong> ({{ user.username }})</td>	
 				<td>
 					<select ng-model="user.role" ng-hide="user.role == 'root'" ng-change="user.$isChanged = true">

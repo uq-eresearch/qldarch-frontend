@@ -6170,6 +6170,7 @@ h6 {
 }
 .navbar-inverse .input-group .dropdown-menu .divider {
   background-color: #090909;
+  margin: 0;
 }
 .navbar-inverse .input-group .dropdown-menu > li > a {
   color: #ffffff;

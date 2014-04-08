@@ -19,7 +19,7 @@ angular.module('angularApp')
             };
         }
 
-        // tempExpression[Uris.QA_DEPICTS_BUILDING] = 'http://qldarch.net/users/cking/Structure#61816694616';
+        tempExpression[Uris.QA_DEPICTS_BUILDING] = 'http://qldarch.net/users/cking/Structure#61816694616';
         // $scope.expressions.push(tempExpression);
 
 

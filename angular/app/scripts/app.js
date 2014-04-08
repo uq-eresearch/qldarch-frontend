@@ -152,11 +152,14 @@ angular.module('angularApp', [
                             console.log('resolving main');
                             return Interview.loadAll().then(function (interviews) {
                                 interviews = GraphHelper.graphValues(interviews);
+                                interviews = $filter('filter')(interviews, function (interview) {
+                                    return interview.interviewees[0];
+                                });
                                 console.log('interview count', interviews);
                                 // Filter only the interviews with pictures
                                 // Looks better for the front page
                                 var interviewsWithPictures = $filter('orderBy')(interviews, function (interview) {
-                                    if (angular.isDefined(interview.interviewees) && interview.interviewees.length && angular.isDefined(interview.interviewees[0].picture)) {
+                                    if (angular.isDefined(interview.interviewees) && interview.interviewees.length && angular.isDefined(interview.interviewees[0].picture) && interview.interviewees[0].picture.file.indexOf('icon') === -1) {
                                         return 0;
                                     } else {
                                         return 1;
@@ -199,12 +202,14 @@ angular.module('angularApp', [
             .state('admin.users', {
                 url: '/users',
                 resolve: {
-                    users: function (Uris, $http, GraphHelper) {
-                        // Gets all users in the system and their roles
-                        return $http.get(Uris.JSON_ROOT + 'user').then(function (response) {
-                            return GraphHelper.graphValues(response.data);
-                        });
-                    }
+                    users: ['Uris', '$http', 'GraphHelper',
+                        function (Uris, $http, GraphHelper) {
+                            // Gets all users in the system and their roles
+                            return $http.get(Uris.JSON_ROOT + 'user').then(function (response) {
+                                return GraphHelper.graphValues(response.data);
+                            });
+                        }
+                    ]
                 },
                 controller: 'AdminUsersCtrl',
                 templateUrl: 'views/admin/users.html'

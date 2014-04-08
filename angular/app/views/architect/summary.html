@@ -1,9 +1,19 @@
+<div class="alert alert-warning" ng-show="Auth.role === 'editor' || Auth.role === 'root'" style="margin: 0;">
+    <div class="container">
+        <div ng-hide="$state.includes('architect.summary.edit')">
+            <!-- Editor: &nbsp; &nbsp; -->
+            <button class="btn btn-default btn-sm" ui-sref="architect.summary.edit({ architectId: architect.encodedUri })"><i class="fa fa-pencil"></i> Edit</button>     
+
+            <button class="btn btn-default btn-sm" ng-click="$parent.delete(architect)" ng-show="Auth.role === 'root'"><i class="fa fa-trash-o"></i> Delete</button>
+        </div>        
+    </div>
+</div>
 <div class="l-frame l-frame-tight">
     <div class="container">
         <div class="row" ng-hide="$state.includes('architect.summary.edit')">
             <div class="col-sm-7">
                 <span ng-show="Auth.auth">
-                    <button class="btn btn-default btn-xs pull-right" ui-sref="architect.summary.edit({ architectId: architect.encodedUri })"><i class="fa fa-pencil"></i> Edit</button>    
+                      
                 </span>
                 
                 <h5>
