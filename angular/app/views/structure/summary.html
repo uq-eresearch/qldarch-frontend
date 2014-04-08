@@ -1,4 +1,4 @@
-<div class="alert alert-warning" ng-show="Auth.role === 'editor' || Auth.role === 'root'" style="margin: 0;">
+<div class="alert alert-warning" ng-show="(Auth.role === 'editor' || Auth.role === 'root') && !$state.includes('structure.summary.edit')" style="margin: 0;" >
     <div class="container">
         <div ng-hide="$state.includes('structure.summary.edit')">
             <!-- Editor: &nbsp; &nbsp; -->

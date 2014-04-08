@@ -17,7 +17,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-default pull-right" ui-sref="firm.summary.edit({firmId:null})" ng-show="Auth.role === 'editor' || Auth.role === 'root'"><i class="fa fa-plus"></i> New Firm</button>
+                <!-- <button class="btn btn-default pull-right" ui-sref="firm.summary.edit({firmId:null})" ng-show="Auth.role === 'editor' || Auth.role === 'root'"><i class="fa fa-plus"></i> New Firm</button> -->
                 <ul class="nav nav-pills">
                     <li ui-sref-active="active">
                         <a href ui-sref="firms.australian">Queensland-based</a>
@@ -28,6 +28,11 @@
                 </ul>
             </div>
         </div>
+    </div>
+</div>
+<div class="alert alert-warning" ng-show="Auth.role === 'editor' || Auth.role === 'root'" style="margin: 0;">
+    <div class="container">
+        <button class="btn btn-default btn-sm" ui-sref="firm.summary.edit({firmId:null})" ng-show="Auth.role === 'editor' || Auth.role === 'root'"><i class="fa fa-plus"></i> New Firm</button>     
     </div>
 </div>
 

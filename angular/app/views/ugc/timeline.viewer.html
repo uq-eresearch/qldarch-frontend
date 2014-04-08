@@ -1,6 +1,6 @@
-<div class="l-frame l-frame-divided l-frame-tighter" ng-show="!$state.includes('ugc.timeline.edit') && (isEditable || isDeletable)">
-	<div class="container">
-		<!-- Edit -->
+<div class="alert alert-warning" ng-show="!$state.includes('ugc.timeline.edit') && (isEditable || isDeletable)" style="margin: 0;">
+    <div class="container">
+        <!-- Edit -->
 		<button class="btn btn-default" ui-sref="ugc.timeline.edit" ng-show="isEditable">
 			<i class="fa fa-pencil"></i> Edit
 		</button>
@@ -9,9 +9,10 @@
 		<button class="btn btn-default" ng-click="delete()" ng-show="isDeletable">
 			<i class="fa fa-trash-o"></i> Delete
 		</button>
-		<!-- /Delete -->
-	</div>
+		<!-- /Delete -->   
+    </div>
 </div>
+
 
 <div class="l-frame l-frame-media" ng-show="timeline.dates.length">
 	<div class="container">

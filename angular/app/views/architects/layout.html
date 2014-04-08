@@ -5,7 +5,7 @@
 	    </div>
 	</div>
 
-	<div class="subnav">
+	<div class="subnav" style="margin-bottom: 0;">
 	    <div class="container">
 	        <div class="row">
 	            <div class="col-md-12">
@@ -20,6 +20,12 @@
 	                </ul>
 	            </div>
 	        </div>
+	    </div>
+	</div>
+
+	<div class="alert alert-warning" ng-show="Auth.role === 'editor' || Auth.role === 'root'" style="margin: 0;">
+	    <div class="container">
+            <button class="btn btn-default btn-sm" ui-sref="architect.summary.edit({architectId:null})"><i class="fa fa-plus"></i> New Architect</button>      
 	    </div>
 	</div>
 
