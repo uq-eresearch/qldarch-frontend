@@ -6,7 +6,7 @@ angular.module('angularApp')
         $scope.wordcloud = compoundObject.jsonData.data;
 
 
-        $scope.isEditable = Auth.auth && ($scope.compoundObject.user.user === Auth.user || Auth.role === 'editor' || Auth.role === 'root');
+        $scope.isEditable = Auth.auth && ($scope.compoundObject.user.user === Auth.user || Auth.role === 'root');
         $scope.isDeletable = Auth.auth && ($scope.compoundObject.user.user === Auth.user || Auth.role === 'root');
 
         $scope.delete = function () {

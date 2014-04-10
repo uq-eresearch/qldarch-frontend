@@ -5,7 +5,7 @@ angular.module('angularApp')
         $scope.compoundObject = compoundObject.jsonData;
         $scope.timeline = compoundObject.jsonData.data;
 
-        $scope.isEditable = Auth.auth && ($scope.compoundObject.user.user === Auth.user || Auth.role === 'editor' || Auth.role === 'root');
+        $scope.isEditable = Auth.auth && ($scope.compoundObject.user.user === Auth.user || Auth.role === 'root');
         $scope.isDeletable = Auth.auth && ($scope.compoundObject.user.user === Auth.user || Auth.role === 'root');
 
         $scope.delete = function () {

@@ -232,6 +232,20 @@ angular.module('angularApp', [
                 templateUrl: 'views/login.html',
                 controller: 'LoginCtrl'
             })
+            .state('forgot', {
+                url: '/forgot',
+                templateUrl: 'views/forgot.html',
+                controller: ['$scope', '$http', 'Uris',
+                    function ($scope, $http, Uris) {
+                        $scope.reset = function (credentials) {
+                            $scope.isResetting = true;
+                            $http.get(Uris.JSON_ROOT + 'user/forgotPassword?username=' + encodeURIComponent(credentials.username)).then(function () {
+                                $scope.isReset = true;
+                            });
+                        };
+                    }
+                ]
+            })
             .state('logout', {
                 url: '/logout',
                 controller: 'LogoutCtrl'
@@ -254,7 +268,17 @@ angular.module('angularApp', [
                 controller: 'UserContentCtrl'
             })
             .state('upload', {
-                url: '/upload?uri&name',
+                abstract: true,
+                url: '/upload?uri&name&type',
+                template: '<ui-view autoscroll="false"></ui-view>'
+            })
+            .state('upload.images', {
+                url: '/image',
+                templateUrl: 'views/files/photograph.html',
+                controller: 'FilePhotographCtrl'
+            })
+            .state('upload.articles', {
+                url: '/document',
                 templateUrl: 'views/files/photograph.html',
                 controller: 'FilePhotographCtrl'
             })
@@ -315,7 +339,7 @@ angular.module('angularApp', [
                 url: '/date'
             })
             .state('ugc.timeline.edit.add.import', {
-                url: '/import'
+                url: '/import',
             })
             .state('ugc.map', {
                 // abstract: true,
@@ -336,6 +360,16 @@ angular.module('angularApp', [
             .state('ugc.map.edit', {
                 url: '/edit',
                 reloadOnSearch: false,
+                resolve: {
+                    typologies: ['Entity', 'GraphHelper',
+                        function (Entity, GraphHelper) {
+                            console.log('got to here!');
+                            return Entity.loadAll('qldarch:BuildingTypology', true).then(function (typologies) {
+                                return GraphHelper.graphValues(typologies);
+                            });
+                        }
+                    ]
+                },
                 views: {
                     'builder@ugc': {
                         templateUrl: 'views/ugc/map.builder.html',
@@ -525,7 +559,8 @@ angular.module('angularApp', [
                     function ($scope, architect, interviews, Uris, Entity, $state) {
                         $scope.architect = architect;
                         $scope.interviews = interviews;
-                        console.log('got interview', interviews);
+                        $scope.entity = architect;
+
                         $scope.delete = function (architect) {
                             var r = window.confirm('Delete architect ' + architect.name + '?');
                             if (r === true) {
@@ -783,6 +818,8 @@ angular.module('angularApp', [
                 controller: ['$scope', 'firm', 'Entity', '$state',
                     function ($scope, firm, Entity, $state) {
                         $scope.firm = firm;
+                        $scope.entity = firm;
+
                         $scope.delete = function (firm) {
                             var r = window.confirm('Delete firm ' + firm.name + '?');
                             if (r === true) {
@@ -993,6 +1030,8 @@ angular.module('angularApp', [
                 controller: ['$scope', 'structure', 'Entity', '$state',
                     function ($scope, structure, Entity, $state) {
                         $scope.structure = structure;
+                        $scope.entity = structure;
+
                         $scope.delete = function (structure) {
                             var r = window.confirm('Delete project ' + structure.name + '?');
                             if (r === true) {

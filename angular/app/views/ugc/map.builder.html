@@ -15,6 +15,131 @@
 			<div class="panel-body">
 				<i class="fa fa-times pull-right" ui-sref="ugc.map.edit"></i>
 				<tabset>
+
+					<!-- Import location -->
+	    			<tab heading="From Architect, Project or Typology" select="$state.go('ugc.map.edit.add.import')">
+	    				<div style="padding: 8px; margin-top: 8px;">
+	    					<p class="text-muted">Search for architects, projects or firms to import locations.</p>
+							<div 
+								ui-select2="architectStructureFirmTypologySelect" 
+								ng-model="map.$import.entity" 
+								class="form-control">
+							</div>
+
+							<!-- Import Location list -->
+							<div style="margin-top: 16px;">
+								<div ng-show="map.$import.entity && map.$import.locations == null" style="text-align: center;">
+									<i class="fa fa-spin fa-refresh"></i>
+								</div>
+								<div ng-show="map.$import.locations && !map.$import.locations.length">
+									No locations found.
+								</div>
+
+								<!-- List of locations + filters -->
+								<div ng-show="map.$import.locations.length">
+									<ul class="list-group">
+										<!-- <li class="list-group-item list-group-item-success media-body">
+											<button class="btn btn-primary" ng-click="import(map.$import.locations)">Add to Map ({{ map.$import.numberToImport || 0}})</button>
+										</li> -->
+										<li class="list-group-item list-group-item-warning">
+											<!-- <h4>Filters</h4> -->
+											<div class="row">
+												<div class="col-sm-4">
+													<div class="form-group">
+														<label>Name</label>
+														<input type="text" ng-model="map.$import.filter.filter" class="form-control" placeholder="Filter by name">
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="form-group">
+														<label>Firm</label>
+														<select ng-model="map.$import.filter.firmUri" class="form-control">
+															<option selected="selected" value=""/>
+															<option value="{{ firm.uri }}" ng-repeat="firm in map.$import.firms">
+																{{ firm.name }}
+															</option>
+														</select>
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="form-group">
+														<label>Architect</label>
+														<select ng-model="map.$import.filter.architectUri" class="form-control">
+															<option selected="selected" value=""/>
+															<option value="{{ architect.uri }}" ng-repeat="architect in map.$import.architects">
+																{{ architect.name }}
+															</option>
+														</select>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-sm-4">
+													<div class="form-group">
+														<label>Location</label>
+														<input type="text" ng-model="map.$import.filter.location" class="form-control" placeholder="Filter by location">
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="form-group">
+														<label>Typology</label>
+														<select ng-model="map.$import.filter.typologyUri" class="form-control">
+															<option selected="selected" value=""/>
+															<option value="{{ typology.uri }}" ng-repeat="typology in map.$import.typologies">
+																{{ typology.name }}
+															</option>
+														</select>
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="form-group">
+														<label>Completion Year</label>
+														<div class="row">
+															<div class="col-sm-6"><input type="text" placeholder="Start year" ng-model="map.$import.filter.startYear" class="form-control"></div>
+															<div class="col-sm-6"><input type="text" placeholder="End year" ng-model="map.$import.filter.endYear" class="form-control"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</li>
+										<li class="list-group-item list-group-item-warning" ng-show="(map.$import.locations | filter:importFilter).length !== map.$import.locations.length">
+											Filtered: Showing {{ (map.$import.locations | filter:importFilter).length }} of {{ map.$import.locations.length }} locations <a href="" ng-click="clearImportFilters()">Clear Filters</a>
+										</li>
+										<li class="list-group-item">
+											<button class="btn btn-primary" ng-click="addAll()"><i class="fa fa-plus"></i> Add ({{ (map.$import.locations | filter:importFilter).length }})</button>
+										</li>
+										<li class="list-group-item">
+											<div ng-repeat="location in map.$import.locations | filter:importFilter" class="row" style="margin-top: 8px;">
+											<div>
+												<div class="col-sm-1">
+
+													<!-- Add button -->
+													<button class="btn btn-primary" ng-click="add(location)" ng-hide="location.$added"><i class="fa fa-plus"></i></button>
+
+													<!-- Added tick -->
+													<button class="btn btn-primary" disabled ng-show="location.$added"><i class="fa fa-check"></i></button>
+													<!-- <input type="checkbox" ng-model="location.$selected" ng-change="importSelectionChanged()"> -->
+												</div>
+												<div class="col-sm-1">
+													<img ng-src="{{ location.asset.thumbnail }}" alt="thumbnail" class="img-responsive">
+												</div>
+												<div class="col-sm-10" ng-click="expression">
+													<p><strong>{{ location.name }}</strong> <span ng-show="location[Uris.QA_COMPLETION_DATE]">({{ location[Uris.QA_COMPLETION_DATE] }})</span>
+													</p>
+													<p ng-repeat="address in location.locations">{{ address }}</p>
+													<p><span ng-repeat="typology in location.buildingTypologies">{{ typology.name }}</span></p>
+												</div>
+											</div>
+										</div>
+										</li>
+									</ul>
+
+								</div>
+							</div>
+	    				</div>
+	    			</tab>
+	    			<!-- /Import location -->
+
 					<!-- New Location -->
 	    			<tab heading="New" select="$state.go('ugc.map.edit.add.location')">
 	    				<form style="padding: 8px; margin-top: 8px;">
@@ -48,50 +173,13 @@
 	    				</form>
 	    			</tab>
 	    			<!-- /New Location -->
-
-	    			<!-- Import location -->
-	    			<tab heading="From Architect, Project or Typology" select="$state.go('ugc.map.edit.add.import')">
-	    				<div style="padding: 8px; margin-top: 8px;">
-	    					<p class="text-muted">Search for architects, projects or firms to import locations.</p>
-							<div 
-								ui-select2="architectStructureFirmTypologySelect" 
-								ng-model="map.$import.entity" 
-								class="form-control">
-							</div>
-							<div style="margin-top: 16px;">
-								<div ng-show="map.$import.entity && map.$import.locations == null" style="text-align: center;">
-									<i class="fa fa-spin fa-refresh"></i>
-								</div>
-								<div ng-show="map.$import.locations && !map.$import.locations.length">
-									No locations found.
-								</div>
-								<div ng-repeat="location in map.$import.locations" class="row" style="margin-top: 8px;">
-									<div>
-										<div class="col-sm-1">
-											<input type="checkbox" ng-model="location.$selected" ng-change="importSelectionChanged()">
-										</div>
-										<div class="col-sm-1">
-											<img ng-src="{{ location.asset.thumbnail }}" alt="thumbnail" class="img-responsive">
-										</div>
-										<div class="col-sm-10" ng-click="expression">
-											<p><strong>{{ location.name }}</strong> ({{ location.lat }} {{ location.lon }})</p> 
-										</div>
-									</div>
-								</div>
-							</div>
-
-							<div style="margin-top: 24px;" ng-show="map.$import.locations.length">
-								<button class="btn btn-primary" ng-click="import(map.$import.locations)">Add to Map ({{ map.$import.numberToImport }})</button>
-							</div>
-	    				</div>
-	    			</tab>
-	    			<!-- /Import location -->
 	  			</tabset>
 			</div>
 		</div>
 
 		<!-- Location list -->
 		<div style="margin-top: 24px;">
+			<h4>Added Locations</h4>
 			<div class="text-muted" ng-hide="map.locations.length">No locations added. Try adding some locations.</div>
 			<!--  | slice:currentPage:currentPage+10 -->
 			<div ng-repeat="location in map.locations" style="margin-top: 8px;">
@@ -103,9 +191,14 @@
 						<button class="btn btn-default btn-xs pull-right" ng-click="remove(location)">
 							<i class="fa fa-trash-o"></i>
 						</button>
-						<p>
-							<i class="fa fa-map-marker" style="margin-right: 8px;"></i> <strong>{{ location.name }}</strong> ({{ location.lat }} {{ location.lon }})
-						</p>
+						<p><strong>{{ location.name }}</strong> <span ng-show="location[Uris.QA_COMPLETION_DATE]">({{ location[Uris.QA_COMPLETION_DATE] }})</span>
+													</p>
+													<p ng-repeat="address in location.locations">{{ address }}</p>
+													<p><span ng-repeat="typology in location.buildingTypologies">{{ typology.name }}</span></p>
+
+						<!-- <p><i class="fa fa-map-marker" style="margin-right: 8px;"></i> <strong>{{ location.name }}</strong> <span ng-show="location[Uris.DCT_CREATED]">({{ location[Uris.DCT_CREATED] }})</span></p>
+
+						<p><span ng-repeat="typology in location.buildingTypologies">{{ typology.name }}</span></p> -->
 					</div>
 				</div>
 			</div>

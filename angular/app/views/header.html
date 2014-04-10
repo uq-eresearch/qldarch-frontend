@@ -76,7 +76,7 @@
                             <!-- <li class=""><a href="#/contribute">contribute</a></li> -->
                             <li class="" ng-hide="Auth.auth" tooltip="Create an account" tooltip-placement="bottom"><a href="#/register" >Join</a></li>
                             <li class="" ng-hide="Auth.auth" tooltip="Log in with an existing account" tooltip-placement="bottom">
-                                <a ui-sref="login">Sign in</a>
+                                <a ui-sref="login">Log in</a>
                             </li>
                         </ul>
 
@@ -89,7 +89,8 @@
                                     <!-- <li><a ui-sref="files.user">My Files</a></li> -->
                                     <li ng-show="Auth.user == 'admin'"><a ui-sref="admin.users">Manage Users</a></li>
                                     <li role="presentation" class="divider"></li>
-                                    <li><a ui-sref="upload">Upload Images</a></li>
+                                    <li><a ui-sref="upload.images">Upload Images</a></li>
+                                    <!-- <li><a ui-sref="upload.documents">Upload Articles</a></li> -->
                                     <li role="presentation" class="divider"></li>
                                     <li><a ui-sref="logout">Sign out</a></li>
                                 </ul>

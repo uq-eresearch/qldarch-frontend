@@ -106,6 +106,7 @@ angular.module('angularApp')
         this.FOAF_NAME = this.FOAF_NS + 'name';
         this.QA_FIRM_NAME = this.QA_NS + 'firmName';
         this.QA_LOCATION = this.QA_NS + 'location';
+        this.QA_COMPLETION_DATE = this.QA_NS + 'completionDate';
         this.QA_ASSOCIATED_FIRM = this.QA_NS + 'associatedFirm';
         this.QA_PRACTICED_IN_QUEENSLAND = this.QA_NS + 'practicedInQueensland';
         this.QA_AUSTRALIAN = this.QA_NS + 'australian';

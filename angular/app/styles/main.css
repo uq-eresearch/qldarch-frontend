@@ -5834,6 +5834,7 @@ footer .footer-logo img {
   margin: 11px 0;
   overflow: hidden;
   background-color: #2f2f2f;
+  margin: 0 !important;
 }
 .navbar .dropdown-menu > li > a {
   color: #999999;
@@ -6197,6 +6198,7 @@ body {
 }
 .alert.alert-warning {
   padding: 8px;
+  border-top: none;
 }
 .select2-thumb {
   width: 20px;

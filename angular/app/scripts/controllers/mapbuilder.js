@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('MapBuilderCtrl', function ($scope, compoundObject, Entity, Uris, Relationship, GraphHelper, Structure, $filter, $state, Auth, CompoundObject) {
+    .controller('MapBuilderCtrl', function ($scope, compoundObject, typologies, Entity, Uris, Relationship, GraphHelper, Structure, $filter, $state, Auth, CompoundObject, Firm, Architect) {
         /*
         =====================================================
             Setup
@@ -9,6 +9,9 @@ angular.module('angularApp')
          */
         $scope.compoundObject = compoundObject.jsonData; // alias for convenience
         $scope.map = compoundObject.jsonData.data; // alias for convenience
+        $scope.map.$import = {};
+        $scope.typologies = typologies;
+
         if (!compoundObject.uri) {
             $scope.map.locations = [];
             $scope.compoundObject.user = Auth;
@@ -59,39 +62,6 @@ angular.module('angularApp')
             }
         };
 
-        /*
-        =====================================================
-            Import Places
-        =====================================================
-         */
-        function addStructuresAsLocations(structures) {
-            $scope.map.$import.locations = [];
-            angular.forEach(structures, function (structure) {
-                if (structure.lat) {
-                    var location = {
-                        name: structure.name,
-                        lat: structure.lat,
-                        lon: structure.lon,
-                        uri: structure.uri,
-                        type: 'structure',
-                        $selected: true,
-                        asset: {
-                            media: 'images/icon.png',
-                            thumbnail: 'images/icon.png',
-                        }
-                    };
-                    // Add in a picture if there is one
-                    if (structure.picture) {
-                        location.asset = {
-                            media: Uris.FILE_ROOT + structure.picture[Uris.QA_SYSTEM_LOCATION],
-                            thumbnail: Uris.THUMB_ROOT + structure.picture[Uris.QA_SYSTEM_LOCATION],
-                        };
-                    }
-                    $scope.map.$import.locations.push(location);
-                }
-            });
-            $scope.map.$import.numberToImport = $scope.map.$import.locations.length;
-        }
         /**
          * Watches for the import entity to be changed, and fetches a list of structures
          * @param  {[type]} entity [description]
@@ -101,6 +71,7 @@ angular.module('angularApp')
             if (!entity) {
                 return;
             }
+
             // Clear the current locations
             $scope.map.$import.locations = null;
 
@@ -167,24 +138,228 @@ angular.module('angularApp')
 
         });
 
-        $scope.importSelectionChanged = function () {
-            var selected = $filter('filter')($scope.map.$import.locations, function (location) {
-                return location.$selected;
+        /*
+        =====================================================
+            Import Places
+        =====================================================
+         */
+        function addStructuresAsLocations(structures) {
+            $scope.map.$import.locations = [];
+            $scope.map.$import.filter = {};
+
+            $scope.map.$import.architects = [];
+            $scope.map.$import.firms = [];
+            var firmUris = [];
+            $scope.map.$import.typologies = [];
+
+            angular.forEach(structures, function (structure) {
+                // Filter out buildings that dont have a location
+                // We cant display them, so we don't show them
+                if (structure.lat) {
+                    var location = angular.copy(structure);
+                    angular.extend(location, {
+                        name: structure.name,
+                        lat: structure.lat,
+                        lon: structure.lon,
+                        uri: structure.uri,
+                        type: 'structure',
+                        asset: {
+                            media: 'images/icon.png',
+                            thumbnail: 'images/icon.png',
+                        }
+                    });
+                    // Add in a picture if there is one
+                    if (structure.picture) {
+                        location.asset = {
+                            media: structure.picture.file,
+                            thumbnail: structure.picture.thumb,
+                        };
+                    }
+
+                    // Check if we already have added it
+                    console.log('checking', location.name, location.uri);
+                    angular.forEach($scope.map.locations, function (addedLocation) {
+                        console.log('- ', addedLocation.uri);
+                        if (addedLocation.uri === location.uri) {
+                            location.$added = true;
+                        }
+                    });
+
+                    // Add it to the list of locations to display
+                    $scope.map.$import.locations.push(location);
+
+                    // Add its building typologies to the list for the filter
+                    if (structure.buildingTypologies) {
+                        angular.forEach(structure.buildingTypologies, function (structureBuildingTypology) {
+                            var found = false;
+                            // console.log('typology', structure.name, structureBuildingTypology.name);
+                            angular.forEach($scope.map.$import.typologies, function (filterBuildingTypology) {
+                                if (structureBuildingTypology.uri === filterBuildingTypology.uri) {
+                                    found = true;
+                                }
+                            });
+                            if (!found) {
+                                $scope.map.$import.typologies.push(structureBuildingTypology);
+                            }
+                        });
+                    }
+
+                    // Store the firms
+                    if (structure[Uris.QA_ASSOCIATED_FIRM]) {
+                        firmUris.push(structure[Uris.QA_ASSOCIATED_FIRM]);
+                    }
+
+                    // Find the people that built it
+                    Relationship.findBySubjectPredicateObject({
+                        predicate: 'qldarch:designedBy',
+                        subject: structure.uri
+                    }).then(function (designedByRelationships) {
+                        var designedByArchitectUris = GraphHelper.getAttributeValuesUnique(designedByRelationships, Uris.QA_OBJECT);
+
+                        Relationship.findBySubjectPredicateObject({
+                            predicate: 'qldarch:workedOn',
+                            object: structure.uri
+                        }).then(function (workedOnRelationships) {
+                            var workedOnArchitectUris = GraphHelper.getAttributeValuesUnique(workedOnRelationships, Uris.QA_SUBJECT);
+
+                            // Merge
+                            var architectUris = designedByArchitectUris.concat(workedOnArchitectUris);
+                            Architect.loadList(architectUris, true).then(function (architects) {
+                                location.architects = architects;
+                                // Add it to list to filter by (if its not already there)
+                                angular.forEach(architects, function (structureArchitect) {
+                                    var found = false;
+                                    // In case we get any firms in there
+                                    if (structureArchitect.type === 'architect') {
+                                        angular.forEach($scope.map.$import.architects, function (importArchitect) {
+                                            if (structureArchitect.uri === importArchitect.uri) {
+                                                // already added
+                                                found = true;
+                                            }
+                                        });
+                                        if (!found) {
+                                            $scope.map.$import.architects.push(structureArchitect);
+                                        }
+                                    }
+                                });
+                            });
+                        });
+                    });
+                }
             });
-            $scope.map.$import.numberToImport = selected.length;
-        };
-        $scope.import = function (locations) {
-            locations = $filter('filter')(locations, function (location) {
-                return location.$selected;
+
+            Firm.loadList(firmUris).then(function (firms) {
+                $scope.map.$import.firms = firms;
             });
-            $scope.map.locations = locations.concat($scope.map.locations);
-            console.log('locations', $scope.map.locations);
-            $scope.map.$import = {
-                entity: null,
-                locations: []
-            };
-            $state.go('ugc.map.edit');
+            generateProspectiveLocations();
+        }
+
+        /*
+        =====================================================
+            Selecting Items from Import
+        =====================================================
+         */
+        $scope.addAll = function () {
+            var filteredLocations = $filter('filter')($scope.map.$import.locations, $scope.importFilter);
+            addLocationsToMap(filteredLocations);
         };
+        $scope.add = function (location) {
+            addLocationsToMap([location]);
+        };
+
+        function addLocationsToMap(locations) {
+            var locationsToAdd = [];
+            // Filter out ones we have already added
+            angular.forEach(locations, function (location) {
+                if (!location.$added) {
+                    location.$added = true;
+                    locationsToAdd.push(location);
+                }
+            });
+            // Add to map
+            $scope.map.locations = locationsToAdd.concat($scope.map.locations);
+            generateProspectiveLocations();
+        }
+
+        function removeLocationFromMap(location) {
+            // Go through ones in the import list
+            angular.forEach($scope.map.$import.locations, function (importLocation) {
+                if (location.uri === importLocation.uri) {
+                    importLocation.$added = false;
+                }
+            });
+            var index = $scope.map.locations.indexOf(location);
+            $scope.map.locations.splice(index, 1);
+            generateProspectiveLocations();
+        }
+
+        $scope.importFilter = function (location) {
+            var result = true;
+            var found;
+            if (angular.isDefined($scope.map.$import.filter)) {
+                if (angular.isDefined($scope.map.$import.filter.typologyUri) && $scope.map.$import.filter.typologyUri.length) {
+                    found = false;
+                    angular.forEach(GraphHelper.asArray(location[Uris.QA_BUILDING_TYPOLOGY_P]), function (typologyUri) {
+                        if (typologyUri === $scope.map.$import.filter.typologyUri) {
+                            found = true;
+                        }
+                    });
+                    result = result && found;
+                }
+                if (angular.isDefined($scope.map.$import.filter.startYear) && $scope.map.$import.filter.startYear.length) {
+                    result = result && parseInt(location[Uris.QA_COMPLETION_DATE]) >= parseInt($scope.map.$import.filter.startYear);
+                }
+                if (angular.isDefined($scope.map.$import.filter.endYear) && $scope.map.$import.filter.endYear.length) {
+                    result = result && parseInt(location[Uris.QA_COMPLETION_DATE]) <= parseInt($scope.map.$import.filter.endYear);
+                }
+                // Name filter
+                if ($scope.map.$import.filter.filter) {
+                    result = result && (location.name.toLowerCase().indexOf($scope.map.$import.filter.filter.toLowerCase()) !== -1);
+                }
+                // Location filter
+                if ($scope.map.$import.filter.location) {
+                    found = false;
+                    angular.forEach(location.locations, function (locationName) {
+                        if (locationName.toLowerCase().indexOf($scope.map.$import.filter.location.toLowerCase()) !== -1) {
+                            found = true;
+                        }
+                    });
+                    result = result && found;
+                }
+                // Firm filter
+                if ($scope.map.$import.filter.firmUri) {
+                    result = result && location[Uris.QA_ASSOCIATED_FIRM] === $scope.map.$import.filter.firmUri;
+                }
+                // architect filter
+                if ($scope.map.$import.filter.architectUri) {
+                    found = false;
+                    angular.forEach(location.architects, function (architect) {
+                        if (architect.uri === $scope.map.$import.filter.architectUri) {
+                            found = true;
+                        }
+                    });
+                    result = result && found;
+                }
+            }
+            return result;
+        };
+        $scope.clearImportFilters = function () {
+            $scope.map.$import.filter = {};
+        };
+
+        $scope.$watch('map.$import.filter', function () {
+            generateProspectiveLocations();
+        }, true);
+
+        function generateProspectiveLocations() {
+            var filteredLocations = $filter('filter')($scope.map.$import.locations, $scope.importFilter);
+            filteredLocations = $filter('filter')(filteredLocations, function (location) {
+                return !location.$added;
+            });
+            $scope.map.$import.prospectiveLocations = filteredLocations;
+        }
+
+
 
         /*
         =====================================================
@@ -193,6 +368,10 @@ angular.module('angularApp')
          */
         $scope.addLocation = function (location) {
             // Store the location
+            location.asset = {
+                media: 'images/icon.png',
+                thumbnail: 'images/icon.png',
+            };
             $scope.map.locations.unshift(location);
             // Clear the entry
             $scope.map.$tempLocation = {};
@@ -205,8 +384,7 @@ angular.module('angularApp')
         =====================================================
          */
         $scope.remove = function (location) {
-            var index = $scope.map.locations.indexOf(location);
-            $scope.map.locations.splice(index, 1);
+            removeLocationFromMap(location);
         };
 
         /*

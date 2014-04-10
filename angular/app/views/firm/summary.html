@@ -2,9 +2,9 @@
     <div class="container">
         <div ng-hide="$state.includes('firm.summary.edit')">
             <!-- Editor: &nbsp; &nbsp; -->
-            <button class="btn btn-default btn-sm" ui-sref="firm.summary.edit({ firmId: firm.encodedUri })"><i class="fa fa-pencil"></i> Edit</button>      
+            <button class="btn btn-default btn-xs" ui-sref="firm.summary.edit({ firmId: firm.encodedUri })"><i class="fa fa-pencil"></i> Edit</button>      
 
-            <button class="btn btn-default btn-sm" ng-click="$parent.delete(firm)" ng-show="Auth.role === 'root'"><i class="fa fa-trash-o"></i> Delete</button>
+            <button class="btn btn-default btn-xs" ng-click="$parent.delete(firm)" ng-show="Auth.role === 'root'"><i class="fa fa-trash-o"></i> Delete</button>
         </div>        
     </div>
 </div>

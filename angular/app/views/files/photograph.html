@@ -16,11 +16,19 @@
 	<div class="l-frame l-frame-tight">
 		<div class="container">
 			<label class="control-label">Which project do the photos depict?</label>
-			<div 
-				ui-select2="structureSelect" 
-				ng-model="selectedProject" 
-				class="form-control">
+			<div class="row">
+				<div class="col-sm-10">
+					<div 
+						ui-select2="structureSelect" 
+						ng-model="selectedProject" 
+						class="form-control">
+					</div>
+				</div>
+				<div class="col-sm-2" style="border-left: 1px solid #ccc; padding-left: 16px;">
+					<button class="btn btn-default form-control"><i class="fa fa-plus"></i> Add Project</button>
+				</div>
 			</div>
+			
 		</div>
 		
 	</div>

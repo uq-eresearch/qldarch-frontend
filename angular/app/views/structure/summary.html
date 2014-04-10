@@ -2,9 +2,9 @@
     <div class="container">
         <div ng-hide="$state.includes('structure.summary.edit')">
             <!-- Editor: &nbsp; &nbsp; -->
-            <button class="btn btn-default btn-sm" ui-sref="structure.summary.edit({ structureId: structure.encodedUri })"><i class="fa fa-pencil"></i> Edit</button>    
+            <button class="btn btn-default btn-xs" ui-sref="structure.summary.edit({ structureId: structure.encodedUri })"><i class="fa fa-pencil"></i> Edit</button>    
 
-            <button class="btn btn-default btn-sm" ng-click="$parent.delete(structure)" ng-show="Auth.role === 'root'"><i class="fa fa-trash-o"></i> Delete</button>
+            <button class="btn btn-default btn-xs" ng-click="$parent.delete(structure)" ng-show="Auth.role === 'root'"><i class="fa fa-trash-o"></i> Delete</button>
         </div>        
     </div>
 </div>
@@ -25,7 +25,7 @@
                 <p ng-hide="structure.locations.length">No location.</p>
 
                 <h5>Completion Date</h5>
-                <p ng-show="structure[Uris.DCT_CREATED].length">{{ structure[Uris.DCT_CREATED] }}</p>
+                <p ng-show="structure[Uris.DCT_CREATED].length">{{ structure[Uris.QA_COMPLETION_DATE] }}</p>
                 <p ng-hide="structure[Uris.DCT_CREATED].length">No completion date.</p>
 
                 <h5>Demolished</h5>

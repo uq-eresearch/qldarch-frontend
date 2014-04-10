@@ -6,11 +6,7 @@
         opacity: 0.1;
     }
 
-    .node circle {
-        fill: #ccc;
-        stroke: #fff;
-        stroke-width: 5px;
-    }
+    
 
     .node rect {
         fill: green;
@@ -27,6 +23,13 @@
 
     }
 
+    .node circle {
+        fill: #ccc;
+        stroke: #fff;
+        stroke-width: 5px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
     .node.selected circle {
         stroke: yellow;
         stroke-width: 5px;
@@ -34,11 +37,26 @@
     .node.node-architect circle {
         fill: #0FACA1;
     }
+    .node.node-architect:hover circle {
+        fill: #3CCDC2;
+    }
+    .node.node-architect.node-architect-nonqueensland circle {
+        fill: #E42962;
+    }
+    .node.node-architect.node-architect-nonqueensland:hover circle {
+        fill: #E42962;
+    }
     .node.node-structure circle {
         fill: #2153B7;
     }
+    .node.node-structure:hover circle {
+        fill: #5389F5;
+    }
     .node.node-firm circle {
         fill: #26D813;
+    }
+    .node.node-firm:hover circle {
+        fill: #87ED7C;
     }
 </style>
 
@@ -105,6 +123,22 @@
                 </ul>
                 <!-- /Selected relationships -->
             </div>
+            <div style="text-align: center;" ng-show="selected && selected.uri !== $parent.entity.uri" class="text-muted">
+                Double click circle to center.
+            </div>
+        </div>
+    </div>
+
+    <div class="l-frame l-frame-tight l-frame-divided">
+        <div class="container">
+            <h3>Legend</h3>
+            <ul class="list-unstyled">
+                <li><div style="display: inline-block; height: 20px; width: 20px; background-color: #0FACA1; margin-right: 8px;"></div> Architect (Practiced in Queensland)</li>
+                <li><div style="display: inline-block; height: 20px; width: 20px; background-color: #E42962; margin-right: 8px;"></div> Architect (Other)</li>
+                <li><div style="display: inline-block; height: 20px; width: 20px; background-color: #2153B7; margin-right: 8px;"></div> Project</li>
+                <li><div style="display: inline-block; height: 20px; width: 20px; background-color: #26D813; margin-right: 8px;"></div> Firm</li>
+                <li><div style="display: inline-block; height: 20px; width: 20px; background-color: #ccc; margin-right: 8px;"></div> Other</li>
+            </ul>
         </div>
     </div>
     
