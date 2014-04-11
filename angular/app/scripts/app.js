@@ -387,6 +387,9 @@ angular.module('angularApp', [
             .state('ugc.map.edit.add.import', {
                 url: '/import',
             })
+            .state('ugc.map.edit.list', {
+                url: '/list'
+            })
             .state('ugc.wordcloud', {
                 // abstract: true,
                 url: '/wordcloud',

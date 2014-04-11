@@ -262,6 +262,17 @@ angular.module('angularApp')
         $scope.addAll = function () {
             var filteredLocations = $filter('filter')($scope.map.$import.locations, $scope.importFilter);
             addLocationsToMap(filteredLocations);
+            $scope.map.$import.entity = null;
+            $scope.map.$import.locations = null;
+            $scope.isShowingFilters = false;
+            $state.go('ugc.map.edit');
+        };
+        $scope.cancel = function () {
+            $scope.map.$import.entity = null;
+            $scope.map.$import.locations = null;
+            $scope.map.$import.prospectiveLocations = [];
+            $scope.isShowingFilters = false;
+            $state.go('ugc.map.edit');
         };
         $scope.add = function (location) {
             addLocationsToMap([location]);

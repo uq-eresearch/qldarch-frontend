@@ -18,10 +18,19 @@ angular.module('angularApp')
 
         };
 
+        /*
+"Notre Dame du Haut, Ronchamps, France"
+1: "Chapel Notre Dame du Haut, Ronchamp, France"
+
+ */
         var setupNames = function (entities) {
             // Array or object
             angular.forEach(entities, function (entity) {
                 entity.name = getName(entity);
+            // if (angular.isArray(entity.name)) {
+            //     console.log('an array?', entity.name);
+            //     entity.name = entity.name[0];
+            // }
                 entity.encodedUri = GraphHelper.encodeUriString(entity.uri);
             });
             return entities;

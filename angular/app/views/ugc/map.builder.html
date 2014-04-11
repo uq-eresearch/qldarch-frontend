@@ -5,19 +5,58 @@
 </div>
 <div class="l-frame l-frame-tighter l-frame-divided">
 	<div class="container">
-		<div ng-hide="$state.includes('ugc.map.edit.add')">
+		<div ng-hide="$state.includes('ugc.map.edit.add') || $state.includes('ugc.map.edit.list')">
 			<button class="btn" ui-sref="ugc.map.edit.add.location" ng-class="{'btn-primary': !map.locations.length, 'btn-default': map.locations.length}">
-				<i class="fa fa-plus"></i> Add Location 
-			</button>	
+				<i class="fa fa-plus"></i> Add More Locations
+			</button>
+			<button ng-show="map.locations.length" class="btn btn-link pull-right" ui-sref="ugc.map.edit.list"><i class="fa fa-pencil"></i> Edit Locations</button>
+			<div class="text-muted" ng-hide="map.locations.length" style="margin-top: 16px;">No locations added. Try adding some locations.</div>
+		</div>
+
+		<div ng-show="$state.includes('ugc.map.edit.list')" class="panel panel-default">
+			<div class="panel-heading">
+				<a href="" ui-sref="ugc.map.edit" class="pull-right">
+					<i class="fa fa-times"></i> 
+				</a>
+				Edit Locations
+			</div>
+			<div class="panel-body">
+				<input type="text" class="form-control" ng-model="map.$import.listFilter" placeholder="Filter  location" style="border-radius: 100px; margin-bottom: 16px;">
+				<div ng-repeat="location in map.locations | filter:map.$import.listFilter" style="margin-top: 8px;">
+					<div class="row">
+						<div class="col-sm-1">
+							<img ng-src="{{ location.asset.thumbnail }}" alt="thumbnail" class="img-responsive">
+						</div>
+						<div class="col-sm-11">
+							<button class="btn btn-default btn-xs pull-right" ng-click="remove(location)">
+								<i class="fa fa-trash-o"></i>
+							</button>
+							<p><strong>{{ location.name }}</strong> <span ng-show="location[Uris.QA_COMPLETION_DATE]">({{ location[Uris.QA_COMPLETION_DATE] }})</span>
+														</p>
+														<p ng-repeat="address in location.locations">{{ address }}</p>
+														<p><span ng-repeat="typology in location.buildingTypologies">{{ typology.name }}</span></p>
+
+							<!-- <p><i class="fa fa-map-marker" style="margin-right: 8px;"></i> <strong>{{ location.name }}</strong> <span ng-show="location[Uris.DCT_CREATED]">({{ location[Uris.DCT_CREATED] }})</span></p>
+
+							<p><span ng-repeat="typology in location.buildingTypologies">{{ typology.name }}</span></p> -->
+						</div>
+					</div>
+				</div>
+			</div>
+			<ul class="list-group">
+				<li class="list-group-item">
+					<button class="btn btn-primary" ui-sref="ugc.map.edit">Done</button>
+				</li>
+			</ul>
 		</div>
 		
-		<div class="panel panel-default" ng-if="$state.includes('ugc.map.edit.add')">
-			<div class="panel-body">
-				<i class="fa fa-times pull-right" ui-sref="ugc.map.edit"></i>
+		<div ng-if="$state.includes('ugc.map.edit.add')">
+			<!-- <div class="panel-body">
+				<i class="fa fa-times pull-right" ui-sref="ugc.map.edit"></i> -->
 				<tabset>
 
 					<!-- Import location -->
-	    			<tab heading="From Architect, Project or Typology" select="$state.go('ugc.map.edit.add.import')">
+	    			<tab heading="Import Locations" select="$state.go('ugc.map.edit.add.import')">
 	    				<div style="padding: 8px; margin-top: 8px;">
 	    					<p class="text-muted">Search for architects, projects or firms to import locations.</p>
 							<div 
@@ -35,14 +74,17 @@
 									No locations found.
 								</div>
 
-								<!-- List of locations + filters -->
-								<div ng-show="map.$import.locations.length">
+								<div ng-show="isShowingFilters" style="margin-top: 16px;">
 									<ul class="list-group">
-										<!-- <li class="list-group-item list-group-item-success media-body">
-											<button class="btn btn-primary" ng-click="import(map.$import.locations)">Add to Map ({{ map.$import.numberToImport || 0}})</button>
-										</li> -->
-										<li class="list-group-item list-group-item-warning">
-											<!-- <h4>Filters</h4> -->
+										<!-- <div class="panel-heading">
+											<div ng-show="(map.$import.locations | filter:importFilter).length !== map.$import.locations.length">
+											Filtered: Showing {{ (map.$import.locations | filter:importFilter).length }} of {{ map.$import.locations.length }} locations <a href="" ng-click="clearImportFilters()">Clear Filters</a>
+											</div>
+										</div> -->
+										<li class="list-group-item" ng-show="(map.$import.locations | filter:importFilter).length !== map.$import.locations.length">
+											<strong>Showing {{ (map.$import.locations | filter:importFilter).length }} of {{ map.$import.locations.length }} locations</strong> <a href="" ng-click="clearImportFilters()">Clear Filters</a>
+										</li>
+										<li class="list-group-item" >
 											<div class="row">
 												<div class="col-sm-4">
 													<div class="form-group">
@@ -102,13 +144,87 @@
 												</div>
 											</div>
 										</li>
+									</ul>
+
+	
+									<!-- <ul class="list-group">
+										<li class="list-group-item media-body">
+											<div class="pull-right">
+												
+											</div>
+
+											<div>
+											 	Previewing {{ (map.$import.locations | filter:importFilter).length }} Locations. 
+											 	<a href="" ng-click="clearImportFilters()">Clear Filters ({{ map.$import.locations.length }})</a>
+											</div>
+											<div ng-show="(map.$import.locations | filter:importFilter).length !== map.$import.locations.length">
+											Filtered: Showing {{ (map.$import.locations | filter:importFilter).length }} of {{ map.$import.locations.length }} locations <a href="" ng-click="clearImportFilters()">Clear Filters</a>
+											</div>
+
+
+											
+
+
+										</li>
+									</ul> -->
+									
+									<!-- Add button -->
+									<!-- <div class="panel panel-primary">
+										<div class="panel-heading media-body">
+											<div class="pull-right">
+											</div>
+										</div>
+										<div class="panel-body">
+											
+										</div>
+									</div> -->
+								</div>
+
+								<div>
+									<button class="btn btn-primary" 
+										ng-click="addAll();" 
+										ng-show="map.$import.prospectiveLocations.length">
+										<i class="fa fa-plus"></i>
+										Add Locations to Map ({{ map.$import.prospectiveLocations.length }} Locations)
+									</button>
+									<button class="btn btn-primary" disabled 
+										ng-click="addAll()" 
+										ng-show="map.$import.prospectiveLocations.length == 0 && map.$import.locations.length > 0"><i class="fa fa-check"></i> All added</button>
+
+									<button class="btn btn-default" ng-click="cancel()" ng-show="map.locations.length">
+										Cancel
+									</button>
+
+									
+
+									<a href="" ng-click="isShowingFilters = !isShowingFilters" class="pull-right" ng-show="map.$import.prospectiveLocations.length">
+										<i class="fa" ng-class="{'fa-chevron-right': !isShowingFilters, 'fa-chevron-up': isShowingFilters}"></i>
+										Filters 
+									</a>
+
+								</div>
+								
+
+								
+
+		
+								<!-- List of locations + filters -->
+								<div ng-show="false">
+									<ul class="list-group">
+										<!-- <li class="list-group-item list-group-item-success media-body">
+											<button class="btn btn-primary" ng-click="import(map.$import.locations)">Add to Map ({{ map.$import.numberToImport || 0}})</button>
+										</li> -->
+										<li class="list-group-item list-group-item-warning">
+											<!-- <h4>Filters</h4> -->
+											
+										</li>
 										<li class="list-group-item list-group-item-warning" ng-show="(map.$import.locations | filter:importFilter).length !== map.$import.locations.length">
 											Filtered: Showing {{ (map.$import.locations | filter:importFilter).length }} of {{ map.$import.locations.length }} locations <a href="" ng-click="clearImportFilters()">Clear Filters</a>
 										</li>
 										<li class="list-group-item">
-											<button class="btn btn-primary" ng-click="addAll()"><i class="fa fa-plus"></i> Add ({{ (map.$import.locations | filter:importFilter).length }})</button>
+											
 										</li>
-										<li class="list-group-item">
+										<li class="list-group-item" style="display: none;">
 											<div ng-repeat="location in map.$import.locations | filter:importFilter" class="row" style="margin-top: 8px;">
 											<div>
 												<div class="col-sm-1">
@@ -141,7 +257,7 @@
 	    			<!-- /Import location -->
 
 					<!-- New Location -->
-	    			<tab heading="New" select="$state.go('ugc.map.edit.add.location')">
+	    			<tab heading="New Location" select="$state.go('ugc.map.edit.add.location')">
 	    				<form style="padding: 8px; margin-top: 8px;">
 	    					<p class="text-muted">Create a new location to add to the map.</p>
 	    					<div class="form-group">
@@ -169,17 +285,19 @@
 							<div style="margin-top: 24px;">
 								<button type="submit" class="btn btn-primary" ng-click="addLocation(map.$tempLocation)"
 								ng-disabled="!map.$tempLocation.name || !map.$tempLocation.lat || !map.$tempLocation.lon">Add to Map</button>
+
+								<button ui-sref="ugc.map.edit" class="btn btn-default" ng-show="map.locations.length">Cancel</button>
 							</div>
 	    				</form>
 	    			</tab>
 	    			<!-- /New Location -->
 	  			</tabset>
-			</div>
+			<!-- </div> -->
 		</div>
 
 		<!-- Location list -->
-		<div style="margin-top: 24px;">
-			<h4>Added Locations</h4>
+		<div style="display: none;">
+			<h4>Added Locations TEST</h4>
 			<div class="text-muted" ng-hide="map.locations.length">No locations added. Try adding some locations.</div>
 			<!--  | slice:currentPage:currentPage+10 -->
 			<div ng-repeat="location in map.locations" style="margin-top: 8px;">
@@ -207,19 +325,22 @@
 	</div>
 </div>
 
-<div class="l-frame l-frame-tighter" ng-show="map.locations.length">
+<div class="l-frame l-frame-tighter l-frame-divided" ng-show="map.locations.length && !map.$import.prospectiveLocations.length && !$state.includes('ugc.map.edit.list') && !$state.includes('ugc.map.edit.add') && Auth.auth">
 	<div class="container">
 		<div class="row">
-			<div class="col-sm-10">
+			<div class="col-sm-9">
 				<input type="text" class="form-control" placeholder="Title: What is your map about?" ng-model="compoundObject.title">
 			</div>
-			<div class="col-sm-2">
+			<div class="col-sm-3">
 				<button class="btn btn-primary form-control" ng-click="save()"
 					ng-disabled="!compoundObject.title || !map.locations.length || !Auth.auth"
 					ng-click="save()">
-						Save Map
+						Save Map ({{ map.locations.length }} locations)
 				</button>
 			</div>
 		</div>
 	</div>
 </div>
+
+
+	

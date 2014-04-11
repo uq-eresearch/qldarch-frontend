@@ -13,8 +13,30 @@
     </div>
 </div>
 
+<div class="l-frame l-frame-tighter l-frame-divided" ng-show="$state.includes('ugc.map.edit.add') && (map.locations.length || map.$import.prospectiveLocations.length)">
+		<div class="container" style="text-align: center;">
+			<strong style="margin-right: 8px;">Zoom</strong>
+			<div class="btn-group">
+		        <button type="button" class="btn btn-default btn-xs" ng-model="zoom" btn-radio="'all'">All</button>
+		        <button type="button" class="btn btn-default btn-xs" ng-model="zoom" btn-radio="'prospective'">
+		        	<img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF" alt="" style="height: 16px; margin-right: 4px;"> New	({{ map.$import.prospectiveLocations.length || 0 }})
+		        </button>
+		        <button type="button" class="btn btn-default btn-xs" ng-model="zoom" btn-radio="'added'">
+		        	<img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|11c3b6" alt="" style="height: 16px; margin-right: 4px;"> Added ({{ map.locations.length || 0 }})
+		        </button>
+		    </div>
+
+			<span style="margin-right: 24px;" class="text-muted" ng-mouseenter="zoomProspective()" ng-mouseleave="zoomAll()">
+				
+			</span>
+
+			<span class="text-muted" ng-mouseenter="zoomAdded()" ng-mouseleave="zoomAll()">
+				
+			</span>
+		</div>
+	</div>
+
 <div class="l-frame l-frame-media" ng-show="map.locations.length || map.$import.prospectiveLocations.length">
-	
 	<div class="container">
 		<h3 style="text-align: center; margin-bottom: 24px;" ng-show="compoundObject.title.length">
 			<!-- Map title -->

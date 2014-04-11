@@ -24,7 +24,7 @@ angular.module('angularApp')
             zoom: 15,
             maxZoom: 16,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
-            scrollwheel: false
+            scrollwheel: true
         };
 
         $scope.$watch('myMap', function (myMap) {
@@ -52,9 +52,9 @@ angular.module('angularApp')
                 pinColor = 'CCCCCC';
 
             if (type === 'added') {
-                pinColor = 'E42962';
+                pinColor = '11c3b6';
             } else if (type === 'prospective') {
-                pinColor = 'F0D1DA';
+                pinColor = 'FFFFFF';
                 animation = google.maps.Animation.DROP;
             }
 
@@ -131,5 +131,37 @@ angular.module('angularApp')
 
         $scope.$watchCollection('map.locations', function (locations) {
             renderLocations(locations, $scope.map.$import.prospectiveLocations);
+        });
+
+        $scope.$watch('zoom', function (zoom) {
+            if (zoom) {
+                var bounds;
+                if (zoom === 'prospective') {
+                    console.log('zoom prospective');
+                    bounds = new google.maps.LatLngBounds();
+                    angular.forEach($scope.map.$import.prospectiveLocations, function (prospectiveLocation) {
+                        bounds.extend(new google.maps.LatLng(prospectiveLocation.lat, prospectiveLocation.lon));
+                    });
+                    $scope.myMap.fitBounds(bounds);
+                } else if (zoom === 'all') {
+                    console.log('zoom all');
+                    bounds = new google.maps.LatLngBounds();
+                    angular.forEach($scope.map.$import.prospectiveLocations, function (prospectiveLocation) {
+                        bounds.extend(new google.maps.LatLng(prospectiveLocation.lat, prospectiveLocation.lon));
+                    });
+                    angular.forEach($scope.map.locations, function (location) {
+                        bounds.extend(new google.maps.LatLng(location.lat, location.lon));
+                    });
+                    $scope.myMap.fitBounds(bounds);
+                } else if (zoom === 'added') {
+                    console.log('zoom added');
+                    bounds = new google.maps.LatLngBounds();
+                    angular.forEach($scope.map.locations, function (location) {
+                        bounds.extend(new google.maps.LatLng(location.lat, location.lon));
+                    });
+                    $scope.myMap.fitBounds(bounds);
+                }
+            }
+
         });
     });
