@@ -222,6 +222,10 @@ angular.module('angularApp', [
                 url: '/contribute',
                 templateUrl: 'views/contribute.html',
             })
+            .state('compound', {
+                url: '/compound',
+                templateUrl: 'views/compound.html',
+            })
             .state('register', {
                 url: '/register',
                 templateUrl: 'views/register.html',

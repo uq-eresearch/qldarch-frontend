@@ -1,0 +1,507 @@
+/* Styles specific to Resource Maps */
+
+.orelink {
+	font-style:italic; 
+	color: #51666b; 
+	padding:10px;	
+}
+
+/* mimetype icons for node views */
+.mimeicon {
+	list-style-position:inside;
+}
+.mimeicon a {
+	position:relative;
+	top:-4px;
+}
+.pageicon {
+	list-style-type: none;
+}
+.imageicon {
+	list-style-image: url(./skin/icons/ore/image.png);
+}
+.htmlicon {
+	list-style-image: url(./skin/icons/ore/page_html.gif);
+}
+.videoicon {
+	list-style-image: url(./skin/icons/ore/film.png);
+}
+.pdficon {
+	list-style-image: url(./skin/icons/ore/file_acrobat.gif);
+}
+.audioicon {
+	list-style-image: url(./skin/icons/ore/page_sound.gif);
+}
+.xmlicon {
+	list-style-image: url(./skin/icons/ore/page_code.png);
+	padding-top:2px;
+}
+.annoicon {
+	list-style-image: url(./skin/icons/comment.png);
+}
+.dataseticon {
+	list-style-image: url(./skin/icons/ore/database_table.png);
+	padding-top:2px;
+}
+.collectionicon {
+	list-style-image: url(./skin/icons/ore/page_white_stack.png);
+	padding-top:2px;
+}
+.texticon{
+	list-style-image: url(./skin/icons/ore/page_white_text.png);
+	padding-top:2px;
+}
+.objicon {
+	list-style-image: url(./skin/icons/ore/chair.png);
+	padding-top:2px;
+}
+.softwareicon {
+	list-style-image: url(./skin/icons/ore/application.png);
+}
+.serviceicon {
+	list-style-image: url(./skin/icons/ore/server-network.png);
+	padding-top:2px;
+}
+.interactiveicon {
+	list-style-image: url(./skin/icons/ore/map_cursor.png);
+	padding-top:2px;
+}
+.eventicon {
+	list-style-image: url(./skin/icons/ore/alarm-clock-select.png);
+	padding-top:2px;
+}
+.oreicon {
+	list-style-image: url(./skin/icons/oaioreicon-sm.png); 
+	padding-top:2px;
+}
+.objecticon {
+	list-style-image: url(./skin/icons/object.png); 
+	padding-top:2px;
+}
+.rdficon {
+	background-image: url(./skin/icons/ore/rdf.png) !important;	
+}
+
+/* Graphical Editor styles */
+/* Allow uri of nodes to be expanded */
+.menuIcon {
+	background-image:url(./lib/ext3.2/resources/images/gray/panel/tools-sprites-trans.gif);
+	background-position: 0 -90px;
+	opacity:.8;
+}
+.toggleIcon {
+	right: -2px;
+	top: 0px; 
+}
+.menuIcon:hover, .toggleIcon:hover {
+	opacity:1;
+}
+.menuIcon img, .toggleIcon img {
+	width:15px;
+	height:15px;
+}
+.hideuri {
+    -moz-transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+}
+.hideuribox {
+	white-space: pre;
+}
+.nodeabstract {
+	height:95%;
+	padding:4px;
+	overflow:auto;
+}
+.co-uri {
+	text-align:left;
+	padding-left: 3px;
+	color: #333333;
+	border-bottom: 1px solid #aeaeae;
+    overflow: hidden;
+}
+
+.entity-header {
+	overflow: hidden;
+    background-color:#e5e5e5;
+    color: #333333;
+    font-size: 11px;
+    text-align: center;
+    font-family: tahoma, arial, helvetica;
+	border-top-right-radius: 15px;
+	border-top-left-radius: 15px;
+    -moz-border-radius-topright: 15px;
+	-moz-border-radius-topleft: 15px;
+    -webkit-border-top-left-radius: 15px;
+    -webkit-border-top-right-radius: 15px;
+	border: 1px solid #aeaeae;
+}
+.co-preview {
+	background-color: white;
+	border-top: 1px solid #aeaeae;
+	border-left: 1px solid #aeaeae;
+	border-right: 1px solid #aeaeae;
+	overflow: hidden;
+	font-size: 9pt;
+}
+.entity-preview {
+    background-color: white;
+	border: 1px solid #aeaeae;
+    overflow: hidden;
+    font-size: 9pt;
+	border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    -moz-border-radius-bottomright: 15px;
+    -moz-border-radius-bottomleft: 15px;
+    -webkit-border-bottom-left-radius: 15px;
+    -webkit-border-bottom-right-radius: 15px;
+}
+.co-footer {
+	background-color: white;
+	border-bottom: 1px solid #aeaeae;
+	font-size: 2px;
+}
+.co-tl {
+	background: url(./skin/resourcenodecircleminus.gif) no-repeat top left;
+}
+.entity_resource {
+	-moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    border-radius: 15px;
+	background-color: transparent;
+	padding:0px;
+	text-align: center;
+	overflow: visible;
+}
+.resource_figure {
+	-moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    border-radius: 15px;
+    background-color: transparent;
+    padding:0px;
+    overflow: visible;
+	text-align:left;
+}
+.co-bl {
+	background: url(./skin/resourcenodecircleminus.gif) no-repeat bottom left;
+}
+.co-br {
+	background: url(./skin/resourcenodecircleminus.gif) no-repeat bottom right;
+}
+.co-tr-minus {
+	background: url(./skin/resourcenodecircleminus.gif) no-repeat top right;
+}
+.co-tr-plus {
+	background: url(./skin/resourcenodecircleplus.gif) no-repeat top right;
+}
+.ctxtConnLabel {
+	color: #51666b !important;
+	font-size:100% !important;
+}
+
+/* main tabs content styles */
+
+.code-icon {
+	background-image: url(./skin/icons/ore/page_code.png) !important; 
+}
+
+.graph-icon {
+	background-image: url(./skin/icons/ore/layout_pencil.png) !important; 
+}
+.list-icon {
+	background-image: url(./skin/icons/ore/table_edit.png) !important; 
+}
+.detail-icon {
+	background-image: url(./skin/icons/ore/application_view_detail.png) !important; 
+}
+.slide-icon {
+	background-image: url(./skin/icons/ore/picture_empty.png) !important; 
+}
+.explore-icon {
+	background-image: url(./skin/icons/ore/network.png) !important; 
+}
+.explorePanel {
+	height: 100% !important; 
+}
+.exploreHistory {
+    vertical-align:middle;
+	line-height: 2em;
+	width:100%;
+	text-align:right;
+	overflow:hidden;
+	font-size:smaller;
+	color:#51666b;
+	padding-left: 4px; 
+	padding-right: 4px;
+}
+#remsmilview {
+	padding-left: 20px;	
+}
+#remsmilview div {
+	padding-top:20px;
+}
+#welcome * ul li {
+	margin-left:10px;
+	list-style-position: inside;
+	list-style-type: square;
+}
+.remlisticon {
+	list-style-position: inside;
+	margin-top:-3px;
+}
+.remlisticon span {
+	position:relative;
+	top:-4px;
+}
+#propertytabs * .x-tree-node a:hover {
+    text-decoration:none;
+    color:black;
+}
+#drawingarea {
+	position:relative;
+	background-position: center !important;
+	border: none;
+	margin:0px;
+}
+
+#remrdfview, #remtrigview {
+ 	color: #51666b;
+ 	font-family: courier monospace;
+ 	font-size: 70%;
+}
+#welcome * a, #remsmilview * a, #remlistview * a {
+	color: #2c5798 !important;
+}
+#welcome * a:hover, #remsmilview * a:hover, #remlistview * a:hover {
+	text-decoration: underline;
+}
+#welcome iframe {border:none;}
+#remlistview .x-grid3-row-selected {background-color: yellow !important;}
+
+.highlightNode {
+	border: 1px solid yellow;
+	background-color: yellow;
+	border-bottom: none;
+}
+.highlightEntity {
+	display:block;
+	-moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    border-radius: 15px;
+	border: 4px solid yellow;
+	background-color: yellow;
+	width: 100%;
+	height: 100%;
+}
+
+/* Resource Map explore view */
+.node {
+	font-size:0.6em;
+	font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color:#51666b;
+	font-weight:normal;
+	cursor:pointer;
+	padding:2px;
+}
+#exploreReset {
+	z-index: 999; 
+	position: absolute; 
+	bottom: 10px; 
+	left: 10px; 
+	font-size: x-small; 
+	color: rgb(81, 102, 107);
+}
+#infovis {width: 100%; height:100%;}
+.explore-loading{
+	background-position: center;
+	background-repeat: no-repeat;
+	background-image: url(./skin/icons/ore/loading.png);
+}
+span.exploreclose {
+    color:white;
+}
+span.exploreclose:hover {
+    color: #FF5555;
+    font-size: 1.5em;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 3px;
+}
+span.explorename {
+    cursor: pointer;
+    background-image: url(./skin/icons/ore/transparentwhite.png);
+}
+div.exploretip-title {
+    font-size: smaller;
+    font-weight: bold;
+}
+div.exploretip-text {
+	font-size: smaller;
+	font-weight: normal;
+	color: #51666b;
+}
+/* Slideshow View */
+#remslideview *, #remlistview * {
+	font-family: "Helvetica","Arial",sans-serif;
+}
+.slideshowTitle {
+	color:#cc0000;font-weight:bold;font-size:120%;padding-top:0.5em;
+	padding-bottom:0.5em;border-bottom:1px solid #cc0000;
+}
+.sectionTitle {
+	font-weight:bold;font-size:120%;padding-top:0.5em;padding-bottom:0.5em; 
+	border-bottom: 1px solid #51666b
+}
+.slideshowProps {
+	font-size:85%;color:#465458;padding:2px;padding-top:0.5em;line-height:1.3em;
+}
+.slideshowTOC {
+	font-size:95%;color:#465458;padding-top:1em;line-height:1.2em
+}
+.slideshowFooter {
+	font-size:70%;padding-top:0.5em;color:#465458;padding-left:3px;
+}
+
+/* Modal message for loading, saving etc */
+.co-load-msg .ext-mb-fix-cursor {
+	display: none !important
+}
+.co-load-msg .x-window-header {
+	height:0;
+}
+
+/* Browse, History, Search listing styles */
+.coListing {
+	padding: 2px;
+    padding-bottom:3px;
+    cursor:pointer;
+}
+.coListing table {
+    font-family: tahoma, arial, helvetica;
+    font-size: smaller;
+}
+div.coListing:hover {
+	background-color: #eeeeee;
+}
+.detailText {
+	padding-left:20px;color:#51666b;font-size:87%
+}
+.descriptionText {
+	padding-left:20px;color:#51666b;font-size:87%;font-style:italic;
+}
+.detailsselected {
+    background-color: yellow;
+}
+.underlined {
+    padding-bottom: 2px;
+    display:block;
+    width: 100%;
+    border-bottom: 1px solid #51666b;
+}
+/* override multiline tree styles for listingss */
+.x-tree-multiline-node-details{
+	color:#51666b;
+	font-size:90%
+}
+
+        
+.x-tree-multiline-node-collapsed .x-tree-elbow-line-multiline-expanded {
+    background-image: none;
+}
+
+/* icons used to indicate co source in listings */
+.oreresult {
+	background-image: url(./skin/icons/oaioreicon-sm.png) !important;
+}
+.ro-oreresult {
+    background-image: url(./skin/icons/oaioreicon-grey.png) !important; 
+}
+
+
+/* Context menu icons for listings menu */
+.add-icon {
+	background-image: url(./skin/icons/add.png);
+}
+.delete-icon {
+    background-image: url(./skin/icons/ore/database_delete.png);
+}
+.edit-icon {
+    background-image: url(./skin/icons/pencil.png);
+}
+.object-icon {
+    background-image: url(./skin/icons/object.png);
+}
+.launch-icon {
+	background-image: url(./skin/icons/page_go.png);
+}
+
+/* Property panel:  relationship icons */
+.rel-to {
+	background-image: url(./skin/icons/ore/arrow_left.png);
+	background-repeat:no-repeat;
+}
+.rel-from {
+	background-image: url(./skin/icons/ore/arrow_right.png);
+	background-repeat:no-repeat;
+}
+.rel-with {
+    background-image: url(./skin/icons/ore/arrow_both.png);
+    background-repeat:no-repeat;
+}
+/* Formatting toolbox for popup property editor */
+.x-edit-pt {
+	background-image: url(./skin/icons/ore/toolbox_pencil.png) !important;
+}
+/* Override superbox select for property editor */
+.x-superboxselect-btns div {float: left; width: 16px; height: 16px; margin-top: 1px;}
+.x-superboxselect-input input { border: none; outline: none; margin-top: 0px; margin-bottom: 0px;}
+.x-superboxselect li {font-size:smaller;float: left; margin: 0.5px 0.5px 1px 0.5px; padding: 0;line-height: 14px;}
+.x-tab-strip .x-tab-strip-with-menu {
+	position:relative;
+}
+.x-tab-strip-with-menu .x-tab-left {
+    padding-right:19px !important;
+}
+.x-tab-strip .x-tab-strip-with-menu a.x-tab-strip-menu {	
+	background-image:url(./lib/ext3.2/resources/images/gray/panel/tools-sprites-trans.gif);
+    background-position:0 -90px;
+	opacity:.6;
+    background-repeat:no-repeat;
+    display:block;
+	width:15px;
+    height:15px;
+    position:absolute;
+    top:4px;
+    right:3px;
+    cursor:pointer;
+    z-index:2;
+}
+.x-tab-strip .x-tab-strip-active a.x-tab-strip-menu {
+    opacity:.8;
+}
+.x-tab-strip .x-tab-strip-active a.x-tab-strip-menu:hover{
+    opacity:1;
+}
+.ext-el-mask {
+    z-index: 9999;
+}
+.ext-mb-textarea {
+	display: none !important;
+}
+.x-tbar-page-next {
+	width: 7px !important;
+}
+.x-tbar-page-prev {
+	width: 7px !important;
+}
+.x-window-bbar {
+	min-width: 400px !important;
+}
+.x-slide-panel {
+	overflow: hidden !important;
+}
+.x-details-panel { 
+	overflow: visible !important;
+}
+#searchResultPanel > .x-panel-bwrap > .x-panel-body {
+	height: 412px !important;
+}
