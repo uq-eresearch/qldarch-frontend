@@ -5,6 +5,11 @@ angular.module('angularApp')
         $scope.relationships = data.relationships;
         $scope.entities = GraphHelper.graphValues(data.entities);
 
+        // Setup the number of times the entity is referenced (inc'd later)
+        angular.forEach($scope.entities, function (entity) {
+            entity.count = 0;
+        });
+
         // We need to transform the data for d3
         var links = [];
         angular.forEach($scope.relationships, function (relationship) {

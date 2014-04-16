@@ -18,6 +18,7 @@ angular.module('angularApp', [
     'ngCookies',
     'ngResource',
     'ngSanitize',
+    'ngAnimate',
     'ngRoute',
     'ngProgress',
     'ui.bootstrap',
@@ -27,7 +28,8 @@ angular.module('angularApp', [
     'ui.utils',
     'infinite-scroll',
     'ui.router',
-    'angularFileUpload'
+    'angularFileUpload',
+    'toaster'
 ])
     .run(function ($rootScope, $route, $location, ngProgress, Uris, Entity, $http, GraphHelper, $state, $stateParams, Auth, $filter) {
 
@@ -133,6 +135,7 @@ angular.module('angularApp', [
 
     })
     .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
+
         console.log('does this work?');
         $httpProvider.defaults.withCredentials = true;
 
@@ -194,6 +197,66 @@ angular.module('angularApp', [
                 },
                 templateUrl: 'views/main.html'
             })
+            .state('image', {
+                abstract: true,
+                url: '/image/:imageId',
+                resolve: {
+                    image: ['Expression', 'GraphHelper', '$stateParams',
+                        function (Expression, GraphHelper, $stateParams) {
+                            console.log('resolving');
+                            var imageUri = GraphHelper.decodeUriString($stateParams.imageId);
+                            return Expression.load(imageUri);
+                        }
+                    ],
+                    depicts: ['Expression', 'Entity', 'GraphHelper', '$stateParams', 'Uris',
+                        function (Expression, Entity, GraphHelper, $stateParams, Uris) {
+                            var imageUri = GraphHelper.decodeUriString($stateParams.imageId);
+                            return Expression.load(imageUri).then(function (expression) {
+                                console.log('depicts', expression[Uris.QA_DEPICTS_BUILDING]);
+                                if (expression[Uris.QA_DEPICTS_BUILDING]) {
+                                    return Entity.load(expression[Uris.QA_DEPICTS_BUILDING]);
+                                }
+                                return [];
+                            });
+
+                        }
+                    ],
+                    images: ['Expression', 'GraphHelper', '$stateParams', 'Uris',
+                        function (Expression, GraphHelper, $stateParams, Uris) {
+                            var imageUri = GraphHelper.decodeUriString($stateParams.imageId);
+                            return Expression.load(imageUri).then(function (expression) {
+                                if (expression[Uris.QA_DEPICTS_BUILDING]) {
+                                    var type;
+                                    if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_PHOTOGRAPH_TYPE) !== -1) {
+                                        type = 'qldarch:Photograph';
+                                    }
+                                    if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_LINEDRAWING_TYPE) !== -1) {
+                                        type = 'qldarch:LineDrawing';
+                                    }
+                                    console.log('type', type);
+                                    return Expression.findByBuildingUris([expression[Uris.QA_DEPICTS_BUILDING]], type).then(function (expressions) {
+                                        console.log('building expressions', expressions);
+                                        return expressions;
+                                    });
+                                } else {
+                                    return [];
+                                }
+                            });
+
+                        }
+                    ]
+                },
+                controller: 'ImageCtrl',
+                template: '<ui-view autoscroll="false"></ui-view>'
+            })
+            .state('image.view', {
+                url: '',
+                templateUrl: 'views/image.view.html'
+            })
+            .state('image.edit', {
+                url: '/edit',
+                templateUrl: 'views/image.edit.html'
+            })
             .state('admin', {
                 abstract: true,
                 url: '/admin',
@@ -213,6 +276,50 @@ angular.module('angularApp', [
                 },
                 controller: 'AdminUsersCtrl',
                 templateUrl: 'views/admin/users.html'
+            })
+            .state('admin.merge', {
+                url: '/merge',
+                controller: 'AdminMergeCtrl',
+                templateUrl: 'views/admin.merge.html'
+            })
+            .state('user', {
+                abstract: true,
+                url: '/user',
+                template: '<ui-view autoscroll="false"></ui-view>'
+            })
+            .state('user.settings', {
+                url: '/settings',
+                controller: 'UserSettingsCtrl',
+                templateUrl: 'views/user.settings.html',
+            })
+            .state('user.ugcs', {
+                url: '/ugcs',
+                resolve: {
+                    compoundObjects: ['CompoundObject', 'Auth',
+                        function (CompoundObject, Auth) {
+                            return Auth.status().then(function () {
+                                return CompoundObject.loadForUser(Auth.user);
+                            });
+                        }
+                    ],
+                },
+                controller: 'UserUgcsCtrl',
+                templateUrl: 'views/user.ugcs.html'
+            })
+            .state('user.files', {
+                url: '/files',
+                resolve: {
+                    expressions: ['Expression', 'Auth',
+                        function (Expression, Auth) {
+                            return Auth.status().then(function () {
+                                console.log('auth is', Auth.user);
+                                return Expression.findByUser(Auth.user);
+                            });
+                        }
+                    ],
+                },
+                controller: 'UserFilesCtrl',
+                templateUrl: 'views/user.files.html'
             })
             .state('about', {
                 url: '/about',
@@ -1068,9 +1175,13 @@ angular.module('angularApp', [
                             }).then(function (relationships) {
                                 // Get all the architects
                                 var designerUris = GraphHelper.getAttributeValuesUnique(relationships, Uris.QA_OBJECT);
-                                return Entity.loadList(designerUris, false).then(function (entities) {
-                                    return GraphHelper.graphValues(entities);
-                                });
+                                if (designerUris.length) {
+                                    return Entity.loadList(designerUris, false).then(function (entities) {
+                                        return GraphHelper.graphValues(entities);
+                                    });
+                                } else {
+                                    return [];
+                                }
                             });
                         }
                     ]
@@ -1124,6 +1235,11 @@ angular.module('angularApp', [
                     ]
                 },
                 controller: 'PhotographCtrl'
+            })
+            .state('structure.photograph.edit', {
+                url: '/edit',
+                // templateUrl: 'views/photograph.edit.html',
+                // controller: 'PhotographEditCtrl'
             })
             .state('structure.lineDrawings', {
                 url: '/line-drawings',

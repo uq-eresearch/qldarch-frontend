@@ -1,12 +1,12 @@
 <div class="alert alert-warning" ng-show="!$state.includes('ugc.map.edit') && (isEditable || isDeletable)" style="margin: 0;">
     <div class="container">
         <!-- Edit -->
-		<button class="btn btn-default btn-sm" ui-sref="ugc.map.edit" ng-show="isEditable">
+		<button class="btn btn-default btn-xs" ui-sref="ugc.map.edit" ng-show="isEditable">
 			<i class="fa fa-pencil"></i> Edit
 		</button>
 		<!-- /Edit -->
 		<!-- Delete -->
-		<button class="btn btn-default btn-sm" ng-click="delete()" ng-show="isDeletable">
+		<button class="btn btn-default btn-xs" ng-click="delete()" ng-show="isDeletable">
 			<i class="fa fa-trash-o"></i> Delete
 		</button>
 		<!-- /Delete -->       

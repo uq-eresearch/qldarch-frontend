@@ -108,6 +108,7 @@ angular.module('angularApp')
         this.QA_LOCATION = this.QA_NS + 'location';
         this.QA_COMPLETION_DATE = this.QA_NS + 'completionDate';
         this.QA_ASSOCIATED_FIRM = this.QA_NS + 'associatedFirm';
+        this.QA_ASSOCIATED_ARCHITECT = this.QA_NS + 'associatedArchitect';
         this.QA_PRACTICED_IN_QUEENSLAND = this.QA_NS + 'practicedInQueensland';
         this.QA_AUSTRALIAN = this.QA_NS + 'australian';
         this.QA_PREF_LABEL = this.QA_NS + 'prefLabel';

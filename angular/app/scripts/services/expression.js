@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .factory('Expression', function (Request, GraphHelper, Uris, File, $filter) {
+    .factory('Expression', function (Request, GraphHelper, Uris, File, $filter, $http, $q, toaster, $cacheFactory) {
         // Service logic
 
         /**
@@ -22,12 +22,65 @@ angular.module('angularApp')
                         });
                         expression.file = files[fileUris[0]];
                     }
+
+                    // Setup state and state params
+                    if (expression[Uris.QA_DEPICTS_BUILDING]) {
+                        console.log('depects building');
+                        expression.$state = 'main';
+                        var params = {};
+                        params.structureId = btoa(expression[Uris.QA_DEPICTS_BUILDING]);
+                        if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_PHOTOGRAPH_TYPE) !== -1) {
+                            expression.$state = 'structure.photograph';
+                            expression.$typeName = 'Photograph';
+                            expression.$type = 'photograph';
+                            params.photographId = expression.encodedUri;
+
+                            expression.$parentState = 'structure.photographs';
+                            expression.$parentStateParams = {
+                                'structureId': params.structureId
+                            };
+                        }
+                        if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_LINEDRAWING_TYPE) !== -1) {
+                            expression.$state = 'structure.lineDrawing';
+                            expression.$typeName = 'Line Drawing';
+                            expression.$type = 'lineDrawing';
+                            params.lineDrawingId = expression.encodedUri;
+
+                            expression.$parentState = 'structure.photographs';
+                            expression.$parentStateParams = {
+                                'structureId': params.structureId
+                            };
+
+                        }
+
+                        expression.$stateParams = params;
+                    } else {
+                        // @todo make this work for other non 'depicts building' types
+                        expression.$state = 'main';
+                        expression.$stateParams = '{}';
+                    }
+
                 });
+
                 return expressions;
             });
         };
 
+        var clearImageCache = function () {
+            $cacheFactory.get('$http').remove('/ws/rest/expression/detail/qldarch%3APhotograph?INCSUBCLASS=false&');
+            $cacheFactory.get('$http').remove('/ws/rest/expression/detail/qldarch%3ALineDrawing?INCSUBCLASS=false&');
+        };
+
         var expression = {
+
+            findByUser: function (email) {
+                return Request.http(Uris.JSON_ROOT + 'expression/user', {
+                    ID: email
+                }, false).then(function (expressions) {
+                    console.log('expressions', expressions);
+                    return attachFiles(GraphHelper.graphValues(expressions));
+                });
+            },
 
             /**
              * Finds all photos that depict a building in a list
@@ -44,6 +97,7 @@ angular.module('angularApp')
                             photographs.push(expression);
                         }
                     });
+                    console.log('hphotographs', photographs);
                     return attachFiles(photographs);
                 });
             },
@@ -84,24 +138,97 @@ angular.module('angularApp')
                 });
             },
 
+            create: function (data) {
+                var payload = angular.copy(data);
+
+                delete payload.building;
+                delete payload.file;
+                delete payload.files;
+
+                var url = Uris.JSON_ROOT + 'expression/description';
+                return $http.post(url, payload, {
+                    withCredentials: true
+                }).then(function (response) {
+                    clearImageCache();
+                    angular.extend(data, response.data);
+                    return attachFiles(data);
+                });
+            },
+
+            update: function (uri, data) {
+                var payload = angular.copy(data);
+                // Remove any extra information
+                // This causes the web server to die
+                delete payload.building;
+                delete payload.file;
+                delete payload.files;
+
+                console.log('payload', payload);
+
+                var url = '/ws/rest/expression/description?ID=' + encodeURIComponent(uri);
+
+                return $http.put(url, payload, {
+                    withCredentials: true
+                }).then(function (response) {
+                    angular.extend(data, response.data);
+                    attachFiles(data);
+                    // setupNames([data]);
+                });
+            },
+
+            delete: function (uri, expression) {
+                var type;
+                if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_PHOTOGRAPH_TYPE) !== -1) {
+                    type = 'photograph';
+                }
+                if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_LINEDRAWING_TYPE) !== -1) {
+                    type = 'line drawing';
+                }
+
+                var r = window.confirm('Delete ' + type + ' ' + expression[Uris.DCT_TITLE] + '?');
+
+                if (r === true) {
+                    var url = '/ws/rest/expression/description?ID=' + encodeURIComponent(uri);
+                    return $http.delete(url).then(function () {
+                        // Invalidate our cache of expressions
+                        clearImageCache();
+
+                        // Display alert
+                        toaster.pop('success', expression[Uris.DCT_TITLE] + ' deleted.', 'You have successfully deleted ' + expression[Uris.DCT_TITLE]);
+                    }, function () {
+                        toaster.pop('error', 'Error occured.', 'Sorry, we couldn\t delete at this time');
+                    });
+                } else {
+                    return $q.when(true);
+                }
+            },
+
+
+
             /**
              * Loads a single entity
              * @param uri
              * @param type
              * @returns {*}
              */
-            load: function (uri, type) {
-                console.log('hello?', type, uri);
-                if (!type) {
-                    console.log('throw dude');
-                    throw ('you need to include type, hopefully this will be fixed in the future');
-                }
-                return Request.getIndex('expression', type, false, false).then(function (expressions) {
-                    var expression = expressions[uri];
+            load: function (uri) {
+                return Request.getUri('expression', uri, false).then(function (expression) {
                     return attachFiles([expression]).then(function () {
                         return expression;
                     });
                 });
+                // @todo - original loading code
+                // console.log('hello?', type, uri);
+                // if (!type) {
+                //     console.log('throw dude');
+                //     throw ('you need to include type, hopefully this will be fixed in the future');
+                // }
+                // return Request.getIndex('expression', type, false, false).then(function (expressions) {
+                //     var expression = expressions[uri];
+                //     return attachFiles([expression]).then(function () {
+                //         return expression;
+                //     });
+                // });
             },
 
             loadAll: function (type) {

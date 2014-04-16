@@ -52,11 +52,15 @@ angular.module('angularApp')
                     buildingTypologyUris = buildingTypologyUris.concat(GraphHelper.asArray(structure[Uris.QA_BUILDING_TYPOLOGY_P]));
                 });
 
+
+
                 return Entity.loadList(buildingTypologyUris).then(function (buildingTypologies) {
                     angular.forEach(structures, function (structure) {
+                        structure.$typologies = structure.$typologies || [];
                         structure.buildingTypologies = [];
                         angular.forEach(GraphHelper.asArray(structure[Uris.QA_BUILDING_TYPOLOGY_P]), function (buildingTypologyUri) {
                             structure.buildingTypologies.push(buildingTypologies[buildingTypologyUri]);
+                            structure.$typologies.push(buildingTypologies[buildingTypologyUri]);
                         });
                     });
                     return structures;
@@ -105,6 +109,13 @@ angular.module('angularApp')
                         // Load the building typology
                         var structure = structures[0];
 
+                        // Load the associated architects
+                        var associatedArchitectUris = GraphHelper.asArray(structure[Uris.QA_ASSOCIATED_ARCHITECT]);
+                        console.log('architect uris', structure[Uris.QA_ASSOCIATED_ARCHITECT]);
+                        Entity.loadList(associatedArchitectUris).then(function (architects) {
+                            console.log('got architects', architects);
+                            structure.$associatedArchitects = GraphHelper.graphValues(architects);
+                        });
                         //						if(angular.isDefined(structure[Uris.GEO_LONG])) {
                         //							if(angular.isArray(structure[Uris.GEO_LONG])) {
                         //								structure.lon = structure[Uris.GEO_LONG][0];
@@ -137,14 +148,14 @@ angular.module('angularApp')
                                 });
                                 console.log('got to here', structure[Uris.QA_ASSOCIATED_FIRM]);
                                 if (angular.isDefined(structure[Uris.QA_ASSOCIATED_FIRM])) {
-                                    return Entity.load(structure[Uris.QA_ASSOCIATED_FIRM], true).then(function (firm) {
-                                        structure.firm = firm;
+                                    return Entity.load(structure[Uris.QA_ASSOCIATED_FIRM], false).then(function (firm) {
+                                        structure.$associatedFirm = firm;
                                         return structure;
                                     });
                                 } else {
                                     return structure;
                                 }
-                            })
+                            });
                         } else {
                             return structure;
                         }

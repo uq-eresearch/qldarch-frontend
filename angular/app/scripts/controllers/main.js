@@ -1,10 +1,9 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('MainCtrl', function ($scope, $location, Uris, Entity, interviews, LayoutHelper, GraphHelper, compoundObjects, $upload, $http) {
+    .controller('MainCtrl', function ($scope, $location, Uris, Entity, interviews, LayoutHelper, GraphHelper, compoundObjects) {
         $scope.searchType = 'entities';
         $scope.query = '';
-
 
         $scope.architectsStart = 0;
         $scope.architectsEnd = 1;

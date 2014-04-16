@@ -24,7 +24,6 @@ angular.module('angularApp')
     $scope.audioPlayer = {};
 
 
-
     // Look for our external locations
     angular.forEach(GraphHelper.asArray(interview[Uris.QA_EXTERNAL_LOCATION]), function (extLocation) {
         if (extLocation.indexOf('you') === -1) {
@@ -167,6 +166,7 @@ angular.module('angularApp')
         dropdownAutoWidth: true,
         minimumInputLength: 2,
         query: function (options) {
+            console.log('querying', options);
             Ontology.findPropertyByName(options.term).then(function (properties) {
                 var data = {
                     results: []

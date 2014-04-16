@@ -3,6 +3,7 @@
 angular.module('angularApp')
     .controller('StructureCtrl', function ($scope, structure, designers, Entity, $state, Uris) {
         $scope.structure = structure;
+        var originalStructure = angular.copy(structure);
         $scope.designers = designers;
         console.log('structure', structure);
 
@@ -39,11 +40,91 @@ angular.module('angularApp')
 
         $scope.cancel = function () {
             if (structure.uri) {
+                angular.copy(originalStructure, structure);
                 $state.go('structure.summary');
             } else {
                 $state.go('structures.australian');
             }
         };
+
+        /**
+         * ======================================================
+         *
+         * Select Box for Firms
+         *
+         * ======================================================
+         */
+        // Setup the entity select boxes
+        $scope.$watch('structure.$associatedFirm', function (associatedFirm) {
+            if (associatedFirm) {
+                structure[Uris.QA_ASSOCIATED_FIRM] = associatedFirm.uri;
+            } else {
+                delete structure[Uris.QA_ASSOCIATED_FIRM];
+            }
+        });
+        $scope.firmSelect = {
+            placeholder: 'Select a Firm',
+            dropdownAutoWidth: true,
+            multiple: false,
+            allowClear: true,
+            query: function (options) {
+                Entity.loadAll('qldarch:Firm', true).then(function (firms) {
+                    var data = {
+                        results: []
+                    };
+
+                    angular.forEach(firms, function (firm) {
+                        if (firm.name.toLowerCase().indexOf(options.term.toLowerCase()) !== -1) {
+                            data.results.push(firm);
+                        }
+                    });
+                    options.callback(data);
+                });
+            }
+        };
+
+
+        /**
+         * ======================================================
+         *
+         * Select Box for Architects
+         *
+         * ======================================================
+         */
+        // Setup the entity select boxes
+        $scope.$watch('structure.$associatedArchitects', function (associatedArchitects) {
+            if (associatedArchitects) {
+                if (associatedArchitects.length) {
+                    structure[Uris.QA_ASSOCIATED_ARCHITECT] = [];
+                    angular.forEach(associatedArchitects, function (associatedArchitect) {
+                        structure[Uris.QA_ASSOCIATED_ARCHITECT].push(associatedArchitect.uri);
+                    });
+                } else {
+                    delete structure[Uris.QA_ASSOCIATED_ARCHITECT];
+                }
+            }
+        });
+
+        $scope.architectSelect = {
+            placeholder: 'Select an Architect',
+            dropdownAutoWidth: true,
+            multiple: true,
+            query: function (options) {
+                Entity.loadAll('qldarch:Architect', true).then(function (architects) {
+                    var data = {
+                        results: []
+                    };
+
+                    angular.forEach(architects, function (architect) {
+                        if (architect.name.toLowerCase().indexOf(options.term.toLowerCase()) !== -1) {
+                            data.results.push(architect);
+                        }
+                    });
+                    options.callback(data);
+                });
+            }
+        };
+
 
 
         /**
@@ -54,27 +135,23 @@ angular.module('angularApp')
          * ======================================================
          */
         // Setup the entity select boxes
-        $scope.structure.$typology = null;
-        angular.forEach(structure.buildingTypologies, function (typology) {
-            $scope.structure.$typology = {
-                id: typology.uri,
-                uri: typology.uri,
-                text: typology[Uris.QA_LABEL],
-                name: typology[Uris.QA_LABEL],
-                encodedUri: typology.encodedUri,
-            };
-        });
-        $scope.$watch('structure.$typology', function (typology) {
+        $scope.$watch('structure.$typologies', function (typologies) {
             // Delete all typologies on the structure
-            if (typology) {
-                console.log('typologies changed');
-                structure[Uris.QA_BUILDING_TYPOLOGY_P] = typology.uri;
+            if (typologies) {
+                if (typologies.length) {
+                    structure[Uris.QA_BUILDING_TYPOLOGY_P] = [];
+                    angular.forEach(typologies, function (typology) {
+                        structure[Uris.QA_BUILDING_TYPOLOGY_P].push(typology.uri);
+                    });
+                } else {
+                    delete structure[Uris.QA_BUILDING_TYPOLOGY_P];
+                }
             }
         });
         $scope.typologySelect = {
             placeholder: 'Select a Building Typology',
             dropdownAutoWidth: true,
-            multiple: false,
+            multiple: true,
             query: function (options) {
                 Entity.loadAll('qldarch:BuildingTypology', true).then(function (typologies) {
                     var data = {

@@ -41,6 +41,7 @@ angular.module('angularApp')
                         compoundObject.jsonData = angular.fromJson(compoundObject[Uris.QA_JSON_DATA]);
                     });
                     var compoundObjects = GraphHelper.graphValues(response.data);
+                    console.log('loading for user');
                     return compoundObjects;
                 });
             },

@@ -27,10 +27,12 @@ angular.module('angularApp')
             // Array or object
             angular.forEach(entities, function (entity) {
                 entity.name = getName(entity);
-            // if (angular.isArray(entity.name)) {
-            //     console.log('an array?', entity.name);
-            //     entity.name = entity.name[0];
-            // }
+                entity.text = entity.name;
+                entity.id = entity.uri;
+                // if (angular.isArray(entity.name)) {
+                //     console.log('an array?', entity.name);
+                //     entity.name = entity.name[0];
+                // }
                 entity.encodedUri = GraphHelper.encodeUriString(entity.uri);
             });
             return entities;
@@ -92,6 +94,8 @@ angular.module('angularApp')
                 delete payload.firm;
                 delete payload.lat;
                 delete payload.lon;
+                delete payload.text;
+                delete payload.id;
 
                 var url = '/ws/rest/entity/description?ID=' + encodeURIComponent(uri);
 

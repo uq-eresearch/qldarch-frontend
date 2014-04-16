@@ -1,0 +1,22 @@
+{
+  "name": "angular-bootstrap-affix",
+  "version": "0.3.0",
+  "dependencies": {
+    "angular-jquery": "~0.2.1"
+  },
+  "devDependencies": {
+    "angular": "latest",
+    "angular-mocks": "latest"
+  },
+  "homepage": "https://github.com/mgcrea/angular-bootstrap-affix",
+  "_release": "0.3.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.3.0",
+    "commit": "72232163a601583588d05dc01c93797826b5fe8e"
+  },
+  "_source": "git://github.com/mgcrea/angular-bootstrap-affix.git",
+  "_target": "~0.3.0",
+  "_originalSource": "angular-bootstrap-affix",
+  "_direct": true
+}

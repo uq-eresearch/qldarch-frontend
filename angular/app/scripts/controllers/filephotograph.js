@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('FilePhotographCtrl', function ($scope, $upload, Uris, $http, Structure, File, $state, $stateParams) {
+    .controller('FilePhotographCtrl', function ($scope, $upload, Uris, $http, Structure, File, $state, $stateParams, Expression) {
 
         $scope.expressions = [];
 
@@ -105,11 +105,13 @@ angular.module('angularApp')
             }
             expression.$depictsLink = $state.href('structure' + '.' + uploadType, params);
 
-            // Post it
-            $http.post(Uris.JSON_ROOT + 'expression/description', expression).then(function (response) {
-                console.log('response', response);
-                angular.extend(expression, response.data);
-            });
+            // // Post it
+            // $http.post(Uris.JSON_ROOT + 'expression/description', expression).then(function (response) {
+            //     console.log('response', response);
+            //     angular.extend(expression, response.data);
+            // });
+
+            Expression.create(expression);
         };
 
 

@@ -25,9 +25,11 @@ angular.module('angularApp')
                     angular.forEach(properties, function (property) {
                         if (angular.isDefined(property[Uris.QA_ENTAILS_RELATIONSHIP])) {
                             // its a relationship
-                            if (property[Uris.RDFS_LABEL].toLowerCase().indexOf(name.toLowerCase()) !== -1) {
+                            console.log('label', property[Uris.RDFS_LABEL]);
+                            var label = GraphHelper.asArray(property[Uris.RDFS_LABEL])[0];
+                            if (label.toLowerCase().indexOf(name.toLowerCase()) !== -1) {
                                 results.push(property);
-                                property.name = property[Uris.RDFS_LABEL];
+                                property.name = label;
                             }
                         }
                     });

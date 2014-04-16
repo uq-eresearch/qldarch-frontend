@@ -1,0 +1,20 @@
+{
+  "name": "timelinejs",
+  "version": "2.27.0",
+  "main": ["compiled/js/storyjs-embed.js","compiled/js/timeline-min.js","compiled/css/timeline.css"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/StrictlySkyler/TimelineJS.git"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "dependencies": {
+    "jquery": "latest"
+  },
+  "devDependencies": {
+    "jquery": "latest"
+  }
+}

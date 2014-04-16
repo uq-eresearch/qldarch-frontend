@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .service('GraphHelper', function (Uris) {
+    .service('GraphHelper', function (Uris, $state) {
         // AngularJS will instantiate a singleton by calling "new" on this function
 
         var that = this;
@@ -103,6 +103,12 @@ angular.module('angularApp')
                 var params = {};
                 params[item.type + 'Id'] = item.encodedUri;
                 item.$stateParams = params;
+
+                // Links
+                item.$link = $state.href(item.type + '.summary', params);
+                item.$linkTo = function (sub) {
+                    return $state.href(item.type + '.' + sub, params);
+                };
             });
         };
 

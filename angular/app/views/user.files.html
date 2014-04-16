@@ -1,0 +1,33 @@
+<div class="content">
+    <div class="page-header has-subnav">
+        <div class="container">
+            <h1>My Files</h1>
+        </div>
+	</div>
+
+    <div class="alert alert-info" style="margin-bottom: 0px;">
+        <div class="container">
+            <i class="fa fa-info-circle"></i> These are all your maps, timelines and wordclouds you have created.
+        </div>
+    </div>
+
+    <div class="alert alert-warning" style="margin: 0;">
+        <div class="container">
+            <button class="btn btn-default btn-xs" ui-sref="upload.images({uri: structure.uri, name: structure.name })"><i class="fa fa-cloud-upload"></i> Upload Image</button>
+
+            <button class="btn btn-default btn-xs" ui-sref="upload.images({uri: structure.uri, name: structure.name })"><i class="fa fa-cloud-upload"></i> Upload PDFs</button>       
+
+        </div>
+    </div>
+
+
+    <div class="l-frame">
+        <div class="container">
+            <div ng-repeat="photographRow in photographRows" class="row">
+                <div class="col-md-2" ng-repeat="photograph in photographRow">
+                    <div ng-include="'views/thumb.image.html'" ng-init="image = photograph"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

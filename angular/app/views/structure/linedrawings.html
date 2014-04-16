@@ -9,19 +9,7 @@
         <p class="text-muted" ng-hide="lineDrawingRows.length">No line drawings.</p>
         <div class="row" ng-repeat="lineDrawingRow in lineDrawingRows">
             <div class="col-sm-2" ng-repeat="lineDrawing in lineDrawingRow">
-                <div class="thumbnail" >
-                    <a href ui-sref="structure.lineDrawing({structureId: structure.encodedUri, lineDrawingId: lineDrawing.encodedUri})">
-                        <img ng-if="lineDrawing.file" class="img-responsive" ng-src="{{ lineDrawing.file.thumb }}" alt=""/>
-                    </a>
-
-                    <div class="caption">
-                        <h4>
-                            <a href ui-sref="structure.lineDrawing({structureId: structure.encodedUri, lineDrawingId: lineDrawing.encodedUri})">
-                                {{ lineDrawing[Uris.DCT_TITLE] }}
-                            </a>
-                        </h4>
-                    </div>
-                </div>
+                <div ng-include="'views/thumb.image.html'"  ng-init="image = lineDrawing"></div>
             </div>
         </div>
     </div>

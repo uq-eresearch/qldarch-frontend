@@ -1,9 +1,22 @@
+<div class="l-frame l-frame-highlight l-frame-tighter">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <input type="search" class="form-control" placeholder="Find an architect" ng-model="filter.architectName">
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 <div class="l-frame l-frame-tight">
-	<div class="container" infinite-scroll="addMoreArchitectRows()">
-	    <div class="row" ng-repeat="architectRow in architectRows | limitTo:architectRowDisplayCount">
-	        <div class="col-sm-2" ng-repeat="architect in architectRow">
-	            <div ng-include="'views/thumbs/architect.html'"></div>
-	        </div>
-	    </div>
-	</div>
+    <div class="container" infinite-scroll="addMoreArchitectRows()">
+        <div class="row" ng-repeat="architectRow in architectRows | limitTo:architectRowDisplayCount | filter:filter.architectName">
+            <div class="col-sm-2" ng-repeat="architect in architectRow">
+                <div ng-include="'views/thumbs/architect.html'"></div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -51,6 +51,7 @@ angular.module('angularApp')
 
                 function start() {
                     // Creates the force graph
+                    console.log('starting data', $scope.data);
                     var force = d3.layout.force()
                         .nodes($scope.data.nodes)
                         .links($scope.data.links)
@@ -106,7 +107,6 @@ angular.module('angularApp')
                     var newNodesElements = node.enter().append('g');
                     newNodesElements.attr('class', function (d) {
                         var classes = 'node ' + 'node-' + d.type;
-                        console.log('d', d);
                         if (d.type === 'architect' && !d[Uris.QA_PRACTICED_IN_QUEENSLAND]) {
                             classes += ' node-architect-nonqueensland';
                         }
@@ -150,24 +150,28 @@ angular.module('angularApp')
                     newNodesElements.append('circle').attr('r', function (d) {
                         // Calculate the size of the cirlce
                         // based on the number of links
-                        var referenceCount = 0;
-                        angular.forEach($scope.data.links, function (link) {
-                            if (link.source === d || link.target === d) {
-                                referenceCount++;
-                            }
-                        });
-                        return 10 * referenceCount.clamp(1, 5);
+                        // var referenceCount = 0;
+                        console.log('count', d.count);
+                        // console.log(d.uri, $scope.data.links[0].source.uri);
+                        // angular.forEach($scope.data.links, function (link) {
+                        //     // console.log('link', link.source.uri, d.uri);
+                        //     if (link.source.uri === d.uri || link.target.uri === d.uri) {
+                        //         referenceCount++;
+                        //     }
+                        // });
+                        // console.log('reference count', referenceCount);
+                        return 10 * d.count.clamp(1, 5);
                     });
 
                     newNodesElements.append('text')
                         .attr('x', function (d) {
-                            var referenceCount = 0;
-                            angular.forEach($scope.data.links, function (link) {
-                                if (link.source === d || link.target === d) {
-                                    referenceCount++;
-                                }
-                            });
-                            return 10 * referenceCount.clamp(1, 5) + 5;
+                            // var referenceCount = 0;
+                            // angular.forEach($scope.data.links, function (link) {
+                            //     if (link.source === d || link.target === d) {
+                            //         referenceCount++;
+                            //     }
+                            // });
+                            return 10 * d.count.clamp(1, 5) + 5;
                         })
                         .attr('dy', '.35em')
                         .attr('fill', 'black')
