@@ -15,6 +15,12 @@
                 <!-- <span ng-show="Auth.auth">
                     <button class="btn btn-default btn-xs pull-right" ui-sref="structure.summary.edit({ structureId: structure.encodedUri })"><i class="fa fa-pencil"></i> Edit</button>    
                 </span> -->
+                
+
+                <h5>Summary</h5>
+                <p>{{ structure[Uris.QA_SUMMARY] }}</p>
+                <p ng-show="!structure[Uris.QA_SUMMARY].length">No summary.</p>
+
                 <h5>Associated Firm</h5>
                 <div class="media" style="margin-bottom: 10px;" ng-show="structure.$associatedFirm">
                     <a class="pull-left" ng-href="{{ structure.$associatedFirm.$link }}">
@@ -59,10 +65,7 @@
                     </li>
                 </ul>
 
-                <h5>Summary</h5>
-                <p>{{ structure[Uris.QA_SUMMARY] }}</p>
-                <p ng-show="!structure[Uris.QA_SUMMARY].length">No summary.</p>
-
+                
                 <h5>Location</h5>
                 <p ng-show="structure.locations.length">{{ structure.locations[0] }}</p>
                 <p ng-hide="structure.locations.length">No location.</p>

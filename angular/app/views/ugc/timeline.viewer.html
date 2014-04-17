@@ -1,12 +1,12 @@
 <div class="alert alert-warning" ng-show="!$state.includes('ugc.timeline.edit') && (isEditable || isDeletable)" style="margin: 0;">
     <div class="container">
         <!-- Edit -->
-		<button class="btn btn-default" ui-sref="ugc.timeline.edit" ng-show="isEditable">
+		<button class="btn btn-default btn-xs" ui-sref="ugc.timeline.edit" ng-show="isEditable">
 			<i class="fa fa-pencil"></i> Edit
 		</button>
 		<!-- /Edit -->
 		<!-- Delete -->
-		<button class="btn btn-default" ng-click="delete()" ng-show="isDeletable">
+		<button class="btn btn-default btn-xs" ng-click="delete()" ng-show="isDeletable">
 			<i class="fa fa-trash-o"></i> Delete
 		</button>
 		<!-- /Delete -->   

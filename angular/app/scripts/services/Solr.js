@@ -61,6 +61,9 @@ angular.module('angularApp')
                 snippet += text.substring(Math.max(0, range.start), Math.min(range.end, text.length)) + ' ... ';
             });
 
+            // Replace html entities
+            snippet = String(snippet).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
             return highlight(snippet, terms);
         }
 
@@ -124,6 +127,7 @@ angular.module('angularApp')
                         result.volume = articles[doc.id][Uris.QA_VOLUME];
                         result.authors = articles[doc.id][Uris.QA_AUTHORS];
                         result.datePublished = articles[doc.id][Uris.QA_DATE_PUBLISHED];
+                        angular.extend(result, articles[doc.id]);
 
                         // Create the text snippet
                         result.snippet = createSnippet(result.text, query.split(' ')).substring(0, 1000);
@@ -180,6 +184,7 @@ angular.module('angularApp')
                             result.uri = doc.interview;
                             result.encodedUri = btoa(doc.interview);
                             result.type = 'interview';
+                            result.$link = '#/interview/' + btoa(doc.interview);
                             result.link = '#/interview/' + btoa(doc.interview);
                         }
                     }

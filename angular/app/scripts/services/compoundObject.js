@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .factory('CompoundObject', function ($http, Uris, GraphHelper) {
+    .factory('CompoundObject', function ($http, Uris, GraphHelper, toaster) {
         // Service logic
         // ...
 
@@ -58,13 +58,19 @@ angular.module('angularApp')
                 compoundObject.modified = Math.round(new Date().getTime() / 1000);
                 return $http.put(Uris.JSON_ROOT + 'compoundObject?ID=' + encodeURIComponent(uri), compoundObject).then(function (response) {
                     GraphHelper.encodeUri(response.data);
+                    toaster.pop('success', 'Successfully updated.');
                     return response.data;
+                }, function () {
+                    toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
                 });
             },
 
             delete: function (uri) {
                 return $http.delete(Uris.JSON_ROOT + 'compoundObject?ID=' + encodeURIComponent(uri)).then(function (response) {
+                    toaster.pop('success', 'Successfully deleted.');
                     return response.data;
+                }, function () {
+                    toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
                 });
 
             }

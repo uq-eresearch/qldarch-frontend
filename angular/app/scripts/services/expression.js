@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .factory('Expression', function (Request, GraphHelper, Uris, File, $filter, $http, $q, toaster, $cacheFactory) {
+    .factory('Expression', function (Request, GraphHelper, Uris, File, $filter, $http, $q, toaster, $cacheFactory, $state) {
         // Service logic
 
         /**
@@ -59,6 +59,35 @@ angular.module('angularApp')
                         expression.$state = 'main';
                         expression.$stateParams = '{}';
                     }
+
+                    if (expression[Uris.RDF_TYPE]) {
+                        // Setup the type
+                        var typeUris = GraphHelper.asArray(expression[Uris.RDF_TYPE]);
+                        if (typeUris.indexOf(Uris.QA_PHOTOGRAPH_TYPE) !== -1 || typeUris.indexOf(Uris.QA_LINEDRAWING_TYPE) !== -1) {
+                            // Its an image
+                            expression.type = 'image';
+                        } else if (typeUris.indexOf(Uris.QA_ARTICLE_TYPE) !== -1) {
+                            expression.type = 'article';
+                        } else if (typeUris.indexOf(Uris.QA_INTERVIEW_TYPE) !== -1) {
+
+                        }
+
+                        if (expression.type) {
+                            var params2 = {};
+                            params2[expression.type + 'Id'] = expression.encodedUri;
+                            expression.$link = $state.href(expression.type, params2);
+                            expression.$linkTo = function (sub) {
+                                return $state.href(expression.type + '.' + sub, params);
+                            };
+                            expression.$state = expression.type;
+                            expression.$stateTo = function (sub) {
+                                return expression.$state + '.' + sub;
+                            };
+                            expression.$stateParams = params2;
+                        }
+
+                    }
+
 
                 });
 
@@ -144,6 +173,8 @@ angular.module('angularApp')
                 delete payload.building;
                 delete payload.file;
                 delete payload.files;
+                delete payload.encodedUri;
+                delete payload.type;
 
                 var url = Uris.JSON_ROOT + 'expression/description';
                 return $http.post(url, payload, {
@@ -162,6 +193,8 @@ angular.module('angularApp')
                 delete payload.building;
                 delete payload.file;
                 delete payload.files;
+                delete payload.encodedUri;
+                delete payload.type;
 
                 console.log('payload', payload);
 

@@ -17,4 +17,8 @@ angular.module('angularApp')
                 }
             });
         };
+
+        this.isUQSLQ = function () {
+            return this.user && ((that.user.indexOf('uq') !== -1 || that.user.indexOf('slq') !== -1) || that.role === 'root');
+        };
     });

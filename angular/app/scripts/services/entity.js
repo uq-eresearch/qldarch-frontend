@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .factory('Entity', function (Uris, $q, $http, Request, GraphHelper, Expression, $filter) {
+    .factory('Entity', function (Uris, $q, $http, Request, GraphHelper, Expression, $filter, toaster) {
         // Service logic
         // ...
 
@@ -26,6 +26,8 @@ angular.module('angularApp')
         var setupNames = function (entities) {
             // Array or object
             angular.forEach(entities, function (entity) {
+
+                // Make the entities auto-complete compatible (for select2)
                 entity.name = getName(entity);
                 entity.text = entity.name;
                 entity.id = entity.uri;
@@ -104,6 +106,9 @@ angular.module('angularApp')
                 }).then(function (response) {
                     angular.extend(data, response.data);
                     setupNames([data]);
+                    toaster.pop('success', data.name + ' updated.');
+                }, function () {
+                    toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
                 });
             },
 
@@ -135,7 +140,10 @@ angular.module('angularApp')
                 }).then(function (response) {
                     angular.extend(data, response.data);
                     setupNames([data]);
+                    toaster.pop('success', data.name + ' created.');
                     return data;
+                }, function () {
+                    toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
                 });
             },
 

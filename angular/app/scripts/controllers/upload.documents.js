@@ -1,27 +1,26 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('FilePhotographCtrl', function ($scope, $upload, Uris, $http, Structure, File, $state, $stateParams, Expression) {
+    .controller('UploadDocumentsCtrl', function ($scope, $upload, Uris, $http, Structure, File, $state, $stateParams, Expression) {
 
         $scope.expressions = [];
 
-        var tempExpression = {};
-        tempExpression[Uris.DCT_TITLE] = 'file name';
-        tempExpression[Uris.RDF_TYPE] = 'http://qldarch.net/ns/rdf/2012-06/terms#Photograph';
-
-        if ($stateParams.uri && $stateParams.name) {
-            $scope.selectedProject = {
-                id: $stateParams.uri,
-                uri: $stateParams.uri,
-                text: $stateParams.name,
-                name: $stateParams.name,
-                encodedUri: btoa($stateParams.uri)
-            };
-        }
-
-        tempExpression[Uris.QA_DEPICTS_BUILDING] = 'http://qldarch.net/users/cking/Structure#61816694616';
+        // var tempExpression = {};
+        // tempExpression[Uris.DCT_TITLE] = 'file name';
+        // tempExpression[Uris.RDF_TYPE] = 'http://qldarch.net/ns/rdf/2012-06/terms#Article';
         // $scope.expressions.push(tempExpression);
 
+        // if ($stateParams.uri && $stateParams.name) {
+        //     $scope.selectedProject = {
+        //         id: $stateParams.uri,
+        //         uri: $stateParams.uri,
+        //         text: $stateParams.name,
+        //         name: $stateParams.name,
+        //         encodedUri: btoa($stateParams.uri)
+        //     };
+        // }
+
+        // tempExpression[Uris.QA_DEPICTS_BUILDING] = 'http://qldarch.net/users/cking/Structure#61816694616';
 
         $scope.onFileSelect = function ($files) {
             //$files: an array of files selected, each file has name, size, and type.
@@ -29,10 +28,13 @@ angular.module('angularApp')
                 console.log('file', file);
                 // Create an expression for each file
                 var expression = {};
+                expression.$article = {};
+                expression.$interview = {};
                 expression.$uploadFile = file;
                 expression[Uris.DCT_TITLE] = file.name;
-                // Default type to photograph
-                expression[Uris.RDF_TYPE] = 'http://qldarch.net/ns/rdf/2012-06/terms#Photograph';
+
+                // Default type to articles
+                expression[Uris.RDF_TYPE] = Uris.QA_ARTICLE_TYPE;
 
                 $scope.expressions.unshift(expression);
 
@@ -53,7 +55,6 @@ angular.module('angularApp')
         };
 
         $scope.cancelUpload = function (expression) {
-
             // Remove the expression
             var index = $scope.expressions.indexOf(expression);
             $scope.expressions.splice(index, 1);
@@ -64,17 +65,17 @@ angular.module('angularApp')
 
         $scope.publish = function (expression) {
             // Setup depicts
-            expression[Uris.QA_DEPICTS_BUILDING] = $scope.selectedProject.uri;
-            expression.$depicts = $scope.selectedProject;
-            var params = {};
-            params.structureId = $scope.selectedProject.encodedUri;
-            var uploadType;
-            if (expression[Uris.RDF_TYPE] === Uris.QA_LINEDRAWING_TYPE) {
-                uploadType = 'lineDrawings';
-            } else {
-                uploadType = 'photographs';
-            }
-            expression.$depictsLink = $state.href('structure' + '.' + uploadType, params);
+            // expression[Uris.QA_DEPICTS_BUILDING] = $scope.selectedProject.uri;
+            // expression.$depicts = $scope.selectedProject;
+            // var params = {};
+            // params.structureId = $scope.selectedProject.encodedUri;
+            // var uploadType;
+            // if (expression[Uris.RDF_TYPE] === Uris.QA_LINEDRAWING_TYPE) {
+            // uploadType = 'lineDrawings';
+            // } else {
+            // uploadType = 'photographs';
+            // }
+            // expression.$depictsLink = $state.href('structure' + '.' + uploadType, params);
 
             // // Post it
             // $http.post(Uris.JSON_ROOT + 'expression/description', expression).then(function (response) {
@@ -82,6 +83,18 @@ angular.module('angularApp')
             //     angular.extend(expression, response.data);
             // });
 
+            // Import data from type
+            if (expression[Uris.RDF_TYPE] === Uris.QA_ARTICLE_TYPE) {
+                var article = expression.$article;
+                delete expression.$article;
+                angular.extend(expression, article);
+            } else if (expression[Uris.RDF_TYPE] === Uris.QA_INTERVIEW_TYPE) {
+                var interview = expression.$interview;
+                delete expression.$article;
+                angular.extend(expression, interview);
+            }
+
+            console.log('expression', expression);
             Expression.create(expression);
         };
 

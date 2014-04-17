@@ -142,6 +142,22 @@ angular.module('angularApp', [
         // For any unmatched url, redirect to /state1
         $urlRouterProvider.otherwise('/');
 
+        $httpProvider.interceptors.push(['$q', 'toaster',
+            function ($q, toaster) {
+                return {
+                    responseError: function (rejection) {
+                        // do something on error
+                        console.log('got a Response ERROR!', rejection);
+                        if (rejection.status === 403) {
+                            toaster.pop('warning', 'You are not logged in.', 'Please log in to continue.');
+                        }
+                        return $q.reject(rejection);
+                    }
+                };
+            }
+        ]);
+
+
 
         // Now set up the states
         $stateProvider
@@ -307,19 +323,61 @@ angular.module('angularApp', [
                 templateUrl: 'views/user.ugcs.html'
             })
             .state('user.files', {
+                abstract: true,
                 url: '/files',
+                templateUrl: 'views/user.files.html'
+            })
+            .state('user.files.images', {
+                url: '',
                 resolve: {
-                    expressions: ['Expression', 'Auth',
-                        function (Expression, Auth) {
+                    expressions: ['Expression', 'Auth', 'GraphHelper', 'Uris', '$filter',
+                        function (Expression, Auth, GraphHelper, Uris, $filter) {
                             return Auth.status().then(function () {
-                                console.log('auth is', Auth.user);
-                                return Expression.findByUser(Auth.user);
+                                return Expression.findByUser(Auth.user).then(function (expressions) {
+                                    return $filter('filter')(expressions, function (expression) {
+                                        return GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_PHOTOGRAPH_TYPE) !== -1 || GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_LINEDRAWING_TYPE) !== -1;
+                                    });
+                                });
                             });
                         }
                     ],
                 },
                 controller: 'UserFilesCtrl',
-                templateUrl: 'views/user.files.html'
+                templateUrl: 'views/user.files.images.html'
+            })
+            .state('user.files.documents', {
+                url: '/documents',
+                resolve: {
+                    expressions: ['Expression', 'Auth', 'GraphHelper', 'Uris', '$filter',
+                        function (Expression, Auth, GraphHelper, Uris, $filter) {
+                            return Auth.status().then(function () {
+                                return Expression.findByUser(Auth.user).then(function (expressions) {
+                                    console.log('documents', expressions);
+                                    return $filter('filter')(expressions, function (expression) {
+                                        return GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_ARTICLE_TYPE) !== -1 || GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_INTERVIEW_TYPE) !== -1;
+                                    });
+                                });
+                            });
+                        }
+                    ],
+                },
+                controller: 'UserFilesDocumentsCtrl',
+                templateUrl: 'views/user.files.documents.html'
+            })
+            .state('user.files.builds', {
+                url: '/builds',
+                resolve: {
+                    compoundObjects: ['CompoundObject', 'Auth',
+                        function (CompoundObject, Auth) {
+                            return Auth.status().then(function () {
+                                return CompoundObject.loadForUser(Auth.user);
+                            });
+                        }
+                    ],
+                },
+                controller: 'UserUgcsCtrl',
+                templateUrl: 'views/user.files.builds.html'
+
             })
             .state('about', {
                 url: '/about',
@@ -388,10 +446,10 @@ angular.module('angularApp', [
                 templateUrl: 'views/files/photograph.html',
                 controller: 'FilePhotographCtrl'
             })
-            .state('upload.articles', {
-                url: '/document',
-                templateUrl: 'views/files/photograph.html',
-                controller: 'FilePhotographCtrl'
+            .state('upload.documents', {
+                url: '/documents',
+                templateUrl: 'views/upload.documents.html',
+                controller: 'UploadDocumentsCtrl'
             })
             .state('ugc', {
                 abstract: true,

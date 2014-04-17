@@ -6,7 +6,7 @@
         <h1>{{ article[Uris.DCT_TITLE] }}</h1>
     </div>
 </div>
-<div class="l-frame l-frame-highlight l-frame-tighter">
+<div class="l-frame l-frame-highlight l-frame-tighter" ng-show="Auth.isUQSLQ()">
     <div class="container">
         <div class="dropdown">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -16,7 +16,7 @@
             <ul class="dropdown-menu" role="menu">
 
                 <li ng-repeat="file in article.files">
-                    <a ng-href="{{ Uris.OMEKA_FILE_ROOT + file[Uris.QA_SYSTEM_LOCATION] }}" alt="" target="_blank">{{ file[Uris.QA_SOURCE_FILENAME] }}</a>
+                    <a ng-href="{{ file.file }}" alt="" target="_blank">{{ file[Uris.QA_SOURCE_FILENAME] }}</a>
                 </li>
             </ul>
         </div>
