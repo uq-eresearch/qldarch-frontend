@@ -151,6 +151,9 @@ angular.module('angularApp', [
                         if (rejection.status === 403) {
                             toaster.pop('warning', 'You are not logged in.', 'Please log in to continue.');
                         }
+                        if (rejection.status === 500) {
+                            toaster.pop('error', 'Oops. Something went wrong.', 'Please contact the system administrator.');
+                        }
                         return $q.reject(rejection);
                     }
                 };
@@ -896,31 +899,12 @@ angular.module('angularApp', [
                 templateUrl: 'views/architect/structures.html',
                 resolve: {
                     structures: ['$stateParams', 'GraphHelper', 'Uris', 'Structure', 'Relationship',
-                        function ($stateParams, GraphHelper, Uris, Structure, Relationship) {
+                        function ($stateParams, GraphHelper, Uris, Structure) {
 
                             var architectUri = GraphHelper.decodeUriString($stateParams.architectId);
 
-                            return Relationship.findBySubjectPredicateObject({
-                                predicate: 'qldarch:designedBy',
-                                object: architectUri
-                            }).then(function (designedByRelationships) {
-                                var designedByStructureUris = GraphHelper.getAttributeValuesUnique(designedByRelationships, Uris.QA_SUBJECT);
-
-                                return Relationship.findBySubjectPredicateObject({
-                                    predicate: 'qldarch:workedOn',
-                                    subject: architectUri
-                                }).then(function (workedOnRelationships) {
-                                    var workedOnStructureUris = GraphHelper.getAttributeValuesUnique(workedOnRelationships, Uris.QA_OBJECT);
-
-                                    // Merge
-                                    var structureUris = designedByStructureUris.concat(workedOnStructureUris);
-                                    console.log(workedOnStructureUris);
-                                    return Structure.loadList(structureUris, true).then(function (structures) {
-                                        console.log('structures', structures);
-                                        return structures;
-                                    });
-                                });
-                            });
+                            // Get designedBy, workedOn and 'associatedArchitect'
+                            return Structure.findByAssociatedArchitectUri(architectUri);
                         }
                     ]
                 },

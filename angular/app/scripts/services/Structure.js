@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .factory('Structure', function (Entity, GraphHelper, Expression, Uris, $q, $filter) {
+    .factory('Structure', function (Entity, GraphHelper, Expression, Uris, $q, $filter, Relationship) {
         // Service logic
 
         var postProcess = function (structures) {
@@ -69,7 +69,7 @@ angular.module('angularApp')
         };
 
         // Public API here
-        return {
+        var that = {
             /**
              * Finds an Architect by 'name'
              * @param name
@@ -93,6 +93,38 @@ angular.module('angularApp')
                     return postProcess($filter('filter')(structures, function (structure) {
                         return structure[Uris.QA_ASSOCIATED_FIRM] === associatedFirmUri;
                     }));
+                });
+            },
+
+            findByAssociatedArchitectUri: function (associatedArchitectUri) {
+                return Relationship.findBySubjectPredicateObject({
+                    predicate: 'qldarch:designedBy',
+                    object: associatedArchitectUri
+                }).then(function (designedByRelationships) {
+                    var designedByStructureUris = GraphHelper.getAttributeValuesUnique(designedByRelationships, Uris.QA_SUBJECT);
+
+                    return Relationship.findBySubjectPredicateObject({
+                        predicate: 'qldarch:workedOn',
+                        subject: associatedArchitectUri
+                    }).then(function (workedOnRelationships) {
+                        var workedOnStructureUris = GraphHelper.getAttributeValuesUnique(workedOnRelationships, Uris.QA_OBJECT);
+
+                        // Merge
+                        var structureUris = designedByStructureUris.concat(workedOnStructureUris);
+                        console.log(workedOnStructureUris);
+                        return that.loadList(structureUris, true).then(function (structures) {
+
+                            return Entity.loadAll('qldarch:Structure', false).then(function (architectStructures) {
+                                angular.forEach(architectStructures, function (structure) {
+                                    if (GraphHelper.asArray(structure[Uris.QA_ASSOCIATED_ARCHITECT]).indexOf(associatedArchitectUri) !== -1) {
+                                        structures[structure.uri] = structure;
+                                    }
+                                });
+
+                                return postProcess(structures);
+                            });
+                        });
+                    });
                 });
             },
 
@@ -189,4 +221,5 @@ angular.module('angularApp')
                 });
             }
         };
+        return that;
     });

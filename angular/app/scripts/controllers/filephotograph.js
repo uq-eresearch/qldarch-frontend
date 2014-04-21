@@ -44,6 +44,11 @@ angular.module('angularApp')
                         // file is uploaded successfully
                         expression[Uris.QA_HAS_FILE] = data.uri;
                         expression.$file = File.setupImageUrls(data);
+                    }).error(function () {
+                        // Something went wrong uploading the file
+                        console.log('File upload failed');
+                        var index = $scope.expressions.indexOf(expression);
+                        $scope.expressions.splice(index, 1);
                     });
             });
 
