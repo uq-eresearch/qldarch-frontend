@@ -70,7 +70,7 @@
 											<div class="col-sm-2" ng-repeat="expression in expressionRow">
 												<a class="thumbnail" href ng-click="addExpressionToDate(expression, timeline.$tempDate)">
 													<div class="thumbnail-image">
-														<img ng-if="expression.file" class="img-responsive" ng-src="{{ Uris.FILE_ROOT + expression.file[Uris.QA_SYSTEM_LOCATION] }}" alt=""/>
+														<img class="img-responsive" ng-src="{{ expression.file.thumb }}" alt=""/>
 													</div>
 													<div class="caption">
 														<input type="checkbox" ng-model="expression.selected">
