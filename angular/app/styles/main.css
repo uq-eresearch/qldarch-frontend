@@ -1841,13 +1841,15 @@ select[multiple].input-lg {
   color: #11c3b6;
 }
 .has-success .form-control,
-form input.ng-valid.ng-dirty {
+form input.ng-valid.ng-dirty,
+form .select2-container.ng-valid.ng-dirty .select2-choice {
   border-color: #3eb283;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 .has-success .form-control:focus,
-form input.ng-valid.ng-dirty:focus {
+form input.ng-valid.ng-dirty:focus,
+form .select2-container-active.ng-valid.ng-dirty .select2-choice {
   border-color: #318d68;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #83d4b3;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #83d4b3;
@@ -1895,13 +1897,15 @@ form input.ng-valid.ng-dirty:focus {
   color: #a94442;
 }
 .has-error .form-control,
-form input.ng-invalid.ng-dirty {
+form input.ng-invalid.ng-dirty,
+form .select2-container.ng-invalid.ng-dirty .select2-choice {
   border-color: #ebccd1;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 .has-error .form-control:focus,
-form input.ng-invalid.ng-dirty:focus {
+form input.ng-invalid.ng-dirty:focus,
+form .select2-container-active.ng-invalid.ng-dirty .select2-choice {
   border-color: #dca7b0;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ffffff;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ffffff;
@@ -6206,6 +6210,10 @@ body {
  * Form Validation
  *
  */
+form .select2-container-active.ng-invalid.ng-dirty .select2-choice {
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ff0000;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ff0000;
+}
 /**
  * Alert
  *

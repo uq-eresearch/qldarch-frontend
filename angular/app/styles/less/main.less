@@ -48,6 +48,34 @@ form {
       &:extend(.has-success .form-control:focus);
     }
   }
+
+  // Select 2 styling
+  .select2-container.ng-invalid.ng-dirty {
+    .select2-choice {
+      &:extend(.has-error .form-control);
+    }
+  }
+  .select2-container.ng-valid.ng-dirty {
+    .select2-choice {
+      &:extend(.has-success .form-control);
+    }
+  }
+  
+  // Select 2 Active styling
+  .select2-container-active.ng-invalid.ng-dirty {
+    .select2-choice {
+      &:extend(.has-error .form-control:focus);
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px red;
+      -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px red;
+    }
+  }
+
+  .select2-container-active.ng-valid.ng-dirty {
+    .select2-choice {
+      &:extend(.has-success .form-control:focus);
+    }  
+  }
+
 }
 
 /**

@@ -36,6 +36,8 @@
     <div class="l-frame l-frame-tight l-frame-highlight">
         <div class="interview-heading">
             <div class="container">
+                <a ng-show="youtubeUrl.length" ng-href="{{ youtubeUrl }}" target="_blank" class="pull-right">Watch on YouTube</a> 
+
                 <h5 ng-click="isShowingInterviewDetails = !isShowingInterviewDetails" style="margin: 0; padding: 0;">
                     <i class="fa fa-fw" ng-class="{'fa-chevron-right': !isShowingInterviewDetails, 'fa-chevron-down': isShowingInterviewDetails}"></i>   {{ title }}
                 </h5>
@@ -189,36 +191,44 @@
                                     <!-- /Control Buttons -->
 
                                     <!-- New relationship -->
-                                    <form role="form" ng-if="exchange.isAddingRelationship">
+                                    <form name="exchange.$form" ng-if="exchange.isAddingRelationship">
                                         <div class="form-group">
                                             <label>Subject</label>
-                                            <div ui-select2="entitySelectOptions" ng-model="exchange.newRelationship.subject" class="form-control"></div>
+                                            <div class="row">
+                                                <div class="col-sm-10">
+                                                    <div name="subject" ui-select2="entitySelectOptions" ng-model="exchange.newRelationship.subject" class="form-control" ng-required="true"></div>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    
+                                                </div>
+                                            </div>
                                         </div>
+
                                         <div class="form-group">
                                             <label>Relationship</label>
-                                            <div ui-select2="relationshipSelectOptions" ng-model="exchange.newRelationship.predicate" class="form-control" ></div>
+                                            <div name="relationship" ui-select2="relationshipSelectOptions" ng-model="exchange.newRelationship.predicate" class="form-control" ng-required="true"></div>
                                         </div>
                                         <div class="form-group">
                                             <label>Object</label>
-                                            <div ui-select2="entitySelectOptions" ng-model="exchange.newRelationship.object" class="form-control" ></div>
+                                            <div name="object" ui-select2="entitySelectOptions" ng-model="exchange.newRelationship.object" class="form-control" ng-required="true"></div>
                                         </div>
                                         <div class="form-group">
                                             <label>Dates</label>
                                             <div class="row">
                                                 <div class="col-sm-6">
-                                                    <input type="text" class="form-control" placeholder="Start Year" ng-model="exchange.newRelationship.startYear"/>
+                                                    <input name="startYear" type="number" class="form-control" placeholder="Start Year" ng-model="exchange.newRelationship.startYear"/>
                                                 </div>
                                                 <div class="col-sm-6">
-                                                    <input type="text" class="form-control" placeholder="End Year" ng-model="exchange.newRelationship.endYear"/>
+                                                    <input name="endYear" type="number" class="form-control" placeholder="End Year" ng-model="exchange.newRelationship.endYear"/>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label>Note</label>
-                                            <textarea class="form-control" placeholder="Note" cols="30" rows="10" ng-model="exchange.newRelationship.note"></textarea>
+                                            <textarea name="note" class="form-control" placeholder="Note" cols="30" rows="10" ng-model="exchange.newRelationship.note"></textarea>
                                         </div>
 
-                                        <button type="submit" class="btn btn-sm btn-primary" ng-click="addRelationshipToExchange(exchange.newRelationship, exchange)">Add</button>
+                                        <button type="submit" class="btn btn-sm btn-primary" ng-click="addRelationshipToExchange(exchange.newRelationship, exchange)" ng-disabled="exchange.$form.$invalid">Add</button>
                                         <button class="btn btn-sm btn-default" ng-click="hideAddRelationship(exchange)">Cancel</button>
                                     </form>
 

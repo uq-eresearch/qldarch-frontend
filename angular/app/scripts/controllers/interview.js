@@ -39,7 +39,8 @@ angular.module('angularApp')
                 mp3: extLocation.substring(0, extLocation.length - 3) + 'mp3'
             };
         } else {
-            // Deal with youtube here
+            // @todo Deal with youtube here
+            $scope.youtubeUrl = extLocation;
         }
     });
 
