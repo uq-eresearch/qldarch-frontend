@@ -96,6 +96,9 @@ angular.module('angularApp', [
         $rootScope.globalSearch = function (val) {
             return Entity.findByName(val, false).then(function (entities) {
                 var results = GraphHelper.graphValues(entities);
+                results = $filter('filter')(results, function (result) {
+                    return result.type === 'architect' || result.type === 'structure' || result.type === 'firm' || result.type === 'other';
+                });
                 results = $filter('orderBy')(results, function (result) {
                     return result.name.length;
                 });
@@ -178,8 +181,6 @@ angular.module('angularApp', [
                 };
             }
         ]);
-
-
 
         // Now set up the states
         $stateProvider
@@ -1222,13 +1223,20 @@ angular.module('angularApp', [
                 url: '/summary',
                 templateUrl: 'views/structure/summary.html',
                 resolve: {
-                    designers: ['$stateParams', 'GraphHelper', 'Uris', 'Entity', 'Relationship',
-                        function ($stateParams, GraphHelper, Uris, Entity, Relationship) {
+                    designers: ['$stateParams', 'GraphHelper', 'Uris', 'Entity', 'Relationship', '$filter',
+                        function ($stateParams, GraphHelper, Uris, Entity, Relationship, $filter) {
+                            var designers = {
+                                architects: [],
+                                firms: []
+                            };
+
                             if (!$stateParams.structureId) {
-                                return [];
+                                return designers;
                             }
 
                             var structureUri = GraphHelper.decodeUriString($stateParams.structureId);
+
+
 
                             return Relationship.findBySubjectPredicateObject({
                                 predicate: 'qldarch:designedBy',
@@ -1238,10 +1246,17 @@ angular.module('angularApp', [
                                 var designerUris = GraphHelper.getAttributeValuesUnique(relationships, Uris.QA_OBJECT);
                                 if (designerUris.length) {
                                     return Entity.loadList(designerUris, false).then(function (entities) {
-                                        return GraphHelper.graphValues(entities);
+                                        entities = GraphHelper.graphValues(entities);
+                                        designers.architects = $filter('filter')(entities, function (entity) {
+                                            return entity.type === 'architect';
+                                        });
+                                        designers.firms = $filter('filter')(entities, function (entity) {
+                                            return entity.type === 'firm';
+                                        });
+                                        return designers;
                                     });
                                 } else {
-                                    return [];
+                                    return designers;
                                 }
                             });
                         }

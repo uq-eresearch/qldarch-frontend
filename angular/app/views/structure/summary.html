@@ -21,22 +21,38 @@
                 <p>{{ structure[Uris.QA_SUMMARY] }}</p>
                 <p ng-show="!structure[Uris.QA_SUMMARY].length">No summary.</p>
 
-                <h5>Associated Firm</h5>
-                <div class="media" style="margin-bottom: 10px;" ng-show="structure.$associatedFirm">
-                    <a class="pull-left" ng-href="{{ structure.$associatedFirm.$link }}">
-                        <img class="media-object img-responsive img-circle" ng-src="{{ structure.$associatedFirm.picture.file }}" alt="{{ structure.$associatedFirm.name }}" style="width:32px; height: 32px;">
-                    </a>
-                    <div class="media-body">
-                        <a ng-href="{{ structure.$associatedFirm.$link }}">
-                            {{ structure.$associatedFirm.name }}
+                <h5 style="margin-top: 24px;">Associated Firm</h5>
+                
+                <ul class="media-list">
+                    <li class="media" style="margin-bottom: 10px;" ng-show="structure.$associatedFirm">
+                        <a class="pull-left" ng-href="{{ structure.$associatedFirm.$link }}">
+                            <img class="media-object img-responsive img-circle" ng-src="{{ structure.$associatedFirm.picture.file }}" alt="{{ structure.$associatedFirm.name }}" style="width:32px; height: 32px;">
                         </a>
-                    </div>
-                </div>
+                        <div class="media-body">
+                            <a ng-href="{{ structure.$associatedFirm.$link }}">
+                                {{ structure.$associatedFirm.name }}
+                            </a>
+                        </div>
+                    </li>
+
+                    <li class="media" ng-repeat="designer in designers.firms">
+                        <a class="pull-left" ng-href="{{ designer.$link }}">
+                            <img class="media-object img-responsive img-circle" ng-src="{{ designer.picture.file }}" style="display:block; width:32px">
+                        </a>
+                        <div class="media-body">
+                            <a ng-href="{{ designer.$link }}">
+                                {{ designer.name }} 
+                            </a>
+                            <span style="color: #BBB">(from interview)</span>
+                        </div>
+                    </li>
+                </ul>
+
                 <p ng-show="!structure.$associatedFirm">
                     No associated firm.
                 </p>
 
-                <h5>Architects</h5>
+                <h5 style="margin-top: 24px;">Associated Architects</h5>
                 <div ng-show="!designers.length && !structure.$associatedArchitects.length">
                     No associated architects.
                 </div>
@@ -53,31 +69,31 @@
                         </div>
                     </li>
 
-                    <li class="media" ng-repeat="designer in designers">
+                    <li class="media" ng-repeat="designer in designers.architects">
                         <a class="pull-left" ng-href="{{ designer.$link }}">
                             <img class="media-object img-responsive img-circle" ng-src="{{ designer.picture.file }}" style="display:block; width:32px">
                         </a>
                         <div class="media-body">
                             <a ng-href="{{ designer.$link }}">
-                                {{ designer.name }}
+                                {{ designer.name }} 
                             </a>
+                            <span style="color: #BBB">(from interview)</span>
                         </div>
                     </li>
                 </ul>
-
                 
-                <h5>Location</h5>
+                <h5 style="margin-top: 24px;">Location</h5>
                 <p ng-show="structure.locations.length">{{ structure.locations[0] }}</p>
                 <p ng-hide="structure.locations.length">No location.</p>
 
-                <h5>Completion Date</h5>
+                <h5 style="margin-top: 24px;">Completion Date</h5>
                 <p ng-show="structure[Uris.QA_COMPLETION_DATE].length">{{ structure[Uris.QA_COMPLETION_DATE] }}</p>
                 <p ng-hide="structure[Uris.QA_COMPLETION_DATE].length">No completion date.</p>
 
-                <h5>Demolished</h5>
+                <h5 style="margin-top: 24px;">Demolished</h5>
                 <p>{{ structure[Uris.QA_DEMOLISHED] && 'Yes' || 'No' }}</p>
 
-                <h5>Typology</h5>
+                <h5 style="margin-top: 24px;">Typology</h5>
                 <ul>
                     <li ng-repeat="typology in structure.$typologies">
                         {{ typology.name }}
