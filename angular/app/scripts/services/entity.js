@@ -139,6 +139,7 @@ angular.module('angularApp')
                     withCredentials: true
                 }).then(function (response) {
                     angular.extend(data, response.data);
+                    data.encodedUri = GraphHelper.encodeUriString(data.uri);
                     setupNames([data]);
                     toaster.pop('success', data.name + ' created.');
                     return data;

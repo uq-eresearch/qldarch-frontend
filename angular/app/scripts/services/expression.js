@@ -182,6 +182,7 @@ angular.module('angularApp')
                 }).then(function (response) {
                     clearImageCache();
                     angular.extend(data, response.data);
+                    data.encodedUri = GraphHelper.encodeUriString(data.uri);
                     toaster.pop('success', data[Uris.DCT_TITLE] + ' created.', 'You have successfully created ' + data[Uris.DCT_TITLE]);
                     return attachFiles(data);
                 }, function () {
@@ -224,7 +225,9 @@ angular.module('angularApp')
                 if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_LINEDRAWING_TYPE) !== -1) {
                     type = 'line drawing';
                 }
-
+                if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_ARTICLE_TYPE) !== -1) {
+                    type = 'article';
+                }
                 var r = window.confirm('Delete ' + type + ' ' + expression[Uris.DCT_TITLE] + '?');
 
                 if (r === true) {
@@ -239,7 +242,7 @@ angular.module('angularApp')
                         toaster.pop('error', 'Error occured.', 'Sorry, we couldn\t delete at this time');
                     });
                 } else {
-                    return $q.when(true);
+                    return $q.reject();
                 }
             },
 

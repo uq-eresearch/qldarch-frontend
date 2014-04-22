@@ -66,8 +66,8 @@
                         <div class="col-sm-10">
                             <!-- Published finished -->
                             <div ng-show="expression.uri">
-                                <p>Published. <a ng-href="{{ expression.$depictsLink }}">{{ expression[Uris.DCT_TITLE] }}</a>
-                                </p>
+                                <p>Published.</p>
+                                <a ng-href="{{ expression.$depictsLink }}" class="btn btn-default">Go to {{ expression[Uris.DCT_TITLE] }}</a>
                             </div>
 
                             <!-- Not finished -->

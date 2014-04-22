@@ -48,8 +48,6 @@ angular.module('angularApp', [
         $rootScope.Auth = Auth;
         $rootScope.Uris = Uris;
 
-
-
         $http.get(Uris.JSON_ROOT + 'login/status').then(function (status) {
             angular.extend(Auth, status.data);
         });
@@ -1447,11 +1445,7 @@ angular.module('angularApp', [
                         }
                     ]
                 },
-                controller: ['$scope', 'article',
-                    function ($scope, article) {
-                        $scope.article = article;
-                    }
-                ]
+                controller: 'ArticleCtrl'
             })
             .state('search', {
                 url: '/search?query',

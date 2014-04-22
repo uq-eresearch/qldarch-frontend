@@ -6,22 +6,32 @@
         <h1>{{ article[Uris.DCT_TITLE] }}</h1>
     </div>
 </div>
-<div class="l-frame l-frame-highlight l-frame-tighter" ng-show="Auth.isUQSLQ()">
-    <div class="container">
-        <div class="dropdown">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                Download
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
 
-                <li ng-repeat="file in article.files">
-                    <a ng-href="{{ file.file }}" alt="" target="_blank">{{ file[Uris.QA_SOURCE_FILENAME] }}</a>
-                </li>
-            </ul>
+<div class="alert alert-warning" ng-show="Auth.isUQSLQ()" style="margin: 0;">
+    <div class="container">
+        <!-- Download dropdown -->
+        <div class="btn-group">
+            <div class="dropdown">
+                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                    Download
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+
+                    <li ng-repeat="file in article.files">
+                        <a ng-href="{{ file.file }}" alt="" target="_blank">{{ file[Uris.QA_SOURCE_FILENAME] }}</a>
+                    </li>
+                </ul>
+            </div>   
         </div>
+        <!-- /Download dropdown -->
+
+        <!-- Delete button -->
+        <button class="btn btn-default btn-xs" ng-click="delete(article)" ng-show="Auth.role === 'root'"><i class="fa fa-trash-o"></i> Delete</button>
+        <!-- /Delete button -->
     </div>
 </div>
+
 <div class="l-frame">
     <div class="container">
 
