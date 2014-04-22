@@ -81,7 +81,7 @@ angular.module('angularApp', [
         });
         $rootScope.$on('$stateChangeSuccess', function () {
             ngProgress.complete();
-            $rootScope.globalSearchString = '';
+            $rootScope.globalSearch.query = '';
         });
         $rootScope.$on('$stateChangeError', function () {
             ngProgress.reset();
