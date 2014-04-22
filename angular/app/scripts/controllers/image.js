@@ -57,6 +57,14 @@ angular.module('angularApp')
             console.log('saving');
             Expression.update(image.uri, image).then(function () {
                 console.log('saved');
+
+                // Update the image in the gallery
+                // otherwise the gallery would have a stale copy of the data
+                angular.forEach($scope.images, function (galleryImage) {
+                    if (galleryImage.uri === image.uri) {
+                        angular.copy(image, galleryImage);
+                    }
+                });
                 $state.go(image.$stateTo('view'), image.$stateParams);
             });
         };

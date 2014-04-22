@@ -182,7 +182,10 @@ angular.module('angularApp')
                 }).then(function (response) {
                     clearImageCache();
                     angular.extend(data, response.data);
+                    toaster.pop('success', data[Uris.DCT_TITLE] + ' created.', 'You have successfully created ' + data[Uris.DCT_TITLE]);
                     return attachFiles(data);
+                }, function () {
+                    toaster.pop('error', 'Error occured.', 'Sorry, we couldn\t created at this time');
                 });
             },
 
@@ -206,6 +209,10 @@ angular.module('angularApp')
                     angular.extend(data, response.data);
                     attachFiles(data);
                     // setupNames([data]);
+                    // Display alert
+                    toaster.pop('success', data[Uris.DCT_TITLE] + ' updated.', 'You have successfully updated ' + data[Uris.DCT_TITLE]);
+                }, function () {
+                    toaster.pop('error', 'Error occured.', 'Sorry, we couldn\t updated at this time');
                 });
             },
 

@@ -29,10 +29,10 @@
         </span></div>
     </div>
 </div>
-<div class="alert alert-warning" ng-show="(Auth.role === 'editor' || Auth.role === 'root') && !$state.includes('edit')" style="margin: 0;">
+<div class="alert alert-warning" ng-show="(Auth.role === 'editor' || Auth.role === 'root')" style="margin: 0;">
     <div class="container">
     	<div class="col-sm-offset-1 col-md-5">
-    		<div ng-hide="$state.includes('architect.summary.edit')">
+    		<div>
 	            <!-- Editor: &nbsp; &nbsp; -->
 	            <button class="btn btn-default btn-xs" ng-click="$state.go('image.edit', {imageId: image.encodedUri})"><i class="fa fa-pencil"></i> Edit image</button>
 
