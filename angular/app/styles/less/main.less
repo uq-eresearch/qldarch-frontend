@@ -41,6 +41,9 @@ form {
       &:extend(.has-error .form-control:focus);
     }
   }
+  input[required] {
+    border: 1px solid #66afe9;
+  }
 
   input.ng-valid.ng-dirty {
     &:extend(.has-success .form-control);
@@ -50,6 +53,11 @@ form {
   }
 
   // Select 2 styling
+  .select2-container.required {
+    .select2-choice {
+      border: 1px solid #66afe9;
+    }
+  }
   .select2-container.ng-invalid.ng-dirty {
     .select2-choice {
       &:extend(.has-error .form-control);

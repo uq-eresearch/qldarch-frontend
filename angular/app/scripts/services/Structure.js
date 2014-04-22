@@ -37,7 +37,7 @@ angular.module('angularApp')
 
 
             // Setup pictures
-            return Expression.findByBuildingUris(uris, 'qldarch:Photograph').then(function (pictures) {
+        return Expression.findByBuildingUris(uris, 'qldarch:Photograph').then(function (pictures) {
                 angular.forEach(pictures, function (picture) {
                     angular.forEach(structures, function (structure) {
                         if (picture[Uris.QA_DEPICTS_BUILDING] === structure.uri) {
