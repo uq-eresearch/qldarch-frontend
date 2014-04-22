@@ -48,14 +48,35 @@ angular.module('angularApp', [
         $rootScope.Auth = Auth;
         $rootScope.Uris = Uris;
 
+
+
         $http.get(Uris.JSON_ROOT + 'login/status').then(function (status) {
             angular.extend(Auth, status.data);
         });
 
         $rootScope.globalSearch = {};
         $rootScope.globalSearch.query = '';
+        var tempFromState = {};
         // Adds the slim progress bar
-        $rootScope.$on('$stateChangeStart', function () {
+        $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+
+            console.log('changing', event, toState, toParams, fromState, fromParams);
+
+            // Catch if we are going to login
+            if (toState.name === 'login' && fromState.name !== '') {
+                tempFromState.fromState = fromState;
+                tempFromState.fromParams = fromParams;
+            }
+            if (fromState.name === 'login') {
+                // Do we have a previous state stored?
+                if (tempFromState.fromState) {
+                    event.preventDefault();
+                    var nextState = tempFromState;
+                    tempFromState = {};
+                    $state.go(nextState.fromState.name, nextState.fromParams);
+                }
+            }
+            // event.preventDefault();
             ngProgress.reset();
             ngProgress.color('#ea1d5d');
             ngProgress.start();
