@@ -845,7 +845,7 @@ angular.module('angularApp', [
                 url: '/interview/:interviewId?time',
                 templateUrl: 'views/architect/interview.html',
                 controller: 'InterviewCtrl',
-                reloadOnSearch: false,
+                // reloadOnSearch: false,
                 resolve: {
                     interview: ['$http', '$stateParams', '$q', 'Uris', 'Architect', 'Interview', 'Transcript', 'Relationship', 'GraphHelper', 'Entity', 'Ontology',
                         function ($http, $stateParams, $q, Uris, Architect, Interview, Transcript, Relationship, GraphHelper, Entity, Ontology) {
