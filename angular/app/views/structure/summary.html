@@ -22,7 +22,9 @@
                 <p ng-show="!structure[Uris.QA_SUMMARY].length">No summary.</p>
 
                 <h5 style="margin-top: 24px;">Associated Firm</h5>
-                
+                <p ng-show="!structure.$associatedFirm && !designers.firms.length">
+                    No associated firm.
+                </p>
                 <ul class="media-list">
                     <li class="media" style="margin-bottom: 10px;" ng-show="structure.$associatedFirm">
                         <a class="pull-left" ng-href="{{ structure.$associatedFirm.$link }}">
@@ -48,12 +50,10 @@
                     </li>
                 </ul>
 
-                <p ng-show="!structure.$associatedFirm">
-                    No associated firm.
-                </p>
+                
 
                 <h5 style="margin-top: 24px;">Associated Architects</h5>
-                <div ng-show="!designers.length && !structure.$associatedArchitects.length">
+                <div ng-show="!designers.architects.length && !structure.$associatedArchitects.length">
                     No associated architects.
                 </div>
 
@@ -88,7 +88,7 @@
 
                 <h5 style="margin-top: 24px;">Completion Date</h5>
                 <p ng-show="structure[Uris.QA_COMPLETION_DATE].length">{{ structure[Uris.QA_COMPLETION_DATE] }}</p>
-                <p ng-hide="structure[Uris.QA_COMPLETION_DATE].length">No completion date.</p>
+                <p ng-hide="structure[Uris.QA_COMPLETION_DATE].length">Unknown</p>
 
                 <h5 style="margin-top: 24px;">Demolished</h5>
                 <p>{{ structure[Uris.QA_DEMOLISHED] && 'Yes' || 'No' }}</p>
