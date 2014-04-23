@@ -30,12 +30,12 @@ angular.module('angularApp')
                 // Create an expression for each file
                 var expression = {};
                 expression.$uploadFile = file;
-                expression[Uris.DCT_TITLE] = file.name;
+                // expression[Uris.DCT_TITLE] = 
                 // Default type to photograph
                 expression[Uris.RDF_TYPE] = 'http://qldarch.net/ns/rdf/2012-06/terms#Photograph';
 
                 $scope.expressions.unshift(expression);
-
+                $scope.myModelObj = {};
                 expression.$upload = File.upload($scope.myModelObj, file)
                     .progress(function (evt) {
                         expression.$uploadFile.percent = parseInt(100.0 * evt.loaded / evt.total);
