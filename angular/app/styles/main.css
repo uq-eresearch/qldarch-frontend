@@ -5966,11 +5966,6 @@ section .thumbnail {
 .thumbnail:hover .thumbnail-image {
   opacity: 0.8;
 }
-.thumbnail:hover .thumbnail-image img {
-  top: -3%;
-  left: -3%;
-  height: 106%;
-}
 .thumbnail:hover a {
   color: #11c3b6 !important;
 }

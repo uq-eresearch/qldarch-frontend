@@ -2,3 +2,5 @@ angular/app/audio/*
 angular/.idea/workspace.xml
 PSDs/*
 angular/secret.json
+
+angular/.sublime-grunt.cache
