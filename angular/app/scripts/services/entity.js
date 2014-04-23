@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .factory('Entity', function (Uris, $q, $http, Request, GraphHelper, Expression, $filter, toaster) {
+    .factory('Entity', function (Uris, $q, $http, Request, GraphHelper, Expression, $filter, toaster, $cacheFactory) {
         // Service logic
         // ...
 
@@ -80,6 +80,15 @@ angular.module('angularApp')
             });
         };
 
+        var clearEntityCaches = function () {
+            $cacheFactory.get('$http').remove('/ws/rest/entity/detail/qldarch%3ANonDigitalThing?INCSUBCLASS=true&');
+            $cacheFactory.get('$http').remove('/ws/rest/entity/detail/qldarch%3AArchitect?INCSUBCLASS=false&');
+            $cacheFactory.get('$http').remove('/ws/rest/entity/detail/qldarch%3AFirm?INCSUBCLASS=false&');
+            $cacheFactory.get('$http').remove('/ws/rest/entity/detail/qldarch%3AStructure?INCSUBCLASS=false&');
+            // http://127.0.0.1:9000/ws/rest/entity/detail/qldarch%3ANonDigitalThing?INCSUBCLASS=true&
+        };
+
+
         // Public API here
         var entity = {
 
@@ -104,6 +113,7 @@ angular.module('angularApp')
                 return $http.put(url, payload, {
                     withCredentials: true
                 }).then(function (response) {
+                    clearEntityCaches();
                     angular.extend(data, response.data);
                     setupNames([data]);
                     toaster.pop('success', data.name + ' updated.');
@@ -114,7 +124,9 @@ angular.module('angularApp')
 
             delete: function (uri) {
                 var url = '/ws/rest/entity/description?ID=' + encodeURIComponent(uri);
-                return $http.delete(url);
+                return $http.delete(url).then(function () {
+                    clearEntityCaches();
+                });
             },
 
             create: function (data, rdfTypeUri) {
@@ -138,6 +150,7 @@ angular.module('angularApp')
                 return $http.post(url, payload, {
                     withCredentials: true
                 }).then(function (response) {
+                    clearEntityCaches();
                     angular.extend(data, response.data);
                     data.encodedUri = GraphHelper.encodeUriString(data.uri);
                     setupNames([data]);
@@ -163,8 +176,11 @@ angular.module('angularApp')
                     summary = true;
                 }
 
+                console.log('Entity: Finding by name');
+
                 return Request.getIndex('entity', type, summary, true).then(function (nonDigitalThings) {
 
+                    console.log('Got entities');
                     // Create name labels for them so we can use them for our search
                     setupNames(nonDigitalThings);
                     GraphHelper.setupTypes(nonDigitalThings);

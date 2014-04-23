@@ -12,8 +12,10 @@ h4, h5, h6 {
 }
 
 .page-header {
-    padding-top: @line-height-computed;
-    padding-bottom: ((@line-height-computed / 2) - 1);
+    // padding-top: @line-height-computed;
+    // padding-bottom: ((@line-height-computed / 2) - 1);
+    padding-top: 16px;
+    padding-bottom: 5px;
     margin: 0 0 @line-height-computed;
     
     border-bottom: none;
@@ -21,9 +23,12 @@ h4, h5, h6 {
     h1 {
         color: white;
         text-transform: capitalize;
+        font-size: 32px;
     }
     small a {
         color: desaturate(lighten(@brand-green, 30%), 40%);
+        display: block;
+        margin-bottom: 8px;
     }
 
     &.page-header-timeline {

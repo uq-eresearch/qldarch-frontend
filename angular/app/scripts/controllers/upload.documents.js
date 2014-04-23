@@ -31,7 +31,6 @@ angular.module('angularApp')
                 expression.$article = {};
                 expression.$interview = {};
                 expression.$uploadFile = file;
-                expression[Uris.DCT_TITLE] = file.name;
 
                 // Default type to articles
                 expression[Uris.RDF_TYPE] = Uris.QA_ARTICLE_TYPE;

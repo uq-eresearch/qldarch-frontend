@@ -34,6 +34,7 @@
                         <a class="navbar-brand" href="#"><img src="images/logo.jpg" alt="" class="img-responsive"/></a>
                     </div>
 
+    <!-- #333333 -->
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
@@ -42,7 +43,7 @@
                             <!--<li>-->
                                 <!--<a href ng-click="isShowingSearch=true"><i class="fa-search fa"></i></a>-->
                             <!--</li>-->
-                            <li class="dropdown">
+                            <li class="dropdown" ng-class="{'active': $state.includes('firm') || $state.includes('structure') || $state.includes('architect') || $state.includes('firms') || $state.includes('structures') || $state.includes('architects') || $state.includes('other')}">
                                 <a href class="dropdown-toggle" data-toggle="dropdown">Browse <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li><a ui-sref="architects.queensland">Architects</a></li>
@@ -50,7 +51,7 @@
                                     <li><a ui-sref="structures.australian">Projects</a></li>
                                 </ul>
                             </li>
-                            <li class="dropdown">
+                            <li class="dropdown" ng-class="{'active': $state.includes('ugc') }">
                                 <a href class="dropdown-toggle" data-toggle="dropdown">Build <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li><a ui-sref="ugc.timeline.edit({id:null})">Timeline</a></li>
@@ -60,8 +61,8 @@
                                 </ul>
                             </li>
 
-                            <li><a ui-sref="contribute">Contribute</a></li>
-
+                            <li ng-class="{'active': $state.includes('contribute') }"><a ui-sref="contribute">Contribute</a></li>
+ 
                                 <!--<ul class="dropdown-menu" ng-if="Auth.auth">
                                     <li><a ui-sref="architect.summary.edit({architectId:null})">New Architect</a></li>
                                     <li><a ui-sref="firm.summary.edit({firmId:null})">New Firm</a></li>
@@ -74,15 +75,15 @@
                             <li class="" ng-hide="Auth.auth"><a>&nbsp;</a></li>
                             <!-- <li class=""><a href="#/about">about</a></li> -->
                             <!-- <li class=""><a href="#/contribute">contribute</a></li> -->
-                            <li class="" ng-hide="Auth.auth" tooltip="Create an account" tooltip-placement="bottom"><a href="#/register" >Sign Up</a></li>
-                            <li class="" ng-hide="Auth.auth" tooltip="Log in with an existing account" tooltip-placement="bottom">
+                            <li class="" ng-hide="Auth.auth" tooltip="Create an account" tooltip-placement="bottom" ng-class="{'active': $state.includes('register') }"><a ui-sref="register" >Sign Up</a></li>
+                            <li class="" ng-hide="Auth.auth" tooltip="Log in with an existing account" tooltip-placement="bottom" ng-class="{'active': $state.includes('login') }">
                                 <a href ui-sref="login">Log in</a>
                             </li>
                         </ul>
 
                         <!-- Logged in user -->
                         <ul class="nav navbar-nav">
-                            <li class="dropdown" ng-show="Auth.auth">
+                            <li class="dropdown" ng-show="Auth.auth" ng-class="{'active': $state.includes('user') }">
                                 <a href class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li><a >{{ Auth.email }}</a></li>

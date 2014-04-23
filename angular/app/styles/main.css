@@ -4046,7 +4046,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-inverse .navbar-nav > .active > a:hover,
 .navbar-inverse .navbar-nav > .active > a:focus {
   color: #ffffff;
-  background-color: #090909;
+  background-color: #3c3c3c;
 }
 .navbar-inverse .navbar-nav > .disabled > a,
 .navbar-inverse .navbar-nav > .disabled > a:hover,
@@ -4071,7 +4071,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-inverse .navbar-nav > .open > a,
 .navbar-inverse .navbar-nav > .open > a:hover,
 .navbar-inverse .navbar-nav > .open > a:focus {
-  background-color: #090909;
+  background-color: #3c3c3c;
   color: #ffffff;
 }
 @media (max-width: 767px) {
@@ -4093,7 +4093,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a:hover,
   .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a:focus {
     color: #ffffff;
-    background-color: #090909;
+    background-color: #3c3c3c;
   }
   .navbar-inverse .navbar-nav .open .dropdown-menu > .disabled > a,
   .navbar-inverse .navbar-nav .open .dropdown-menu > .disabled > a:hover,
@@ -6127,8 +6127,8 @@ h6 {
   font-weight: bold;
 }
 .page-header {
-  padding-top: 24px;
-  padding-bottom: 11px;
+  padding-top: 16px;
+  padding-bottom: 5px;
   margin: 0 0 24px;
   border-bottom: none;
   background-color: #0faca0;
@@ -6136,9 +6136,12 @@ h6 {
 .page-header h1 {
   color: white;
   text-transform: capitalize;
+  font-size: 32px;
 }
 .page-header small a {
   color: #97d6d2;
+  display: block;
+  margin-bottom: 8px;
 }
 .page-header.page-header-timeline {
   background-color: #ccda6a;
@@ -6200,6 +6203,12 @@ h6 {
 }
 body {
   background-color: white;
+}
+.fa-asterisk.fa-asterisk-required {
+  font-size: 8px;
+  position: relative;
+  top: -5px;
+  color: #AC5A5A;
 }
 /**
  * Form Validation
@@ -6662,14 +6671,22 @@ form .select2-container-active.ng-invalid.ng-dirty .select2-choice {
   display: none;
 }
 .subnav {
-  padding: 12px 0;
   border: 1px solid #eeeeee;
   margin-bottom: 24px;
 }
 .subnav .nav > li > a {
-  padding: 5px 15px;
-  border-radius: 3px;
+  padding: 12px 15px;
+  border-radius: 0;
+  color: #6f6f6f;
+}
+.subnav .nav > li > a:hover {
+  color: #555555;
+  background-color: white;
+  border-bottom: 3px solid #6f6f6f;
 }
 .subnav .nav-pills > li.active > a {
-  background-color: #53C6BB;
+  color: #53C6BB;
+  background-color: white;
+  border-bottom: 3px solid #53C6BB;
+  border-radius: 0px;
 }

@@ -1,7 +1,7 @@
-<div class="alert alert-warning" ng-show="!$state.includes('ugc.map.edit') && (isEditable || isDeletable)" style="margin: 0;">
+<div class="alert alert-warning" ng-show="!$state.includes('ugc.wordcloud.edit') && (isEditable || isDeletable)" style="margin: 0;">
     <div class="container">
         <!-- Edit -->
-		<button class="btn btn-default" ui-sref="ugc.map.edit" ng-show="isEditable">
+		<button class="btn btn-default" ui-sref="ugc.wordcloud.edit" ng-show="isEditable">
 			<i class="fa fa-pencil"></i> Edit
 		</button>
 		<!-- /Edit -->
@@ -24,9 +24,9 @@
 		<!-- /Edit -->
 		
 		<h3 style="text-align: center; margin-bottom: 24px" ng-show="compoundObject.title.length">
-			<!-- Map title -->
+			<!-- Object title -->
 			{{ compoundObject.title }}<br>
-			<!-- /Map title -->
+			<!-- /Object title -->
 
 			<!-- Author name -->
 			<small ng-show="compoundObject.user.user.length">By {{ compoundObject.user.email }}</small>

@@ -29,6 +29,12 @@ body {
   background-color: white;
 }
 
+.fa-asterisk.fa-asterisk-required {
+  font-size: 8px;
+  position: relative;
+  top: -5px;
+  color: #AC5A5A;
+}
 /**
  * Form Validation
  *
@@ -611,14 +617,24 @@ form {
 }
 
 .subnav {
-  padding: @line-height-computed / 2 0;
+  // padding: @line-height-computed / 2 0;
   border: 1px solid @gray-lighter;
   margin-bottom: @line-height-computed;
   .nav > li > a {
-    padding: 5px 15px;
-    border-radius: 3px;
+    padding: 12px 15px;
+    border-radius: 0;
+    color: lighten(@gray, 10%);
+  }
+  .nav > li > a:hover {
+    color: @gray;
+    background-color: white;
+    border-bottom: 3px solid lighten(@gray, 10%);;
   }
   .nav-pills > li.active > a {
-    background-color: #53C6BB;
+    // background-color: #53C6BB;
+    color: #53C6BB;
+    background-color: white;
+    border-bottom: 3px solid #53C6BB;
+    border-radius: 0px;
   }
 }
