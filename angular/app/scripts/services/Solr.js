@@ -248,8 +248,19 @@ angular.module('angularApp')
                     return getArticlesFromDocs(response.data.response.docs, args.query).then(function (articles) {
                         return getInterviewsFromDocs(response.data.response.docs, args.query).then(function (interviews) {
                             var results = articles.concat(interviews);
-                            return $filter('orderBy')(results, '-score');
-                            // return results;
+
+                            if (args.containFullQuery) {
+                                results = $filter('filter')(results, function (result) {
+                                    var matches = true;
+                                    angular.forEach(args.query.split(' '), function (term) {
+                                        matches = matches && result.text.toLowerCase().indexOf(term.toLowerCase()) !== -1;
+                                    });
+                                    return matches;
+                                });
+                            }
+                            results = $filter('orderBy')(results, '-score');
+
+                            return results;
 
                         });
                     });

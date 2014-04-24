@@ -53,8 +53,32 @@ angular.module('angularApp')
                 $scope.importSelectionChanged();
                 console.log('documents', documents);
             });
-
         });
+
+        $scope.search = function (query) {
+            $scope.wordcloud.$import.isSearching = true;
+            if (!query.length) {
+                return;
+            }
+
+            // Clear the current locations
+            $scope.wordcloud.$import.documents = null;
+
+            // Do a search for documents
+            Solr.query({
+                query: query,
+                containFullQuery: true
+            }).then(function (documents) {
+                $scope.wordcloud.$import.isSearching = false;
+                // Got the documents
+                $scope.wordcloud.$import.documents = documents;
+                angular.forEach(documents, function (document) {
+                    document.$selected = true;
+                });
+                $scope.importSelectionChanged();
+                console.log('documents', documents);
+            });
+        };
 
         /**
          * Adds a list of documents (if selected) to the word cloud visualisation

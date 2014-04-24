@@ -657,6 +657,9 @@ angular.module('angularApp', [
             .state('ugc.wordcloud.edit.add.document', {
                 url: '/document',
             })
+            .state('ugc.wordcloud.edit.add.search', {
+                url: '/search',
+            })
             .state('ugc.wordcloud.edit.add.import', {
                 url: '/import',
             })
