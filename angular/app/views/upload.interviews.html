@@ -33,9 +33,9 @@
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a ui-sref="architect.summary.edit({})" target="_blank">Architect</a>
+                                    <li><a ui-sref="architect.summary.edit({})">Architect</a>
                                     </li>
-                                    <li><a ui-sref="other.summary.edit({})" target="_blank">Person</a>
+                                    <li><a ui-sref="other.summary.edit({})">Person</a>
                                     </li>
                                 </ul>
                             </div>
@@ -46,11 +46,10 @@
                 <div class="form-group" style="margin-top: 16px;">
                     <label class="control-label">
                         Who was the interviewer?
-                        <i class="fa fa-asterisk fa-asterisk-required"></i>
                     </label>
                     <div class="row">
                         <div class="col-sm-10">
-                            <div name="selectedInterviewers" ui-select2="personSelect" ng-model="interview.$interviewers" class="form-control" ui-validate="'$value.length > 0'">
+                            <div name="selectedInterviewers" ui-select2="personSelect" ng-model="interview.$interviewers" class="form-control">
                             </div>
                         </div>
                         <div class="col-sm-2" style="border-left: 1px solid #ccc; padding-left: 16px;">
@@ -60,9 +59,9 @@
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a ui-sref="architect.summary.edit({})" target="_blank">Architect</a>
+                                    <li><a ui-sref="architect.summary.edit({})">Architect</a>
                                     </li>
-                                    <li><a ui-sref="other.summary.edit({})" target="_blank">Person</a>
+                                    <li><a ui-sref="other.summary.edit({})">Person</a>
                                     </li>
                                 </ul>
                             </div>
