@@ -3,6 +3,7 @@
     <div class="alert alert-warning" style="margin: 0;" ng-show="Auth.role === 'editor' || Auth.role === 'root'">
         <div class="container">
             <button class="btn btn-default btn-xs" ui-sref="upload.interviews({ id: interview.encodedUri })"><i class="fa fa-pencil" ></i> Edit</button>
+            <button class="btn btn-default btn-xs" ng-click="delete(interview)" ng-show="Auth.role === 'root'"><i class="fa fa-trash-o" ></i> Delete</button>
         </div>
     </div>
 

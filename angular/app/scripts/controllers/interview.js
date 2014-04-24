@@ -2,10 +2,16 @@
 
 angular.module('angularApp')
 // interview, transcript, evidences
-.controller('InterviewCtrl', function ($scope, interview, $http, Uris, Entity, Ontology, architect, interviews, $stateParams, $location, $anchorScroll, $timeout, GraphHelper) {
+.controller('InterviewCtrl', function ($scope, interview, $state, $http, Uris, Entity, Ontology, architect, interviews, $stateParams, $location, $anchorScroll, $timeout, GraphHelper, Expression, $cacheFactory) {
     // Setup
 
-
+    $scope.delete = function (interview) {
+        Expression.delete(interview.uri, interview).then(function () {
+            $cacheFactory.get('$http').remove('/ws/rest/expression/detail/qldarch%3AInterview?INCSUBCLASS=false&');
+            $cacheFactory.get('$http').remove('/ws/rest/expression/summary/qldarch%3AInterview?INCSUBCLASS=false&');
+            $state.go(architect.$state + '.summary', architect.$stateParams);
+        });
+    };
 
     $scope.sub = 'interviews';
     $scope.interviews = interviews;
