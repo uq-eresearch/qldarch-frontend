@@ -6229,9 +6229,18 @@ form .select2-container-active.ng-invalid.ng-dirty .select2-choice {
  *
  * Takes out some padding from the standard alert
  */
+.alert {
+  border-radius: 0;
+}
 .alert.alert-warning {
   padding: 8px;
   border-top: none;
+}
+.alert.alert-info {
+  border: none;
+  background-color: white;
+  border-bottom: 1px solid #eee;
+  color: #6f6f6f;
 }
 .select2-thumb {
   width: 20px;

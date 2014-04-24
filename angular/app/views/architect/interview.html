@@ -138,9 +138,11 @@
                         <div class="col-sm-6">
                             <div class="media">
                                 <div class="pull-left" style="text-align: center">
-                                    <a href="#/{{ exchange.speaker.type }}/summary?{{ exchange.speaker.type }}Id={{ exchange.speaker.encodedUri }}" class="exchange-dp">
-                                        <img class="media-object img-circle" ng-src="{{ exchange.speaker.picture.thumb }}" alt="" style="width: 32px"/>
-                                    </a>
+
+                                    <img ng-show="exchange.speaker" class="media-object exchange-dp" ng-src="{{ exchange.speaker.picture.thumb }}" alt="" style="width: 32px"/>
+
+
+                                    <img ng-hide="exchange.speaker" class="media-object exchange-dp" src="images/icon.png" alt="" style="width: 32px"/>
 
                                     <!-- play button -->
                                     <button class="btn btn-xs btn-default exchange-play" 

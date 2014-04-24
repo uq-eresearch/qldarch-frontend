@@ -1,13 +1,14 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('UploadInterviewsCtrl', function ($scope, GraphHelper, Entity, Uris, $cacheFactory, File, Expression) {
+    .controller('UploadInterviewsCtrl', function ($scope, GraphHelper, Entity, Uris, $cacheFactory, File, Expression, toaster, $state) {
 
-        $scope.expression = {};
-        $scope.expression[Uris.RDF_TYPE] = Uris.QA_INTERVIEW_TYPE;
-        $scope.expression[Uris.QA_EXTERNAL_LOCATION] = [];
-        $scope.expression[Uris.QA_HAS_FILE] = [];
-        $scope.expression.$audioFiles = [];
+        $scope.interview = {};
+        $scope.interview[Uris.RDF_TYPE] = Uris.QA_INTERVIEW_TYPE;
+        $scope.interview[Uris.QA_EXTERNAL_LOCATION] = [];
+        $scope.interview[Uris.QA_HAS_FILE] = [];
+        $scope.interview.$audioFiles = [];
+        $scope.interview.$transcriptFiles = [];
 
         $scope.onAudioFileSelect = function ($files) {
             //$files: an array of files selected, each file has name, size, and type.
@@ -15,7 +16,7 @@ angular.module('angularApp')
                 console.log('file', file);
                 // Create an expression for each files
                 var newFile = {};
-                $scope.expression.$audioFiles.unshift(newFile);
+                $scope.interview.$audioFiles.unshift(newFile);
                 newFile.uploadFile = file;
                 newFile.uploadFn = File.upload($scope.myModelObj, file)
                     .progress(function (evt) {
@@ -23,16 +24,16 @@ angular.module('angularApp')
                         newFile.uploadFile.isComplete = newFile.uploadFile.percent === 100;
                     }).success(function (data) {
                         // file is uploaded successfully
-                        $scope.expression[Uris.QA_HAS_FILE].push(data.uri);
+                        $scope.interview[Uris.QA_HAS_FILE].push(data.uri);
 
                         // Set the transcript
                         // expression[Uris.QA_HAS_TRANSCRIPT] = data.uri;
-                        $scope.expression[Uris.QA_EXTERNAL_LOCATION].push(Uris.SESAME_FILE_ROOT + data[Uris.QA_SYSTEM_LOCATION]);
+                        $scope.interview[Uris.QA_EXTERNAL_LOCATION].push(Uris.SESAME_FILE_ROOT + data[Uris.QA_SYSTEM_LOCATION]);
 
                         // expression.$file = File.setupImageUrls(data);
                         // {"uri":"http://qldarch.net/users/amuys/DigitalFile#70211253214","http://qldarch.net/ns/rdf/2012-06/terms#managedFile":true,"http://qldarch.net/ns/rdf/2012-06/terms#basicMimeType":"text/plain","http://qldarch.net/ns/rdf/2012-06/terms#dateUploaded":1398229653214,"http://qldarch.net/ns/rdf/2012-06/terms#sourceFilename":"91f43085d59092db9ed9c59bac06ffa2.txt","http://www.w3.org/1999/02/22-rdf-syntax-ns#type":"http://qldarch.net/ns/rdf/2012-06/terms#DigitalFile","http://qldarch.net/ns/rdf/2012-06/terms#transcriptFile":"amuys/transcript/amuys-1398229653098-91f43085d59092db9ed9c59bac06ffa2.txt.json","http://qldarch.net/ns/rdf/2012-06/terms#uploadedBy":"http://qldarch.net/users/amuys","http://qldarch.net/ns/rdf/2012-06/terms#hasFileSize":39724,"http://qldarch.net/ns/rdf/2012-06/terms#systemLocation":"amuys/amuys-1398229653072-91f43085d59092db9ed9c59bac06ffa2.txt"}
                     });
-                // $scope.expression.$files.push(file);
+                // $scope.interview.$files.push(file);
             });
         };
 
@@ -42,7 +43,7 @@ angular.module('angularApp')
                 console.log('file', file);
                 // Create an expression for each files
                 var newFile = {};
-                $scope.expression.$audioFiles.unshift(newFile);
+                $scope.interview.$transcriptFiles.unshift(newFile);
                 newFile.uploadFile = file;
                 newFile.uploadFn = File.upload($scope.myModelObj, file)
                     .progress(function (evt) {
@@ -50,26 +51,38 @@ angular.module('angularApp')
                         newFile.uploadFile.isComplete = newFile.uploadFile.percent === 100;
                     }).success(function (data) {
                         // file is uploaded successfully
-                        $scope.expression[Uris.QA_HAS_FILE].push(data.uri);
+                        // $scope.interview[Uris.QA_HAS_FILE].push(data.uri);
 
+                        if (angular.isDefined(data[Uris.QA_TRANSCRIPT_FILE])) {
+                            // It's been processed as a transcript file
+                            // Set the hasTrascript property
+                            $scope.interview[Uris.QA_HAS_TRANSCRIPT] = data.uri; //data[Uris.QA_TRANSCRIPT_FILE];
+                            // Set a shortcut to the transcript file
+                            $scope.interview[Uris.QA_TRANSCRIPT_LOCATION] = Uris.SESAME_FILE_ROOT + data[Uris.QA_TRANSCRIPT_FILE];
+                        } else {
+                            toaster.pop('error', 'Transcript couldn\'t be processed', 'Sorry this transcript couldn\'t be processed');
+                        }
                         // Set the transcript
                         // expression[Uris.QA_HAS_TRANSCRIPT] = data.uri;
-                        $scope.expression[Uris.QA_EXTERNAL_LOCATION] = Uris.SESAME_FILE_ROOT + data[Uris.QA_SYSTEM_LOCATION];
+                        // $scope.interview[Uris.QA_EXTERNAL_LOCATION] = Uris.SESAME_FILE_ROOT + data[Uris.QA_SYSTEM_LOCATION];
 
                         // expression.$file = File.setupImageUrls(data);
                         // {"uri":"http://qldarch.net/users/amuys/DigitalFile#70211253214","http://qldarch.net/ns/rdf/2012-06/terms#managedFile":true,"http://qldarch.net/ns/rdf/2012-06/terms#basicMimeType":"text/plain","http://qldarch.net/ns/rdf/2012-06/terms#dateUploaded":1398229653214,"http://qldarch.net/ns/rdf/2012-06/terms#sourceFilename":"91f43085d59092db9ed9c59bac06ffa2.txt","http://www.w3.org/1999/02/22-rdf-syntax-ns#type":"http://qldarch.net/ns/rdf/2012-06/terms#DigitalFile","http://qldarch.net/ns/rdf/2012-06/terms#transcriptFile":"amuys/transcript/amuys-1398229653098-91f43085d59092db9ed9c59bac06ffa2.txt.json","http://qldarch.net/ns/rdf/2012-06/terms#uploadedBy":"http://qldarch.net/users/amuys","http://qldarch.net/ns/rdf/2012-06/terms#hasFileSize":39724,"http://qldarch.net/ns/rdf/2012-06/terms#systemLocation":"amuys/amuys-1398229653072-91f43085d59092db9ed9c59bac06ffa2.txt"}
                     });
-                // $scope.expression.$files.push(file);
+                // $scope.interview.$files.push(file);
             });
         };
 
         $scope.create = function (expression) {
-            Expression.create(expression);
+            Expression.create(expression).then(function () {
+                var interviewee = $scope.selectedInterviewees[0];
+                $state.go(interviewee.$state + '.summary', interviewee.$stateParams);
+            });
         };
         // $scope.cancelUpload = function (expression) {
         //     // Remove the expression
-        //     var index = $scope.expressions.indexOf(expression);
-        //     $scope.expressions.splice(index, 1);
+        //     var index = $scope.interviews.indexOf(expression);
+        //     $scope.interviews.splice(index, 1);
 
         //     // Cancel the upload
         //     expression.$upload.cancel();
@@ -94,16 +107,19 @@ angular.module('angularApp')
 
         // Update our model when the selected interviewers change
         $scope.$watch('selectedInterviewees', function (selectedInterviewees) {
-            $scope.expression[Uris.QA_INTERVIEWEE] = [];
+            $scope.interview[Uris.QA_INTERVIEWEE] = [];
+            $scope.interview[Uris.DCT_TITLE] = '';
             angular.forEach(selectedInterviewees, function (interviewee) {
-                $scope.expression[Uris.QA_INTERVIEWEE].push(interviewee.uri);
+                $scope.interview[Uris.QA_INTERVIEWEE].push(interviewee.uri);
+                $scope.interview[Uris.DCT_TITLE] += interviewee.name + ' ';
             });
+            $scope.interview[Uris.DCT_TITLE] += 'Interview';
         });
 
         $scope.$watch('selectedInterviewers', function (selectedInterviewers) {
-            $scope.expression[Uris.QA_INTERVIEWER] = [];
+            $scope.interview[Uris.QA_INTERVIEWER] = [];
             angular.forEach(selectedInterviewers, function (interviewer) {
-                $scope.expression[Uris.QA_INTERVIEWER].push(interviewer.uri);
+                $scope.interview[Uris.QA_INTERVIEWER].push(interviewer.uri);
             });
         });
 

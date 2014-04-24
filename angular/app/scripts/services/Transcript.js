@@ -12,8 +12,14 @@ angular.module('angularApp')
             if (speaker.name === 'Deborah van der Plaat') {
                 return 'DV';
             } else {
-                var firstInitial = speaker[Uris.FOAF_FIRST_NAME].charAt(0);
-                var lastInitial = speaker[Uris.FOAF_LAST_NAME].charAt(0);
+                var firstInitial = '',
+                    lastInitial = '';
+                if (angular.isDefined(speaker[Uris.FOAF_FIRST_NAME])) {
+                    firstInitial = speaker[Uris.FOAF_FIRST_NAME].charAt(0);
+                }
+                if (angular.isDefined(speaker[Uris.FOAF_LAST_NAME])) {
+                    lastInitial = speaker[Uris.FOAF_LAST_NAME].charAt(0);
+                }
                 return firstInitial + lastInitial;
             }
         };
@@ -75,6 +81,7 @@ angular.module('angularApp')
                     var speakers = args.interviewers.concat(args.interviewees);
 
                     angular.forEach(speakers, function (speaker) {
+                        console.log('interviewers', speaker);
                         if (getInitials(speaker) === exchange.speakerInitials) {
                             exchange.speaker = speaker;
                             if (args.interviewers.indexOf(speaker) !== -1) {

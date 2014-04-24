@@ -149,6 +149,10 @@ module.exports = function (grunt) {
                 context: '/static',
                 host: 'qldarch-test.metadata.net',
                 changeOrigin: true,
+            }, {
+                context: '/files',
+                host: 'qldarch-test.metadata.net',
+                changeOrigin: true,
             }],
             livereload: {
                 options: {

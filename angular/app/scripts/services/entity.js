@@ -48,7 +48,15 @@ angular.module('angularApp')
             // Get all the preferred images
             var imageUris = GraphHelper.getAttributeValuesUnique(entities, Uris.QA_PREFERRED_IMAGE);
 
-            // Get the images for the non-structures
+            // Set the default picture
+            angular.forEach(entities, function (entity) {
+                entity.picture = {
+                    file: 'images/icon.png',
+                    thumb: 'images/icon.png',
+                };
+            });
+
+            // Overwrite the pictures if we have them
             return Expression.loadList(imageUris, 'qldarch:Photograph').then(function (expressions) {
                 angular.forEach(entities, function (entity) {
                     // Add images
@@ -62,17 +70,7 @@ angular.module('angularApp')
                         var expression = expressions[imageUri];
                         if (angular.isDefined(expression.file)) {
                             entity.picture = expression.file;
-                        } else {
-                            entity.picture = {
-                                file: 'images/icon.png',
-                                thumb: 'images/icon.png',
-                            };
                         }
-                    } else {
-                        entity.picture = {
-                            file: 'images/icon.png',
-                            thumb: 'images/icon.png',
-                        };
                     }
                 });
 

@@ -98,9 +98,17 @@ form {
  * Takes out some padding from the standard alert
  */
 .alert {
+  border-radius: 0;
+
   &.alert-warning {
     padding: 8px;
     border-top: none;
+  }
+  &.alert-info {
+    border: none;
+    background-color: white;
+    border-bottom: 1px solid #eee;
+    color: lighten(@gray, 10%);
   }
 }
 .select2-thumb {

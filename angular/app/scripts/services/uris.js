@@ -101,6 +101,8 @@ angular.module('angularApp')
         this.FOAF_AGENT_TYPE = this.FOAF_NS + 'Agent';
         this.FOAF_PERSON_TYPE = this.FOAF_NS + 'Person';
 
+        this.QA_TRANSCRIPT_FILE = this.QA_NS + 'transcriptFile';
+
         this.FOAF_FIRST_NAME = this.FOAF_NS + 'firstName';
         this.FOAF_LAST_NAME = this.FOAF_NS + 'lastName';
         this.FOAF_NAME = this.FOAF_NS + 'name';
