@@ -113,7 +113,7 @@
                             <!-- <input type="text" ng-model="myModelObj" class="form-control"> -->
                             <!-- <input type="file" ng-file-select="onFileSelect($files)" class="form-control"> -->
                             <div class="upload-choose-label">Or select files</div>
-                            <input type="file" ng-file-select="onFileSelect($files)" multiple>
+                            <input type="file" ng-file-select="onAudioFileSelect($files)" multiple>
                         </div>
                     </div>
                     <!-- /Upload form -->
@@ -128,20 +128,9 @@
                     		</button>
                     		Transcript
                     	</li>
-                    	<li class="list-group-item" ng-repeat="file in interview.$transcriptFiles">
-                    		<button ng-show="file.uploadFile.isComplete" class="btn btn-default btn-xs pull-right">
-                    			<i class="fa fa-trash-o"></i>
-                    		</button>
-                    		{{ file.uploadFile.name }}
-                    		<div class="progress" ng-hide="file.uploadFile.isComplete">
-                                <div class="progress-bar" role="progressbar" style="width: {{ file.uploadFile.percent }}%;">
-                                    {{ file.uploadFile.percent }}%
-                                </div>
-                            </div>
-                        </li>
                     </ul>
 
-                    <div class="form-group upload" ng-hide="interview.$transcriptFiles.length || interview[Uris.QA_TRANSCRIPT_LOCATION]">
+                    <div class="form-group upload" ng-hide="interview[Uris.QA_TRANSCRIPT_LOCATION]">
                         <div ng-file-drop="onTranscriptFileSelect($files)" ng-file-drag-over-class="upload-dropzone-dragover" ng-show="dropSupported" class="upload-dropzone">
                             <i class="fa fa-cloud-upload"></i> Drop transcript file here
                         </div>
@@ -152,7 +141,7 @@
                             <!-- <input type="text" ng-model="myModelObj" class="form-control"> -->
                             <!-- <input type="file" ng-file-select="onFileSelect($files)" class="form-control"> -->
                             <div class="upload-choose-label">Or select files</div>
-                            <input type="file" ng-file-select="onFileSelect($files)">
+                            <input type="file" ng-file-select="onTranscriptFileSelect($files)">
                         </div>
 
                     </div>

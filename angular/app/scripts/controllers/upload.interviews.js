@@ -40,7 +40,7 @@ angular.module('angularApp')
                 console.log('file', file);
                 // Create an expression for each files
                 var newFile = {};
-                $scope.interview.$transcriptFiles.unshift(newFile);
+                // $scope.interview.$transcriptFiles.unshift(newFile);
                 newFile.uploadFile = file;
                 newFile.uploadFn = File.upload($scope.myModelObj, file)
                     .progress(function (evt) {
