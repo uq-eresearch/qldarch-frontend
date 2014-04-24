@@ -168,10 +168,6 @@
                                     </div>
 
 
-
-
-
-
                                     <!-- Description -->
                                     <div class="form-group">
                                         <label>Description</label>
@@ -179,7 +175,7 @@
                                     </div>
 
                                     <!-- Creator -->
-                                    <div class="form-group" class="form-group">
+                                    <!-- <div class="form-group" class="form-group">
                                         <label>Creator</label>
                                         <div class="radio">
                                             <label>
@@ -192,16 +188,16 @@
                                             </label>
                                         </div>
                                         <input type="text" placeholder="Who created this item?" ng-model="expression[Uris.DCT_CREATOR]" class="form-control" ng-show="expression.$creator === 'other'">
-                                    </div>
+                                    </div> -->
 
                                     <!-- Created Date -->
-                                    <div class="form-group">
+                                   <!--  <div class="form-group">
                                         <label>Created Date</label>
                                         <input type="text" placeholder="When was this created?" ng-model="expression[Uris.DCT_CREATED]" class="form-control">
                                     </div>
-
+ -->
                                     <!-- Rights -->
-                                    <div class="form-group">
+                                    <!-- <div class="form-group">
                                         <label>Rights</label>
                                         <div class="radio">
                                             <label>
@@ -227,13 +223,13 @@
                                             </label>
                                         </div>
                                         <input type="text" placeholder="Who owns the rights to this item?" ng-model="expression[Uris.DCT_RIGHTS]" class="form-control" ng-show="expression.$rights == 'other'">
-                                    </div>
+                                    </div> -->
 
                                     <!-- External Identifier -->
-                                    <div class="form-group">
+                                    <!-- <div class="form-group">
                                         <label>External Identifier</label>
                                         <input type="text" placeholder="Does this item have an external identifier?" ng-model="expression[Uris.DCT_IDENTIFIER]" class="form-control">
-                                    </div>
+                                    </div> -->
 
                                     <div ng-hide="expression.uri">
                                         <button class="btn btn-primary" ng-click="publish(expression)" ng-disabled="expression.$form.$invalid">Publish</button>
