@@ -36,10 +36,10 @@
     </div>
 </div>
 
-<div class="l-frame l-frame-highlight l-frame-tight" ng-hide="$state.includes('firms.other')">
+<div class="l-frame l-frame-media l-frame-tighter" ng-hide="$state.includes('firms.other')">
     <div class="container">
-        <div class="chart-index">
-            <button class="btn btn-default" style="margin-right:1px;" 
+        <div class="chart-index" style="margin-bottom: 16px; text-align: center;">
+            <button class="btn btn-dark" style="margin-right:1px;" 
                 ng-click="goToIndex(null)"
                 ng-class="{'btn-primary': $stateParams.index == null}">
                     All
@@ -47,16 +47,13 @@
             <button style="margin-right:1px;" 
                 ng-repeat="(index, exists) in indexes"
                 class="btn" 
-                ng-class="{'btn-primary': $stateParams.index === index, 'btn-default': $stateParams.index !== index}" 
+                ng-class="{'btn-primary': $stateParams.index === index, 'btn-dark': $stateParams.index !== index}" 
                 ng-disabled="!exists"
                 ng-click="goToIndex(index)">
                     {{ index }}
             </button>
         </div>
-    </div>    
-</div>
-<div class="l-frame l-frame-media" ng-hide="$state.includes('firms.other')">
-    <div class="container">
+
         <div id="chart"></div>
     </div>
 </div>

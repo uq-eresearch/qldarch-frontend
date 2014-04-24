@@ -233,6 +233,16 @@ form {
   &.btn-default {
     border: 1px solid @btn-default-border;
   }
+  &.btn-dark {
+    color: white;
+    background-color: #222;
+    border: black;
+    &[disabled] {
+      color: @gray;
+      background-color: #222;
+      border: black;
+    }
+  }
   border: none;
 }
 .jumbotron {

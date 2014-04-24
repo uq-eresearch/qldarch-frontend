@@ -6356,6 +6356,16 @@ form .select2-container-active.ng-invalid.ng-dirty .select2-choice {
 .btn.btn-default {
   border: 1px solid #cccccc;
 }
+.btn.btn-dark {
+  color: white;
+  background-color: #222;
+  border: black;
+}
+.btn.btn-dark[disabled] {
+  color: #555555;
+  background-color: #222;
+  border: black;
+}
 .jumbotron {
   background-image: url('../images/header.jpg');
   background-repeat: no-repeat;
