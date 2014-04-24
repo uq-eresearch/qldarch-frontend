@@ -32,15 +32,15 @@
             <div class="col-md-12">
                 <form action="" ng-submit="updateArchitect(architect)">
                     <div class="form-group">
-                        <label for="">First Name</label>
+                        <label for="">First Name <i class="fa fa-asterisk fa-asterisk-required"></i></label>
                         <input type="text" class="form-control" placeholder="First Name" ng-model="architect[Uris.FOAF_FIRST_NAME]">
                     </div>
                     <div class="form-group">
-                        <label for="">Last Name</label>
+                        <label for="">Last Name <i class="fa fa-asterisk fa-asterisk-required"></i></label>
                         <input type="text" class="form-control" placeholder="Last Name" ng-model="architect[Uris.FOAF_LAST_NAME]">
                     </div>
                     <div class="form-group">
-                        <label for="">Also known as (optional) <i class="fa fa-info-circle" tooltip="Example: 'William Douglas' may be also known as 'Bill Douglas'"></i></label>
+                        <label for="">Also known as <i class="fa fa-info-circle" tooltip="Example: 'William Douglas' may be also known as 'Bill Douglas'"></i></label>
                         <input type="text" class="form-control" placeholder="Also known as" ng-model="architect[Uris.QA_PREF_LABEL]">
                     </div>
                     <div class="form-group">

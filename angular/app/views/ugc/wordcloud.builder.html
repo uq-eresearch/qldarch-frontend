@@ -36,15 +36,15 @@
                                 <p class="text-muted">Create a new document to add to the word cloud.</p>
                                 <div class="form-group">
                                     <label class="control-label" for="dateHeadline">
-                                        Name
-                                        <i class="fa fa-asterisk" style="font-size: 10px"></i>
+                                        Name 
+                                        <i class="fa fa-asterisk fa-asterisk-required"></i>
                                     </label>
                                     <input ng-model="wordcloud.$tempDocument.title" name="dateHeadline" type="text" class="form-control" id="dateHeadline" placeholder="What is the name of your text?" required="">
                                 </div>
                                 <div class="form-group">
                                     <label>
                                         Text
-                                        <i class="fa fa-asterisk" style="font-size: 10px"></i>
+                                        <i class="fa fa-asterisk fa-asterisk-required"></i>
                                     </label>
                                     <textarea rows="10" class="form-control" ng-model="wordcloud.$tempDocument.text"></textarea>
                                 </div>
