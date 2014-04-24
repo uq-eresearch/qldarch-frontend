@@ -1,10 +1,6 @@
 'use strict';
 
 angular.module('angularApp')
-  .controller('UserFilesInterviewsCtrl', function ($scope) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
-  });
+    .controller('UserFilesInterviewsCtrl', function ($scope, expressions) {
+        $scope.expressions = expressions;
+    });

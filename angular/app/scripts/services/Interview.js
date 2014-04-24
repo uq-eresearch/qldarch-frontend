@@ -30,6 +30,8 @@ angular.module('angularApp')
                             interview.interviewers.push(participants[interviewUri]);
                         });
                     }
+                    interview.$interviewers = interview.interviewers;
+                    interview.$interviewees = interview.interviewees;
                 });
                 console.log('interviews', interviews);
                 return interviews;

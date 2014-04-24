@@ -1,14 +1,11 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('UploadInterviewsCtrl', function ($scope, GraphHelper, Entity, Uris, $cacheFactory, File, Expression, toaster, $state) {
+    .controller('UploadInterviewsCtrl', function ($scope, interview, GraphHelper, Entity, Uris, $cacheFactory, File, Expression, toaster, $state) {
 
-        $scope.interview = {};
-        $scope.interview[Uris.RDF_TYPE] = Uris.QA_INTERVIEW_TYPE;
-        $scope.interview[Uris.QA_EXTERNAL_LOCATION] = [];
-        $scope.interview[Uris.QA_HAS_FILE] = [];
-        $scope.interview.$audioFiles = [];
-        $scope.interview.$transcriptFiles = [];
+        $scope.interview = interview;
+        interview.$audioFiles = [];
+        interview.$transcriptFiles = [];
 
         $scope.onAudioFileSelect = function ($files) {
             //$files: an array of files selected, each file has name, size, and type.
@@ -74,10 +71,55 @@ angular.module('angularApp')
         };
 
         $scope.create = function (expression) {
-            Expression.create(expression).then(function () {
-                var interviewee = $scope.selectedInterviewees[0];
-                $state.go(interviewee.$state + '.summary', interviewee.$stateParams);
-            });
+            $cacheFactory.get('$http').remove('/ws/rest/expression/detail/qldarch%3AInterview?INCSUBCLASS=false&');
+            $cacheFactory.get('$http').remove('/ws/rest/expression/summary/qldarch%3AInterview?INCSUBCLASS=false&');
+            $cacheFactory.get('$http').remove('/ws/rest/expression/description?SUMMARY=false&IDLIST=' + encodeURIComponent(expression.uri));
+
+            if (expression.uri) {
+                Expression.update(expression.uri, expression).then(function () {
+                    // var interviewee = $scope.interview.$interviewees[0];
+                    $state.go($scope.interview.$state, $scope.interview.$stateParams);
+                });
+            } else {
+                Expression.create(expression).then(function () {
+                    var interviewee = $scope.interview.$interviewers[0];
+                    $state.go(interviewee.$state + '.summary', interviewee.$stateParams);
+                });
+            }
+        };
+        $scope.cancel = function () {
+            if ($scope.interview.uri) {
+                // Go back to interview
+                $state.go($scope.interview.$state, $scope.interview.$stateParams);
+            } else {
+                $state.go('user.files.interviews');
+            }
+        };
+
+        $scope.removeAudioFile = function (file) {
+            var index = $scope.interview.files.indexOf(file);
+            $scope.interview.files.splice(index, 1);
+
+            index = $scope.interview[Uris.QA_HAS_FILE].indexOf(file.uri);
+            $scope.interview[Uris.QA_HAS_FILE].splice(index, 1);
+
+            index = $scope.interview[Uris.QA_EXTERNAL_LOCATION].indexOf(Uris.SESAME_FILE_ROOT + file[Uris.QA_SYSTEM_LOCATION]);
+            $scope.interview[Uris.QA_EXTERNAL_LOCATION].splice(index, 1);
+        };
+        $scope.removeNewAudioFile = function (file) {
+            var index = $scope.interview.$audioFiles.indexOf(file);
+            $scope.interview.$audioFiles.splice(index, 1);
+
+            index = $scope.interview[Uris.QA_HAS_FILE].indexOf(file.uri);
+            $scope.interview[Uris.QA_HAS_FILE].splice(index, 1);
+
+            index = $scope.interview[Uris.QA_EXTERNAL_LOCATION].indexOf(Uris.SESAME_FILE_ROOT + file[Uris.QA_SYSTEM_LOCATION]);
+            $scope.interview[Uris.QA_EXTERNAL_LOCATION].splice(index, 1);
+        };
+
+        $scope.removeTranscript = function () {
+            delete $scope.interview[Uris.QA_HAS_TRANSCRIPT];
+            delete $scope.interview[Uris.QA_TRANSCRIPT_LOCATION];
         };
         // $scope.cancelUpload = function (expression) {
         //     // Remove the expression
@@ -106,7 +148,7 @@ angular.module('angularApp')
         };
 
         // Update our model when the selected interviewers change
-        $scope.$watch('selectedInterviewees', function (selectedInterviewees) {
+        $scope.$watch('interview.$interviewees', function (selectedInterviewees) {
             $scope.interview[Uris.QA_INTERVIEWEE] = [];
             $scope.interview[Uris.DCT_TITLE] = '';
             angular.forEach(selectedInterviewees, function (interviewee) {
@@ -116,7 +158,7 @@ angular.module('angularApp')
             $scope.interview[Uris.DCT_TITLE] += 'Interview';
         });
 
-        $scope.$watch('selectedInterviewers', function (selectedInterviewers) {
+        $scope.$watch('interview.$interviewers', function (selectedInterviewers) {
             $scope.interview[Uris.QA_INTERVIEWER] = [];
             angular.forEach(selectedInterviewers, function (interviewer) {
                 $scope.interview[Uris.QA_INTERVIEWER].push(interviewer.uri);
@@ -137,7 +179,7 @@ angular.module('angularApp')
                     };
                     angular.forEach(entities, function (entity) {
                         var types = GraphHelper.asArray(entity[Uris.RDF_TYPE]);
-                        if (types.indexOf(Uris.QA_ARCHITECT_TYPE) || types.indexOf(Uris.FOAF_PERSON_TYPE)) {
+                        if (types.indexOf(Uris.QA_ARCHITECT_TYPE) === -1 || types.indexOf(Uris.FOAF_PERSON_TYPE) === -1) {
 
                         }
                         data.results.unshift(entity);

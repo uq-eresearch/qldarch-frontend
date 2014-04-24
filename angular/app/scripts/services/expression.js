@@ -69,7 +69,7 @@ angular.module('angularApp')
                         } else if (typeUris.indexOf(Uris.QA_ARTICLE_TYPE) !== -1) {
                             expression.type = 'article';
                         } else if (typeUris.indexOf(Uris.QA_INTERVIEW_TYPE) !== -1) {
-
+                            expression.type = 'interview';
                         }
 
                         if (expression.type) {
@@ -99,6 +99,8 @@ angular.module('angularApp')
             $cacheFactory.get('$http').remove('/ws/rest/expression/detail/qldarch%3APhotograph?INCSUBCLASS=false&');
             $cacheFactory.get('$http').remove('/ws/rest/expression/detail/qldarch%3ALineDrawing?INCSUBCLASS=false&');
         };
+        // http://127.0.0.1:9000/ws/rest/expression/summary/qldarch%3AInterview?INCSUBCLASS=false&
+        // http://127.0.0.1:9000/ws/rest/expression/description?SUMMARY=false&IDLIST=http%3A%2F%2Fqldarch.net%2Fusers%2Fcmcnamara87%40gmail.com%2FInterview%2370281218834
 
         var expression = {
 
@@ -175,6 +177,8 @@ angular.module('angularApp')
                 delete payload.files;
                 delete payload.encodedUri;
                 delete payload.type;
+                delete payload.interviewees;
+                delete payload.interviewers;
 
                 var url = Uris.JSON_ROOT + 'expression/description';
                 return $http.post(url, payload, {
@@ -199,6 +203,9 @@ angular.module('angularApp')
                 delete payload.files;
                 delete payload.encodedUri;
                 delete payload.type;
+                delete payload.type;
+                delete payload.interviewees;
+                delete payload.interviewers;
 
                 console.log('payload', payload);
 

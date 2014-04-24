@@ -1,7 +1,7 @@
 <div class="content">
     <div class="page-header has-subnav">
         <div class="container">
-            <h1>New Interview</h1>
+            <h1>{{ interview.uri && 'Edit Interview' || 'New Interview' }}</h1>
         </div>
     </div>
 
@@ -23,7 +23,7 @@
                     </label>
                     <div class="row">
                         <div class="col-sm-10">
-                            <div name="selectedInterviewees" ui-select2="personSelect" ng-model="selectedInterviewees" class="form-control" ui-validate="'$value.length > 0'" >
+                            <div name="selectedInterviewees" ui-select2="personSelect" ng-model="interview.$interviewees" class="form-control" ui-validate="'$value.length > 0'" >
                             </div>
                         </div>
                         <div class="col-sm-2" style="border-left: 1px solid #ccc; padding-left: 16px;">
@@ -50,7 +50,7 @@
                     </label>
                     <div class="row">
                         <div class="col-sm-10">
-                            <div name="selectedInterviewers" ui-select2="personSelect" ng-model="selectedInterviewers" class="form-control" ui-validate="'$value.length > 0'">
+                            <div name="selectedInterviewers" ui-select2="personSelect" ng-model="interview.$interviewers" class="form-control" ui-validate="'$value.length > 0'">
                             </div>
                         </div>
                         <div class="col-sm-2" style="border-left: 1px solid #ccc; padding-left: 16px;">
@@ -80,6 +80,29 @@
                         Audio Files (mp3, ogg)
                         <i class="fa fa-asterisk fa-asterisk-required"></i>
                     </label>
+
+                    <!-- Added files -->
+                    <ul class="list-group">
+                    	<li class="list-group-item" ng-repeat="file in interview.files">
+                    		<button class="btn btn-default btn-xs pull-right" ng-click="removeAudioFile(file)">	<i class="fa fa-trash-o"></i>
+                    		</button>
+                    		{{ file[Uris.QA_SOURCE_FILENAME] }}
+                    	</li>
+                    	<li class="list-group-item" ng-repeat="file in interview.$audioFiles">
+                    		<button ng-show="file.uploadFile.isComplete" class="btn btn-default btn-xs pull-right" ng-click="removeNewAudioFile(file)">
+                    			<i class="fa fa-trash-o"></i>
+                    		</button>
+                    		{{ file.uploadFile.name }}
+                    		<div class="progress" ng-hide="file.uploadFile.isComplete">
+                                <div class="progress-bar" role="progressbar" style="width: {{ file.uploadFile.percent }}%;">
+                                    {{ file.uploadFile.percent }}%
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- /Added files -->
+
+					<!-- Upload form -->
                     <div class="form-group upload">
                         <div ng-file-drop="onAudioFileSelect($files)" ng-file-drag-over-class="upload-dropzone-dragover" ng-show="dropSupported" class="upload-dropzone">
                             <i class="fa fa-cloud-upload"></i> Drop audio files here
@@ -93,58 +116,33 @@
                             <div class="upload-choose-label">Or select files</div>
                             <input type="file" ng-file-select="onFileSelect($files)" multiple>
                         </div>
-
                     </div>
-                    <!-- <button class="btn btn-default" ng-click="upload.abort()">Cancel Upload</button> -->
-
-                    <div id="audioUploads">
-                        <div class="panel panel-default" ng-repeat="file in interview.$audioFiles">
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-sm-1">
-                                        <div class="square square-icon square-interview">
-                                            <div class="square-content">
-                                                <div class="center">
-                                                    <div class="center-content">
-                                                        <i class="fa fa-microphone"></i> 
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-11">
-                                        <p>
-                                            <strong>
-                                                {{ file.uploadFile.name }}
-                                            </strong>
-                                        </p>
-                                        <div class="row">
-                                            <div class="col-sm-10">
-                                                <div class="progress">
-                                                    <div class="progress-bar" role="progressbar" style="width: {{ file.uploadFile.percent }}%;">
-                                                        {{ file.uploadFile.percent }}%
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <span ng-show="file.uploadFile.percent == 100">
-                                                    Uploaded <i class="fa fa-check"></i>	
-                                                </span>
-                                                <span ng-show="file.uploadFile.percent < 100">
-                                                    Uploading... <i class="fa fa-spin fa-refresh"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- /Upload form -->
                 </div>
 
                 <div class="form-group">
                     <label>Transcript Files (doc, txt)</label>
-                    <div class="form-group upload">
+                    <ul class="list-group">
+                    	<li class="list-group-item" ng-show="interview[Uris.QA_TRANSCRIPT_LOCATION]">
+                    		<button class="btn btn-default btn-xs pull-right" ng-click="removeTranscript()">
+                    			<i class="fa fa-trash-o"></i>
+                    		</button>
+                    		Transcript
+                    	</li>
+                    	<li class="list-group-item" ng-repeat="file in interview.$transcriptFiles">
+                    		<button ng-show="file.uploadFile.isComplete" class="btn btn-default btn-xs pull-right">
+                    			<i class="fa fa-trash-o"></i>
+                    		</button>
+                    		{{ file.uploadFile.name }}
+                    		<div class="progress" ng-hide="file.uploadFile.isComplete">
+                                <div class="progress-bar" role="progressbar" style="width: {{ file.uploadFile.percent }}%;">
+                                    {{ file.uploadFile.percent }}%
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="form-group upload" ng-hide="interview.$transcriptFiles.length || interview[Uris.QA_TRANSCRIPT_LOCATION]">
                         <div ng-file-drop="onTranscriptFileSelect($files)" ng-file-drag-over-class="upload-dropzone-dragover" ng-show="dropSupported" class="upload-dropzone">
                             <i class="fa fa-cloud-upload"></i> Drop transcript file here
                         </div>
@@ -160,55 +158,13 @@
 
                     </div>
                     <!-- <button class="btn btn-default" ng-click="upload.abort()">Cancel Upload</button> -->
-
-                    <div id="transcriptUploads">
-                        <div class="panel panel-default" ng-repeat="file in interview.$transcriptFiles">
-                            <div class="panel-body">
-                                <div class="row">
-                                    <!-- <div class="col-sm-1">
-                                        <div class="square square-icon square-interview">
-                                            <div class="square-content">
-                                                <div class="center">
-                                                    <div class="center-content">
-                                                        <i class="fa fa-microphone"></i> 
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
-                                    <div class="col-sm-12">
-                                        <p>
-                                            <strong>
-                                                {{ file.uploadFile.name }}
-                                            </strong>
-                                        </p>
-                                        <div class="row">
-                                            <div class="col-sm-10">
-                                                <div class="progress">
-                                                    <div class="progress-bar" role="progressbar" style="width: {{ file.uploadFile.percent }}%;">
-                                                        {{ file.uploadFile.percent }}%
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <span ng-show="file.uploadFile.percent == 100">
-                                                    Uploaded <i class="fa fa-check"></i>	
-                                                </span>
-                                                <span ng-show="file.uploadFile.percent < 100">
-                                                    Uploading... <i class="fa fa-spin fa-refresh"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="form-group">
-                    <button class="btn btn-primary" ng-click="create(interview)" ng-disabled="form.$invalid || !interview.$audioFiles.length">Create</button>
-                    <button class="btn btn-default">Cancel</button>
+                    <button class="btn btn-primary" ng-click="create(interview)" ng-disabled="form.$invalid || !(interview.$audioFiles.length || interview.files.length)">
+                    	{{ interview.uri && 'Update' || 'Create' }}
+                    </button>
+                    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
                 </div>
 
             </form>
