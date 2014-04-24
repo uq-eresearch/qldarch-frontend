@@ -36,7 +36,7 @@
 	            <!-- Editor: &nbsp; &nbsp; -->
 	            <button class="btn btn-default btn-xs" ng-click="$state.go('image.edit', {imageId: image.encodedUri})"><i class="fa fa-pencil"></i> Edit image</button>
 
-	            <button class="btn btn-default btn-xs" ng-click="delete(image)" ng-show="Auth.role === 'root'"><i class="fa fa-trash-o"></i> Delete image</button>
+	            <button class="btn btn-default btn-xs" ng-click="delete(image)" ng-show="Auth.canDelete(image.uri)"><i class="fa fa-trash-o"></i> Delete image</button>
 	        </div> 
     	</div>
     </div>

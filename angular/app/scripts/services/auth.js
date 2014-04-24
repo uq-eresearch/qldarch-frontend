@@ -21,4 +21,15 @@ angular.module('angularApp')
         this.isUQSLQ = function () {
             return this.user && ((that.user.indexOf('uq') !== -1 || that.user.indexOf('slq') !== -1) || that.role === 'root');
         };
+
+        /**
+         * Checks if the current user can delete something
+         *
+         * @param  {[type]} uri [description]
+         * @return {[type]}     [description]
+         */
+        this.canDelete = function (uri) {
+            return this.role === 'root' || uri.indexOf(this.user) !== -1;
+        };
+
     });
