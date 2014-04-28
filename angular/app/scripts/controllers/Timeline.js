@@ -50,7 +50,7 @@ angular.module('angularApp')
                         media: 'images/icon.png',
                         thumbnail: 'images/icon.png',
                         'caption': '<h3 style="text-transform: capitalize"><a href="#/' +
-                            relationship.object.type + '/' + relationship.object.encodedUri + '">' + relationship.object.name + '</a></h3>'
+                            relationship.object.type + '/summary?' + relationship.object.type + 'Id=' + relationship.object.encodedUri + '">' + relationship.object.name + '</a></h3>'
                     };
                     if (angular.isDefined(relationship.object.picture)) {
                         url = relationship.object.picture.thumb;
@@ -63,7 +63,7 @@ angular.module('angularApp')
                         media: 'images/icon.png',
                         thumbnail: 'images/icon.png',
                         'caption': '<h3 style="text-transform: capitalize"><a href="#/' +
-                            relationship.subject.type + '/' + relationship.subject.encodedUri + '">' + relationship.subject.name + '</a></h3>'
+                            relationship.subject.type + '/summary?' + relationship.subject.type + 'Id=' + relationship.subject.encodedUri + '">' + relationship.subject.name + '</a></h3>'
                     };
                     if (angular.isDefined(relationship.subject.picture)) {
                         url = relationship.subject.picture.thumb;
