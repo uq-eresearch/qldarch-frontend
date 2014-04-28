@@ -23,16 +23,28 @@ angular.module('angularApp')
                         expression.file = files[fileUris[0]];
                     }
 
-                    // Setup state and state params
+                    expression.$state = 'main';
+                    var params = {};
+
+                    if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_PHOTOGRAPH_TYPE) !== -1 || GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_PORTRAIT_TYPE) !== -1) {
+                        expression.$state = 'structure.photograph';
+                        expression.$typeName = 'Photograph';
+                        expression.$type = 'photograph';
+                        params.photographId = expression.encodedUri;
+                    }
+                    if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_LINEDRAWING_TYPE) !== -1) {
+                        expression.$state = 'structure.lineDrawing';
+                        expression.$typeName = 'Line Drawing';
+                        expression.$type = 'lineDrawing';
+                        params.lineDrawingId = expression.encodedUri;
+                    }
+
+                    // Setup parent state
                     if (expression[Uris.QA_DEPICTS_BUILDING]) {
                         console.log('depects building');
-                        expression.$state = 'main';
-                        var params = {};
+
                         params.structureId = btoa(expression[Uris.QA_DEPICTS_BUILDING]);
-                        if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_PHOTOGRAPH_TYPE) !== -1) {
-                            expression.$state = 'structure.photograph';
-                            expression.$typeName = 'Photograph';
-                            expression.$type = 'photograph';
+                        if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_PHOTOGRAPH_TYPE) !== -1 || GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_PORTRAIT_TYPE) !== -1) {
                             params.photographId = expression.encodedUri;
 
                             expression.$parentState = 'structure.photographs';
@@ -41,18 +53,13 @@ angular.module('angularApp')
                             };
                         }
                         if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_LINEDRAWING_TYPE) !== -1) {
-                            expression.$state = 'structure.lineDrawing';
-                            expression.$typeName = 'Line Drawing';
-                            expression.$type = 'lineDrawing';
-                            params.lineDrawingId = expression.encodedUri;
-
-                            expression.$parentState = 'structure.photographs';
+                            expression.$parentState = 'structure.lineDrawings';
                             expression.$parentStateParams = {
                                 'structureId': params.structureId
                             };
 
                         }
-
+                        console.log('expression[Uris.RDF_TYPE]');
                         expression.$stateParams = params;
                     } else {
                         // @todo make this work for other non 'depicts building' types
@@ -163,7 +170,15 @@ angular.module('angularApp')
                 }
                 return Request.getIndex('expression', type, false, false).then(function (expressions) {
                     var photographs = $filter('filter')(GraphHelper.graphValues(expressions), function (expression) {
-                        return architectUris.indexOf(expression[Uris.QA_RELATED_TO]) >= 0;
+                        var relatedArchitectUris = GraphHelper.asArray(expression[Uris.QA_RELATED_TO]).concat(GraphHelper.asArray(expression[Uris.QA_ASSOCIATED_ARCHITECT]));
+                        var found = false;
+                        angular.forEach(architectUris, function (architectUri) {
+                            if (relatedArchitectUris.indexOf(architectUri) !== -1) {
+                                // its found
+                                found = true;
+                            }
+                        });
+                        return found;
                     });
                     return attachFiles(photographs);
                 });

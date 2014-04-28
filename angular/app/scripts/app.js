@@ -251,8 +251,15 @@ angular.module('angularApp', [
                         function (Expression, Entity, GraphHelper, $stateParams, Uris) {
                             var imageUri = GraphHelper.decodeUriString($stateParams.imageId);
                             return Expression.load(imageUri).then(function (expression) {
+                                console.log('expression', expression);
                                 console.log('depicts', expression[Uris.QA_DEPICTS_BUILDING]);
                                 if (expression[Uris.QA_DEPICTS_BUILDING]) {
+                                    return Entity.load(expression[Uris.QA_DEPICTS_BUILDING]);
+                                }
+                                if (expression[Uris.QA_RELATED_TO]) {
+                                    return Entity.load(GraphHelper.asArray(expression[Uris.QA_RELATED_TO])[0]);
+                                }
+                                if (expression[Uris.QA_DEPICTS_ARCHITECT]) {
                                     return Entity.load(expression[Uris.QA_DEPICTS_BUILDING]);
                                 }
                                 return [];
@@ -264,17 +271,22 @@ angular.module('angularApp', [
                         function (Expression, GraphHelper, $stateParams, Uris) {
                             var imageUri = GraphHelper.decodeUriString($stateParams.imageId);
                             return Expression.load(imageUri).then(function (expression) {
+                                var type;
+                                if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_PHOTOGRAPH_TYPE) !== -1) {
+                                    type = 'qldarch:Photograph';
+                                }
+                                if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_LINEDRAWING_TYPE) !== -1) {
+                                    type = 'qldarch:LineDrawing';
+                                }
+                                console.log('type', type);
                                 if (expression[Uris.QA_DEPICTS_BUILDING]) {
-                                    var type;
-                                    if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_PHOTOGRAPH_TYPE) !== -1) {
-                                        type = 'qldarch:Photograph';
-                                    }
-                                    if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_LINEDRAWING_TYPE) !== -1) {
-                                        type = 'qldarch:LineDrawing';
-                                    }
-                                    console.log('type', type);
                                     return Expression.findByBuildingUris([expression[Uris.QA_DEPICTS_BUILDING]], type).then(function (expressions) {
                                         console.log('building expressions', expressions);
+                                        return expressions;
+                                    });
+                                } else if (expression[Uris.QA_RELATED_TO]) {
+                                    return Expression.findByArchitectUris(GraphHelper.asArray(expression[Uris.QA_RELATED_TO]), type).then(function (expressions) {
+                                        console.log('architect expressions', expressions);
                                         return expressions;
                                     });
                                 } else {
@@ -818,6 +830,23 @@ angular.module('angularApp', [
             })
             .state('architect.summary.edit', {
                 url: '/edit'
+            })
+            .state('architect.photographs', {
+                url: '/photographs',
+                templateUrl: 'views/architect/photographs.html',
+                resolve: {
+                    photographs: ['GraphHelper', 'Structure', 'Expression', '$stateParams',
+                        function (GraphHelper, Structure, Expression, $stateParams) {
+                            var architectUri = GraphHelper.decodeUriString($stateParams.architectId);
+                            return Expression.findByArchitectUris([architectUri], 'qldarch:Photograph');
+                        }
+                    ]
+                },
+                controller: ['$scope', 'photographs', 'LayoutHelper',
+                    function ($scope, photographs, LayoutHelper) {
+                        $scope.photographRows = LayoutHelper.group(photographs, 6);
+                    }
+                ]
             })
             .state('architect.articles', {
                 url: '/articles',

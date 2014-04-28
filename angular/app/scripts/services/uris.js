@@ -91,8 +91,8 @@ angular.module('angularApp')
         this.QA_ARTICLE_TYPE = this.QA_NS + 'Article';
         this.QA_PHOTOGRAPH_TYPE = this.QA_NS + 'Photograph';
         this.QA_LINEDRAWING_TYPE = this.QA_NS + 'LineDrawing';
+    this.QA_PORTRAIT_TYPE = this.QA_NS + 'Portrait';
         this.QA_DIGITAL_THING = this.QA_NS + 'DigitalThing';
-
         this.QA_EDUCATIONAL_INSTITUTION = this.QA_NS + 'EducationalInstitution';
 
         this.QA_ARCHITECT_TYPE = this.QA_NS + 'Architect';
