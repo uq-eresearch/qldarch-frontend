@@ -6160,19 +6160,26 @@ h6 {
 }
 .navbar-inverse .input-group input {
   border: none;
-  background-color: #555555;
-  color: white;
+  background-color: white;
+  border-radius: 100px 0 0 100px;
+  color: #555555;
   font-size: 14px;
 }
 .navbar-inverse .input-group input:focus {
   box-shadow: none;
 }
+.navbar-inverse .input-group input.ng-valid.ng-dirty {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  border-color: transparent;
+}
 .navbar-inverse .input-group .input-group-addon {
   border: none;
-  background-color: #3c3c3c;
+  border-radius: 0 100px 100px 0;
+  background-color: white;
 }
 .navbar-inverse .input-group .dropdown-menu {
-  background-color: #3c3c3c;
+  background-color: white;
 }
 .navbar-inverse .input-group .dropdown-menu > .dropdown-header {
   border-color: #090909;
@@ -6182,7 +6189,11 @@ h6 {
   margin: 0;
 }
 .navbar-inverse .input-group .dropdown-menu > li > a {
-  color: #ffffff;
+  color: #555555;
+  cursor: pointer;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-size: 12px;
 }
 .navbar-inverse .input-group .dropdown-menu > li > a:hover,
 .navbar-inverse .input-group .dropdown-menu > li > a:focus {

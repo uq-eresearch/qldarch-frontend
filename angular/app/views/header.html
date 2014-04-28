@@ -114,7 +114,8 @@
                                        typeahead="entity.name for entity in globalSearch($viewValue) | filter:$viewValue"
                                        typeahead-loading="loadingLocations" class="form-control"
                                        typeahead-min-length="1"
-                                       typeahead-on-select="globalSearchOnSelect($item, $model, $label)" />
+                                       typeahead-on-select="globalSearchOnSelect($item, $model, $label)" 
+                                       />
 
                                 <span class="input-group-addon">
                                     <i ng-show="!loadingLocations" class="fa fa-search"></i>

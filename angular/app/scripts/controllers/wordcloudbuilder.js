@@ -14,6 +14,7 @@ angular.module('angularApp')
             $scope.wordcloud.documents = [];
             $scope.compoundObject.user = Auth;
             $scope.compoundObject.type = 'wordcloud';
+            $scope.wordcloud.stopWords = [];
         }
 
         /*
@@ -22,12 +23,23 @@ angular.module('angularApp')
         =====================================================
          */
 
+        function calculateNumberToImport() {
+            if ($scope.wordcloud.$import.documents) {
+                var selected = $filter('filter')($scope.wordcloud.$import.documents, function (document) {
+                    return document.$selected;
+                });
+                selected = $filter('filter')(selected, function (document) {
+                    return !$scope.wordcloud.$import.type || document.type === $scope.wordcloud.$import.type;
+                });
+                $scope.wordcloud.$import.numberToImport = selected.length;
+            }
+        }
         $scope.importSelectionChanged = function () {
-            var selected = $filter('filter')($scope.wordcloud.$import.documents, function (document) {
-                return document.$selected;
-            });
-            $scope.wordcloud.$import.numberToImport = selected.length;
+            calculateNumberToImport();
         };
+        $scope.$watch('wordcloud.$import.type', function () {
+            calculateNumberToImport();
+        });
 
         /**
          * Watches for the import entity to be changed, and fetches a list of structures
@@ -89,7 +101,9 @@ angular.module('angularApp')
             documents = $filter('filter')(documents, function (document) {
                 return document.$selected;
             });
-            console.log('documents', documents);
+            documents = $filter('filter')(documents, function (document) {
+                return !$scope.wordcloud.$import.type || document.type === $scope.wordcloud.$import.type;
+            });
 
             $scope.wordcloud.documents = documents.concat($scope.wordcloud.documents);
             $scope.wordcloud.$import = {
@@ -126,7 +140,22 @@ angular.module('angularApp')
             $scope.wordcloud.documents.splice(index, 1);
         };
 
-
+        /*
+        =====================================================
+            Add stop word
+        =====================================================
+         */
+        $scope.addStopWord = function (word) {
+            console.log('adding sotp worod');
+            $scope.wordcloud.stopWords = $scope.wordcloud.stopWords || [];
+            $scope.wordcloud.stopWords.push(word.toLowerCase());
+            $scope.wordcloud.$stopWord = '';
+            console.log($scope.wordcloud.stopWords);
+        };
+        $scope.removeStopWord = function (word) {
+            var index = $scope.wordcloud.stopWords.indexOf(word);
+            $scope.wordcloud.stopWords.splice(index, 1);
+        };
         /*
         =====================================================
             Save Map 
@@ -157,7 +186,7 @@ angular.module('angularApp')
         function format(entity) {
             var imgSrc = 'images/icon.png';
             if (entity.picture) {
-                imgSrc = Uris.THUMB_ROOT + entity.picture[Uris.QA_SYSTEM_LOCATION];
+                imgSrc = Uris.THUMB_ROOT + entity.picture.thumb;
             }
 
             return '<img class="select2-thumb" src="' + imgSrc + '" />' + entity.text;
