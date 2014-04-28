@@ -174,11 +174,11 @@ angular.module('angularApp')
                     summary = true;
                 }
 
-                console.log('Entity: Finding by name');
+                // console.log('Entity: Finding by name');
 
                 return Request.getIndex('entity', type, summary, true).then(function (nonDigitalThings) {
 
-                    console.log('Got entities');
+                    // console.log('Got entities');
                     // Create name labels for them so we can use them for our search
                     setupNames(nonDigitalThings);
                     GraphHelper.setupTypes(nonDigitalThings);

@@ -31,24 +31,48 @@ angular.module('angularApp')
 
 
     // Look for our external locations
+    $scope.audioPlayerPlaylist = [];
+    console.log('external locations', GraphHelper.asArray(interview[Uris.QA_EXTERNAL_LOCATION]));
     angular.forEach(GraphHelper.asArray(interview[Uris.QA_EXTERNAL_LOCATION]), function (extLocation) {
-        if (extLocation.indexOf('you') === -1) {
-            // Not found, use this
+
+        // Youtube URL
+        if (extLocation.indexOf('you') !== -1) {
+            $scope.youtubeUrl = extLocation;
+            return;
+        }
+
+        var fileExtension = extLocation.substring(extLocation.length - 3);
+        console.log('fileExtension', fileExtension);
+        if (fileExtension === 'mp3') {
+            // its an mp3 file
             $scope.audioPlayerPlaylist = [{
                 src: extLocation,
-                type: 'audio/ogg'
-            }, {
-                src: extLocation.substring(0, extLocation.length - 3) + 'mp3',
                 type: 'audio/mp3'
             }];
             $scope.download = {
                 mp3: extLocation.substring(0, extLocation.length - 3) + 'mp3'
             };
-        } else {
-            // @todo Deal with youtube here
-            $scope.youtubeUrl = extLocation;
+        } else if (fileExtension === 'ogg') {
+            // its an ogg file
+            $scope.audioPlayerPlaylist.push({
+                src: extLocation,
+                type: 'audio/ogg'
+            });
         }
+        // Not found, use this
+
+        // $scope.audioPlayerPlaylist = [{
+        //     src: extLocation,
+        //     type: 'audio/ogg'
+        // }, {
+        //     src: extLocation.substring(0, extLocation.length - 3) + 'mp3',
+        //     type: 'audio/mp3'
+        // }];
+        // $scope.download = {
+        //     mp3: extLocation.substring(0, extLocation.length - 3) + 'mp3'
+        // };
     });
+    console.log('playlist is', $scope.audioPlayerPlaylist);
 
     // $scope.audioPlayerPlaylist = [{
     //     src: 'audio/bligh.mp3',
