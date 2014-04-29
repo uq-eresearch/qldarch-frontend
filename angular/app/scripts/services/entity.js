@@ -13,9 +13,8 @@ angular.module('angularApp')
                 }
                 return personName;
             } else {
-                return entity[Uris.QA_FIRM_NAME] || entity[Uris.FOAF_NAME] || entity[Uris.QA_LABEL];
+                return entity[Uris.QA_TOPIC_HEADING] || entity[Uris.QA_AWARD_TITLE] || entity[Uris.QA_FIRM_NAME] || entity[Uris.FOAF_NAME] || entity[Uris.QA_LABEL] || 'Unknown';
             }
-
         };
 
         /*
@@ -231,6 +230,15 @@ angular.module('angularApp')
                     summary = true;
                 }
                 return Request.getIndex('entity', type, summary).then(function (entities) {
+                    return setupPicturesAndTypes(setupNames(entities));
+                });
+            },
+
+            loadAllIncSubclass: function (type, summary) {
+                if (!angular.isDefined(summary)) {
+                    summary = true;
+                }
+                return Request.getIndex('entity', type, summary, true).then(function (entities) {
                     return setupPicturesAndTypes(setupNames(entities));
                 });
             },

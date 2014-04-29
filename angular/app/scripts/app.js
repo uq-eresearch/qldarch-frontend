@@ -681,7 +681,7 @@ angular.module('angularApp', [
                 resolve: {
                     others: ['Entity', 'Uris', 'GraphHelper',
                         function (Entity, Uris, GraphHelper) {
-                            return Entity.loadAll('qldarch:NonDigitalThing', true).then(function (entities) {
+                            return Entity.loadAllIncSubclass('qldarch:NonDigitalThing', true).then(function (entities) {
                                 var results = [];
                                 angular.forEach(entities, function (entity) {
                                     var types = GraphHelper.asArray(entity[Uris.RDF_TYPE]);
