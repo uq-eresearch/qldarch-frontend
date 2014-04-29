@@ -675,6 +675,28 @@ angular.module('angularApp', [
             .state('ugc.wordcloud.edit.add.import', {
                 url: '/import',
             })
+            .state('others', {
+                url: '/others',
+                templateUrl: 'views/other/others.html',
+                resolve: {
+                    others: ['Entity', 'Uris', 'GraphHelper',
+                        function (Entity, Uris, GraphHelper) {
+                            return Entity.loadAll('qldarch:NonDigitalThing', true).then(function (entities) {
+                                var results = [];
+                                angular.forEach(entities, function (entity) {
+                                    var types = GraphHelper.asArray(entity[Uris.RDF_TYPE]);
+
+                                    if (types.indexOf(Uris.QA_ARCHITECT_TYPE) === -1 && types.indexOf(Uris.QA_FIRM_TYPE) === -1 && types.indexOf(Uris.QA_STRUCTURE_TYPE) === -1 && types.indexOf(Uris.QA_BUILDING_TYPOLOGY) === -1) {
+                                        results.push(entity);
+                                    }
+                                });
+                                return results;
+                            });
+                        }
+                    ]
+                },
+                controller: 'OthersCtrl'
+            })
             .state('other', {
                 abstract: true,
                 url: '/other?otherId',
@@ -803,6 +825,12 @@ angular.module('angularApp', [
                                 console.log('got interviews for', architectUri, interviews);
                                 return interviews;
                             });
+                        }
+                    ],
+                    types: ['Ontology',
+                        function (Ontology) {
+                            console.log('loading summary');
+                            return Ontology.loadAllEditableEntityTypes();
                         }
                     ]
                 },
@@ -1062,6 +1090,12 @@ angular.module('angularApp', [
                             var firmUri = GraphHelper.decodeUriString($stateParams.firmId);
                             return Firm.load(firmUri);
                         }
+                    ],
+                    types: ['Ontology',
+                        function (Ontology) {
+                            console.log('loading summary');
+                            return Ontology.loadAllEditableEntityTypes();
+                        }
                     ]
                 },
                 controller: ['$scope', 'firm', 'Entity', '$state',
@@ -1086,7 +1120,7 @@ angular.module('angularApp', [
                 controller: 'FirmCtrl'
             })
             .state('firm.summary.edit', {
-                url: '/edit'
+                url: '/edit',
             })
             .state('firm.employees', {
                 url: '/employees',
@@ -1273,6 +1307,12 @@ angular.module('angularApp', [
                             } else {
                                 return {};
                             }
+                        }
+                    ],
+                    types: ['Ontology',
+                        function (Ontology) {
+                            console.log('loading summary');
+                            return Ontology.loadAllEditableEntityTypes();
                         }
                     ]
                 },

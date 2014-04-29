@@ -1,9 +1,34 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('OtherCtrl', function ($scope, other, types, $state, Entity, Uris) {
+    .controller('OtherCtrl', function ($scope, other, types, $state, Entity, Uris, GraphHelper) {
         $scope.other = other;
+        if ($scope.other[Uris.FOAF_FIRST_NAME] || $scope.other[Uris.FOAF_LAST_NAME]) {
+            $scope.other[Uris.QA_LABEL] = $scope.other[Uris.FOAF_FIRST_NAME] + ' ' + $scope.other[Uris.FOAF_LAST_NAME];
+        }
+
         $scope.types = types;
+
+        function goToTypePage(typeUri) {
+            if (typeUri === Uris.QA_ARCHITECT_TYPE) {
+                $state.go('architect.summary', {
+                    architectId: other.encodedUri
+                });
+            } else if (typeUri === Uris.QA_FIRM_TYPE) {
+                $state.go('firm.summary', {
+                    firmId: other.encodedUri
+                });
+            } else if (typeUri === Uris.QA_STRUCTURE_TYPE) {
+                $state.go('structure.summary', {
+                    structureId: other.encodedUri
+                });
+            } else {
+                $state.go('other.summary', {
+                    otherId: other.encodedUri
+                });
+            }
+        }
+
 
         $scope.updateOther = function (other) {
             if (other.uri) {
@@ -17,15 +42,11 @@ angular.module('angularApp')
                     });
                 });
 
-                $state.go('other.summary', {
-                    architectId: other.encodedUri
-                });
+                goToTypePage($scope.other[Uris.RDF_TYPE]);
             } else {
                 // POST
-                Entity.create(other, other[Uris.RDF_TYPE]).then(function (other) {
-                    $state.go('other.summary', {
-                        otherId: other.encodedUri
-                    });
+                Entity.create(other, other[Uris.RDF_TYPE]).then(function () {
+                    goToTypePage($scope.other[Uris.RDF_TYPE]);
                 });
             }
         };
@@ -47,7 +68,7 @@ angular.module('angularApp')
          */
         $scope.other.$type = null;
         angular.forEach(types, function (type) {
-            if (type.uri === other[Uris.RDF_TYPE]) {
+            if (GraphHelper.asArray(other[Uris.RDF_TYPE]).indexOf(type.uri) !== -1) {
                 $scope.other.$type = {
                     id: type.uri,
                     uri: type.uri,
@@ -72,7 +93,7 @@ angular.module('angularApp')
                     results: []
                 };
                 angular.forEach(types, function (type) {
-                    if (type.uri !== Uris.QA_ARCHITECT_TYPE && type.uri !== Uris.QA_STRUCTURE_TYPE && type.uri !== Uris.QA_FIRM_TYPE) {
+                    if (type.uri !== Uris.QA_BUILDING_TYPOLOGY && type[Uris.QA_LABEL].toLowerCase().indexOf(options.term.toLowerCase()) !== -1) {
                         data.results.push({
                             id: type.uri,
                             uri: type.uri,
@@ -81,10 +102,8 @@ angular.module('angularApp')
                             encodedUri: type.encodedUri,
                         });
                     }
-
                 });
                 options.callback(data);
-
             }
         };
 

@@ -32,4 +32,8 @@ angular.module('angularApp')
             return this.role === 'root' || uri.indexOf(this.user) !== -1;
         };
 
+        this.isEditor = function () {
+            return this.role === 'editor' || this.role === 'root';
+        };
+
     });

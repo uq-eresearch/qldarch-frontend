@@ -16,7 +16,7 @@
 	                	<li ng-class="{'active': $state.includes('other.summary')}">
 	                    	<a ui-sref="other.summary({ otherId: other.encodedUri })">Summary</a>
                     	</li>
-	                    <li ng-class="{'active': $state.includes('other.relationships')}">
+	                    <li ng-class="{'active': $state.includes('other.relationships')}" ng-show="other.uri">
 	                    	<a ui-sref="other.relationships({ otherId: other.encodedUri })">Relationships</a>
                     	</li>
 	                </ul>

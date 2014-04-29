@@ -41,7 +41,7 @@ angular.module('angularApp')
 
                     // Setup parent state
                     if (expression[Uris.QA_DEPICTS_BUILDING]) {
-                        console.log('depects building');
+                        // console.log('depects building');
 
                         params.structureId = btoa(expression[Uris.QA_DEPICTS_BUILDING]);
                         if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_PHOTOGRAPH_TYPE) !== -1 || GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_PORTRAIT_TYPE) !== -1) {
@@ -59,7 +59,7 @@ angular.module('angularApp')
                             };
 
                         }
-                        console.log('expression[Uris.RDF_TYPE]');
+                        // console.log('expression[Uris.RDF_TYPE]');
                         expression.$stateParams = params;
                     } else {
                         // @todo make this work for other non 'depicts building' types

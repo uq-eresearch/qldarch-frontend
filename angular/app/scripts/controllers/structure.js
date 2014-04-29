@@ -1,11 +1,31 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('StructureCtrl', function ($scope, structure, designers, Entity, $state, Uris) {
+    .controller('StructureCtrl', function ($scope, structure, types, designers, Entity, $state, Uris) {
         $scope.structure = structure;
         var originalStructure = angular.copy(structure);
         $scope.designers = designers;
         console.log('structure', structure);
+
+        function goToTypePage(typeUri) {
+            if (typeUri === Uris.QA_ARCHITECT_TYPE) {
+                $state.go('architect.summary', {
+                    architectId: structure.encodedUri
+                });
+            } else if (typeUri === Uris.QA_FIRM_TYPE) {
+                $state.go('firm.summary', {
+                    firmId: structure.encodedUri
+                });
+            } else if (typeUri === Uris.QA_STRUCTURE_TYPE) {
+                $state.go('structure.summary', {
+                    structureId: structure.encodedUri
+                });
+            } else {
+                $state.go('other.summary', {
+                    otherId: structure.encodedUri
+                });
+            }
+        }
 
 
         $scope.updateStructure = function (structure) {
@@ -24,16 +44,12 @@ angular.module('angularApp')
                     });
                 });
 
-                $state.go('structure.summary', {
-                    structureId: structure.encodedUri
-                });
+                goToTypePage($scope.structure[Uris.RDF_TYPE]);
             } else {
                 // POST
                 Entity.create(structure, Uris.QA_STRUCTURE_TYPE).then(function (structure) {
-                    console.log('sturcture', structure);
-                    $state.go('structure.summary', {
-                        structureId: structure.encodedUri
-                    });
+                    console.log('structure', structure);
+                    goToTypePage($scope.structure[Uris.RDF_TYPE]);
                 });
             }
         };
@@ -125,6 +141,54 @@ angular.module('angularApp')
             }
         };
 
+
+        /**
+         * ======================================================
+         *
+         * Select Box for Types
+         *
+         * ======================================================
+         */
+        $scope.structure.$type = null;
+        angular.forEach(types, function (type) {
+            if (type.uri === Uris.QA_STRUCTURE_TYPE) {
+                $scope.structure.$type = {
+                    id: type.uri,
+                    uri: type.uri,
+                    text: type[Uris.QA_LABEL],
+                    name: type[Uris.QA_LABEL],
+                    encodedUri: type.encodedUri,
+                };
+            }
+        });
+        $scope.$watch('structure.$type', function (type) {
+            // Delete all typologies on the structure
+            if (type) {
+                $scope.structure[Uris.RDF_TYPE] = type.uri;
+            }
+        });
+        $scope.typeSelect = {
+            placeholder: 'Select a Type',
+            dropdownAutoWidth: true,
+            multiple: false,
+            query: function (options) {
+                var data = {
+                    results: []
+                };
+                angular.forEach(types, function (type) {
+                    if (type.uri !== Uris.QA_BUILDING_TYPOLOGY && type[Uris.QA_LABEL].toLowerCase().indexOf(options.term.toLowerCase()) !== -1) {
+                        data.results.push({
+                            id: type.uri,
+                            uri: type.uri,
+                            text: type[Uris.QA_LABEL],
+                            name: type[Uris.QA_LABEL],
+                            encodedUri: type.encodedUri,
+                        });
+                    }
+                });
+                options.callback(data);
+            }
+        };
 
 
         /**
