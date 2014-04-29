@@ -463,7 +463,11 @@ module.exports = function (grunt) {
         'uglify',
         'rev',
         'usemin',
-        'copy:special',
+        'copy:special'
+    ]);
+
+    grunt.registerTask('deploy', [
+        'build',
         'sftp:deploy'
     ]);
 
