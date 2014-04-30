@@ -363,7 +363,7 @@ angular.module('angularApp', [
                 templateUrl: 'views/user.files.html'
             })
             .state('user.files.images', {
-                url: '',
+                url: '/images',
                 resolve: {
                     expressions: ['Expression', 'Auth', 'GraphHelper', 'Uris', '$filter',
                         function (Expression, Auth, GraphHelper, Uris, $filter) {
