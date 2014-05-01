@@ -64,6 +64,7 @@ angular.module('angularApp')
         this.QA_TIME_TO = this.QA_NS + 'timeTo';
         this.QA_DOCUMENTED_BY = this.QA_NS + 'documentedBy';
         this.QA_DEPICTS_BUILDING = this.QA_NS + 'depictsBuilding';
+        this.QA_DEPICTS_ARCHITECT = this.QA_NS + 'depictsArchitect';
         this.QA_MANAGED_FILE = this.QA_NS + 'managedFile';
 
         this.QA_ISSUE = this.QA_NS + 'issue';

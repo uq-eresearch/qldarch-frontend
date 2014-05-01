@@ -1,23 +1,23 @@
 'use strict';
 
 angular.module('angularApp')
-    .factory('Expression', function (Request, GraphHelper, Uris, File, $filter, $http, $q, toaster, $cacheFactory, $state) {
+    .factory('Expression', function(Request, GraphHelper, Uris, File, $filter, $http, $q, toaster, $cacheFactory, $state) {
         // Service logic
 
         /**
          * Checks if the expression object has a file, and retrieves it
          * @param expressions
          */
-        var attachFiles = function (expressions) {
+        var attachFiles = function(expressions) {
             var fileUris = GraphHelper.getAttributeValuesUnique(expressions, Uris.QA_HAS_FILE);
-            return File.loadList(fileUris).then(function (files) {
-                //				console.log("got files", files);
-                angular.forEach(expressions, function (expression) {
+            return File.loadList(fileUris).then(function(files) {
+                //              console.log("got files", files);
+                angular.forEach(expressions, function(expression) {
 
                     if (angular.isDefined(expression[Uris.QA_HAS_FILE])) {
                         var fileUris = GraphHelper.asArray(expression[Uris.QA_HAS_FILE]);
                         expression.files = [];
-                        angular.forEach(fileUris, function (fileUri) {
+                        angular.forEach(fileUris, function(fileUri) {
                             expression.files.push(files[fileUri]);
                         });
                         expression.file = files[fileUris[0]];
@@ -38,6 +38,7 @@ angular.module('angularApp')
                         expression.$type = 'lineDrawing';
                         params.lineDrawingId = expression.encodedUri;
                     }
+
 
                     // Setup parent state
                     if (expression[Uris.QA_DEPICTS_BUILDING]) {
@@ -83,11 +84,11 @@ angular.module('angularApp')
                             var params2 = {};
                             params2[expression.type + 'Id'] = expression.encodedUri;
                             expression.$link = $state.href(expression.type, params2);
-                            expression.$linkTo = function (sub) {
+                            expression.$linkTo = function(sub) {
                                 return $state.href(expression.type + '.' + sub, params);
                             };
                             expression.$state = expression.type;
-                            expression.$stateTo = function (sub) {
+                            expression.$stateTo = function(sub) {
                                 return expression.$state + '.' + sub;
                             };
                             expression.$stateParams = params2;
@@ -102,7 +103,7 @@ angular.module('angularApp')
             });
         };
 
-        var clearImageCache = function () {
+        var clearImageCache = function() {
             $cacheFactory.get('$http').remove('/ws/rest/expression/detail/qldarch%3APhotograph?INCSUBCLASS=false&');
             $cacheFactory.get('$http').remove('/ws/rest/expression/detail/qldarch%3ALineDrawing?INCSUBCLASS=false&');
         };
@@ -111,10 +112,10 @@ angular.module('angularApp')
 
         var expression = {
 
-            findByUser: function (email) {
+            findByUser: function(email) {
                 return Request.http(Uris.JSON_ROOT + 'expression/user', {
                     ID: email
-                }, false).then(function (expressions) {
+                }, false).then(function(expressions) {
                     console.log('expressions', expressions);
                     return attachFiles(GraphHelper.graphValues(expressions));
                 });
@@ -124,13 +125,13 @@ angular.module('angularApp')
              * Finds all photos that depict a building in a list
              * @param buildingUris  Array of building uris
              */
-            findByBuildingUris: function (buildingUris, type) {
+            findByBuildingUris: function(buildingUris, type) {
                 if (!angular.isDefined(type)) {
                     throw ('Type needs to be defined');
                 }
-                return Request.getIndex('expression', type, false, false).then(function (expressions) {
+                return Request.getIndex('expression', type, false, false).then(function(expressions) {
                     var photographs = [];
-                    angular.forEach(expressions, function (expression) {
+                    angular.forEach(expressions, function(expression) {
                         if (angular.isDefined(expression[Uris.QA_DEPICTS_BUILDING]) && buildingUris.indexOf(expression[Uris.QA_DEPICTS_BUILDING]) !== -1) {
                             photographs.push(expression);
                         }
@@ -144,13 +145,13 @@ angular.module('angularApp')
              * Finds all photos that have an associated firm
              * @param firmUris  Array of firm uris
              */
-            findByFirmUris: function (firmUris, type) {
+            findByFirmUris: function(firmUris, type) {
                 if (!angular.isDefined(type)) {
                     throw ('Type needs to be defined');
                 }
-                return Request.getIndex('expression', type, false, false).then(function (expressions) {
+                return Request.getIndex('expression', type, false, false).then(function(expressions) {
                     var photographs = [];
-                    angular.forEach(expressions, function (expression) {
+                    angular.forEach(expressions, function(expression) {
                         if (angular.isDefined(expression[Uris.QA_ASSOCIATED_FIRM]) && firmUris.indexOf(expression[Uris.QA_ASSOCIATED_FIRM]) !== -1) {
                             photographs.push(expression);
                         }
@@ -164,15 +165,15 @@ angular.module('angularApp')
              * Finds all photos that have an associated firm
              * @param firmUris  Array of firm uris
              */
-            findByArchitectUris: function (architectUris, type) {
+            findByArchitectUris: function(architectUris, type) {
                 if (!angular.isDefined(type)) {
                     throw ('Type needs to be defined');
                 }
-                return Request.getIndex('expression', type, false, false).then(function (expressions) {
-                    var photographs = $filter('filter')(GraphHelper.graphValues(expressions), function (expression) {
-                        var relatedArchitectUris = GraphHelper.asArray(expression[Uris.QA_RELATED_TO]).concat(GraphHelper.asArray(expression[Uris.QA_ASSOCIATED_ARCHITECT]));
+                return Request.getIndex('expression', type, false, false).then(function(expressions) {
+                    var photographs = $filter('filter')(GraphHelper.graphValues(expressions), function(expression) {
+                        var relatedArchitectUris = GraphHelper.asArray(expression[Uris.QA_RELATED_TO]).concat(GraphHelper.asArray(expression[Uris.QA_DEPICTS_ARCHITECT]));
                         var found = false;
-                        angular.forEach(architectUris, function (architectUri) {
+                        angular.forEach(architectUris, function(architectUri) {
                             if (relatedArchitectUris.indexOf(architectUri) !== -1) {
                                 // its found
                                 found = true;
@@ -184,7 +185,7 @@ angular.module('angularApp')
                 });
             },
 
-            create: function (data) {
+            create: function(data) {
                 var payload = angular.copy(data);
 
                 delete payload.building;
@@ -198,18 +199,20 @@ angular.module('angularApp')
                 var url = Uris.JSON_ROOT + 'expression/description';
                 return $http.post(url, payload, {
                     withCredentials: true
-                }).then(function (response) {
+                }).then(function(response) {
                     clearImageCache();
                     angular.extend(data, response.data);
                     data.encodedUri = GraphHelper.encodeUriString(data.uri);
                     toaster.pop('success', data[Uris.DCT_TITLE] + ' created.', 'You have successfully created ' + data[Uris.DCT_TITLE]);
-                    return attachFiles(data);
-                }, function () {
+                    return attachFiles([data]).then(function() {
+                        return data;
+                    });
+                }, function() {
                     toaster.pop('error', 'Error occured.', 'Sorry, we couldn\t created at this time');
                 });
             },
 
-            update: function (uri, data) {
+            update: function(uri, data) {
                 var payload = angular.copy(data);
                 // Remove any extra information
                 // This causes the web server to die
@@ -228,18 +231,18 @@ angular.module('angularApp')
 
                 return $http.put(url, payload, {
                     withCredentials: true
-                }).then(function (response) {
+                }).then(function(response) {
                     angular.extend(data, response.data);
                     attachFiles(data);
                     // setupNames([data]);
                     // Display alert
                     toaster.pop('success', data[Uris.DCT_TITLE] + ' updated.', 'You have successfully updated ' + data[Uris.DCT_TITLE]);
-                }, function () {
+                }, function() {
                     toaster.pop('error', 'Error occured.', 'Sorry, we couldn\t updated at this time');
                 });
             },
 
-            delete: function (uri, expression) {
+            delete: function(uri, expression) {
                 var type;
                 if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_PHOTOGRAPH_TYPE) !== -1) {
                     type = 'photograph';
@@ -254,13 +257,13 @@ angular.module('angularApp')
 
                 if (r === true) {
                     var url = '/ws/rest/expression/description?ID=' + encodeURIComponent(uri);
-                    return $http.delete(url).then(function () {
+                    return $http.delete(url).then(function() {
                         // Invalidate our cache of expressions
                         clearImageCache();
 
                         // Display alert
                         toaster.pop('success', expression[Uris.DCT_TITLE] + ' deleted.', 'You have successfully deleted ' + expression[Uris.DCT_TITLE]);
-                    }, function () {
+                    }, function() {
                         toaster.pop('error', 'Error occured.', 'Sorry, we couldn\t delete at this time');
                     });
                 } else {
@@ -276,9 +279,9 @@ angular.module('angularApp')
              * @param type
              * @returns {*}
              */
-            load: function (uri) {
-                return Request.getUri('expression', uri, false).then(function (expression) {
-                    return attachFiles([expression]).then(function () {
+            load: function(uri) {
+                return Request.getUri('expression', uri, false).then(function(expression) {
+                    return attachFiles([expression]).then(function() {
                         return expression;
                     });
                 });
@@ -296,12 +299,12 @@ angular.module('angularApp')
                 // });
             },
 
-            loadAll: function (type) {
+            loadAll: function(type) {
                 if (!type) {
                     throw ('you need to include type, hopefully this will be fixed in the future');
                 }
 
-                return Request.getIndex('expression', type, true).then(function (expressions) {
+                return Request.getIndex('expression', type, true).then(function(expressions) {
                     return attachFiles(expressions);
                 });
             },
@@ -312,7 +315,7 @@ angular.module('angularApp')
              * @param type
              * @returns {*}
              */
-            loadList: function (uris, type, summary) {
+            loadList: function(uris, type, summary) {
                 // Because its broken, we need to do a getIndex and filter
                 // IDLIST isn't working like it should
 
@@ -322,9 +325,9 @@ angular.module('angularApp')
                 if (!angular.isDefined(summary)) {
                     summary = true;
                 }
-                return Request.getIndex('expression', type, summary).then(function (expressions) {
+                return Request.getIndex('expression', type, summary).then(function(expressions) {
                     var filteredExpressions = {};
-                    angular.forEach(uris, function (uri) {
+                    angular.forEach(uris, function(uri) {
                         filteredExpressions[uri] = expressions[uri];
                     });
 
