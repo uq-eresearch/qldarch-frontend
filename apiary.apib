@@ -1,0 +1,418 @@
+FORMAT: 1A
+HOST: http://www.google.com
+
+# QLDArch
+All URLs are relative to either **http://qldarch.net/ws/rest/** or *http://qldarch-test.metadata.net/ws/rest/*
+
+# Group Compound Objects
+
+## Compound Objects Index [/compoundObject{?ID}]
+### List all compound object [GET]
++ Response 200 (application/json)
+
+        { }
+        
+### Create a new compound object [POST]
+The request payload can be any JSON data. It does not have to allow the format below.
+
++ Request (application/json)
+
+        {"data":{"locations":[{"name":"Location 1","lat":"-27","lon":"153"}]},"user":{"user":"cmcnamara87@gmail.com","auth":true,"email":"Craig McNamara"},"type":"map","title":"My Map"}
+
++ Response 200 (application/json)
+
+        {"uri":"http://qldarch.net/users/cmcnamara87@gmail.com/CompoundObject#68213848726","http://qldarch.net/ns/rdf/2012-06/terms#jsonData":"{\"data\":{\"locations\":[{\"name\":\"Location 1\",\"lat\":\"-27\",\"lon\":\"153\"}]},\"user\":{\"user\":\"cmcnamara87@gmail.com\",\"auth\":true,\"email\":\"Craig McNamara\"},\"type\":\"map\",\"title\":\"My Map\"}","http://www.w3.org/1999/02/22-rdf-syntax-ns#type":"http://qldarch.net/ns/rdf/2012-06/terms#CompoundObject"}
+
+### Update a compound object [PUT]
++ Parameters
+    + ID (required, string, `http%3A%2F%2Fqldarch.net%2Fusers%2Fuqsmcnau%2FTimeline%2367101677794`) ... The `uri` of the compound object
+ 
++ Request (application/x-www-form-urlencoded)
+    
+        {"data":{"locations":[{"name":"Location 1","lat":"-27","lon":"153"}]},"user":{"user":"cmcnamara87@gmail.com","auth":true,"email":"Craig McNamara"},"type":"map","title":"My Map"}
+
++ Response 200 (application/json)
+
+        {"uri":"http://qldarch.net/users/cmcnamara87@gmail.com/CompoundObject#68213848726","http://qldarch.net/ns/rdf/2012-06/terms#jsonData":"{\"data\":{\"locations\":[{\"name\":\"Location 1\",\"lat\":\"-27\",\"lon\":\"153\"}]},\"user\":{\"user\":\"cmcnamara87@gmail.com\",\"auth\":true,\"email\":\"Craig McNamara\"},\"type\":\"map\",\"title\":\"My Map\"}","http://www.w3.org/1999/02/22-rdf-syntax-ns#type":"http://qldarch.net/ns/rdf/2012-06/terms#CompoundObject"}
+
+
+
+## Compound Objects [/compoundObject/id{?ID}]
+### Get all compound objects for a user [GET]
++ Parameters
+    + ID (required, string, `http%3A%2F%2Fqldarch.net%2Fusers%2Fuqsmcnau%2FTimeline%2367101677794`) ... The `uri` of the compound object
+ 
++ Response 200 (application/json)
+
+        { }   
+        
+
+### Delete a compound object [DELETE]
++ Parameters
+    + ID (required, string, `http%3A%2F%2Fqldarch.net%2Fusers%2Fuqsmcnau%2FTimeline%2367101677794`) ... The `uri` of the compound object
+ 
++ Response 200 (application/json)
+
+        { }   
+
+## User Compound Objects [/compoundObject/user{?username}]
+### Get all compound objects for a user [GET]
++ Parameters
+    + username (required, string) ... The username of the user `cmcnamara87@gmail.com`.
+ 
++ Response 200 (application/json)
+
+        { }   
+
+# Group User
+Notes related resources of the **Notes API**
+
+## User [/user]
+### Registers / creates a new user [POST]
+**Kludge alert!** In the `username` field, we are storing a user's
+*email address*. In the `email` field, we are storing a users 
+*display name*. 
+
++ Request (application/x-www-form-urlencoded)
+
+        {
+            "username" : "cmcnamara87@gmail.com",
+            "email" : "Craig McNamara",
+            "password" : "example123",
+            "confirmPassword" : "example123"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "user":"cmcnamara87@gmail.com",
+            "auth":true,
+            "email": "Craig McNamara"
+        }
+
+## Roles [/user/role]
+### Assign a role to an existing user [PUT]
+
++ Request (application/x-www-form-urlencoded)
+
+        {
+        
+        }
+        
++ Response 200 (application/json)
+
+        { }
+        
+# Group Authentication
+
+## Login Status [/login/status]
+### Current login status object [GET]
++ Response 200 (application/json)
+
+        {
+            user: "",
+            auth: false
+        }
+        or if logged in
+        {
+            user: "admin",
+            auth: true
+        }
+        
+
+
+## Login [/login]
+### Login [POST]
++ Request (application/x-www-form-urlencoded)
+
+        { "username": "admin", "password": "password" }
+        
++ Response 200 (application/json)
+
+        {
+            "user":"admin",
+            "auth":true,
+            "email": "Craig McNamara"
+        }
+
+## Logout [/logout]
+### Logout [GET]
++ Response 200 (application/json)
+
+        {
+            user: "",
+            auth: false
+        }
+        
+# Group Entities
+
+## Entities List [/entity/{summary}/{type}]
+### List all entities of a type [GET]
++ Parameters
+    + summary (required, string) ... Either `summary` or `detail`.
+    + type (required, URI or short, `qldarch:Architect`) ... URI of type
+
++ Response 200 (application/json)
+
+        {
+            http://qldarch.net/users/patriciadowling/Architect#62953961802: {
+            uri: "http://qldarch.net/users/patriciadowling/Architect#62953961802",
+            http://xmlns.com/foaf/0.1/lastName: "MacLurkin",
+            http://xmlns.com/foaf/0.1/firstName: "Charles"
+            },
+            ...
+        }
+        
+## Entity Description [/entity/description{?ID}{?IDLIST}{?SUMMARY}]
+### Retrieve an entity or a list of entities [GET]
+Either ID or IDLIST parameters are required, not both.
+
++ Parameters
+    + ID (required, URI, `http://qldarch.net/users/patriciadowling/Architect#62953961802`) ... The URI of the entity to describe
+    + IDLIST (required, String - Comma Separated URIs) ... A list of URIs of the entity to describe comma separated
+    + SUMMARY (optional, boolean, `true`) ... URI of type.
+
++ Response 200 (application/json)
+
+        {
+            http://qldarch.net/users/patriciadowling/Architect#62953961802: {
+                uri: "http://qldarch.net/users/patriciadowling/Architect#62953961802",
+                http://xmlns.com/foaf/0.1/lastName: "MacLurkin",
+                http://qldarch.net/ns/rdf/2012-06/terms#evidence: "http://qldarch.net/users/patriciadowling/Evidence#62953961768",
+                http://www.w3.org/1999/02/22-rdf-syntax-ns#type: "http://qldarch.net/ns/rdf/2012-06/terms#Architect",
+                http://xmlns.com/foaf/0.1/firstName: "Charles"
+            }
+        }
+
+### Update an entity [PUT]
+Only ID is required. Do not include other query parameters.
+
++ Parameters
+    + ID (required, URI, `http://qldarch.net/rdf/2012-12/resources/people/6`) ... The URI of the entity to describe
+
++ Request (application/json)
+
+        {
+            "uri":"http://qldarch.net/rdf/2012-12/resources/people/6",
+            "http://xmlns.com/foaf/0.1/lastName":"Mills2",
+            "http://qldarch.net/ns/rdf/2012-06/terms#preferredImage":"http://qldarch.net/omeka/items/show/1793","http://www.w3.org/1999/02/22-rdf-syntax-ns#type":["http://www.w3.org/2000/01/rdf-schema#Resource","http://qldarch.net/ns/rdf/2012-06/terms#Entity","http://qldarch.net/ns/rdf/2012-06/terms#NonDigitalThing","http://qldarch.net/ns/rdf/2012-06/terms#StructureOrAgent","http://xmlns.com/foaf/0.1/Agent","http://xmlns.com/foaf/0.1/Person","http://qldarch.net/ns/rdf/2012-06/terms#Architect","http://qldarch.net/ns/rdf/2012-06/terms#Evincible","http://qldarch.net/ns/rdf/2012-06/terms#StructureOrAgentOrTopic"],"http://qldarch.net/ns/rdf/2012-06/terms#label":"Helen Mills","http://xmlns.com/foaf/0.1/firstName":"Helen","http://qldarch.net/ns/rdf/2012-06/terms#practicedInQueensland":true,"http://qldarch.net/ns/rdf/2012-06/terms#relatedTo":["http://qldarch.net/omeka/items/show/1793","http://qldarch.net/omeka/items/show/1769"],
+            "http://www.w3.org/2000/01/rdf-schema#label":"Helen Mills"
+        }
+        
++ Response 200 (application/json)
+
+        {
+            "uri":"http://qldarch.net/rdf/2012-12/resources/people/6",
+            "http://xmlns.com/foaf/0.1/lastName":"Mills2",
+            "http://qldarch.net/ns/rdf/2012-06/terms#preferredImage":"http://qldarch.net/omeka/items/show/1793",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
+                "http://qldarch.net/ns/rdf/2012-06/terms#NonDigitalThing",
+                "http://qldarch.net/ns/rdf/2012-06/terms#StructureOrAgent",
+                "http://xmlns.com/foaf/0.1/Agent",
+                "http://www.w3.org/2000/01/rdf-schema#Resource",
+                "http://qldarch.net/ns/rdf/2012-06/terms#Entity",
+                "http://xmlns.com/foaf/0.1/Person",
+                "http://qldarch.net/ns/rdf/2012-06/terms#StructureOrAgentOrTopic",
+                "http://qldarch.net/ns/rdf/2012-06/terms#Architect",
+                "http://qldarch.net/ns/rdf/2012-06/terms#Evincible"
+            ],
+            "http://qldarch.net/ns/rdf/2012-06/terms#label":"Helen Mills","http://xmlns.com/foaf/0.1/firstName":"Helen","http://qldarch.net/ns/rdf/2012-06/terms#practicedInQueensland":true,"http://www.w3.org/2000/01/rdf-schema#label":"Helen Mills",
+            "http://qldarch.net/ns/rdf/2012-06/terms#relatedTo": [
+                "http://qldarch.net/omeka/items/show/1769",
+                "http://qldarch.net/omeka/items/show/1793"
+            ]
+        }
+        
+# Group Expressions
+Notes related resources of the **Expressions API**
+
+## Expression Index [/expression/{summary}/{type}]
+
+### List all expressions of a type [GET]
++ Parameters
+    + summary (required, string) ... Either `summary` or `detail`.
+    + type (required, URI or shorthand, `qldarch:Photograph`) ... URI of type.
+    
++ Response 200 (application/json)
+
+        {
+            http://qldarch.net/omeka/items/show/59: {
+                uri: "http://qldarch.net/omeka/items/show/59",
+                http://qldarch.net/ns/rdf/2012-06/terms#hasFile: "http://qldarch.net/omeka/files/show/58",
+                http://purl.org/dc/terms/identifier: "UQFL278",
+                http://purl.org/dc/terms/title: "Hayes House, St Lucia; view from living room to river"
+            },
+            http://qldarch.net/omeka/items/show/1889: {
+                uri: "http://qldarch.net/omeka/items/show/1889",
+                http://qldarch.net/ns/rdf/2012-06/terms#hasFile: "http://qldarch.net/omeka/files/show/940",
+                http://purl.org/dc/terms/identifier: "BVN Offsite Archive, Box 6442 - envelope_JD Legg + Graham Bligh",
+                http://purl.org/dc/terms/title: "Portraits: JD Legg (L) & Graham Bligh (R); Contact Sheet: 2632_13_A-H"
+            }
+        }
+
+## Expression Description [/expression/description{?ID}{?IDLIST}{?SUMMARY}]
+
+### Retrieve an expression or expressions [GET]
+Either the ID or IDLIST parameters are required, not both. This resource is broken currently and will return an empty object as a response.
+
++ Parameters
+    + ID (required, URI) ... The URI of the expression to describe
+    + IDLIST (required, String - Comma Separated URIs) ... A list of URIs of the expression to describe comma separated
+    + SUMMARY (optional, boolean, `true`) ... URI of type.
+
++ Response 200 (application/json)
+
+        {}
+
+### Create an Expression [POST]
+Allows uploading an expression instance (abstract description of a content item - may manifest as multiple files in different formats). 
+Consumes JSON (standard qldarch json-rdf format) with blank uri attribute.
+
++ Request (application/json)
+
+        ...
+        
++ Response 200 (application/json)
+
+        ...
+        
+# Group Files
+Manifestations of Expressions
+
+## File Description [/file/summary{?ID}{?IDLIST}]
+### Retrieve a File [GET]
++ Parameters
+    + ID (required, URI) ... The URI of the file to describe
+    + IDLIST (required, URI) ... The URI of the file to describe
+
++ Response 200 (application/json)
+
+        {
+            "http://qldarch.net/omeka/files/show/888": {
+                "uri": "http://qldarch.net/omeka/files/show/888",
+                "http://qldarch.net/ns/rdf/2012-06/terms#hasMimeType": "image/jpeg; charset=binary",
+                "http://qldarch.net/ns/rdf/2012-06/terms#basicMimeType": "image/jpeg",
+                "http://qldarch.net/ns/rdf/2012-06/terms#sourceFilename": "IMG_0001_edited.jpg",
+                "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
+                    "http://qldarch.net/ns/rdf/2012-06/terms#DigitalThing",
+                    "http://qldarch.net/ns/rdf/2012-06/terms#Entity",
+                    "http://qldarch.net/ns/rdf/2012-06/terms#DigitalFile",
+                    "http://purl.org/vocab/frbr/core#Manifestation",
+                    "http://qldarch.net/ns/rdf/2012-06/terms#Evincible"
+                ],
+                "http://qldarch.net/ns/rdf/2012-06/terms#hasFileSize": 57814,
+                "http://qldarch.net/ns/rdf/2012-06/terms#systemLocation": "a5b6731170020719d60f5322fbe9cfe4.jpg"
+            }
+        }
+
+## File Description [/file/user{?ID}]
+### Retrieve a File [GET]
+Takes ID, returns files for current user.
+
++ Parameters
+    + ID (required, URI) ... ID
+
++ Response 200 (application/json)
+
+        ...
+    
+### Create a File [POST]
+Consumes file in multipart/form - uses apache file uploader library to upload file and saves it to archivedir and stores file summary metadata in metadata store.
+
++ Request (multipart/form)
+    
+        ...
+
++ Response 200 (application/json)
+
+        ...
+  
+# Group Ontology
+
+## Relationships [/ontology/relationships]
+### Retrieve all relationships [GET]
++ Response 200 (application/json)
+
+        {
+            http://qldarch.net/ns/rdf/2012-06/terms#InfluencedByRelation: {
+            uri: "http://qldarch.net/ns/rdf/2012-06/terms#InfluencedByRelation",
+            http://qldarch.net/ns/rdf/2012-06/terms#impliesRelationship: "http://qldarch.net/ns/rdf/2012-06/terms#influencedBy",
+            http://www.w3.org/2000/01/rdf-schema#subClassOf: [
+            "http://www.w3.org/2000/01/rdf-schema#Resource",
+            "http://qldarch.net/ns/rdf/2012-06/terms#Relationship",
+            "http://qldarch.net/ns/rdf/2012-06/terms#RelatedToRelation",
+            "http://qldarch.net/ns/rdf/2012-06/terms#Evincible",
+            "http://qldarch.net/ns/rdf/2012-06/terms#InfluencedByRelation"
+            ],
+            http://www.w3.org/1999/02/22-rdf-syntax-ns#type: [
+            "http://www.w3.org/2000/01/rdf-schema#Resource",
+            "http://qldarch.net/ns/rdf/2012-06/terms#Relationship",
+            "http://www.w3.org/2002/07/owl#Class",
+            "http://www.w3.org/2000/01/rdf-schema#Class",
+            "http://qldarch.net/ns/rdf/2012-06/terms#Evincible"
+            ],
+            http://qldarch.net/ns/rdf/2012-06/terms#label: "Influenced By",
+            http://www.w3.org/2000/01/rdf-schema#label: "Influenced By"
+            },
+            ...
+        }
+
+## Properties [/ontology/properties]
+### Retrieve all properties [GET]
++ Response 200 (application/json)
+
+        {
+            http://qldarch.net/ns/rdf/2012-06/terms#mimeType: {
+            uri: "http://qldarch.net/ns/rdf/2012-06/terms#mimeType",
+            http://www.w3.org/2000/01/rdf-schema#domain: "http://qldarch.net/ns/rdf/2012-06/terms#DigitalFile",
+            http://qldarch.net/ns/rdf/2012-06/terms#display: false,
+            http://www.w3.org/1999/02/22-rdf-syntax-ns#type: [
+            "http://www.w3.org/2000/01/rdf-schema#Resource",
+            "http://www.w3.org/2002/07/owl#DatatypeProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://qldarch.net/ns/rdf/2012-06/terms#AttributeProperty"
+            ],
+            http://qldarch.net/ns/rdf/2012-06/terms#label: "Mime Type",
+            http://www.w3.org/2000/01/rdf-schema#range: "http://www.w3.org/2001/XMLSchema#string",
+            http://www.w3.org/2000/01/rdf-schema#label: "Mime Type",
+            http://qldarch.net/ns/rdf/2012-06/terms#editable: false
+            },
+            ...
+        }
+        
+        
+## Entities [/ontology/entities/{type}{?INCSUBCLASS}{?INCSUPERCLASS}]
++ Parameters
+    + type (required, string, `qldarch:Architect`) ... Type of entity
+    + INCSUBCLASS (optional, boolean, `true`) ... Entity and all sub-classes
+    + INCSUPERCLASS (optional, boolean, `true`) ... Entity and all super-classes
+
+### Retrieve all entity types [GET]
++ Response 200 (application/json)
+        
+        {
+            http://qldarch.net/ns/rdf/2012-06/terms#InfluencedByRelation: {
+            uri: "http://qldarch.net/ns/rdf/2012-06/terms#InfluencedByRelation",
+            http://qldarch.net/ns/rdf/2012-06/terms#impliesRelationship: "http://qldarch.net/ns/rdf/2012-06/terms#influencedBy",
+            http://www.w3.org/2000/01/rdf-schema#subClassOf: [
+            "http://www.w3.org/2000/01/rdf-schema#Resource",
+            "http://qldarch.net/ns/rdf/2012-06/terms#Relationship",
+            "http://qldarch.net/ns/rdf/2012-06/terms#RelatedToRelation",
+            "http://qldarch.net/ns/rdf/2012-06/terms#Evincible",
+            "http://qldarch.net/ns/rdf/2012-06/terms#InfluencedByRelation"
+            ],
+            http://www.w3.org/1999/02/22-rdf-syntax-ns#type: [
+            "http://www.w3.org/2000/01/rdf-schema#Resource",
+            "http://qldarch.net/ns/rdf/2012-06/terms#Relationship",
+            "http://www.w3.org/2002/07/owl#Class",
+            "http://www.w3.org/2000/01/rdf-schema#Class",
+            "http://qldarch.net/ns/rdf/2012-06/terms#Evincible"
+            ],
+            http://qldarch.net/ns/rdf/2012-06/terms#label: "Influenced By",
+            http://www.w3.org/2000/01/rdf-schema#label: "Influenced By"
+            }, 
+            ... 
+        }
+
+
+
