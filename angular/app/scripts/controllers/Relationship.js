@@ -5,6 +5,11 @@ angular.module('angularApp')
         $scope.relationships = data.relationships;
         $scope.entities = GraphHelper.graphValues(data.entities);
 
+        // Setup the number of times the entity is referenced (inc'd later)
+        angular.forEach($scope.entities, function (entity) {
+            entity.count = 0;
+        });
+
         // We need to transform the data for d3
         var links = [];
         angular.forEach($scope.relationships, function (relationship) {
@@ -52,11 +57,14 @@ angular.module('angularApp')
         $scope.nodeSelected = function (node) {
             $scope.selected = node;
             $scope.selectedRelationships = [];
-            angular.forEach(data.relationships, function (relationship) {
-                if ((angular.isDefined(relationship.subject) && (relationship.subject.uri === node.uri)) ||
-                    (angular.isDefined(relationship.object) && (relationship.object.uri === node.uri))) {
-                    $scope.selectedRelationships.push(relationship);
-                }
-            });
+            if (node) {
+                angular.forEach(data.relationships, function (relationship) {
+                    if ((angular.isDefined(relationship.subject) && (relationship.subject.uri === node.uri)) ||
+                        (angular.isDefined(relationship.object) && (relationship.object.uri === node.uri))) {
+                        $scope.selectedRelationships.push(relationship);
+                    }
+                });
+            }
+
         };
     });

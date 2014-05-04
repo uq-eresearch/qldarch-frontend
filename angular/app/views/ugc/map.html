@@ -1,0 +1,28 @@
+<div class="content">
+	<div class="page-header page-header-map has-subnav">
+		<div class="container">
+			<h1><img src="images/icon_32152.svg" style="width: 50px; margin-right: 8px;" /> Map Builder</h1>
+		</div>
+	</div>
+
+	<ui-view></ui-view>
+
+	<div class="l-frame l-frame-media" ng-show="map.locations.length">
+		<div class="container">
+			<button class="btn btn-default pull-right" ui-sref="ugc.map.show.edit"><i class="fa fa-pencil"></i> Edit</button>
+			<h3 style="text-align: center; margin-bottom: 24px;" ng-show="compoundObject.title.length">
+				<!-- Map title -->
+				{{ compoundObject.title }}<br/>
+				<!-- /Map title -->
+
+				<!-- Author name -->
+				<small ng-show="compoundObject.user">By {{ compoundObject.user.email }}</small>
+				<!-- /Author name -->
+			</h3>
+			<div ui-map="myMap" class="map-canvas map"
+				ui-options="mapOptions">
+			</div>	
+		</div>
+	</div>
+
+</div>

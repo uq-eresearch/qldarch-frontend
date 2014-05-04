@@ -1,14 +1,7 @@
-<div class="page-header">
-    <div class="container">
-        <h1>Architects</h1>
-    </div>
-</div>
-<section>
-    <div class="container">
-        <div class="row" ng-repeat="architectRow in architectRows">
-            <div class="col-sm-2" ng-repeat="architect in architectRow">
-                <div ng-include="'views/thumbs/architect.html'"></div>
-            </div>
+<div class="container" infinite-scroll="addMoreArchitectRows()">
+    <div class="row" ng-repeat="architectRow in architectRows | limitTo:architectRowDisplayCount">
+        <div class="col-sm-2" ng-repeat="architect in architectRow">
+            <div ng-include="'views/thumbs/architect.html'"></div>
         </div>
     </div>
-</section>
+</div>

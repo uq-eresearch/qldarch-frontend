@@ -11,35 +11,49 @@
 	.input-group {
 		input {
 		border: none;
-		background-color: lighten(@navbar-inverse-bg, 10);
-		color: white;
+		background-color: white; ;//lighten(@navbar-inverse-bg, 20);
+		border-radius: 100px 0 0 100px;
+		color: @gray;
+		font-size: 14px;
 
 			&:focus {			
 			box-shadow: none;
+			}
+			&.ng-valid.ng-dirty {
+				box-shadow: none;
+				-webkit-box-shadow: none;
+				border-color: transparent;;
 			}
 		}
 
 		.input-group-addon {
 			border: none;
-			background-color: lighten(@navbar-inverse-bg, 5);
+			border-radius: 0 100px 100px 0;
+			background-color: white; //lighten(@navbar-inverse-bg, 10);
 		}
 
 		.dropdown-menu {
-			background-color: lighten(@navbar-inverse-bg, 10);
+			background-color: white; //lighten(@navbar-inverse-bg, 10);
 
 			> .dropdown-header {
 				border-color: @navbar-inverse-border;
 			}
 			.divider {
 				background-color: @navbar-inverse-border;
+				margin: 0;
 			}
 			> li > a {
-				color: @navbar-inverse-autocomplete-color;
+				// color: @navbar-inverse-autocomplete-color;
+				color: @gray;
+				cursor: pointer;
 				&:hover,
 				&:focus {
 					color: @navbar-inverse-autocomplete-hover-color;
 					background-color: @navbar-inverse-autocomplete-hover-bg;
 				}
+				padding-top: 8px;
+				padding-bottom: 8px;
+				font-size: 12px;
 			}
 			> .active > a {
 				&,

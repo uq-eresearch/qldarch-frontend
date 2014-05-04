@@ -6,7 +6,6 @@ angular.module('angularApp')
         // ...
 
         var that = this;
-        var meaningOfLife = 42;
 
         // Public API here
         return {
@@ -33,8 +32,11 @@ angular.module('angularApp')
              * Loads all the entities of a certain type
              * @returns {Promise | Object} All architects
              */
-            loadAll: function () {
-                return Entity.loadAll('qldarch:Architect');
+            loadAll: function (summary) {
+                if (!angular.isDefined(summary)) {
+                    summary = true;
+                }
+                return Entity.loadAll('qldarch:Architect', summary);
             },
 
             /**

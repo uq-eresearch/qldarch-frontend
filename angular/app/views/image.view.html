@@ -1,0 +1,80 @@
+<div class="l-frame l-frame-media l-frame-tight" style="min-height: 700px;">
+    <div class="container" style="text-align: center;">
+    	<h1 style="font-size: 24px; margin-bottom: 32px;">
+            <a ng-href="{{ $state.href(depicts.$state + '.' + image.$type + 's', depicts.$stateParams) }}" style="color: white;">
+                {{ image.$typeName }}s ({{ images.length }})
+            </a>
+            <span>-</span>
+    		<a ng-href="{{ $state.href(depicts.$state + '.summary', depicts.$stateParams) }}" style="color: white;">
+    			{{ depicts.name }}
+    		</a>
+    	</h1>
+    	<div class="row carousel carousel-big">
+            <div class="col-sm-1" class="hidden-phone">
+                <div class="carousel-nav carousel-nav-left" ng-click="prev()" ng-show="index > 0">
+                    <i class="fa fa-chevron-left"></i>      
+                </div>
+            </div>
+            <div class="col-sm-10">
+                <img class="img-responsive" style="width: 100%;" ng-src="{{ image.file.file }}" alt="" style="margin: 0 auto;" />
+            </div>
+            <div class="col-sm-1" class="hidden-phone">
+                <div class="carousel-nav carousel-nav-right" ng-click="next()" ng-show="index < images.length - 1">
+                    <i class="fa fa-chevron-right"></i>
+                </div>
+            </div>    
+        </div>
+        <div style="margin-top: 16px;"><span class="label label-default">
+            {{ index + 1 }} / {{ images.length }}
+        </span></div>
+    </div>
+</div>
+<div class="alert alert-warning" ng-show="(Auth.role === 'editor' || Auth.role === 'root')" style="margin: 0;">
+    <div class="container">
+    	<div class="col-sm-offset-1 col-md-5">
+    		<div>
+	            <!-- Editor: &nbsp; &nbsp; -->
+	            <button class="btn btn-default btn-xs" ng-click="$state.go('image.edit', {imageId: image.encodedUri})"><i class="fa fa-pencil"></i> Edit image</button>
+
+	            <button class="btn btn-default btn-xs" ng-click="delete(image)" ng-show="Auth.canDelete(image.uri)"><i class="fa fa-trash-o"></i> Delete image</button>
+	        </div> 
+    	</div>
+    </div>
+</div>
+
+<div class="l-frame l-frame-tight">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-offset-1 col-md-5">
+                <h5>Title</h5>
+                <p>
+                    {{ image[Uris.DCT_TITLE] }}
+                </p>
+
+                <h5>Rights</h5>
+                <p>
+                    {{ image[Uris.DCT_RIGHTS] || 'No rights.'  }}
+                </p>
+
+                <h5>Identifier</h5>
+                <p>
+                    {{ image[Uris.DCT_IDENTIFIER] || 'No identifier.' }}
+                </p>
+            </div>
+            <div class="col-md-5">
+                <h5>
+                    Depicts
+                </h5>
+                <p>
+                    <a href ui-sref="structure.summary({structureId: image.building.encodedUri})">
+                        {{ depicts.name }}
+                    </a>
+                </p>
+                <h5>External Location</h5>
+                <p>
+                    {{ image[Uris.QA_LOCATION] || 'No external location.' }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

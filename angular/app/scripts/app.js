@@ -18,6 +18,7 @@ angular.module('angularApp', [
     'ngCookies',
     'ngResource',
     'ngSanitize',
+    'ngAnimate',
     'ngRoute',
     'ngProgress',
     'ui.bootstrap',
@@ -26,25 +27,63 @@ angular.module('angularApp', [
     'audioPlayer',
     'ui.utils',
     'infinite-scroll',
-    'ui.router'
+    'ui.router',
+    'angularFileUpload',
+    'toaster'
 ])
-    .run(function ($rootScope, $route, $location, ngProgress, Uris, Entity, $http, GraphHelper, $state, $stateParams) {
+    .run(function($rootScope, $route, $location, ngProgress, Uris, Entity, $http, GraphHelper, $state, $stateParams, Auth, $filter) {
+
+        // Fix bug with scrolling to top with ui-router changing
+        $rootScope.$on('$viewContentLoaded', function() {
+            var interval = setInterval(function() {
+                if (document.readyState === 'complete') {
+                    window.scrollTo(0, 0);
+                    clearInterval(interval);
+                }
+            }, 200);
+        });
+
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
-
+        $rootScope.Auth = Auth;
         $rootScope.Uris = Uris;
-        $rootScope.globalSearchString = '';
+
+        $http.get(Uris.JSON_ROOT + 'login/status').then(function(status) {
+            angular.extend(Auth, status.data);
+        });
+
+        $rootScope.globalSearch = {};
+        $rootScope.globalSearch.query = '';
+        var tempFromState = {};
         // Adds the slim progress bar
-        $rootScope.$on('$stateChangeStart', function () {
+        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+
+            console.log('changing', event, toState, toParams, fromState, fromParams);
+
+            // Catch if we are going to login
+            if (toState.name === 'login' && fromState.name !== '') {
+                tempFromState.fromState = fromState;
+                tempFromState.fromParams = fromParams;
+            }
+            if (fromState.name === 'login') {
+                // Do we have a previous state stored?
+                if (tempFromState.fromState) {
+                    event.preventDefault();
+                    var nextState = tempFromState;
+                    tempFromState = {};
+                    $state.go(nextState.fromState.name, nextState.fromParams);
+                }
+            }
+            // event.preventDefault();
             ngProgress.reset();
             ngProgress.color('#ea1d5d');
             ngProgress.start();
         });
-        $rootScope.$on('$stateChangeSuccess', function () {
+        $rootScope.$on('$stateChangeSuccess', function() {
             ngProgress.complete();
-            $rootScope.globalSearchString = '';
+            $rootScope.globalSearch.query = '';
         });
-        $rootScope.$on('$stateChangeError', function () {
+        $rootScope.$on('$stateChangeError', function() {
             ngProgress.reset();
             ngProgress.reset();
         });
@@ -54,11 +93,28 @@ angular.module('angularApp', [
          * @param val
          * @returns {Promise|*}
          */
-        $rootScope.globalSearch = function (val) {
-            return Entity.findByName(val, false).then(function (entities) {
-                var results = GraphHelper.graphValues(entities).slice(0, 5);
+        $rootScope.globalSearch = function(val) {
+            return Entity.findByName(val, false).then(function(entities) {
+                var results = GraphHelper.graphValues(entities);
+                results = $filter('filter')(results, function(result) {
+                    return result.type === 'architect' || result.type === 'structure' || result.type === 'firm' || result.type === 'other';
+                });
+                results = $filter('orderBy')(results, function(result) {
+                    return result.name.length;
+                });
+                results = results.slice(0, 10);
+
+                angular.forEach(results, function(result) {
+                    var label = result.name + ' (' + result.type.charAt(0).toUpperCase() + result.type.slice(1) + ')';
+                    if (result.type === 'structure') {
+                        label = result.name + ' (Project)';
+                    }
+                    result.name = label;
+                });
+
+
                 var search = {
-                    name: 'Search for \'' + val + '\'',
+                    name: ' <i class="fa fa-search"></i> Search for \'' + val + '\'',
                     type: 'search',
                     query: val
                 };
@@ -73,42 +129,58 @@ angular.module('angularApp', [
          * @param $model
          * @param $label
          */
-        $rootScope.globalSearchOnSelect = function ($item) {
+        $rootScope.globalSearchOnSelect = function($item, $model) {
             // $rootScope.globalSearchOnSelect = function ($item, $model, $label) {
             if ($item.type === 'search') {
                 // special case
-                console.log('should be searching for', $item.query);
+                $rootScope.globalSearch.query = $item.query;
+                $model = $item.query;
                 $location.path('/search');
                 $location.search('query', $item.query);
             } else {
                 // already a result
-                $location.path('/' + $item.type + '/' + $item.encodedUri);
+                console.log('path is', $item.type);
+                var url;
+                if ($item.type === 'structure') {
+                    url = '/project/summary?' + $item.type + 'Id=' + $item.encodedUri;
+                } else {
+                    url = '/' + $item.type + '/summary?' + $item.type + 'Id=' + $item.encodedUri;
+                }
+
+                var params = {};
+                params[$item.type + 'Id'] = $item.encodedUri;
+                $state.go($item.type + '.summary', params);
+                console.log('url is', url);
+                // $location.path(url);
             }
         };
 
-
-        //      $rootScope.getLocation = function(val) {
-        //          return $http.get('http://maps.googleapis.com/maps/api/geocode/json', {
-        //              params: {
-        //                  address: val,
-        //                  sensor: false
-        //              }
-        //          }).then(function(res){
-        //              var addresses = [];
-        ////                angular.forEach(res.data.results, function(item){
-        ////                    addresses.push(item.formatted_address);
-        ////                });
-        //              console.log("addresses", addresses);
-        //              return res.data.results;
-        //          });
-        //      };
-
-
     })
-    .config(function ($stateProvider, $urlRouterProvider) {
+    .config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+
         console.log('does this work?');
+        $httpProvider.defaults.withCredentials = true;
+
         // For any unmatched url, redirect to /state1
         $urlRouterProvider.otherwise('/');
+
+        $httpProvider.interceptors.push(['$q', 'toaster',
+            function($q, toaster) {
+                return {
+                    responseError: function(rejection) {
+                        // do something on error
+                        console.log('got a Response ERROR!', rejection);
+                        if (rejection.status === 403) {
+                            toaster.pop('warning', 'You are not logged in.', 'Please log in to continue.');
+                        }
+                        if (rejection.status === 500) {
+                            toaster.pop('error', 'Oops. Something went wrong.', 'Please contact the system administrator.');
+                        }
+                        return $q.reject(rejection);
+                    }
+                };
+            }
+        ]);
 
         // Now set up the states
         $stateProvider
@@ -118,31 +190,253 @@ angular.module('angularApp', [
                 resolve: {
                     // Load X number of interviews
                     interviews: ['Expression', 'GraphHelper', 'Uris', 'Architect', '$filter', 'Interview',
-                        function (Expression, GraphHelper, Uris, Architect, $filter, Interview) {
+                        function(Expression, GraphHelper, Uris, Architect, $filter, Interview) {
                             console.log('resolving main');
-                            return Interview.loadAll().then(function (interviews) {
+                            return Interview.loadAll().then(function(interviews) {
                                 interviews = GraphHelper.graphValues(interviews);
+                                interviews = $filter('filter')(interviews, function(interview) {
+                                    return interview.interviewees[0];
+                                });
+                                console.log('interview count', interviews);
                                 // Filter only the interviews with pictures
                                 // Looks better for the front page
-                                var interviewsWithPictures = $filter('filter')(interviews, function (interview) {
-                                    return angular.isDefined(interview.interviewees) && interview.interviewees.length && angular.isDefined(interview.interviewees[0].picture);
+                                var interviewsWithPictures = $filter('orderBy')(interviews, function(interview) {
+                                    if (angular.isDefined(interview.interviewees) && interview.interviewees.length && angular.isDefined(interview.interviewees[0].picture) && interview.interviewees[0].picture.file.indexOf('icon') === -1) {
+                                        return 0;
+                                    } else {
+                                        return 1;
+                                    }
                                 });
                                 return interviewsWithPictures;
                             });
                         }
                     ],
-                    architects: ['Architect', 'GraphHelper', '$filter',
-                        function (Architect, GraphHelper, $filter) {
-                            return Architect.loadAll().then(function (architects) {
-                                architects = GraphHelper.graphValues(architects);
-                                return $filter('filter')(architects, function (architect) {
-                                    return angular.isDefined(architect.picture);
+                    // architects: ['Architect', 'GraphHelper', '$filter',
+                    //     function (Architect, GraphHelper, $filter) {
+                    //         return Architect.loadAll().then(function (architects) {
+                    //             architects = GraphHelper.graphValues(architects);
+                    //             return $filter('filter')(architects, function (architect) {
+                    //                 return angular.isDefined(architect.picture);
+                    //             });
+                    //         });
+                    //     }
+                    // ],
+                    compoundObjects: ['CompoundObject', '$filter',
+                        function(CompoundObject, $filter) {
+                            return CompoundObject.loadAll().then(function(compoundObjects) {
+                                compoundObjects = $filter('orderBy')(compoundObjects, '-jsonData.modified');
+                                compoundObjects = $filter('filter')(compoundObjects, function(compoundObject) {
+                                    return angular.isDefined(compoundObject.jsonData.type);
                                 });
+                                console.log('compoundObjects', compoundObjects);
+                                return compoundObjects;
                             });
                         }
                     ]
                 },
                 templateUrl: 'views/main.html'
+            })
+            .state('image', {
+                abstract: true,
+                url: '/image/:imageId',
+                resolve: {
+                    image: ['Expression', 'GraphHelper', '$stateParams',
+                        function(Expression, GraphHelper, $stateParams) {
+                            console.log('resolving');
+                            var imageUri = GraphHelper.decodeUriString($stateParams.imageId);
+                            return Expression.load(imageUri);
+                        }
+                    ],
+                    depicts: ['Expression', 'Entity', 'GraphHelper', '$stateParams', 'Uris',
+                        function(Expression, Entity, GraphHelper, $stateParams, Uris) {
+                            var imageUri = GraphHelper.decodeUriString($stateParams.imageId);
+                            return Expression.load(imageUri).then(function(expression) {
+                                console.log('expression', expression);
+                                // console.log('depicts', expression[Uris.QA_DEPICTS_BUILDING]);
+                                if (expression[Uris.QA_DEPICTS_BUILDING]) {
+                                    return Entity.load(expression[Uris.QA_DEPICTS_BUILDING]);
+                                }
+                                if (expression[Uris.QA_RELATED_TO]) {
+                                    return Entity.load(GraphHelper.asArray(expression[Uris.QA_RELATED_TO])[0]);
+                                }
+                                if (expression[Uris.QA_DEPICTS_ARCHITECT]) {
+                                    return Entity.load(expression[Uris.QA_DEPICTS_ARCHITECT]);
+                                }
+                                return [];
+                            });
+
+                        }
+                    ],
+                    images: ['Expression', 'GraphHelper', '$stateParams', 'Uris',
+                        function(Expression, GraphHelper, $stateParams, Uris) {
+                            var imageUri = GraphHelper.decodeUriString($stateParams.imageId);
+                            return Expression.load(imageUri).then(function(expression) {
+                                var type;
+                                if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_PHOTOGRAPH_TYPE) !== -1) {
+                                    type = 'qldarch:Photograph';
+                                }
+                                if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_LINEDRAWING_TYPE) !== -1) {
+                                    type = 'qldarch:LineDrawing';
+                                }
+                                console.log('type', type);
+                                if (expression[Uris.QA_DEPICTS_BUILDING]) {
+                                    return Expression.findByBuildingUris([expression[Uris.QA_DEPICTS_BUILDING]], type).then(function(expressions) {
+                                        console.log('building expressions', expressions);
+                                        return expressions;
+                                    });
+                                } else if (expression[Uris.QA_RELATED_TO]) {
+                                    return Expression.findByArchitectUris(GraphHelper.asArray(expression[Uris.QA_RELATED_TO]), type).then(function(expressions) {
+                                        console.log('architect expressions', expressions);
+                                        return expressions;
+                                    });
+                                } else if (expression[Uris.QA_DEPICTS_ARCHITECT]) {
+                                    return Expression.findByArchitectUris(GraphHelper.asArray(expression[Uris.QA_DEPICTS_ARCHITECT]), type).then(function(expressions) {
+                                        console.log('architect expressions', expressions);
+                                        return expressions;
+                                    });
+                                } else {
+                                    return [];
+                                }
+                            });
+
+                        }
+                    ]
+                },
+                controller: 'ImageCtrl',
+                template: '<ui-view autoscroll="false"></ui-view>'
+            })
+            .state('image.view', {
+                url: '',
+                templateUrl: 'views/image.view.html'
+            })
+            .state('image.edit', {
+                url: '/edit',
+                templateUrl: 'views/image.edit.html'
+            })
+            .state('admin', {
+                abstract: true,
+                url: '/admin',
+                template: '<ui-view autoscroll="false"></ui-view>'
+            })
+            .state('admin.users', {
+                url: '/users',
+                resolve: {
+                    users: ['Uris', '$http', 'GraphHelper',
+                        function(Uris, $http, GraphHelper) {
+                            // Gets all users in the system and their roles
+                            return $http.get(Uris.JSON_ROOT + 'user').then(function(response) {
+                                return GraphHelper.graphValues(response.data);
+                            });
+                        }
+                    ]
+                },
+                controller: 'AdminUsersCtrl',
+                templateUrl: 'views/admin/users.html'
+            })
+            .state('admin.merge', {
+                url: '/merge',
+                controller: 'AdminMergeCtrl',
+                templateUrl: 'views/admin.merge.html'
+            })
+            .state('user', {
+                abstract: true,
+                url: '/user',
+                template: '<ui-view autoscroll="false"></ui-view>'
+            })
+            .state('user.settings', {
+                url: '/settings',
+                controller: 'UserSettingsCtrl',
+                templateUrl: 'views/user.settings.html',
+            })
+            .state('user.ugcs', {
+                url: '/ugcs',
+                resolve: {
+                    compoundObjects: ['CompoundObject', 'Auth',
+                        function(CompoundObject, Auth) {
+                            return Auth.status().then(function() {
+                                return CompoundObject.loadForUser(Auth.user);
+                            });
+                        }
+                    ],
+                },
+                controller: 'UserUgcsCtrl',
+                templateUrl: 'views/user.ugcs.html'
+            })
+            .state('user.files', {
+                abstract: true,
+                url: '/files',
+                templateUrl: 'views/user.files.html'
+            })
+            .state('user.files.images', {
+                url: '/images',
+                resolve: {
+                    expressions: ['Expression', 'Auth', 'GraphHelper', 'Uris', '$filter',
+                        function(Expression, Auth, GraphHelper, Uris, $filter) {
+                            return Auth.status().then(function() {
+                                return Expression.findByUser(Auth.user).then(function(expressions) {
+                                    return $filter('filter')(expressions, function(expression) {
+                                        return GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_PHOTOGRAPH_TYPE) !== -1 || GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_LINEDRAWING_TYPE) !== -1;
+                                    });
+                                });
+                            });
+                        }
+                    ],
+                },
+                controller: 'UserFilesCtrl',
+                templateUrl: 'views/user.files.images.html'
+            })
+            .state('user.files.documents', {
+                url: '/documents',
+                resolve: {
+                    expressions: ['Expression', 'Auth', 'GraphHelper', 'Uris', '$filter',
+                        function(Expression, Auth, GraphHelper, Uris, $filter) {
+                            return Auth.status().then(function() {
+                                return Expression.findByUser(Auth.user).then(function(expressions) {
+                                    console.log('documents', expressions);
+                                    return $filter('filter')(expressions, function(expression) {
+                                        return GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_ARTICLE_TYPE) !== -1;
+                                    });
+                                });
+                            });
+                        }
+                    ],
+                },
+                controller: 'UserFilesDocumentsCtrl',
+                templateUrl: 'views/user.files.documents.html'
+            })
+            .state('user.files.interviews', {
+                url: '/interviews',
+                resolve: {
+                    expressions: ['Expression', 'Auth', 'GraphHelper', 'Uris', '$filter',
+                        function(Expression, Auth, GraphHelper, Uris, $filter) {
+                            return Auth.status().then(function() {
+                                return Expression.findByUser(Auth.user).then(function(expressions) {
+                                    // Filter out and only show the interviews
+                                    return $filter('filter')(expressions, function(expression) {
+                                        return GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_INTERVIEW_TYPE) !== -1;
+                                    });
+                                });
+                            });
+                        }
+                    ],
+                },
+                controller: 'UserFilesInterviewsCtrl',
+                templateUrl: 'views/user.files.interviews.html'
+            })
+            .state('user.files.builds', {
+                url: '/builds',
+                resolve: {
+                    compoundObjects: ['CompoundObject', 'Auth',
+                        function(CompoundObject, Auth) {
+                            return Auth.status().then(function() {
+                                return CompoundObject.loadForUser(Auth.user);
+                            });
+                        }
+                    ],
+                },
+                controller: 'UserUgcsCtrl',
+                templateUrl: 'views/user.files.builds.html'
+
             })
             .state('about', {
                 url: '/about',
@@ -152,75 +446,440 @@ angular.module('angularApp', [
                 url: '/contribute',
                 templateUrl: 'views/contribute.html',
             })
+            .state('compound', {
+                url: '/compound',
+                templateUrl: 'views/compound.html',
+            })
             .state('register', {
                 url: '/register',
                 templateUrl: 'views/register.html',
+                controller: 'RegisterCtrl'
             })
             .state('login', {
                 url: '/login',
                 templateUrl: 'views/login.html',
+                controller: 'LoginCtrl'
             })
-            .state('create', {
+            .state('forgot', {
+                url: '/forgot',
+                templateUrl: 'views/forgot.html',
+                controller: ['$scope', '$http', 'Uris',
+                    function($scope, $http, Uris) {
+                        $scope.reset = function(credentials) {
+                            $scope.isResetting = true;
+                            $http.get(Uris.JSON_ROOT + 'user/forgotPassword?username=' + encodeURIComponent(credentials.username)).then(function() {
+                                $scope.isReset = true;
+                            });
+                        };
+                    }
+                ]
+            })
+            .state('logout', {
+                url: '/logout',
+                controller: 'LogoutCtrl'
+            })
+            .state('ugcs', {
                 abstract: true,
-                url: '/create',
-                template: '<ui-view></ui-view>'
+                url: '/ugcs',
+                template: '<ui-view autoscroll="false"></ui-view>'
             })
-            .state('create.timeline', {
-                url: '/timeline?timeline',
-                templateUrl: 'views/create/timeline.html',
-                controller: 'CreateTimelineCtrl',
-                reloadOnSearch: false
-            })
-            .state('create.map', {
-                url: '/map?map',
-                templateUrl: 'views/create/map.html',
-                controller: 'CreateMapCtrl',
-                reloadOnSearch: false
-            })
-            .state('create.textAnalysis', {
-                url: '/text-analysis'
-            })
-            .state('architects', {
-                url: '/architects',
-                templateUrl: 'views/architects.html',
-                controller: 'ArchitectsCtrl',
+            .state('ugcs.user', {
+                url: '/user/:username',
+                templateUrl: 'views/ugc/usercontent.html',
                 resolve: {
-                    architects: ['Architect',
-                        function (Architect) {
-                            return Architect.loadAll();
+                    compoundObjects: ['CompoundObject', 'Auth', '$stateParams',
+                        function(CompoundObject, Auth, $stateParams) {
+                            return CompoundObject.loadForUser($stateParams.username);
+                        }
+                    ]
+                },
+                controller: 'UserContentCtrl'
+            })
+            .state('upload', {
+                abstract: true,
+                url: '/upload?uri&name&type',
+                template: '<ui-view autoscroll="false"></ui-view>'
+            })
+            .state('upload.images', {
+                url: '/image',
+                templateUrl: 'views/files/photograph.html',
+                controller: 'FilePhotographCtrl'
+            })
+            .state('upload.documents', {
+                url: '/documents',
+                templateUrl: 'views/upload.documents.html',
+                controller: 'UploadDocumentsCtrl'
+            })
+            .state('upload.interviews', {
+                url: '/interviews?id',
+                resolve: {
+                    interview: ['Uris', '$stateParams', 'GraphHelper', 'Interview',
+                        function(Uris, $stateParams, GraphHelper, Interview) {
+                            if ($stateParams.id) {
+                                var interviewUri = GraphHelper.decodeUriString($stateParams.id);
+                                console.log('loading interview');
+                                return Interview.load(interviewUri);
+                            } else {
+                                var interview = {};
+                                interview[Uris.RDF_TYPE] = Uris.QA_INTERVIEW_TYPE;
+                                interview[Uris.QA_EXTERNAL_LOCATION] = [];
+                                interview[Uris.QA_HAS_FILE] = [];
+                                return interview;
+                            }
+                        }
+                    ]
+                },
+                templateUrl: 'views/upload.interviews.html',
+                controller: 'UploadInterviewsCtrl'
+            })
+            .state('ugc', {
+                abstract: true,
+                url: '/ugc?id',
+                resolve: {
+                    compoundObject: ['$stateParams', 'GraphHelper', 'CompoundObject',
+                        function($stateParams, GraphHelper, CompoundObject) {
+                            if ($stateParams.id) {
+                                var mapUri = GraphHelper.decodeUriString($stateParams.id);
+                                return CompoundObject.load(mapUri);
+                            } else {
+                                return {
+                                    jsonData: {
+                                        data: {}
+                                    }
+                                };
+                            }
+                        }
+                    ]
+                },
+                templateUrl: 'views/ugc/ugc.html',
+            })
+            .state('ugc.timeline', {
+                url: '/timeline',
+                views: {
+                    header: {
+                        templateUrl: 'views/ugc/timeline.header.html'
+                    },
+                    builder: {
+                        template: ''
+                    },
+                    viewer: {
+                        templateUrl: 'views/ugc/timeline.viewer.html',
+                        controller: 'TimelineViewerCtrl'
+                    }
+                }
+            })
+            .state('ugc.timeline.edit', {
+                url: '/edit',
+                controller: 'TimelineBuilderCtrl',
+                reloadOnSearch: false,
+                views: {
+                    'builder@ugc': {
+                        templateUrl: 'views/ugc/timeline.builder.html',
+                        controller: 'TimelineBuilderCtrl'
+                    }
+                }
+
+            })
+            .state('ugc.timeline.edit.add', {
+                abstract: true,
+                url: '/add',
+                template: '<ui-view autoscroll="false"></ui-view>'
+            })
+            .state('ugc.timeline.edit.add.date', {
+                url: '/date'
+            })
+            .state('ugc.timeline.edit.add.import', {
+                url: '/import',
+            })
+            .state('ugc.map', {
+                // abstract: true,
+                url: '/map',
+                views: {
+                    header: {
+                        templateUrl: 'views/ugc/map.header.html'
+                    },
+                    builder: {
+                        template: ''
+                    },
+                    viewer: {
+                        templateUrl: 'views/ugc/map.viewer.html',
+                        controller: 'MapViewerCtrl'
+                    }
+                }
+            })
+            .state('ugc.map.edit', {
+                url: '/edit',
+                reloadOnSearch: false,
+                resolve: {
+                    typologies: ['Entity', 'GraphHelper',
+                        function(Entity, GraphHelper) {
+                            console.log('got to here!');
+                            return Entity.loadAll('qldarch:BuildingTypology', true).then(function(typologies) {
+                                return GraphHelper.graphValues(typologies);
+                            });
+                        }
+                    ]
+                },
+                views: {
+                    'builder@ugc': {
+                        templateUrl: 'views/ugc/map.builder.html',
+                        controller: 'MapBuilderCtrl'
+                    }
+                }
+            })
+            .state('ugc.map.edit.add', {
+                abstract: true,
+                url: '/add',
+            })
+            .state('ugc.map.edit.add.location', {
+                url: '/location',
+            })
+            .state('ugc.map.edit.add.import', {
+                url: '/import',
+            })
+            .state('ugc.map.edit.list', {
+                url: '/list'
+            })
+            .state('ugc.wordcloud', {
+                // abstract: true,
+                url: '/wordcloud',
+                views: {
+                    header: {
+                        templateUrl: 'views/ugc/wordcloud.header.html'
+                    },
+                    builder: {
+                        template: ''
+                    },
+                    viewer: {
+                        templateUrl: 'views/ugc/wordcloud.viewer.html',
+                        controller: 'WordCloudViewerCtrl'
+                    }
+                }
+            })
+            .state('ugc.wordcloud.edit', {
+                url: '/edit',
+                controller: 'CreateMapCtrl',
+                reloadOnSearch: false,
+                views: {
+                    'builder@ugc': {
+                        templateUrl: 'views/ugc/wordcloud.builder.html',
+                        controller: 'WordCloudBuilderCtrl'
+                    }
+                }
+            })
+            .state('ugc.wordcloud.edit.add', {
+                abstract: true,
+                url: '/add',
+            })
+            .state('ugc.wordcloud.edit.add.document', {
+                url: '/document',
+            })
+            .state('ugc.wordcloud.edit.add.search', {
+                url: '/search',
+            })
+            .state('ugc.wordcloud.edit.add.import', {
+                url: '/import',
+            })
+            .state('others', {
+                url: '/others',
+                templateUrl: 'views/other/others.html',
+                resolve: {
+                    others: ['Entity', 'Uris', 'GraphHelper',
+                        function(Entity, Uris, GraphHelper) {
+                            return Entity.loadAllIncSubclass('qldarch:NonDigitalThing', true).then(function(entities) {
+                                var results = [];
+                                angular.forEach(entities, function(entity) {
+                                    var types = GraphHelper.asArray(entity[Uris.RDF_TYPE]);
+
+                                    if (types.indexOf(Uris.QA_ARCHITECT_TYPE) === -1 && types.indexOf(Uris.QA_FIRM_TYPE) === -1 && types.indexOf(Uris.QA_STRUCTURE_TYPE) === -1 && types.indexOf(Uris.QA_BUILDING_TYPOLOGY) === -1) {
+                                        results.push(entity);
+                                    }
+                                });
+                                return results;
+                            });
+                        }
+                    ]
+                },
+                controller: 'OthersCtrl'
+            })
+            .state('other', {
+                abstract: true,
+                url: '/other?otherId',
+                templateUrl: 'views/other/layout.html',
+                resolve: {
+                    other: ['Entity', '$stateParams', 'GraphHelper',
+                        function(Entity, $stateParams, GraphHelper) {
+                            console.log('loading other');
+                            if (!$stateParams.otherId) {
+                                console.log('no other id');
+                                return {};
+                            }
+                            console.log('getting uri');
+                            var uri = GraphHelper.decodeUriString($stateParams.otherId);
+                            console.log('got to here');
+                            return Entity.load(uri, false);
+                        }
+                    ]
+                },
+                controller: ['$scope', 'other',
+                    function($scope, other) {
+                        $scope.other = other;
+                    }
+                ]
+            })
+            .state('other.summary', {
+                url: '/summary',
+                templateUrl: 'views/other/summary.html',
+                resolve: {
+                    types: ['Ontology',
+                        function(Ontology) {
+                            console.log('loading summary');
+                            return Ontology.loadAllEditableEntityTypes();
+                        }
+                    ]
+                },
+                controller: 'OtherCtrl'
+            })
+            .state('other.summary.edit', {
+                url: '/edit'
+            })
+            .state('other.relationships', {
+                url: '/relationships',
+                templateUrl: 'views/relationships.html',
+                controller: 'RelationshipCtrl',
+                resolve: {
+                    data: ['Relationship', 'GraphHelper', 'Entity', '$stateParams',
+                        function(Relationship, GraphHelper, Entity, $stateParams) {
+                            var uri = GraphHelper.decodeUriString($stateParams.otherId);
+                            console.log('id is', $stateParams.otherId);
+                            // Get all the relationships
+                            return Relationship.findByEntityUri(uri).then(function(relationships) {
+                                return Relationship.getData(relationships).then(function(data) {
+                                    return data;
+                                });
+                            });
                         }
                     ]
                 }
             })
+            .state('architects', {
+                abstract: true,
+                url: '/architects',
+                templateUrl: 'views/architects/layout.html'
+                //template: '<ui-view autoscroll="false"></ui-view>'
+            })
+            .state('architects.queensland', {
+                url: '',
+                templateUrl: 'views/architects/architects.html',
+                controller: 'ArchitectsCtrl',
+                resolve: {
+                    architects: ['Architect', '$filter', 'Uris', 'GraphHelper',
+                        function(Architect, $filter, Uris, GraphHelper) {
+                            return Architect.loadAll(false).then(function(architects) {
+                                architects = GraphHelper.graphValues(architects);
+                                return $filter('filter')(architects, function(architect) {
+                                    return architect[Uris.QA_PRACTICED_IN_QUEENSLAND] === true;
+                                });
+                            });
+                        }
+                    ]
+                }
+            })
+            .state('architects.other', {
+                url: '/other',
+                templateUrl: 'views/architects/architects.html',
+                controller: 'ArchitectsCtrl',
+                resolve: {
+                    architects: ['Architect', '$filter', 'Uris', 'GraphHelper',
+                        function(Architect, $filter, Uris, GraphHelper) {
+                            return Architect.loadAll(false).then(function(architects) {
+                                architects = GraphHelper.graphValues(architects);
+                                return $filter('filter')(architects, function(architect) {
+                                    return architect[Uris.QA_PRACTICED_IN_QUEENSLAND] !== true;
+                                });
+                            });
+                        }
+                    ]
+                }
+            })
+            .state('architects.create', {
+                url: '/create',
+                templateUrl: 'views/architect/summary.html'
+            })
             .state('architect', {
                 abstract: true,
-                url: '/architect/:architectId',
+                url: '/architect?architectId',
                 templateUrl: 'views/architect/layout.html',
                 resolve: {
                     architect: ['Architect', '$stateParams', 'GraphHelper',
-                        function (Architect, $stateParams, GraphHelper) {
+                        function(Architect, $stateParams, GraphHelper) {
+                            if (!$stateParams.architectId) {
+                                return {};
+                            }
                             var architectUri = GraphHelper.decodeUriString($stateParams.architectId);
                             return Architect.load(architectUri, false);
                         }
                     ],
                     interviews: ['Interview', '$stateParams', 'GraphHelper',
-                        function (Interview, $stateParams, GraphHelper) {
+                        function(Interview, $stateParams, GraphHelper) {
+                            if (!$stateParams.architectId) {
+                                return null;
+                            }
                             var architectUri = GraphHelper.decodeUriString($stateParams.architectId);
-                            return Interview.findByIntervieweeUri(architectUri);
+                            return Interview.findByIntervieweeUri(architectUri).then(function(interviews) {
+                                console.log('got interviews for', architectUri, interviews);
+                                return interviews;
+                            });
+                        }
+                    ],
+                    types: ['Ontology',
+                        function(Ontology) {
+                            console.log('loading summary');
+                            return Ontology.loadAllEditableEntityTypes();
                         }
                     ]
                 },
-                controller: ['$scope', 'architect', 'interviews',
-                    function ($scope, architect, interviews) {
+                controller: ['$scope', 'architect', 'interviews', 'Uris', 'Entity', '$state',
+                    function($scope, architect, interviews, Uris, Entity, $state) {
                         $scope.architect = architect;
                         $scope.interviews = interviews;
+                        $scope.entity = architect;
+
+                        $scope.delete = function(architect) {
+                            var r = window.confirm('Delete architect ' + architect.name + '?');
+                            if (r === true) {
+                                Entity.delete(architect.uri).then(function() {
+                                    $state.go('architects.queensland');
+                                });
+                            }
+                        };
                     }
                 ]
             })
             .state('architect.summary', {
-                url: '',
+                url: '/summary',
                 templateUrl: 'views/architect/summary.html',
                 controller: 'ArchitectCtrl'
+            })
+            .state('architect.summary.edit', {
+                url: '/edit'
+            })
+            .state('architect.photographs', {
+                url: '/photographs',
+                templateUrl: 'views/architect/photographs.html',
+                resolve: {
+                    photographs: ['GraphHelper', 'Structure', 'Expression', '$stateParams',
+                        function(GraphHelper, Structure, Expression, $stateParams) {
+                            var architectUri = GraphHelper.decodeUriString($stateParams.architectId);
+                            return Expression.findByArchitectUris([architectUri], 'qldarch:Photograph');
+                        }
+                    ]
+                },
+                controller: ['$scope', 'photographs', 'LayoutHelper',
+                    function($scope, photographs, LayoutHelper) {
+                        $scope.photographRows = LayoutHelper.group(photographs, 6);
+                    }
+                ]
             })
             .state('architect.articles', {
                 url: '/articles',
@@ -228,13 +887,13 @@ angular.module('angularApp', [
                 controller: 'ArchitectArticlesCtrl',
                 resolve: {
                     articles: ['$stateParams', 'GraphHelper', 'Entity', 'Solr', '$filter',
-                        function ($stateParams, GraphHelper, Entity, Solr, $filter) {
+                        function($stateParams, GraphHelper, Entity, Solr, $filter) {
                             var architectUri = GraphHelper.decodeUriString($stateParams.architectId);
-                            return Entity.load(architectUri).then(function (entity) {
+                            return Entity.load(architectUri).then(function(entity) {
                                 return Solr.query({
                                     query: entity.name,
                                     type: 'article'
-                                }).then(function (results) {
+                                }).then(function(results) {
                                     return $filter('filter')(results, {
                                         'type': 'article'
                                     });
@@ -250,11 +909,11 @@ angular.module('angularApp', [
                 controller: 'RelationshipCtrl',
                 resolve: {
                     data: ['Relationship', 'GraphHelper', 'Entity', '$stateParams',
-                        function (Relationship, GraphHelper, Entity, $stateParams) {
+                        function(Relationship, GraphHelper, Entity, $stateParams) {
                             var architectUri = GraphHelper.decodeUriString($stateParams.architectId);
                             // Get all the relationships
-                            return Relationship.findByEntityUri(architectUri).then(function (relationships) {
-                                return Relationship.getData(relationships).then(function (data) {
+                            return Relationship.findByEntityUri(architectUri).then(function(relationships) {
+                                return Relationship.getData(relationships).then(function(data) {
                                     console.log('data', data);
                                     return data;
                                 });
@@ -268,11 +927,11 @@ angular.module('angularApp', [
                 templateUrl: 'views/timeline.html',
                 resolve: {
                     data: ['Relationship', 'GraphHelper', 'Entity', '$stateParams', '$filter', 'Uris',
-                        function (Relationship, GraphHelper, Entity, $stateParams, $filter, Uris) {
+                        function(Relationship, GraphHelper, Entity, $stateParams, $filter, Uris) {
                             var architectUri = GraphHelper.decodeUriString($stateParams.architectId);
                             // Get all the relationships
-                            return Relationship.findByEntityUri(architectUri).then(function (relationships) {
-                                var relationshipsWithDates = $filter('filter')(relationships, function (relationship) {
+                            return Relationship.findByEntityUri(architectUri).then(function(relationships) {
+                                var relationshipsWithDates = $filter('filter')(relationships, function(relationship) {
                                     return angular.isDefined(relationship[Uris.QA_START_DATE]);
                                 });
                                 return Relationship.getData(relationshipsWithDates);
@@ -280,7 +939,7 @@ angular.module('angularApp', [
                         }
                     ],
                     entity: ['Architect', '$stateParams', 'GraphHelper',
-                        function (Architect, $stateParams, GraphHelper) {
+                        function(Architect, $stateParams, GraphHelper) {
                             var architectUri = GraphHelper.decodeUriString($stateParams.architectId);
                             return Architect.load(architectUri, false);
                         }
@@ -292,10 +951,10 @@ angular.module('angularApp', [
                 url: '/interview/:interviewId?time',
                 resolve: {
                     interview: ['Interview', '$state', '$stateParams', 'ngProgress',
-                        function (Interview, $state, $stateParams, ngProgress) {
+                        function(Interview, $state, $stateParams, ngProgress) {
                             var interviewUri = atob($stateParams.interviewId);
                             ngProgress.reset();
-                            return Interview.load(interviewUri).then(function (interview) {
+                            return Interview.load(interviewUri).then(function(interview) {
                                 var interviewee = interview.interviewees[0];
                                 $state.go('architect.interview', {
                                     architectId: interviewee.encodedUri,
@@ -312,14 +971,14 @@ angular.module('angularApp', [
                 url: '/interview/:interviewId?time',
                 templateUrl: 'views/architect/interview.html',
                 controller: 'InterviewCtrl',
-                reloadOnSearch: false,
+                // reloadOnSearch: false,
                 resolve: {
                     interview: ['$http', '$stateParams', '$q', 'Uris', 'Architect', 'Interview', 'Transcript', 'Relationship', 'GraphHelper', 'Entity', 'Ontology',
-                        function ($http, $stateParams, $q, Uris, Architect, Interview, Transcript, Relationship, GraphHelper, Entity, Ontology) {
+                        function($http, $stateParams, $q, Uris, Architect, Interview, Transcript, Relationship, GraphHelper, Entity, Ontology) {
                             var interviewUri = atob($stateParams.interviewId);
 
                             // Get all the interview
-                            return Interview.load(interviewUri).then(function (interview) {
+                            return Interview.load(interviewUri).then(function(interview) {
 
                                 var transcriptUrls = GraphHelper.asArray(interview[Uris.QA_TRANSCRIPT_LOCATION]);
                                 if (transcriptUrls.length === 0) {
@@ -329,18 +988,18 @@ angular.module('angularApp', [
                                 var transcriptUrl = transcriptUrls[0];
                                 console.log('transcript urls', transcriptUrls);
 
-                                return Transcript.findWithUrl(transcriptUrl).then(function (transcript) {
-                                    return Relationship.findByInterviewUri(interviewUri).then(function (relationships) {
+                                return Transcript.findWithUrl(transcriptUrl).then(function(transcript) {
+                                    return Relationship.findByInterviewUri(interviewUri).then(function(relationships) {
                                         // Get all the subject, object, and predicate data
                                         var entities = GraphHelper.getAttributeValuesUnique(relationships, [Uris.QA_SUBJECT, Uris.QA_OBJECT]);
                                         var relatedRequests = [Entity.loadList(entities), Ontology.loadAllProperties()];
 
-                                        return $q.all(relatedRequests).then(function (relatedData) {
+                                        return $q.all(relatedRequests).then(function(relatedData) {
                                             var entities = relatedData[0];
                                             var properties = relatedData[1];
 
                                             // Insert that data
-                                            angular.forEach(relationships, function (relationship) {
+                                            angular.forEach(relationships, function(relationship) {
                                                 relationship.subject = entities[relationship[Uris.QA_SUBJECT]];
                                                 relationship.object = entities[relationship[Uris.QA_OBJECT]];
                                                 relationship.predicate = properties[relationship[Uris.QA_PREDICATE]];
@@ -366,90 +1025,123 @@ angular.module('angularApp', [
                 templateUrl: 'views/architect/structures.html',
                 resolve: {
                     structures: ['$stateParams', 'GraphHelper', 'Uris', 'Structure', 'Relationship',
-                        function ($stateParams, GraphHelper, Uris, Structure, Relationship) {
+                        function($stateParams, GraphHelper, Uris, Structure) {
 
                             var architectUri = GraphHelper.decodeUriString($stateParams.architectId);
 
-                            return Relationship.findBySubjectPredicateObject({
-                                predicate: 'qldarch:designedBy',
-                                object: architectUri
-                            }).then(function (designedByRelationships) {
-                                var designedByStructureUris = GraphHelper.getAttributeValuesUnique(designedByRelationships, Uris.QA_SUBJECT);
-
-                                return Relationship.findBySubjectPredicateObject({
-                                    predicate: 'qldarch:workedOn',
-                                    subject: architectUri
-                                }).then(function (workedOnRelationships) {
-                                    var workedOnStructureUris = GraphHelper.getAttributeValuesUnique(workedOnRelationships, Uris.QA_OBJECT);
-
-                                    // Merge
-                                    var structureUris = designedByStructureUris.concat(workedOnStructureUris);
-                                    console.log(workedOnStructureUris);
-                                    return Structure.loadList(structureUris, true).then(function (structures) {
-                                        console.log('structures', structures);
-                                        return structures;
-                                    });
-                                });
-                            });
+                            // Get designedBy, workedOn and 'associatedArchitect'
+                            return Structure.findByAssociatedArchitectUri(architectUri);
                         }
                     ]
                 },
                 controller: 'ArchitectStructuresCtrl'
             })
             .state('firms', {
+                abstract: true,
                 url: '/firms',
+                template: '<ui-view autoscroll="false"></ui-view>'
+            })
+            .state('firms.australian', {
+                url: '?index',
+                reloadOnSearch: false,
                 templateUrl: 'views/firms.html',
                 resolve: {
-                    firms: ['Firm',
-                        function (Firm) {
-                            return Firm.loadAll();
+                    firms: ['Firm', '$filter', 'GraphHelper', 'Uris',
+                        function(Firm, $filter, GraphHelper, Uris) {
+                            return Firm.loadAll(false).then(function(firms) {
+                                firms = GraphHelper.graphValues(firms);
+                                return $filter('filter')(firms, function(firm) {
+                                    return firm[Uris.QA_AUSTRALIAN] === true;
+                                });
+                            });
                         }
-                    ]
+                    ],
+                    australian: function() {
+                        return true;
+                    }
+                },
+                controller: 'FirmsCtrl'
+            })
+            .state('firms.other', {
+                url: '/other',
+                templateUrl: 'views/firms.html',
+                resolve: {
+                    firms: ['Firm', '$filter', 'GraphHelper', 'Uris',
+                        function(Firm, $filter, GraphHelper, Uris) {
+                            return Firm.loadAll(false).then(function(firms) {
+                                firms = GraphHelper.graphValues(firms);
+                                return $filter('filter')(firms, function(firm) {
+                                    return firm[Uris.QA_AUSTRALIAN] !== true;
+                                });
+                            });
+                        }
+                    ],
+                    australian: function() {
+                        return false;
+                    }
                 },
                 controller: 'FirmsCtrl'
             })
             .state('firm', {
                 abstract: true,
-                url: '/firm/:firmId',
+                url: '/firm?firmId',
                 templateUrl: 'views/firm/layout.html',
                 resolve: {
                     firm: ['$stateParams', 'Firm', 'GraphHelper',
-                        function ($stateParams, Firm, GraphHelper) {
+                        function($stateParams, Firm, GraphHelper) {
+                            if (!$stateParams.firmId) {
+                                return {};
+                            }
                             var firmUri = GraphHelper.decodeUriString($stateParams.firmId);
                             return Firm.load(firmUri);
                         }
+                    ],
+                    types: ['Ontology',
+                        function(Ontology) {
+                            console.log('loading summary');
+                            return Ontology.loadAllEditableEntityTypes();
+                        }
                     ]
                 },
-                controller: ['$scope', 'firm',
-                    function ($scope, firm) {
+                controller: ['$scope', 'firm', 'Entity', '$state',
+                    function($scope, firm, Entity, $state) {
                         $scope.firm = firm;
+                        $scope.entity = firm;
+
+                        $scope.delete = function(firm) {
+                            var r = window.confirm('Delete firm ' + firm.name + '?');
+                            if (r === true) {
+                                Entity.delete(firm.uri).then(function() {
+                                    $state.go('firms.australian');
+                                });
+                            }
+                        };
                     }
                 ]
             })
             .state('firm.summary', {
-                url: '',
+                url: '/summary',
                 templateUrl: 'views/firm/summary.html',
-                controller: ['$scope', 'firm',
-                    function ($scope, firm) {
-                        $scope.firm = firm;
-                    }
-                ]
+                controller: 'FirmCtrl'
+            })
+            .state('firm.summary.edit', {
+                url: '/edit',
             })
             .state('firm.employees', {
                 url: '/employees',
                 templateUrl: 'views/firm/employees.html',
                 resolve: {
                     employees: ['$stateParams', 'GraphHelper', 'Uris', 'Architect', 'Relationship',
-                        function ($stateParams, GraphHelper, Uris, Architect, Relationship) {
+                        function($stateParams, GraphHelper, Uris, Architect, Relationship) {
                             var firmUri = GraphHelper.decodeUriString($stateParams.firmId);
 
                             return Relationship.findBySubjectPredicateObject({
                                 predicate: 'qldarch:employedBy',
                                 object: firmUri
-                            }).then(function (relationships) {
+                            }).then(function(relationships) {
                                 // Get all the architects
                                 var architectUris = GraphHelper.getAttributeValuesUnique(relationships, Uris.QA_SUBJECT);
-                                return Architect.loadList(architectUris, true).then(function (architects) {
+                                return Architect.loadList(architectUris, true).then(function(architects) {
                                     return GraphHelper.graphValues(architects);
                                 });
                             });
@@ -457,82 +1149,70 @@ angular.module('angularApp', [
                     ]
                 },
                 controller: ['$scope', 'firm', 'employees', 'LayoutHelper',
-                    function ($scope, firm, employees, LayoutHelper) {
+                    function($scope, firm, employees, LayoutHelper) {
                         $scope.firm = firm;
                         $scope.employeeRows = LayoutHelper.group(employees, 6);
                     }
                 ]
             })
             .state('firm.structures', {
-                url: '/structures',
+                url: '/projects',
                 templateUrl: 'views/firm/structures.html',
                 resolve: {
                     structures: ['$stateParams', 'GraphHelper', 'Uris', 'Structure', 'Relationship',
-                        function ($stateParams, GraphHelper, Uris, Structure, Relationship) {
+                        function($stateParams, GraphHelper, Uris, Structure, Relationship) {
                             var firmUri = GraphHelper.decodeUriString($stateParams.firmId);
-
                             return Relationship.findBySubjectPredicateObject({
                                 predicate: 'qldarch:designedBy',
                                 object: firmUri
-                            }).then(function (relationships) {
+                            }).then(function(relationships) {
                                 // Get all the architects
                                 var structureUris = GraphHelper.getAttributeValuesUnique(relationships, Uris.QA_SUBJECT);
-                                return Structure.loadList(structureUris, true).then(function (structures) {
-                                    return GraphHelper.graphValues(structures);
+
+                                return Structure.loadList(structureUris, true).then(function(structures) {
+                                    var relationshipStructures = GraphHelper.graphValues(structures);
+
+                                    // Get the associated firms...this is awful
+                                    // should be all relationships or nothing!
+                                    return Structure.findByAssociatedFirmUri(firmUri).then(function(firmStructures) {
+                                        var structures = angular.extend(relationshipStructures, firmStructures);
+                                        return GraphHelper.graphValues(structures);
+                                    });
                                 });
                             });
                         }
                     ]
                 },
                 controller: ['$scope', 'firm', 'structures', 'LayoutHelper',
-                    function ($scope, firm, structures, LayoutHelper) {
+                    function($scope, firm, structures, LayoutHelper) {
                         $scope.firm = firm;
                         $scope.structureRows = LayoutHelper.group(structures, 6);
                     }
                 ]
             })
-            .state('firm.lineDrawings', {
-                url: '/line-drawings',
-                templateUrl: 'views/firm/linedrawings.html',
+            .state('firm.articles', {
+                url: '/articles',
+                templateUrl: 'views/architect/articles.html',
                 resolve: {
-                    lineDrawings: ['GraphHelper', '$stateParams', 'Expression',
-                        function (GraphHelper, $stateParams, Expression) {
+                    articles: ['$stateParams', 'GraphHelper', 'Entity', 'Solr', '$filter',
+                        function($stateParams, GraphHelper, Entity, Solr, $filter) {
                             var firmUri = GraphHelper.decodeUriString($stateParams.firmId);
-                            return Expression.findByFirmUris([firmUri], 'qldarch:LineDrawing');
-                        }
-                    ]
-                },
-                controller: ['$scope', 'lineDrawings', 'LayoutHelper',
-                    function ($scope, lineDrawings, LayoutHelper) {
-                        $scope.lineDrawingRows = LayoutHelper.group(lineDrawings, 6);
-                    }
-                ]
-            })
-            .state('firm.lineDrawing', {
-                url: '/line-drawing/:lineDrawingId',
-                templateUrl: 'views/linedrawing.html',
-                resolve: {
-                    lineDrawing: ['Expression', '$stateParams', 'GraphHelper', 'Uris', 'Firm',
-                        function (Expression, $stateParams, GraphHelper, Uris, Firm) {
-                            var lineDrawingUri = GraphHelper.decodeUriString($stateParams.lineDrawingId);
-                            console.log('loading firm');
-                            return Expression.load(lineDrawingUri, 'qldarch:LineDrawing').then(function (lineDrawing) {
-                                // Loading building if its there
-                                if (angular.isDefined(lineDrawing[Uris.QA_DEPICTS_BUILDING])) {
-                                    return Firm.load(lineDrawing[Uris.QA_DEPICTS_BUILDING]).then(function (structure) {
-                                        lineDrawing.building = structure;
-                                        return lineDrawing;
+                            return Entity.load(firmUri).then(function(entity) {
+                                return Solr.query({
+                                    query: entity.name,
+                                    type: 'article'
+                                }).then(function(results) {
+                                    return $filter('filter')(results, {
+                                        'type': 'article'
                                     });
-                                } else {
-                                    return lineDrawing;
-                                }
+                                });
                             });
                         }
                     ]
                 },
-                controller: ['$scope', 'lineDrawing',
-                    function ($scope, lineDrawing) {
-                        $scope.lineDrawing = lineDrawing;
+                controller: ['$scope', 'articles',
+                    function($scope, articles) {
+                        $scope.articles = articles;
                     }
                 ]
             })
@@ -541,10 +1221,10 @@ angular.module('angularApp', [
                 templateUrl: 'views/relationships.html',
                 resolve: {
                     data: ['Relationship', 'GraphHelper', 'Entity', '$stateParams',
-                        function (Relationship, GraphHelper, Entity, $stateParams) {
+                        function(Relationship, GraphHelper, Entity, $stateParams) {
                             var firmUri = GraphHelper.decodeUriString($stateParams.firmId);
                             // Get all the relationships
-                            return Relationship.findByEntityUri(firmUri).then(function (relationships) {
+                            return Relationship.findByEntityUri(firmUri).then(function(relationships) {
                                 return Relationship.getData(relationships);
                             });
                         }
@@ -557,12 +1237,12 @@ angular.module('angularApp', [
                 templateUrl: 'views/timeline.html',
                 resolve: {
                     data: ['Relationship', 'GraphHelper', 'Entity', '$stateParams', '$filter', 'Uris',
-                        function (Relationship, GraphHelper, Entity, $stateParams, $filter, Uris) {
+                        function(Relationship, GraphHelper, Entity, $stateParams, $filter, Uris) {
 
                             var firmUri = GraphHelper.decodeUriString($stateParams.firmId);
                             // Get all the relationships
-                            return Relationship.findByEntityUri(firmUri).then(function (relationships) {
-                                var relationshipsWithDates = $filter('filter')(relationships, function (relationship) {
+                            return Relationship.findByEntityUri(firmUri).then(function(relationships) {
+                                var relationshipsWithDates = $filter('filter')(relationships, function(relationship) {
                                     return angular.isDefined(relationship[Uris.QA_START_DATE]);
                                 });
                                 return Relationship.getData(relationshipsWithDates);
@@ -570,7 +1250,7 @@ angular.module('angularApp', [
                         }
                     ],
                     entity: ['Firm', '$stateParams', 'GraphHelper',
-                        function (Firm, $stateParams, GraphHelper) {
+                        function(Firm, $stateParams, GraphHelper) {
                             var firmUri = GraphHelper.decodeUriString($stateParams.firmId);
                             return Firm.load(firmUri, false);
                         }
@@ -579,62 +1259,131 @@ angular.module('angularApp', [
                 controller: 'TimelineCtrl'
             })
             .state('structures', {
-                url: '/structures',
+                abstract: true,
+                url: '/projects',
+                template: '<ui-view autoscroll="false"></ui-view>'
+            })
+            .state('structures.australian', {
+                url: '',
                 templateUrl: 'views/structures.html',
                 controller: 'StructuresCtrl',
                 resolve: {
-                    structures: ['Structure',
-                        function (Structure) {
-                            return Structure.loadAll();
+                    structures: ['Structure', '$filter', 'GraphHelper', 'Uris',
+                        function(Structure, $filter, GraphHelper, Uris) {
+                            return Structure.loadAll(false).then(function(structures) {
+                                structures = GraphHelper.graphValues(structures);
+                                console.log('got structures', structures);
+                                return $filter('filter')(structures, function(structure) {
+                                    return structure[Uris.QA_AUSTRALIAN] === true;
+                                });
+                            });
+                        }
+                    ]
+                }
+            })
+            .state('structures.other', {
+                url: '/other',
+                templateUrl: 'views/structures.html',
+                controller: 'StructuresCtrl',
+                resolve: {
+                    structures: ['Structure', '$filter', 'GraphHelper', 'Uris',
+                        function(Structure, $filter, GraphHelper, Uris) {
+                            return Structure.loadAll(false).then(function(structures) {
+                                structures = GraphHelper.graphValues(structures);
+                                return $filter('filter')(structures, function(structure) {
+                                    return structure[Uris.QA_AUSTRALIAN] !== true;
+                                });
+                            });
                         }
                     ]
                 }
             })
             .state('structure', {
+                // http://qldarch-test.metadata.net/beta/#/project/aHR0cDovL3FsZGFyY2gubmV0L3JkZi8yMDEyLTEyL3Jlc291cmNlcy9idWlsZGluZ3MvMzE=
                 abstract: true,
-                url: '/structure/:structureId',
+                url: '/project?structureId',
                 templateUrl: 'views/structure/layout.html',
                 resolve: {
                     structure: ['$http', '$stateParams', 'Uris', 'Structure', 'GraphHelper',
-                        function ($http, $stateParams, Uris, Structure, GraphHelper) {
-                            var structureUri = GraphHelper.decodeUriString($stateParams.structureId);
-                            return Structure.load(structureUri);
+                        function($http, $stateParams, Uris, Structure, GraphHelper) {
+                            if ($stateParams.structureId) {
+                                var structureUri = GraphHelper.decodeUriString($stateParams.structureId);
+                                return Structure.load(structureUri);
+                            } else {
+                                return {};
+                            }
+                        }
+                    ],
+                    types: ['Ontology',
+                        function(Ontology) {
+                            console.log('loading summary');
+                            return Ontology.loadAllEditableEntityTypes();
                         }
                     ]
                 },
-                controller: ['$scope', 'structure',
-                    function ($scope, structure) {
+                controller: ['$scope', 'structure', 'Entity', '$state',
+                    function($scope, structure, Entity, $state) {
                         $scope.structure = structure;
+                        $scope.entity = structure;
+
+                        $scope.delete = function(structure) {
+                            var r = window.confirm('Delete project ' + structure.name + '?');
+                            if (r === true) {
+                                Entity.delete(structure.uri).then(function() {
+                                    $state.go('structures.australian');
+                                });
+                            }
+                        };
                     }
                 ]
             })
             .state('structure.summary', {
-                url: '',
+                url: '/summary',
                 templateUrl: 'views/structure/summary.html',
                 resolve: {
-                    designers: ['$stateParams', 'GraphHelper', 'Uris', 'Entity', 'Relationship',
-                        function ($stateParams, GraphHelper, Uris, Entity, Relationship) {
+                    designers: ['$stateParams', 'GraphHelper', 'Uris', 'Entity', 'Relationship', '$filter',
+                        function($stateParams, GraphHelper, Uris, Entity, Relationship, $filter) {
+                            var designers = {
+                                architects: [],
+                                firms: []
+                            };
+
+                            if (!$stateParams.structureId) {
+                                return designers;
+                            }
+
                             var structureUri = GraphHelper.decodeUriString($stateParams.structureId);
+
+
 
                             return Relationship.findBySubjectPredicateObject({
                                 predicate: 'qldarch:designedBy',
                                 subject: structureUri
-                            }).then(function (relationships) {
+                            }).then(function(relationships) {
                                 // Get all the architects
                                 var designerUris = GraphHelper.getAttributeValuesUnique(relationships, Uris.QA_OBJECT);
-                                return Entity.loadList(designerUris, false).then(function (entities) {
-                                    return GraphHelper.graphValues(entities);
-                                });
+                                if (designerUris.length) {
+                                    return Entity.loadList(designerUris, false).then(function(entities) {
+                                        entities = GraphHelper.graphValues(entities);
+                                        designers.architects = $filter('filter')(entities, function(entity) {
+                                            return entity.type === 'architect';
+                                        });
+                                        designers.firms = $filter('filter')(entities, function(entity) {
+                                            return entity.type === 'firm';
+                                        });
+                                        return designers;
+                                    });
+                                } else {
+                                    return designers;
+                                }
                             });
                         }
                     ]
                 },
-                controller: ['$scope', 'structure', 'designers',
-                    function ($scope, structure, designers) {
-                        $scope.structure = structure;
-                        $scope.designers = designers;
-                    }
-                ]
+                controller: 'StructureCtrl'
+            })
+            .state('structure.summary.edit', {
+                url: '/edit'
             })
             .state('structure.map', {
                 url: '/map',
@@ -646,14 +1395,14 @@ angular.module('angularApp', [
                 templateUrl: 'views/structure/photographs.html',
                 resolve: {
                     photographs: ['GraphHelper', 'Structure', 'Expression', '$stateParams',
-                        function (GraphHelper, Structure, Expression, $stateParams) {
+                        function(GraphHelper, Structure, Expression, $stateParams) {
                             var structureUri = GraphHelper.decodeUriString($stateParams.structureId);
                             return Expression.findByBuildingUris([structureUri], 'qldarch:Photograph');
                         }
                     ]
                 },
                 controller: ['$scope', 'photographs', 'LayoutHelper',
-                    function ($scope, photographs, LayoutHelper) {
+                    function($scope, photographs, LayoutHelper) {
                         $scope.photographRows = LayoutHelper.group(photographs, 6);
                     }
                 ]
@@ -663,12 +1412,12 @@ angular.module('angularApp', [
                 templateUrl: 'views/photograph.html',
                 resolve: {
                     photograph: ['Expression', '$stateParams', 'GraphHelper', 'Uris', 'Structure',
-                        function (Expression, $stateParams, GraphHelper, Uris, Structure) {
+                        function(Expression, $stateParams, GraphHelper, Uris, Structure) {
                             var photographUri = GraphHelper.decodeUriString($stateParams.photographId);
-                            return Expression.load(photographUri, 'qldarch:Photograph').then(function (photograph) {
+                            return Expression.load(photographUri, 'qldarch:Photograph').then(function(photograph) {
                                 // Loading building if its there
                                 if (angular.isDefined(photograph[Uris.QA_DEPICTS_BUILDING])) {
-                                    return Structure.load(photograph[Uris.QA_DEPICTS_BUILDING]).then(function (structure) {
+                                    return Structure.load(photograph[Uris.QA_DEPICTS_BUILDING]).then(function(structure) {
                                         photograph.building = structure;
                                         return photograph;
                                     });
@@ -681,19 +1430,24 @@ angular.module('angularApp', [
                 },
                 controller: 'PhotographCtrl'
             })
+            .state('structure.photograph.edit', {
+                url: '/edit',
+                // templateUrl: 'views/photograph.edit.html',
+                // controller: 'PhotographEditCtrl'
+            })
             .state('structure.lineDrawings', {
                 url: '/line-drawings',
                 templateUrl: 'views/structure/linedrawings.html',
                 resolve: {
                     lineDrawings: ['GraphHelper', '$stateParams', 'Expression',
-                        function (GraphHelper, $stateParams, Expression) {
+                        function(GraphHelper, $stateParams, Expression) {
                             var structureUri = GraphHelper.decodeUriString($stateParams.structureId);
                             return Expression.findByBuildingUris([structureUri], 'qldarch:LineDrawing');
                         }
                     ]
                 },
                 controller: ['$scope', 'lineDrawings', 'LayoutHelper',
-                    function ($scope, lineDrawings, LayoutHelper) {
+                    function($scope, lineDrawings, LayoutHelper) {
                         $scope.lineDrawingRows = LayoutHelper.group(lineDrawings, 6);
                     }
                 ]
@@ -703,12 +1457,12 @@ angular.module('angularApp', [
                 templateUrl: 'views/linedrawing.html',
                 resolve: {
                     lineDrawing: ['Expression', '$stateParams', 'GraphHelper', 'Uris', 'Structure',
-                        function (Expression, $stateParams, GraphHelper, Uris, Structure) {
+                        function(Expression, $stateParams, GraphHelper, Uris, Structure) {
                             var lineDrawingUri = GraphHelper.decodeUriString($stateParams.lineDrawingId);
-                            return Expression.load(lineDrawingUri, 'qldarch:LineDrawing').then(function (lineDrawing) {
+                            return Expression.load(lineDrawingUri, 'qldarch:LineDrawing').then(function(lineDrawing) {
                                 // Loading building if its there
                                 if (angular.isDefined(lineDrawing[Uris.QA_DEPICTS_BUILDING])) {
-                                    return Structure.load(lineDrawing[Uris.QA_DEPICTS_BUILDING]).then(function (structure) {
+                                    return Structure.load(lineDrawing[Uris.QA_DEPICTS_BUILDING]).then(function(structure) {
                                         lineDrawing.building = structure;
                                         return lineDrawing;
                                     });
@@ -720,8 +1474,34 @@ angular.module('angularApp', [
                     ]
                 },
                 controller: ['$scope', 'lineDrawing',
-                    function ($scope, lineDrawing) {
+                    function($scope, lineDrawing) {
                         $scope.lineDrawing = lineDrawing;
+                    }
+                ]
+            })
+            .state('structure.articles', {
+                url: '/articles',
+                templateUrl: 'views/architect/articles.html',
+                resolve: {
+                    articles: ['$stateParams', 'GraphHelper', 'Entity', 'Solr', '$filter',
+                        function($stateParams, GraphHelper, Entity, Solr, $filter) {
+                            var structureId = GraphHelper.decodeUriString($stateParams.structureId);
+                            return Entity.load(structureId).then(function(entity) {
+                                return Solr.query({
+                                    query: entity.name,
+                                    type: 'article'
+                                }).then(function(results) {
+                                    return $filter('filter')(results, {
+                                        'type': 'article'
+                                    });
+                                });
+                            });
+                        }
+                    ]
+                },
+                controller: ['$scope', 'articles',
+                    function($scope, articles) {
+                        $scope.articles = articles;
                     }
                 ]
             })
@@ -730,12 +1510,12 @@ angular.module('angularApp', [
                 templateUrl: 'views/timeline.html',
                 resolve: {
                     data: ['Relationship', 'GraphHelper', 'Entity', '$stateParams', '$filter', 'Uris',
-                        function (Relationship, GraphHelper, Entity, $stateParams, $filter, Uris) {
+                        function(Relationship, GraphHelper, Entity, $stateParams, $filter, Uris) {
 
                             var structureUri = GraphHelper.decodeUriString($stateParams.structureId);
                             // Get all the relationships
-                            return Relationship.findByEntityUri(structureUri).then(function (relationships) {
-                                var relationshipsWithDates = $filter('filter')(relationships, function (relationship) {
+                            return Relationship.findByEntityUri(structureUri).then(function(relationships) {
+                                var relationshipsWithDates = $filter('filter')(relationships, function(relationship) {
                                     return angular.isDefined(relationship[Uris.QA_START_DATE]);
                                 });
                                 return Relationship.getData(relationshipsWithDates);
@@ -743,7 +1523,7 @@ angular.module('angularApp', [
                         }
                     ],
                     entity: ['Structure', '$stateParams', 'GraphHelper',
-                        function (Structure, $stateParams, GraphHelper) {
+                        function(Structure, $stateParams, GraphHelper) {
                             var structureUri = GraphHelper.decodeUriString($stateParams.structureId);
                             return Structure.load(structureUri, false);
                         }
@@ -756,16 +1536,65 @@ angular.module('angularApp', [
                 templateUrl: 'views/relationships.html',
                 resolve: {
                     data: ['Relationship', 'GraphHelper', 'Entity', '$stateParams',
-                        function (Relationship, GraphHelper, Entity, $stateParams) {
+                        function(Relationship, GraphHelper, Entity, $stateParams) {
                             var structureUri = GraphHelper.decodeUriString($stateParams.structureId);
                             // Get all the relationships
-                            return Relationship.findByEntityUri(structureUri).then(function (relationships) {
+                            return Relationship.findByEntityUri(structureUri).then(function(relationships) {
                                 return Relationship.getData(relationships);
                             });
                         }
                     ]
                 },
                 controller: 'RelationshipCtrl'
+            })
+            .state('articles', {
+                url: '/articles',
+                templateUrl: 'views/articles.html',
+                resolve: {
+                    // @todo: change this for building
+                    articles: ['Expression',
+                        function(Expression) {
+                            return Expression.loadAll('qldarch:Article');
+                        }
+                    ]
+                },
+                controller: ['$scope', 'articles',
+                    function($scope, articles) {
+                        $scope.articles = articles;
+                    }
+                ]
+            })
+            .state('article', {
+                url: '/article/:articleId',
+                templateUrl: 'views/article.html',
+                resolve: {
+                    // @todo: change this for building
+                    article: ['Expression', 'GraphHelper', '$stateParams',
+                        function(Expression, GraphHelper, $stateParams) {
+                            console.log('loading article');
+                            var articleUri = GraphHelper.decodeUriString($stateParams.articleId);
+                            console.log('loading article', articleUri);
+                            return Expression.load(articleUri, 'qldarch:Article');
+                        }
+                    ]
+                },
+                controller: 'ArticleCtrl'
+            })
+            .state('search', {
+                url: '/search?query',
+                templateUrl: 'views/search.html',
+                controller: 'SearchCtrl',
+                resolve: {
+                    results: ['$stateParams', 'Solr',
+                        function($stateParams, Solr) {
+                            var query = $stateParams.query;
+
+                            return Solr.query({
+                                query: query,
+                            });
+                        }
+                    ]
+                }
             });
     });
 // .config(function ($routeProvider) {

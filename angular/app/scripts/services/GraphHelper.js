@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .service('GraphHelper', function (Uris) {
+    .service('GraphHelper', function (Uris, $state) {
         // AngularJS will instantiate a singleton by calling "new" on this function
 
         var that = this;
@@ -73,13 +73,19 @@ angular.module('angularApp')
             // Setup the types
             angular.forEach(array, function (item) {
 
+                // Set a default
+                item.type = 'other';
+
+                // Now overwrite it if we can
+
                 // List of types we are matching
                 // Just entity types at the moment + the photograph type
                 var typeUris = [
                     Uris.QA_ARCHITECT_TYPE,
                     Uris.QA_FIRM_TYPE,
                     Uris.QA_STRUCTURE_TYPE,
-                    Uris.QA_PHOTOGRAPH_TYPE
+                    Uris.QA_PHOTOGRAPH_TYPE,
+                    Uris.QA_BUILDING_TYPOLOGY
                 ];
 
                 angular.forEach(typeUris, function (typeUri) {
@@ -92,6 +98,17 @@ angular.module('angularApp')
                         item.type = typeUri.substring(Uris.QA_NS.length).toLowerCase();
                     }
                 });
+
+                item.$state = item.type;
+                var params = {};
+                params[item.type + 'Id'] = item.encodedUri;
+                item.$stateParams = params;
+
+                // Links
+                item.$link = $state.href(item.type + '.summary', params);
+                item.$linkTo = function (sub) {
+                    return $state.href(item.type + '.' + sub, params);
+                };
             });
         };
 

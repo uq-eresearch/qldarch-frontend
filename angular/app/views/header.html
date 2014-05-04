@@ -1,5 +1,4 @@
 <header>
-
     <div class="navbar-wrapper">
         <div class="container">
             <nav class="navbar navbar-inverse" role="navigation">
@@ -35,59 +34,96 @@
                         <a class="navbar-brand" href="#"><img src="images/logo.jpg" alt="" class="img-responsive"/></a>
                     </div>
 
+    <!-- #333333 -->
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
+                        <!-- /Search form -->
                         <ul class="nav navbar-nav">
                             <!--<li>-->
                                 <!--<a href ng-click="isShowingSearch=true"><i class="fa-search fa"></i></a>-->
                             <!--</li>-->
-                            <li class="dropdown">
+                            <li class="dropdown" ng-class="{'active': $state.includes('firm') || $state.includes('structure') || $state.includes('architect') || $state.includes('firms') || $state.includes('structures') || $state.includes('architects') || $state.includes('other')}">
                                 <a href class="dropdown-toggle" data-toggle="dropdown">Browse <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a ui-sref="architects">Architects</a></li>
-                                    <li><a ui-sref="firms">Firms</a></li>
-                                    <li><a ui-sref="structures">Structures</a></li>
-                                    <!-- <li class="divider"></li> -->
-                                    <!-- <li><a href="#/articles">Articles</a></li> -->
-                                    <!-- <li><a ui-sref="interviews">Interviews</a></li> -->
+                                    <li><a ui-sref="architects.queensland">Architects</a></li>
+                                    <li><a ui-sref="firms.australian">Firms</a></li>
+                                    <li><a ui-sref="structures.australian">Projects</a></li>
+                                    <li ng-show="Auth.isEditor()"><a ui-sref="others">Other</a></li>
                                 </ul>
                             </li>
-                            <li class="dropdown">
-                                <a href class="dropdown-toggle" data-toggle="dropdown">Create <b class="caret"></b></a>
+                            <li class="dropdown" ng-class="{'active': $state.includes('ugc') }">
+                                <a href class="dropdown-toggle" data-toggle="dropdown">Build <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a ui-sref="create.timeline">Timeline</a></li>
-                                    <!-- <li><a ui-sref="create.map">Map</a></li> -->
-                                    <!-- <li><a ui-sref="create.textAnalysis">Text Analysis</a></li> -->
+                                    <li><a ui-sref="ugc.timeline.edit({id:null})">Timeline</a></li>
+                                    <li><a ui-sref="ugc.map.edit.add.import({id:null})">Map</a></li>
+                                    <li><a ui-sref="ugc.wordcloud.edit({id:null})">Word Cloud</a></li>
+                                    <li><a ui-sref="compound">Compound</a></li>
                                 </ul>
                             </li>
 
+                            <li ng-class="{'active': $state.includes('contribute') }"><a ui-sref="contribute">Contribute</a></li>
+ 
+                                <!--<ul class="dropdown-menu" ng-if="Auth.auth">
+                                    <li><a ui-sref="architect.summary.edit({architectId:null})">New Architect</a></li>
+                                    <li><a ui-sref="firm.summary.edit({firmId:null})">New Firm</a></li>
+                                    <li><a ui-sref="structure.summary.edit({structureId:null})">New Project</a></li>
+                                     <li role="presentation" class="divider"></li>
+                                    <li><a ui-sref="upload">Upload Images</a></li>
+                                </ul>-->
+                            
+
+                            <li class="" ng-hide="Auth.auth"><a>&nbsp;</a></li>
                             <!-- <li class=""><a href="#/about">about</a></li> -->
                             <!-- <li class=""><a href="#/contribute">contribute</a></li> -->
-                            <li class=""><a href="#/register"><i class="fa fa-plus"></i> Join</a></li>
-                            <li class=""><a href="#/login">Sign in</a></li>
+                            <li class="" ng-hide="Auth.auth" tooltip="Create an account" tooltip-placement="bottom" ng-class="{'active': $state.includes('register') }"><a ui-sref="register" >Sign Up</a></li>
+                            <li class="" ng-hide="Auth.auth" tooltip="Log in with an existing account" tooltip-placement="bottom" ng-class="{'active': $state.includes('login') }">
+                                <a href ui-sref="login">Log in</a>
+                            </li>
                         </ul>
 
+                        <!-- Logged in user -->
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown" ng-show="Auth.auth" ng-class="{'active': $state.includes('user') }" style="margin-right: 8px;">
+                                <a href class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a >{{ Auth.email }}</a></li>
+                                    <!-- <li><a ui-sref="user.ugcs">My Content</a></li> -->
+                                    <li><a ui-sref="user.files.images">My Files</a></li>
+                                    <li role="presentation" class="divider" ng-show="Auth.role == 'root'"></li>
+                                    <li ng-show="Auth.role == 'root'"><a ui-sref="admin.users">Manage Users</a></li>
+                                    <li ng-show="Auth.role == 'root'"><a ui-sref="admin.merge">Move Relationships</a></li>
+                                    <li role="presentation" class="divider"></li>
+                                    <!-- <li><a ui-sref="upload.images">Upload Images</a></li> -->
+                                    <!-- <li><a ui-sref="upload.documents">Upload Articles</a></li> -->
+                                    <li role="presentation" class="divider"></li>
+                                    <li><a ui-sref="user.settings">Settings</a></li>
+                                    <li><a ui-sref="logout">Sign out</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <!-- /Logged in user -->
+
+                        <!-- Search form -->
                         <form class="navbar-form" role="search">
-                        <div class="input-group">
+                            <div class="input-group">
 
-                            <input type="text"
-                                   class="form-control"
-                                   ng-model="$parent.globalSearchString"
-                                   placeholder="Search"
-                                   typeahead="entity.name for entity in globalSearch($viewValue) | filter:$viewValue"
-                                   typeahead-loading="loadingLocations" class="form-control"
-                                   typeahead-min-length="3"
-                                   typeahead-on-select="globalSearchOnSelect($item, $model, $label)" />
+                                <input type="text"
+                                       class="form-control"
+                                       ng-model="globalSearch.query"
+                                       placeholder="Search"
+                                       typeahead="entity.name for entity in globalSearch($viewValue) | filter:$viewValue"
+                                       typeahead-loading="loadingLocations" class="form-control"
+                                       typeahead-min-length="1"
+                                       typeahead-on-select="globalSearchOnSelect($item, $model, $label)" 
+                                       />
 
-                            <span class="input-group-addon">
-                                <i ng-show="!loadingLocations" class="fa fa-search"></i>
-                                <i ng-show="loadingLocations" class="fa fa-spin fa-refresh"></i>
-                            </span>
-
-                        </div>
+                                <span class="input-group-addon">
+                                    <i ng-show="!loadingLocations" class="fa fa-search"></i>
+                                    <i ng-show="loadingLocations" class="fa fa-spin fa-refresh"></i>
+                                </span>
+                            </div>
                         </form>
-
 
                         <!--<form class="navbar-form navbar-right" role="search">-->
                             <!--<div class="form-group">-->

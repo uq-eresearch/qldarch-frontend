@@ -1,15 +1,77 @@
-<div class="container">
-    <div class="row">
-        <div class="col-sm-7">
-            <h5>Summary</h5>
-            <p>{{ firm[Uris.QA_SUMMARY] }}</p>
-            <p ng-show="!firm[Uris.QA_SUMMARY].length">
-                No summary.
-            </p>
+<div class="alert alert-warning" ng-show="(Auth.role === 'editor' || Auth.role === 'root') && !$state.includes('firm.summary.edit')" style="margin: 0;" >
+    <div class="container">
+        <div ng-hide="$state.includes('firm.summary.edit')">
+            <!-- Editor: &nbsp; &nbsp; -->
+            <button class="btn btn-default btn-xs" ui-sref="firm.summary.edit({ firmId: firm.encodedUri })"><i class="fa fa-pencil"></i> Edit</button>      
+
+            <button class="btn btn-default btn-xs" ng-click="$parent.delete(firm)" ng-show="Auth.role === 'root'"><i class="fa fa-trash-o"></i> Delete</button>
+        </div>        
+    </div>
+</div>
+
+<div class="l-frame l-frame-tight">
+    <div class="container">
+        <div class="row" ng-hide="$state.includes('firm.summary.edit')">
+            <div class="col-sm-7">
+                <!-- <span ng-show="Auth.auth">
+                    <button class="btn btn-default btn-xs pull-right" ui-sref="firm.summary.edit({ firmId: firm.encodedUri })"><i class="fa fa-pencil"></i> Edit</button>    
+                </span> -->
+
+                <h5>Summary</h5>
+                <p>{{ firm[Uris.QA_SUMMARY] }}</p>
+                <p ng-hide="firm[Uris.QA_SUMMARY].length" class="text-muted">
+                    No summary.
+                </p>
+
+                <h5>Operating Years</h5>
+                <p>
+                    {{ firm[Uris.QA_START_DATE] }} 
+                    <span ng-show="firm[Uris.QA_END_DATE]">- {{ firm[Uris.QA_END_DATE] }}</span>
+                </p>
+                <p ng-hide="firm[Uris.QA_START_DATE].length" class="text-muted">No operating years recorded.</p>
+
+
+            </div>
+            <div class="col-sm-5">
+                <img ng-if="firm.picture" class="img-responsive" ng-src="{{ firm.picture.file }}" alt=""/>
+            </div>
         </div>
-        <div class="col-sm-5">
-            <img ng-if="firm.picture" class="img-responsive" ng-src="{{ Uris.FILE_ROOT + firm.picture[Uris.QA_SYSTEM_LOCATION] }}" alt=""/>
-            <img ng-if="!firm.picture" ng-src="images/icon.png" style="display:block; width:100%">
+        <div class="row" ng-show="$state.includes('firm.summary.edit')">
+            <div class="col-md-12">
+                <form action="" ng-submit="updateFirm(firm)">
+                    <div class="form-group">
+                        <label>Type <i class="fa fa-asterisk fa-asterisk-required"></i></label>
+                        <div ui-select2="typeSelect" ng-model="firm.$type" class="form-control"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Name <i class="fa fa-asterisk fa-asterisk-required"></i></label>
+                        <input type="text" class="form-control" ng-model="firm[Uris.QA_FIRM_NAME]" placeholder="Firm Name">
+                    </div>
+                    <div class="form-group">
+                        <label>Summary</label>
+                        <textarea rows="10" id="summary" class="form-control" placeholder="Summary" ng-model="firm[Uris.QA_SUMMARY]"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Start Year</label>
+                        <input type="text" class="form-control" ng-model="firm[Uris.QA_START_DATE]" placeholder="Start Year">
+                    </div>
+                    <div class="form-group">
+                        <label>End Year</label>
+                        <input type="text" class="form-control" ng-model="firm[Uris.QA_END_DATE]" placeholder="End Year">
+                    </div>
+
+
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" ng-model="firm[Uris.QA_AUSTRALIAN]"> Australian Firm
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>

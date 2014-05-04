@@ -12,8 +12,14 @@ angular.module('angularApp')
             if (speaker.name === 'Deborah van der Plaat') {
                 return 'DV';
             } else {
-                var firstInitial = speaker[Uris.FOAF_FIRST_NAME].charAt(0);
-                var lastInitial = speaker[Uris.FOAF_LAST_NAME].charAt(0);
+                var firstInitial = '',
+                    lastInitial = '';
+                if (angular.isDefined(speaker[Uris.FOAF_FIRST_NAME])) {
+                    firstInitial = speaker[Uris.FOAF_FIRST_NAME].charAt(0);
+                }
+                if (angular.isDefined(speaker[Uris.FOAF_LAST_NAME])) {
+                    lastInitial = speaker[Uris.FOAF_LAST_NAME].charAt(0);
+                }
                 return firstInitial + lastInitial;
             }
         };
@@ -29,13 +35,15 @@ angular.module('angularApp')
              */
             findWithUrl: function (url) {
                 if (ENV.name === 'development') {
-                    url = 'http://localhost:8080/qldarch/scripts/SCG_InterviewWithGrahamBligh.json';
+                    // http://qldarch-test.metadata.net/static/transcripts/json/SCG_InterviewWithGrahamBligh.json
+                    url = url.substring('http://qldarch-test.metadata.net'.length);
+                    // url = 'http://localhost:8080/qldarch/scripts/SCG_InterviewWithGrahamBligh.json';
                 }
-                console.log('transcript url', url);
-                console.log('env name', ENV);
+            // console.log('transcript url', url);
+                // console.log('env name', ENV);
                 return Request.http(url, {}, true).then(function (transcript) {
                     // We have the transcript
-                    console.log('Transcript loaded');
+                    // console.log('Transcript loaded');
                     return transcript;
                 });
             },
@@ -73,6 +81,7 @@ angular.module('angularApp')
                     var speakers = args.interviewers.concat(args.interviewees);
 
                     angular.forEach(speakers, function (speaker) {
+                        // console.log('interviewers', speaker);
                         if (getInitials(speaker) === exchange.speakerInitials) {
                             exchange.speaker = speaker;
                             if (args.interviewers.indexOf(speaker) !== -1) {

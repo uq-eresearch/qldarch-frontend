@@ -2,10 +2,16 @@
 
 angular.module('angularApp')
 // interview, transcript, evidences
-.controller('InterviewCtrl', function ($scope, interview, $http, Uris, Entity, Ontology, architect, interviews, $stateParams, $location, $anchorScroll, $timeout) {
+.controller('InterviewCtrl', function ($scope, interview, $state, $http, Uris, Entity, Ontology, architect, interviews, $stateParams, $location, $anchorScroll, $timeout, GraphHelper, Expression, $cacheFactory) {
     // Setup
 
-
+    $scope.delete = function (interview) {
+        Expression.delete(interview.uri, interview).then(function () {
+            $cacheFactory.get('$http').remove('/ws/rest/expression/detail/qldarch%3AInterview?INCSUBCLASS=false&');
+            $cacheFactory.get('$http').remove('/ws/rest/expression/summary/qldarch%3AInterview?INCSUBCLASS=false&');
+            $state.go(architect.$state + '.summary', architect.$stateParams);
+        });
+    };
 
     $scope.sub = 'interviews';
     $scope.interviews = interviews;
@@ -22,10 +28,52 @@ angular.module('angularApp')
     $scope.isSyncingTranscript = false;
     var audioPlayerDom = document.getElementById('audio1');
     $scope.audioPlayer = {};
-    $scope.audioPlayerPlaylist = [{
-        src: interview[Uris.QA_EXTERNAL_LOCATION],
-        type: 'audio/ogg'
-    }];
+
+
+    // Look for our external locations
+    $scope.audioPlayerPlaylist = [];
+    console.log('external locations', GraphHelper.asArray(interview[Uris.QA_EXTERNAL_LOCATION]));
+    angular.forEach(GraphHelper.asArray(interview[Uris.QA_EXTERNAL_LOCATION]), function (extLocation) {
+
+        // Youtube URL
+        if (extLocation.indexOf('you') !== -1) {
+            $scope.youtubeUrl = extLocation;
+            return;
+        }
+
+        var fileExtension = extLocation.substring(extLocation.length - 3);
+        console.log('fileExtension', fileExtension);
+        if (fileExtension === 'mp3') {
+            // its an mp3 file
+            $scope.audioPlayerPlaylist = [{
+                src: extLocation,
+                type: 'audio/mp3'
+            }];
+            $scope.download = {
+                mp3: extLocation.substring(0, extLocation.length - 3) + 'mp3'
+            };
+        } else if (fileExtension === 'ogg') {
+            // its an ogg file
+            $scope.audioPlayerPlaylist.push({
+                src: extLocation,
+                type: 'audio/ogg'
+            });
+        }
+        // Not found, use this
+
+        // $scope.audioPlayerPlaylist = [{
+        //     src: extLocation,
+        //     type: 'audio/ogg'
+        // }, {
+        //     src: extLocation.substring(0, extLocation.length - 3) + 'mp3',
+        //     type: 'audio/mp3'
+        // }];
+        // $scope.download = {
+        //     mp3: extLocation.substring(0, extLocation.length - 3) + 'mp3'
+        // };
+    });
+    console.log('playlist is', $scope.audioPlayerPlaylist);
+
     // $scope.audioPlayerPlaylist = [{
     //     src: 'audio/bligh.mp3',
     //     type: 'audio/mp3'
@@ -38,6 +86,7 @@ angular.module('angularApp')
     $scope.isSearching = false;
 
     function scrollToTime(time, duration) {
+        console.log('scrolling to time!');
         if (!duration) {
             duration = 2000;
         }
@@ -148,6 +197,7 @@ angular.module('angularApp')
         dropdownAutoWidth: true,
         minimumInputLength: 2,
         query: function (options) {
+            console.log('querying', options);
             Ontology.findPropertyByName(options.term).then(function (properties) {
                 var data = {
                     results: []
@@ -357,14 +407,20 @@ angular.module('angularApp')
      * @param exchange
      */
     $scope.playFromExchange = function (exchange) {
-        audioPlayerDom.currentTime = exchange.startTime;
-        $scope.audioPlayer.currentTime = exchange.startTime;
-        $scope.isSyncing = true;
-        playing();
+        $scope.audioPlayer.pause();
 
-        $scope.audioPlayer.play();
-
-        jQuery('html, body').scrollTop(jQuery('#transcript').offset().top - 20);
+        console.log('play from exchange');
+        // jQuery('html, body').scrollTop(jQuery('#transcript').offset().top - 20);
+        // 
+        jQuery('html, body').animate({
+            scrollTop: jQuery('.player').offset().top + 'px'
+        }, 500, 'swing', function () {
+            audioPlayerDom.currentTime = exchange.startTime;
+            $scope.audioPlayer.currentTime = exchange.startTime;
+            $scope.isSyncing = true;
+            playing();
+            $scope.audioPlayer.play();
+        });
     };
 
 

@@ -1,21 +1,40 @@
 'use strict';
 
 angular.module('angularApp')
-    .factory('Entity', function (Uris, $q, $http, Request, GraphHelper, Expression) {
+    .factory('Entity', function (Uris, $q, $http, Request, GraphHelper, Expression, $filter, toaster, $cacheFactory) {
         // Service logic
         // ...
 
         var getName = function (entity) {
-            return entity[Uris.QA_LABEL] ||
-                entity[Uris.QA_FIRM_NAME] ||
-                entity[Uris.FOAF_NAME] ||
-                entity[Uris.FOAF_FIRST_NAME] + " " + entity[Uris.FOAF_LAST_NAME];
+            if (entity[Uris.FOAF_FIRST_NAME] || entity[Uris.FOAF_LAST_NAME]) {
+                var personName = entity[Uris.FOAF_FIRST_NAME] + ' ' + entity[Uris.FOAF_LAST_NAME];
+                if (entity[Uris.QA_PREF_LABEL]) {
+                    personName += ' (' + entity[Uris.QA_PREF_LABEL] + ')';
+                }
+                return personName;
+            } else {
+                return entity[Uris.QA_TOPIC_HEADING] || entity[Uris.QA_AWARD_TITLE] || entity[Uris.QA_FIRM_NAME] || entity[Uris.FOAF_NAME] || entity[Uris.QA_LABEL] || 'Unknown';
+            }
         };
 
+        /*
+"Notre Dame du Haut, Ronchamps, France"
+1: "Chapel Notre Dame du Haut, Ronchamp, France"
+
+ */
         var setupNames = function (entities) {
             // Array or object
             angular.forEach(entities, function (entity) {
+
+                // Make the entities auto-complete compatible (for select2)
                 entity.name = getName(entity);
+                entity.text = entity.name;
+                entity.id = entity.uri;
+                // if (angular.isArray(entity.name)) {
+                //     console.log('an array?', entity.name);
+                //     entity.name = entity.name[0];
+                // }
+                entity.encodedUri = GraphHelper.encodeUriString(entity.uri);
             });
             return entities;
         };
@@ -28,7 +47,15 @@ angular.module('angularApp')
             // Get all the preferred images
             var imageUris = GraphHelper.getAttributeValuesUnique(entities, Uris.QA_PREFERRED_IMAGE);
 
-            // Get the images for the non-structures
+            // Set the default picture
+            angular.forEach(entities, function (entity) {
+                entity.picture = {
+                    file: 'images/icon.png',
+                    thumb: 'images/icon.png',
+                };
+            });
+
+            // Overwrite the pictures if we have them
             return Expression.loadList(imageUris, 'qldarch:Photograph').then(function (expressions) {
                 angular.forEach(entities, function (entity) {
                     // Add images
@@ -50,8 +77,86 @@ angular.module('angularApp')
             });
         };
 
+        var clearEntityCaches = function () {
+            $cacheFactory.get('$http').remove('/ws/rest/entity/detail/qldarch%3ANonDigitalThing?INCSUBCLASS=true&');
+            $cacheFactory.get('$http').remove('/ws/rest/entity/detail/qldarch%3AArchitect?INCSUBCLASS=false&');
+            $cacheFactory.get('$http').remove('/ws/rest/entity/detail/qldarch%3AFirm?INCSUBCLASS=false&');
+            $cacheFactory.get('$http').remove('/ws/rest/entity/detail/qldarch%3AStructure?INCSUBCLASS=false&');
+            // http://127.0.0.1:9000/ws/rest/entity/detail/qldarch%3ANonDigitalThing?INCSUBCLASS=true&
+        };
+
+
         // Public API here
         var entity = {
+
+            update: function (uri, data) {
+                var payload = angular.copy(data);
+                // Remove any extra information
+                // This causes the web server to die
+                delete payload.encodedUri;
+                delete payload.name;
+                delete payload.type;
+                delete payload.picture;
+                delete payload.buildingTypologies;
+                delete payload.locations;
+                delete payload.firm;
+                delete payload.lat;
+                delete payload.lon;
+                delete payload.text;
+                delete payload.id;
+
+                var url = '/ws/rest/entity/description?ID=' + encodeURIComponent(uri);
+
+                return $http.put(url, payload, {
+                    withCredentials: true
+                }).then(function (response) {
+                    clearEntityCaches();
+                    angular.extend(data, response.data);
+                    setupNames([data]);
+                    toaster.pop('success', data.name + ' updated.');
+                }, function () {
+                    toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+                });
+            },
+
+            delete: function (uri) {
+                var url = '/ws/rest/entity/description?ID=' + encodeURIComponent(uri);
+                return $http.delete(url).then(function () {
+                    clearEntityCaches();
+                });
+            },
+
+            create: function (data, rdfTypeUri) {
+                var payload = angular.copy(data);
+                // Remove any extra information
+                // This causes the web server to die
+                delete payload.encodedUri;
+                delete payload.name;
+                delete payload.type;
+                delete payload.picture;
+                delete payload.buildingTypologies;
+                delete payload.locations;
+                delete payload.firm;
+                delete payload.lat;
+                delete payload.lon;
+
+                var url = '/ws/rest/entity/description';
+
+                payload[Uris.RDF_TYPE] = rdfTypeUri;
+
+                return $http.post(url, payload, {
+                    withCredentials: true
+                }).then(function (response) {
+                    clearEntityCaches();
+                    angular.extend(data, response.data);
+                    data.encodedUri = GraphHelper.encodeUriString(data.uri);
+                    setupNames([data]);
+                    toaster.pop('success', data.name + ' created.');
+                    return data;
+                }, function () {
+                    toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+                });
+            },
 
             /**
              * Finds an entity by name
@@ -68,19 +173,36 @@ angular.module('angularApp')
                     summary = true;
                 }
 
+                // console.log('Entity: Finding by name');
+
                 return Request.getIndex('entity', type, summary, true).then(function (nonDigitalThings) {
+
+                    // console.log('Got entities');
                     // Create name labels for them so we can use them for our search
                     setupNames(nonDigitalThings);
+                    GraphHelper.setupTypes(nonDigitalThings);
+
 
                     var results = [];
                     angular.forEach(nonDigitalThings, function (thing) {
-                        if (thing.name.toLowerCase().indexOf(name.toLowerCase()) !== -1) {
+                        if (thing.type && thing.name && thing.name.toLowerCase().indexOf(name.toLowerCase()) !== -1) {
                             results.push(thing);
                         }
                     });
                     // Go through and add in the names
                     //					console.log("FINDING BY NAME");
-                    return setupPicturesAndTypes(results);
+                    return setupPicturesAndTypes(results).then(function (entities) {
+                        entities = $filter('orderBy')(entities, function (entity) {
+                            // Sort by last name, first name (if its a thing with a last name)
+                            // otherwise just use its name label
+                            if (angular.isDefined(entity[Uris.FOAF_LAST_NAME])) {
+                                return entity[Uris.FOAF_LAST_NAME] + entity[Uris.FOAF_FIRST_NAME];
+                            } else {
+                                return entity.name;
+                            }
+                        });
+                        return entities;
+                    });
                 });
             },
 
@@ -108,6 +230,15 @@ angular.module('angularApp')
                     summary = true;
                 }
                 return Request.getIndex('entity', type, summary).then(function (entities) {
+                    return setupPicturesAndTypes(setupNames(entities));
+                });
+            },
+
+            loadAllIncSubclass: function (type, summary) {
+                if (!angular.isDefined(summary)) {
+                    summary = true;
+                }
+                return Request.getIndex('entity', type, summary, true).then(function (entities) {
                     return setupPicturesAndTypes(setupNames(entities));
                 });
             },

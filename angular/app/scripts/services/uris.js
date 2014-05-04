@@ -7,8 +7,10 @@ angular.module('angularApp')
 
         this.JSON_ROOT = '/ws/rest/';
         this.SOLR_ROOT = '/solr/collection1/';
-        this.FILE_ROOT = 'http://qldarch-test.metadata.net/omeka/archive/files/';
-        this.THUMB_ROOT = 'http://qldarch-test.metadata.net/omeka/archive/square_thumbnails/';
+        this.OMEKA_FILE_ROOT = 'http://qldarch-test.metadata.net/omeka/archive/files/';
+        this.OMEKA_THUMB_ROOT = 'http://qldarch-test.metadata.net/omeka/archive/square_thumbnails/';
+        this.SESAME_FILE_ROOT = 'http://qldarch-test.metadata.net/files/';
+        this.SESAME_THUMB_ROOT = 'http://qldarch-test.metadata.net/files/';
 
         this.PROD_URL = 'http://qldarch-test.metadata.net/beta/';
         this.DEV_URL = 'http://localhost:8080/qldarch/';
@@ -62,10 +64,14 @@ angular.module('angularApp')
         this.QA_TIME_TO = this.QA_NS + 'timeTo';
         this.QA_DOCUMENTED_BY = this.QA_NS + 'documentedBy';
         this.QA_DEPICTS_BUILDING = this.QA_NS + 'depictsBuilding';
+        this.QA_DEPICTS_ARCHITECT = this.QA_NS + 'depictsArchitect';
+        this.QA_MANAGED_FILE = this.QA_NS + 'managedFile';
 
         this.QA_ISSUE = this.QA_NS + 'issue';
+        this.QA_VOLUME = this.QA_NS + 'volume';
         this.QA_PERIODICAL_TITLE = this.QA_NS + 'periodicalTitle';
         this.QA_PAGES = this.QA_NS + 'pages';
+        this.QA_DATE_PUBLISHED = this.QA_NS + 'datePublished';
         this.QA_AUTHORS = this.QA_NS + 'authors';
         this.QA_SOURCE_FILENAME = this.QA_NS + 'sourceFilename';
 
@@ -86,8 +92,8 @@ angular.module('angularApp')
         this.QA_ARTICLE_TYPE = this.QA_NS + 'Article';
         this.QA_PHOTOGRAPH_TYPE = this.QA_NS + 'Photograph';
         this.QA_LINEDRAWING_TYPE = this.QA_NS + 'LineDrawing';
+        this.QA_PORTRAIT_TYPE = this.QA_NS + 'Portrait';
         this.QA_DIGITAL_THING = this.QA_NS + 'DigitalThing';
-
         this.QA_EDUCATIONAL_INSTITUTION = this.QA_NS + 'EducationalInstitution';
 
         this.QA_ARCHITECT_TYPE = this.QA_NS + 'Architect';
@@ -96,15 +102,23 @@ angular.module('angularApp')
         this.FOAF_AGENT_TYPE = this.FOAF_NS + 'Agent';
         this.FOAF_PERSON_TYPE = this.FOAF_NS + 'Person';
 
+        this.QA_TRANSCRIPT_FILE = this.QA_NS + 'transcriptFile';
+
         this.FOAF_FIRST_NAME = this.FOAF_NS + 'firstName';
         this.FOAF_LAST_NAME = this.FOAF_NS + 'lastName';
         this.FOAF_NAME = this.FOAF_NS + 'name';
         this.QA_FIRM_NAME = this.QA_NS + 'firmName';
         this.QA_LOCATION = this.QA_NS + 'location';
+        this.QA_COMPLETION_DATE = this.QA_NS + 'completionDate';
         this.QA_ASSOCIATED_FIRM = this.QA_NS + 'associatedFirm';
+        this.QA_ASSOCIATED_ARCHITECT = this.QA_NS + 'associatedArchitect';
+        this.QA_PRACTICED_IN_QUEENSLAND = this.QA_NS + 'practicedInQueensland';
+        this.QA_AUSTRALIAN = this.QA_NS + 'australian';
+        this.QA_PREF_LABEL = this.QA_NS + 'prefLabel';
 
         this.QA_BUILDING_TYPOLOGY = this.QA_NS + 'BuildingTypology';
         this.QA_BUILDING_TYPOLOGY_P = this.QA_NS + 'buildingTypology';
+        this.QA_DEMOLISHED = this.QA_NS + 'demolished';
 
         this.QA_TOPIC_TYPE = this.QA_NS + 'Topic';
         this.QA_TOPIC_HEADING = this.QA_NS + 'topicHeading';
@@ -128,4 +142,7 @@ angular.module('angularApp')
 
         this.GEO_LAT = this.GEO_NS + 'lat';
         this.GEO_LONG = this.GEO_NS + 'long';
+
+        // Compound object
+        this.QA_JSON_DATA = this.QA_NS + 'jsonData';
     });

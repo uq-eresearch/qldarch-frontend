@@ -80,6 +80,9 @@ angular.module('angularApp')
                                 relationship.predicate.name = relationship.predicate.name.toLowerCase();
                             }
                             if (relationship.predicate[Uris.QA_LABEL]) {
+                                if (angular.isArray(relationship.predicate[Uris.QA_LABEL])) {
+                                    relationship.predicate[Uris.QA_LABEL] = relationship.predicate[Uris.QA_LABEL][0];
+                                }
                                 relationship.predicate[Uris.QA_LABEL] = relationship.predicate[Uris.QA_LABEL].toLowerCase();
                             }
 

@@ -1,23 +1,34 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('TimelineCtrl', function ($scope, entity, data, Uris) {
+    .controller('TimelineCtrl', function ($scope, entity, data, Uris, $state) {
 
         $scope.isShowingTimeline = false;
         $scope.entity = entity;
+
+        /**
+         * Opens this timeline in the timeline creator
+         * @return {[type]} [description]
+         */
+        $scope.openInTimelineBuilder = function () {
+            console.log('opening in timeline creator');
+            $state.go('create.timeline', {
+                uris: angular.toJson([entity.uri])
+            });
+        };
 
         if (data.relationships.length) {
             $scope.isShowingTimeline = true;
 
             if (angular.isDefined(entity.picture)) {
                 $scope.asset = {
-                    'media': Uris.FILE_ROOT + entity.picture[Uris.QA_SYSTEM_LOCATION]
+                    'media': entity.picture.thumb
                 };
             }
 
             var dates = [];
             angular.forEach(data.relationships, function (relationship) {
-                console.log('textual note', relationship, relationship[Uris.QA_TEXTUAL_NOTE]);
+
                 var timelineDate = {};
                 timelineDate.startDate = relationship[Uris.QA_START_DATE].substring(0, 4);
                 if (angular.isDefined(relationship[Uris.QA_END_DATE])) {
@@ -39,10 +50,10 @@ angular.module('angularApp')
                         media: 'images/icon.png',
                         thumbnail: 'images/icon.png',
                         'caption': '<h3 style="text-transform: capitalize"><a href="#/' +
-                            relationship.object.type + '/' + relationship.object.encodedUri + '">' + relationship.object.name + '</a></h3>'
+                            relationship.object.type + '/summary?' + relationship.object.type + 'Id=' + relationship.object.encodedUri + '">' + relationship.object.name + '</a></h3>'
                     };
                     if (angular.isDefined(relationship.object.picture)) {
-                        url = Uris.FILE_ROOT + relationship.object.picture[Uris.QA_SYSTEM_LOCATION];
+                        url = relationship.object.picture.thumb;
                         timelineDate.asset.thumbnail = url;
                         timelineDate.asset.media = url;
                     }
@@ -52,15 +63,14 @@ angular.module('angularApp')
                         media: 'images/icon.png',
                         thumbnail: 'images/icon.png',
                         'caption': '<h3 style="text-transform: capitalize"><a href="#/' +
-                            relationship.subject.type + '/' + relationship.subject.encodedUri + '">' + relationship.subject.name + '</a></h3>'
+                            relationship.subject.type + '/summary?' + relationship.subject.type + 'Id=' + relationship.subject.encodedUri + '">' + relationship.subject.name + '</a></h3>'
                     };
                     if (angular.isDefined(relationship.subject.picture)) {
-                        url = Uris.FILE_ROOT + relationship.subject.picture[Uris.QA_SYSTEM_LOCATION];
+                        url = relationship.subject.picture.thumb;
                         timelineDate.asset.thumbnail = url;
                         timelineDate.asset.media = url;
                     }
                 }
-                console.log(timelineDate);
                 dates.push(timelineDate);
             });
             $scope.dates = dates;

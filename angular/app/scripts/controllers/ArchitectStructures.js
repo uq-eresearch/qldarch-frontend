@@ -2,22 +2,19 @@
 
 angular.module('angularApp')
     .controller('ArchitectStructuresCtrl', function ($scope, structures, interviews, architect, GraphHelper, LayoutHelper) {
-        $scope.sub = "structures";
+
         $scope.structures = structures;
         $scope.structureRows = LayoutHelper.group(GraphHelper.graphValues(structures), 6);
-        $scope.interviews = interviews;
-        $scope.architect = architect;
         $scope.isShowingMap = false;
 
         // Setup the filters and map
-        console.log('structures', structures);
         $scope.buildingTypologies = [];
         angular.forEach(structures, function (structure) {
             // We have some data to show on the map, so just set it to on
             if (angular.isDefined(structure.lat)) {
                 console.log('show the map');
                 $scope.isShowingMap = true;
-            };
+            }
 
             // Extract all the unique building typologies
             angular.forEach(structure.buildingTypologies, function (buildingTypology) {

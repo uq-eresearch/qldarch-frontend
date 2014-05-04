@@ -1,31 +1,60 @@
-<div>
-    <div class="container" ng-show="isShowingMap">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-
-                    </div>
-                    <div class="panel-body">
-                        word cloud
-                        <!--<div ui-map="$parent.myMap" class="map-canvas map"
-                             ui-event="mapEvents"
-                             ui-options="mapOptions">
-                        </div>-->
+<div class="l-frame l-frame-tight">
+    <div class="container">
+        
+        <div ng-repeat="article in articles" class="row" style="margin-bottom: 20px;">
+            <div class="col-md-1">
+                <!-- Icon Square -->
+                <div class="square square-icon" ng-class="{'square-interview': article.type=='interview', 'square-article': article.type == 'article'}">
+                    <div class="square-content">
+                        <div class="center">
+                            <div class="center-content">
+                                <!-- Icon -->
+                                <i class="fa fa-book" ng-show="article.type == 'article'"></i>  
+                                <i class="fa fa-microphone" ng-show="article.type == 'interview'"></i>  
+                                <!-- /Icon -->
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <!-- /Icon Square -->
             </div>
-        </div>
-    </div>
+            <div class="col-md-8">
+                <!-- Article Details -->
+                <h4>
+                    <!-- /Title -->
+                    <a ui-sref="article({ articleId: article.encodedUri })">
+                        {{ article.title }}
+                    </a>
+                    <!-- Title -->
+                </h4>
+                <h5>
+                    <!-- Author -->
+                    <span ng-show="article.authors">{{ article.authors }}, </span>
+                    <!-- /Author -->
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div ng-repeat="article in articles">
-                    <h4>
-                        <a href="#/article/{{ article.encodedUri }}">{{ article.title }}</a>
-                    </h4>
-                    <p ng-bind-html="article.snippet"></p>
+                    <!-- Periodical Title -->
+                    {{ article.periodicalTitle }} 
+                    <!-- /Periodical Title -->
+
+                    <!-- Date Published -->
+                    <span ng-show="article.datePublished">({{ article.datePublished }})</span>
+                    <!-- /Date Published -->
+
+                    <span ng-show="article.volumne || article.issue">-</span> 
+                    
+                    <!-- Volume -->
+                    <span ng-show="article.volume">Volume {{ article.volume }},</span> 
+                    <!-- /Volume -->
+        
+                    <!-- Issue -->
+                    <span ng-show="article.issue">Issue {{ article.issue }}</span>
+                    <!-- /Issue -->
+
+                </h5>
+
+
+                <!-- Result: Snippet -->
+                <div ng-bind-html="article.snippet">
                 </div>
             </div>
         </div>

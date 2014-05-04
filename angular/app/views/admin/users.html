@@ -1,0 +1,34 @@
+<div class="content">
+	<div class="page-header">
+	    <div class="container">
+	        <h1>Manage Users</h1>
+	    </div>
+	</div>
+	<div class="container">
+		<table class="table table-striped ">
+			<tr>
+				<th>User</th>
+				<th>Role</th>
+			</tr>
+			<tr ng-repeat="user in users | orderBy:'email'">
+				<td><strong>{{ user.email }}</strong> ({{ user.username }})</td>	
+				<td>
+					<select ng-model="user.role" ng-hide="user.role == 'root'" ng-change="user.$isChanged = true">
+						<option value="editor">Editor - Build, Add, Upload</option>
+						<option value="authorized">Registered - Build</option>
+						<option value="disabled">Disabled</option>
+					</select>
+					<span ng-show="user.role == 'root'">Admin - Build, Add, Upload, Delete</span>
+					<span ng-hide="Auth.user == user.username || user.role == 'root'">
+						<button class="btn btn-primary btn-xs" ng-click="!user.$isSaving && saveUser(user)" ng-show="user.$isChanged">
+							<i class="fa fa-save"></i> 
+							<span ng-show="user.$isSaving"><i class="fa fa-refresh fa-spin"></i></span> 
+							<span ng-hide="user.$isSaving">Save</span> 
+						</button>
+					</span>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+</div>

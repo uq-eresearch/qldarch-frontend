@@ -1,19 +1,15 @@
-<div class="container">
-    <div class="row" ng-repeat="lineDrawingRow in lineDrawingRows">
-        <div class="col-sm-2" ng-repeat="lineDrawing in lineDrawingRow">
-            <div class="thumbnail" >
-                <a ng-href="#/structure/{{ structure.encodedUri }}/line-drawing/{{ lineDrawing.encodedUri }}" class="thumbnail-image">
-                    <img ng-if="lineDrawing.file" class="img-responsive" ng-src="{{ Uris.FILE_ROOT + lineDrawing.file[Uris.QA_SYSTEM_LOCATION] }}" alt=""/>
-                    <img ng-if="!lineDrawing.file" ng-src="images/icon.png" style="display:block; width:100%">
-                </a>
+<div class="alert alert-warning" ng-show="Auth.role === 'editor' || Auth.role === 'root'" style="margin: 0;">
+    <div class="container">
+        <button class="btn btn-default btn-xs" ui-sref="upload.images({uri: structure.uri, name: structure.name })"><i class="fa fa-cloud-upload"></i> Upload Image</button>      
+    </div>
+</div>
 
-                <div class="caption">
-                    <h4>
-                        <a ng-href="#/structure/{{ structure.encodedUri }}//line-drawing/{{ lineDrawing.encodedUri }}">
-                            {{ lineDrawing[Uris.DCT_TITLE] }}
-                        </a>
-                    </h4>
-                </div>
+<div class="l-frame l-frame-tight">
+    <div class="container">
+        <p class="text-muted" ng-hide="lineDrawingRows.length">No line drawings.</p>
+        <div class="row" ng-repeat="lineDrawingRow in lineDrawingRows">
+            <div class="col-sm-2" ng-repeat="lineDrawing in lineDrawingRow">
+                <div ng-include="'views/thumb.image.html'"  ng-init="image = lineDrawing"></div>
             </div>
         </div>
     </div>

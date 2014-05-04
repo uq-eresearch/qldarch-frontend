@@ -1,10 +1,16 @@
 //
 // Thumbnails
 // --------------------------------------------------
-
 .thumbnail {
+  // &:extend(.thumbnail);
+
+  &.thumbnail-fix {
+
+  }
   position: relative;
   border: none;
+  border-radius: 0;
+  // background-color: @brand-green;
 
   .thumbnail-image {
     display: block;
@@ -14,33 +20,58 @@
     position: relative;
     background-color: @gray-lighter;
     border: 1px solid darken(@gray-lighter, 5);
-    border-radius: 3px;
     text-align: center;
+    transition: opacity 0.25s;
+    overflow: hidden;
     img {
       position: absolute;
       height: 100%;
-      width: auto;
+      width: 100%;
       max-width: none;
-      border-radius: 3px;
+      top: 0;
+      left: 0;  
+      transition: 0.25s;
+      // border-radius: 3px;
+    }
+  }
+
+  &:hover {
+    background-image: none !important;
+    background-color: @brand-green;
+    
+    .thumbnail-image {
+      
+      opacity: 0.8;
+      img {
+        // top: -3%;
+        // left: -3%;
+        // height: 106%;
+      }
+    }
+    a {
+      color: @brand-green !important;
     }
   }
 
   .caption {
     width: 100%;
-    background-color: rgba(0,0,0,0.8);
-    background-color: transparent;
+    background-color: white;
+    border-radius: 0;
+    text-transform: capitalize;
 //    position: absolute;
 //    bottom:0;
 
-    h4 {
-      margin-bottom: 0px;
+    h3, h4 {
+      margin-bottom: 0;
       font-size: @font-size-base;
+      text-align: center;
     }
 
     a {
       font-weight: normal;
-      color: @gray-light;
+      color: @gray;
       line-height: 24px;
+      transition: color 0.25s;
     }
     .btn {
       display: none;

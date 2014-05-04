@@ -1,23 +1,32 @@
 <div class="content">
-	<div class="page-header">
+	<div class="page-header has-subnav">
 	    <div class="container">
-	        <small><a ng-href="#/architects">Architects »</a></small>
-	        <h1>{{ architect.name }}</h1>
+	        <small ng-show="architect.uri"><a ng-href="#/architects">Architects »</a></small>
+	        <h1>
+	        	<img ng-show="architect.uri" ng-src="{{ architect.picture.thumb }}" alt="" style="height: 40px; width: 40px; position: relative; top: -4px; margin-right: 1px; border: 3px solid white;" class=""> 
+	        	{{ architect.name || 'New Architect' }}
+	        </h1>
 	    </div>
 	</div>
 
-	<div class="subnav">
+	<div class="subnav" style="margin-bottom: 0;">
 	    <div class="container">
 	        <div class="row">
 	            <div class="col-md-12">
+	            	<!-- <button class="btn btn-default pull-right" ng-click="delete(architect)" ng-show="Auth.role === 'root'"><i class="fa fa-trash-o"></i> Delete</button> -->
+
 	                <ul class="nav nav-pills">
-	                    <li ui-sref-active="active">
-	                    	<a href ui-sref="architect.summary({ architectId: architect.encodedUri })">Summary</a>
+	                    <li ng-class="{'active': $state.includes('architect.summary')}">
+	                    	<a href ui-sref="architect.summary({ architectId: architect.encodedUri })">Biography</a>
                     	</li>
-						<li ui-sref-active="active" ng-if="interviews.length == 1">
+                    	<li ui-sref-active="active" ng-show="architect.uri">
+	                    	<a href ui-sref="architect.photographs({ architectId: architect.encodedUri })">		Photographs
+	                    	</a>
+	                    </li>
+						<li ui-sref-active="active" ng-if="interviews.length == 1" ng-show="architect.uri">
 	                    	<a href href ui-sref="architect.interview({ architectId: architect.encodedUri, interviewId: interviews[0].encodedUri })">Interview</a>
                     	</li>
-                    	<li class="dropdown" ng-show="interviews.length > 1" ui-sref-active="active">
+                    	<li class="dropdown" ng-show="interviews.length > 1" ng-class="{'active': $state.includes('architect.interview')}" ng-show="architect.uri">
 	                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
 	                            Interviews <span class="caret"></span>
 	                        </a>
@@ -27,16 +36,16 @@
 	                            </li>
 	                        </ul>
 	                    </li>
-	                    <li ui-sref-active="active">
-	                    	<a href ui-sref="architect.structures({ architectId: architect.encodedUri })">Structures</a>
+	                    <li ui-sref-active="active" ng-show="architect.uri">
+	                    	<a href ui-sref="architect.structures({ architectId: architect.encodedUri })">Projects</a>
 	                    </li>
-	                    <li ui-sref-active="active">
+	                    <li ui-sref-active="active" ng-show="architect.uri">
 	                    	<a href ui-sref="architect.articles({ architectId: architect.encodedUri })">Articles</a>
                     	</li>
-	                    <li ui-sref-active="active">
+	                    <li ui-sref-active="active" ng-show="architect.uri">
 	                    	<a href ui-sref="architect.relationships({ architectId: architect.encodedUri })">Relationships</a>
                     	</li>
-                    	<li ui-sref-active="active">
+                    	<li ui-sref-active="active" ng-show="architect.uri">
 	                    	<a href ui-sref="architect.timeline({ architectId: architect.encodedUri })">Timeline</a>
                     	</li>
 	                </ul>

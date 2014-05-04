@@ -1,40 +1,39 @@
 'use strict';
 
 angular.module('angularApp')
-    .factory('Interview', function (Expression, Uris, GraphHelper, Architect, Relationship, Request) {
+    .factory('Interview', function (Expression, Uris, GraphHelper, Entity, Relationship, Request) {
         // Service logic
         var addArchitectsToInterviews = function (interviews) {
 
             // Get all the interviewees
             var interviewParticipants = GraphHelper.getAttributeValuesUnique(interviews, [Uris.QA_INTERVIEWEE, Uris.QA_INTERVIEWER]);
 
-            return Architect.loadList(interviewParticipants, true).then(function (participants) {
+            // console.log('uris to get', interviewParticipants);
+            return Entity.loadList(interviewParticipants, true).then(function (participants) {
                 // Load
+                // console.log('entity loaded', participants);
                 angular.forEach(interviews, function (interview) {
                     interview.interviewees = [];
                     interview.interviewers = [];
                     if (angular.isDefined(interview[Uris.QA_INTERVIEWEE])) {
-                        var intervieweesUris = interview[Uris.QA_INTERVIEWEE];
-                        // Insert the interviewee
-                        if (!angular.isArray(interview[Uris.QA_INTERVIEWEE])) {
-                            intervieweesUris = [interview[Uris.QA_INTERVIEWEE]];
-                        }
+                        var intervieweesUris = GraphHelper.asArray(interview[Uris.QA_INTERVIEWEE]);
 
+                        // console.log('interview interviewees', interview[Uris.DCT_TITLE], intervieweesUris);
                         angular.forEach(intervieweesUris, function (intervieweeUri) {
                             interview.interviewees.push(participants[intervieweeUri]);
                         });
                     }
                     if (angular.isDefined(interview[Uris.QA_INTERVIEWER])) {
-                        var interviewersUris = interview[Uris.QA_INTERVIEWER];
-                        if (!angular.isArray(interview[Uris.QA_INTERVIEWER])) {
-                            interviewersUris = [interview[Uris.QA_INTERVIEWER]];
-                        }
+                        var interviewersUris = GraphHelper.asArray(interview[Uris.QA_INTERVIEWER]);
 
                         angular.forEach(interviewersUris, function (interviewUri) {
                             interview.interviewers.push(participants[interviewUri]);
                         });
                     }
+                    interview.$interviewers = interview.interviewers;
+                    interview.$interviewees = interview.interviewees;
                 });
+                console.log('interviews', interviews);
                 return interviews;
             });
         };
@@ -86,9 +85,11 @@ angular.module('angularApp')
                     // Get the ones with this interviewee
                     var filteredInterviews = [];
                     angular.forEach(interviews, function (interview) {
-                        if (interview[Uris.QA_INTERVIEWEE] === intervieweeUri) {
-                            filteredInterviews.push(interview);
-                        }
+                        angular.forEach(GraphHelper.asArray(interview[Uris.QA_INTERVIEWEE]), function (searchIntervieweeUri) {
+                            if (searchIntervieweeUri === intervieweeUri) {
+                                filteredInterviews.push(interview);
+                            }
+                        });
                     });
                     return addArchitectsToInterviews(filteredInterviews);
                 });
@@ -109,9 +110,14 @@ angular.module('angularApp')
                         return Expression.loadList(interviews, 'qldarch:Interview').then(function (interviews) {
                             var otherInterviews = [];
                             angular.forEach(interviews, function (interview) {
-                                if (interview[Uris.QA_INTERVIEWEE] !== mentionedUri) {
-                                    otherInterviews.push(interview);
-                                }
+                                angular.forEach(GraphHelper.asArray(interview[Uris.QA_INTERVIEWEE]), function (searchIntervieweeUri) {
+                                    if (searchIntervieweeUri === mentionedUri) {
+                                        otherInterviews.push(interview);
+                                    }
+                                });
+                                // if (interview[Uris.QA_INTERVIEWEE] !== mentionedUri) {
+                                //     otherInterviews.push(interview);
+                                // }
                             });
                             return addArchitectsToInterviews(otherInterviews);
                         });

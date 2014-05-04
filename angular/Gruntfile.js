@@ -15,6 +15,34 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-ng-constant');
 
     grunt.initConfig({
+        secret: grunt.file.readJSON('secret.json'),
+        sftp: {
+            deploy: {
+                files: {
+                    './': 'dist/**'
+                },
+                options: {
+                    path: '/var/www/html/beta/',
+                    srcBasePath: 'dist/',
+                    host: '<%= secret.host %>',
+                    username: '<%= secret.username %>',
+                    password: '<%= secret.password %>',
+                    port: 6666,
+                    showProgress: true,
+                    createDirectories: false
+                }
+            }
+        },
+        // sshexec: {
+        //     test: {
+        //         command: 'ssh -L 6666:qldarch-test:22 uqcmcna1@gladys',
+        //         options: {
+        //             host: '<%= secret.host %>',
+        //             username: '<%= secret.username %>',
+        //             password: '<%= secret.password %>'
+        //         }
+        //     }
+        // },
         yeoman: {
             // configurable paths
             app: require('./bower.json').appPath || 'app',
@@ -83,6 +111,8 @@ module.exports = function (grunt) {
                 },
                 files: [
                     '<%= yeoman.app %>/{,*/}*.html',
+                    '<%= yeoman.app %>/views/**/*.html',
+                    // '<%= yeoman.app %>/**/*{,*/}*.html',
                     '.tmp/styles/{,*/}*.css',
                     '{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js',
                     '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
@@ -107,13 +137,49 @@ module.exports = function (grunt) {
                 hostname: 'localhost',
                 livereload: 35729
             },
+            proxies: [{
+                context: '/ws',
+                host: 'qldarch-test.metadata.net',
+                changeOrigin: true
+            }, {
+                context: '/solr',
+                host: 'qldarch-test.metadata.net',
+                changeOrigin: true,
+            }, {
+                context: '/static',
+                host: 'qldarch-test.metadata.net',
+                changeOrigin: true,
+            }, {
+                context: '/files',
+                host: 'qldarch-test.metadata.net',
+                changeOrigin: true,
+            }],
             livereload: {
                 options: {
                     open: true,
                     base: [
                         '.tmp',
                         '<%= yeoman.app %>'
-                    ]
+                    ],
+                    middleware: function (connect, options) {
+                        if (!Array.isArray(options.base)) {
+                            options.base = [options.base];
+                        }
+
+                        // Setup the proxy
+                        var middlewares = [require('grunt-connect-proxy/lib/utils').proxyRequest];
+
+                        // Serve static files.
+                        options.base.forEach(function (base) {
+                            middlewares.push(connect.static(base));
+                        });
+
+                        // Make directory browse-able.
+                        var directory = options.directory || options.base[options.base.length - 1];
+                        middlewares.push(connect.directory(directory));
+
+                        return middlewares;
+                    }
                 }
             },
             test: {
@@ -216,7 +282,8 @@ module.exports = function (grunt) {
                     cwd: '<%= yeoman.app %>/images',
                     src: '{,*/}*.{png,jpg,jpeg}',
                     dest: '<%= yeoman.dist %>/images'
-                }]
+                }],
+                cache: false
             }
         },
         svgmin: {
@@ -276,7 +343,9 @@ module.exports = function (grunt) {
                         '.htaccess',
                         'bower_components/**/*',
                         'images/{,*/}*.{gif,webp}',
-                        'fonts/*'
+                        'images/header.jpg',
+                        'fonts/*',
+                        'files/*'
                     ]
                 }, {
                     expand: true,
@@ -284,6 +353,18 @@ module.exports = function (grunt) {
                     dest: '<%= yeoman.dist %>/images',
                     src: [
                         'generated/*'
+                    ]
+                }]
+            },
+            special: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    cwd: '<%= yeoman.app %>',
+                    dest: '<%= yeoman.dist %>',
+                    src: [
+                        'images/icon.png',
+                        'images/header.jpg',
                     ]
                 }]
             },
@@ -353,6 +434,7 @@ module.exports = function (grunt) {
             'ngconstant:development', // 
             'concurrent:server',
             'autoprefixer',
+            'configureProxies:server',
             'connect:livereload',
             'watch'
         ]);
@@ -380,7 +462,13 @@ module.exports = function (grunt) {
         'cssmin',
         'uglify',
         'rev',
-        'usemin'
+        'usemin',
+        'copy:special'
+    ]);
+
+    grunt.registerTask('deploy', [
+        'build',
+        'sftp:deploy'
     ]);
 
     grunt.registerTask('default', [

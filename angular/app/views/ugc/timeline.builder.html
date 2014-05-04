@@ -1,0 +1,183 @@
+<div class="alert alert-info" style="margin-bottom: 8px;">
+	<div class="container">
+		<i class="fa fa-info-circle"></i> Plot dates on a timeline and build temporal relationships
+	</div>
+</div>
+<div class="l-frame l-frame-tighter l-frame-divided">
+	<div class="container">
+		<div ng-hide="$state.includes('ugc.timeline.edit.add')">
+			<button class="btn" ui-sref="ugc.timeline.edit.add.date" ng-class="{'btn-primary': !timeline.dates.length, 'btn-default': timeline.dates.length}">
+				<i class="fa fa-plus"></i> Add Date 
+			</button>	
+		</div>
+		
+		<div class="panel panel-default" ng-if="$state.includes('ugc.timeline.edit.add')">
+			<div class="panel-body">
+				<i class="fa fa-times pull-right" ui-sref="ugc.timeline.edit"></i>
+				<tabset>
+					<!-- New Date -->
+	    			<tab heading="New" select="$state.go('ugc.timeline.edit.add.date')">
+	    				<form style="padding: 8px; margin-top: 8px;">
+							<div class="form-group">
+								<label>
+									Dates
+									<i class="fa fa-asterisk fa-asterisk-required"></i>
+								</label>
+								<div class="row">
+									<div class="col-sm-6">
+										<input type="text" class="form-control" placeholder="Start Year" ng-model="timeline.$tempDate.startDate" required/>
+									</div>
+									<div class="col-sm-6">
+										<input type="text" class="form-control" placeholder="End Year" ng-model="timeline.$tempDate.endDate" required/>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label" for="dateHeadline">
+									Title
+									<i class="fa fa-asterisk fa-asterisk-required"></i>
+								</label>
+								<input ng-model="timeline.$tempDate.headline" name="dateHeadline" type="text" class="form-control" id="dateHeadline" placeholder="Title" required>
+							</div>
+							<div class="form-group">
+								<label class="control-label" for="yourcomments">Description</label>
+								<textarea ng-model="timeline.$tempDate.text" name="comments" class="form-control" id="yourcomments" placeholder="Text"></textarea>
+							</div>		
+
+							<div class="form-group">
+								<label>Display Picture</label>
+								<ol>
+									<li>
+										<label>Select Architect or Project</label>
+										<div 
+											ui-select2="architectStructureSelect" 
+											ng-model="timeline.$tempDate.$photo.entity" 
+											class="form-control">
+										</div>
+									</li>
+									<li ng-show="timeline.$tempDate.$photo.entity">
+										<label>Choose a Photo</label>
+										<div ng-show="timeline.$tempDate.$photo.entity && timeline.$tempDate.$photo.expressions == null" style="text-align: center;">
+											<i class="fa fa-spin fa-refresh"></i>
+										</div>
+
+										<div ng-show="timeline.$tempDate.$photo.expressions && !timeline.$tempDate.$photo.expressions.length">
+											No photos found.
+										</div>
+
+										<div class="row" ng-repeat="expressionRow in timeline.$tempDate.$photo.expressionRows">
+											<div class="col-sm-2" ng-repeat="expression in expressionRow">
+												<a class="thumbnail" href ng-click="addExpressionToDate(expression, timeline.$tempDate)">
+													<div class="thumbnail-image">
+														<img class="img-responsive" ng-src="{{ expression.file.thumb }}" alt=""/>
+													</div>
+													<div class="caption">
+														<input type="checkbox" ng-model="expression.selected">
+														{{ expression[Uris.DCT_TITLE] }}
+													</div>
+												</a>
+											</div>
+										</div>								
+									</li>
+								</ol>
+									
+							</div>
+
+							<button type="submit" class="btn btn-primary" ng-click="addDate(timeline.$tempDate)">Add</button>
+							<button class="btn btn-default" ui-sref="ugc.timeline.edit">Cancel</button>
+						</form>
+	    			</tab>
+	    			<!-- /New Date -->
+
+	    			<!-- Import date -->
+	    			<tab heading="From Architect, Project or Typology" select="$state.go('ugc.timeline.edit.add.import')">
+	    				<div style="padding: 8px; margin-top: 8px;">
+	    					<p>Search for architects, projects or firms to import dates from their timeline.</p>
+							<div 
+								ui-select2="architectStructureFirmSelect" 
+								ng-model="timeline.$import.entity" 
+								class="form-control">
+							</div>
+
+							<div style="margin-top: 16px;">
+								<div ng-show="timeline.$import.entity && timeline.$import.dates == null" style="text-align: center;">
+									<i class="fa fa-spin fa-refresh"></i>
+								</div>
+
+								<div ng-show="timeline.$import.dates && !timeline.$import.dates.length">
+									No dates found.
+								</div>
+								<div ng-repeat="date in timeline.$import.dates" class="row" style="margin-top: 8px;">
+									<div>
+										<div class="col-sm-1" style="text-align: right">
+											<input type="checkbox" ng-model="date.$selected" ng-change="importSelectionChanged()">
+										</div>
+										<div class="col-sm-1">
+											<img ng-src="{{ date.asset.thumbnail }}" alt="thumbnail" class="img-responsive">
+										</div>
+										<div class="col-sm-10">
+											<strong>{{ date.startDate }} <span ng-show="date.endDate">- {{ date.endDate }}</span></strong> 
+											{{ date.headline }}
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+							<div style="margin-top: 10px;" >
+								<button class="btn btn-primary" ng-click="import(timeline.$import.dates)" ng-show="timeline.$import.dates.length">Add to timeline ({{ timeline.$import.numberToImport }})</button>
+								<button class="btn btn-default" ui-sref="ugc.timeline.edit" >Cancel</button>
+							</div>
+	    				</div>
+	    			</tab>
+	    			<!-- /Import date -->
+	  			</tabset>
+			</div>
+		</div>
+
+		<!-- Date list -->
+		<div style="margin-top: 24px;">
+			<div class="text-muted" ng-hide="timeline.dates.length">No dates added. Try adding some dates.</div>
+			<!--  | slice:currentPage:currentPage+10 -->
+			<div ng-repeat="date in timeline.dates" style="margin-top: 8px;">
+				<div class="row">
+					<div class="col-sm-1">
+						<img ng-src="{{ date.asset.thumbnail }}" alt="thumbnail" class="img-responsive">
+					</div>
+					<div class="col-sm-11">
+						<button class="btn btn-default btn-xs pull-right" ng-click="remove(date)">
+							<i class="fa fa-trash-o"></i>
+						</button>
+						<p>
+							<strong>
+								{{ date.startDate }} <span ng-show="date.endDate">- {{ date.endDate }}</span>
+							</strong> 
+						</p>
+						<p>
+							{{ date.headline }}
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /Date List -->
+	</div>
+</div>
+
+<div class="l-frame l-frame-tighter" ng-show="timeline.dates.length">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-10">
+				<input type="text" class="form-control" placeholder="Title: What is your timeline about?" ng-model="compoundObject.title">
+			</div>
+			<div class="col-sm-2">
+				<button class="btn btn-primary form-control" ng-click="save()"
+					ng-disabled="!compoundObject.title || !timeline.dates.length || !Auth.auth"
+					ng-click="save()">
+						Save timeline
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
