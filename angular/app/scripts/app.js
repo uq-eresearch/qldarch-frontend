@@ -973,8 +973,8 @@ angular.module('angularApp', [
                 controller: 'InterviewCtrl',
                 // reloadOnSearch: false,
                 resolve: {
-                    interview: ['$http', '$stateParams', '$q', 'Uris', 'Architect', 'Interview', 'Transcript', 'Relationship', 'GraphHelper', 'Entity', 'Ontology',
-                        function($http, $stateParams, $q, Uris, Architect, Interview, Transcript, Relationship, GraphHelper, Entity, Ontology) {
+                    interview: ['$http', '$stateParams', '$q', 'Uris', 'Architect', 'Interview', 'Transcript', 'Relationship', 'GraphHelper', 'Entity', 'Ontology', 'File',
+                        function($http, $stateParams, $q, Uris, Architect, Interview, Transcript, Relationship, GraphHelper, Entity, Ontology, File) {
                             var interviewUri = atob($stateParams.interviewId);
 
                             // Get all the interview
@@ -988,30 +988,36 @@ angular.module('angularApp', [
                                 var transcriptUrl = transcriptUrls[0];
                                 console.log('transcript urls', transcriptUrls);
 
-                                return Transcript.findWithUrl(transcriptUrl).then(function(transcript) {
-                                    return Relationship.findByInterviewUri(interviewUri).then(function(relationships) {
-                                        // Get all the subject, object, and predicate data
-                                        var entities = GraphHelper.getAttributeValuesUnique(relationships, [Uris.QA_SUBJECT, Uris.QA_OBJECT]);
-                                        var relatedRequests = [Entity.loadList(entities), Ontology.loadAllProperties()];
+                                console.log('interview is', interview);
+                                return Transcript.findFileFromInterviewKludge(interview[Uris.QA_HAS_TRANSCRIPT]).then(function(transcriptFile) {
+                                    interview.transcriptFile = transcriptFile;
 
-                                        return $q.all(relatedRequests).then(function(relatedData) {
-                                            var entities = relatedData[0];
-                                            var properties = relatedData[1];
+                                    return Transcript.findWithUrl(transcriptUrl).then(function(transcript) {
+                                        console.log('transcript file is', transcript);
+                                        return Relationship.findByInterviewUri(interviewUri).then(function(relationships) {
+                                            // Get all the subject, object, and predicate data
+                                            var entities = GraphHelper.getAttributeValuesUnique(relationships, [Uris.QA_SUBJECT, Uris.QA_OBJECT]);
+                                            var relatedRequests = [Entity.loadList(entities), Ontology.loadAllProperties()];
 
-                                            // Insert that data
-                                            angular.forEach(relationships, function(relationship) {
-                                                relationship.subject = entities[relationship[Uris.QA_SUBJECT]];
-                                                relationship.object = entities[relationship[Uris.QA_OBJECT]];
-                                                relationship.predicate = properties[relationship[Uris.QA_PREDICATE]];
+                                            return $q.all(relatedRequests).then(function(relatedData) {
+                                                var entities = relatedData[0];
+                                                var properties = relatedData[1];
+
+                                                // Insert that data
+                                                angular.forEach(relationships, function(relationship) {
+                                                    relationship.subject = entities[relationship[Uris.QA_SUBJECT]];
+                                                    relationship.object = entities[relationship[Uris.QA_OBJECT]];
+                                                    relationship.predicate = properties[relationship[Uris.QA_PREDICATE]];
+                                                });
+
+                                                //                                      // Setup the transcript with all this new data
+                                                interview.transcript = Transcript.setupTranscript(transcript, {
+                                                    interviewers: interview.interviewers,
+                                                    interviewees: interview.interviewees,
+                                                    relationships: relationships
+                                                });
+                                                return interview;
                                             });
-
-                                            //                                      // Setup the transcript with all this new data
-                                            interview.transcript = Transcript.setupTranscript(transcript, {
-                                                interviewers: interview.interviewers,
-                                                interviewees: interview.interviewees,
-                                                relationships: relationships
-                                            });
-                                            return interview;
                                         });
                                     });
                                 });
