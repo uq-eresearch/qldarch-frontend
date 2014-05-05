@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('angularApp')
-    .factory('Transcript', function (Request, Uris, ENV) {
+    .factory('Transcript', function(Request, Uris, ENV, Expression, File) {
 
-        var convertToSeconds = function (timeString) {
+        var convertToSeconds = function(timeString) {
             var parts = timeString.split(':');
             return parseInt(parts[0]) * 60 * 60 + parseInt(parts[1]) * 60 + parseInt(parts[2]);
         };
 
-        var getInitials = function (speaker) {
+        var getInitials = function(speaker) {
             if (speaker.name === 'Deborah van der Plaat') {
                 return 'DV';
             } else {
@@ -28,27 +28,47 @@ angular.module('angularApp')
         return {
 
             /**
+             * Gets the transcript file from an interview
+             *
+             * Handles the problems that the HAS_TRANSCRIPT property from omeka is an expression
+             * but from internal its just file uril
+             *
+             * @param  {[type]} uri The uri of the transcript (QA_HAS_TRANSCRIPT) property
+             * @return {[type]}     [description]
+             */
+            findFileFromInterviewKludge: function(uri) {
+                if (uri.indexOf('omeka') !== -1) {
+                    // its an omeka one
+                    return Expression.load(uri).then(function(expression) {
+                        return File.load(expression[Uris.QA_HAS_FILE]);
+                    });
+                } else {
+                    return File.load(uri);
+                }
+            },
+
+            /**
              * Load a transcript and incorporates the speakers
              * @param url               The url of the transcript
              * @param speakers          An array of speakers
              * @returns {Promise|*}
              */
-            findWithUrl: function (url) {
+            findWithUrl: function(url) {
                 if (ENV.name === 'development') {
                     // http://qldarch-test.metadata.net/static/transcripts/json/SCG_InterviewWithGrahamBligh.json
                     url = url.substring('http://qldarch-test.metadata.net'.length);
                     // url = 'http://localhost:8080/qldarch/scripts/SCG_InterviewWithGrahamBligh.json';
                 }
-            // console.log('transcript url', url);
+                // console.log('transcript url', url);
                 // console.log('env name', ENV);
-                return Request.http(url, {}, true).then(function (transcript) {
+                return Request.http(url, {}, true).then(function(transcript) {
                     // We have the transcript
                     // console.log('Transcript loaded');
                     return transcript;
                 });
             },
 
-            setupTranscript: function (transcript, args) {
+            setupTranscript: function(transcript, args) {
                 var defaults = {
                     interviewees: [],
                     interviewers: [],
@@ -58,7 +78,7 @@ angular.module('angularApp')
                 args = angular.extend({}, defaults, args);
 
                 // Transform start and end times to seconds for each exchange
-                angular.forEach(transcript.exchanges, function (exchange, exchangeIndex) {
+                angular.forEach(transcript.exchanges, function(exchange, exchangeIndex) {
                     // Setup the start time in seconds
                     if (exchangeIndex !== 0) {
                         exchange.startTime = convertToSeconds(exchange.time);
@@ -80,7 +100,7 @@ angular.module('angularApp')
 
                     var speakers = args.interviewers.concat(args.interviewees);
 
-                    angular.forEach(speakers, function (speaker) {
+                    angular.forEach(speakers, function(speaker) {
                         // console.log('interviewers', speaker);
                         if (getInitials(speaker) === exchange.speakerInitials) {
                             exchange.speaker = speaker;
@@ -91,9 +111,9 @@ angular.module('angularApp')
                     });
 
                     // Add in relationships to exchange
-                    angular.forEach(args.relationships, function (relationship) {
+                    angular.forEach(args.relationships, function(relationship) {
 
-                        angular.forEach(relationship.evidences, function (evidence) {
+                        angular.forEach(relationship.evidences, function(evidence) {
                             // Check that it has a from and to time
                             if (angular.isDefined(evidence[Uris.QA_TIME_FROM]) && angular.isDefined(evidence[Uris.QA_TIME_TO])) {
 

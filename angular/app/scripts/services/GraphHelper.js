@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('angularApp')
-    .service('GraphHelper', function (Uris, $state) {
+    .service('GraphHelper', function(Uris, $state) {
         // AngularJS will instantiate a singleton by calling "new" on this function
 
         var that = this;
 
-        this.asArray = function (value) {
+        this.asArray = function(value) {
             if (!angular.isDefined(value)) {
                 return [];
             }
@@ -17,9 +17,9 @@ angular.module('angularApp')
             }
         };
 
-        this.graphValues = function (graphs) {
+        this.graphValues = function(graphs) {
             var results = [];
-            angular.forEach(graphs, function (graph) {
+            angular.forEach(graphs, function(graph) {
                 results.push(graph);
             });
             return results;
@@ -30,9 +30,10 @@ angular.module('angularApp')
          * @param graph
          * @returns {*}
          */
-        this.encodeUri = function (graph) {
-            graph.encodedUri = btoa(graph.uri);
-
+        this.encodeUri = function(graph) {
+            if (graph) {
+                graph.encodedUri = btoa(graph.uri);
+            }
             return graph;
         };
 
@@ -41,23 +42,23 @@ angular.module('angularApp')
          * @param graphs
          * @returns {*}
          */
-        this.encodeUris = function (graphs) {
-            angular.forEach(graphs, function (graph) {
+        this.encodeUris = function(graphs) {
+            angular.forEach(graphs, function(graph) {
                 if (angular.isDefined(graph.uri)) {
                     that.encodeUri(graph);
                 }
             });
             return graphs;
         };
-        this.decodeUriString = function (encodedUri) {
+        this.decodeUriString = function(encodedUri) {
             return atob(encodedUri);
         };
-        this.encodeUriString = function (uri) {
+        this.encodeUriString = function(uri) {
             return btoa(uri);
         };
 
 
-        this.indexOfWithAttr = function (array, attr, value) {
+        this.indexOfWithAttr = function(array, attr, value) {
             for (var i = 0; i < array.length; i += 1) {
                 if (array[i][attr] === value) {
                     return i;
@@ -69,9 +70,9 @@ angular.module('angularApp')
          * Adds in a type (structure, architect etc) to an array of items
          * @param array
          */
-        this.setupTypes = function (array) {
+        this.setupTypes = function(array) {
             // Setup the types
-            angular.forEach(array, function (item) {
+            angular.forEach(array, function(item) {
 
                 // Set a default
                 item.type = 'other';
@@ -88,7 +89,7 @@ angular.module('angularApp')
                     Uris.QA_BUILDING_TYPOLOGY
                 ];
 
-                angular.forEach(typeUris, function (typeUri) {
+                angular.forEach(typeUris, function(typeUri) {
                     var currentItemType = item[Uris.RDF_TYPE];
                     if (!angular.isArray(currentItemType)) {
                         currentItemType = [currentItemType];
@@ -106,18 +107,18 @@ angular.module('angularApp')
 
                 // Links
                 item.$link = $state.href(item.type + '.summary', params);
-                item.$linkTo = function (sub) {
+                item.$linkTo = function(sub) {
                     return $state.href(item.type + '.' + sub, params);
                 };
             });
         };
 
-        this.filterTypes = function (array, type) {
+        this.filterTypes = function(array, type) {
             // Setup types
             this.setupTypes(array);
 
             var results = [];
-            angular.forEach(array, function (item) {
+            angular.forEach(array, function(item) {
                 if (item.type === type) {
                     results.push(item);
                 }
@@ -131,7 +132,7 @@ angular.module('angularApp')
          * @param attrs
          * @returns {Array}
          */
-        this.getAttributeValuesUnique = function (array, attrs) {
+        this.getAttributeValuesUnique = function(array, attrs) {
             var uniqueValues = [];
 
             // converts attributes to array, just makes things easier
@@ -140,9 +141,9 @@ angular.module('angularApp')
             }
 
             // go through all the tiems in the array
-            angular.forEach(array, function (item) {
+            angular.forEach(array, function(item) {
                 // go through all the attributes
-                angular.forEach(attrs, function (attr) {
+                angular.forEach(attrs, function(attr) {
                     if (angular.isDefined(item[attr])) {
 
                         var values = item[attr];
@@ -151,7 +152,7 @@ angular.module('angularApp')
                         if (!angular.isArray(values)) {
                             values = [values];
                         }
-                        angular.forEach(values, function (value) {
+                        angular.forEach(values, function(value) {
                             if (uniqueValues.indexOf(value) === -1) {
                                 uniqueValues.push(value);
                             }
@@ -166,14 +167,14 @@ angular.module('angularApp')
          * Updates original to match new array
          * @param original
          */
-        this.updateArray = function (originalArray, newArray, comparisonAttr) {
+        this.updateArray = function(originalArray, newArray, comparisonAttr) {
 
             // Compare the new array to the old array
             for (var i = originalArray.length - 1; i >= 0; i--) {
                 var originalItem = originalArray[i];
                 var atIndex = -1;
 
-                angular.forEach(newArray, function (newItem, i2) {
+                angular.forEach(newArray, function(newItem, i2) {
                     // Check if this old item is in new array
                     if (newItem[comparisonAttr] === originalItem[comparisonAttr]) {
                         atIndex = i2;
@@ -186,12 +187,12 @@ angular.module('angularApp')
                 } else {
                     // we didnt find it
                     // so remove it from the old one
-                    //					originalArray.splice(i, 1);
+                    //                  originalArray.splice(i, 1);
                     originalItem.new = false;
                 }
             }
             // Append all the new ones we didnt have before
-            angular.forEach(newArray, function (newItem) {
+            angular.forEach(newArray, function(newItem) {
 
                 originalArray.push(newItem);
             });
