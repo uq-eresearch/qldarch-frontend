@@ -16,7 +16,7 @@
   <section>
     <div class="container">
       <!--<div ng-include="'views/searchbox.html'"></div>-->
-      <div ng-repeat="result in results | orderBy:'-score'" class="row">
+      <div ng-repeat="result in results | orderBy:'-score'" class="row" style="margin-bottom: 40px;">
         <div class="col-md-1">
           <div class="square square-icon" ng-class="{'square-interview': result.type=='interview', 'square-article': result.type == 'article'}">
             <div class="square-content">
@@ -30,14 +30,15 @@
           </div>
         </div>
         <div class="col-md-8">
-          <h4>
+          <h3>
             <!-- Title -->
-            <a ng-href="{{ result.$link }}">
+            <a ng-href="{{ result.$link }}" style="color: #333">
                             {{ result.title }}
                         </a>
             <!-- /Title -->
-          </h4>
-          <h5>
+          </h3>
+
+          <h5 class="text-muted">
             <!-- Authors -->
             <span ng-show="result.authors">{{ result.authors }},</span>
             <!-- /Authors -->
@@ -47,18 +48,21 @@
             <!-- /Periodical Title -->
 
             <!-- Date Published -->
-            <span ng-show="result.datePublished">({{ result.datePublished }})</span>
+            <span ng-show="result.datePublished">, {{ result.datePublished }}</span>
             <!-- /Date Published -->
 
-            <span ng-show="result.volumne || result.issue">-</span>
-
             <!-- Volume -->
-            <span ng-show="result.volume">Volume {{ result.volume }},</span>
+            <span ng-show="result.volume">, volume {{ result.volume }}</span>
             <!-- /Volume -->
 
             <!-- Issue -->
-            <span ng-show="result.issue">Issue {{ result.issue }}</span>
+            <span ng-show="result.issue">, issue {{ result.issue }}</span>
             <!-- /Issue -->
+
+            <!-- Pages -->
+            <span ng-show="result.issue">, {{ result.pages }}</span>
+            <!-- /Pages -->
+
           </h5>
 
           <!-- Result: Snippet -->
