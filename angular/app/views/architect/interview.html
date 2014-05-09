@@ -160,14 +160,17 @@
                   <button class="btn btn-xs btn-default exchange-play" ng-click="playFromExchange(exchange)">
                     <i class="fa fa-play"></i>
                   </button>
+  
+                  <a ui-sref="architect.interview({time: exchange.startTime})" class="btn btn-link exchange-play"><i class="fa fa-link"></i></a>
+                  
                   <!-- end of play button -->
                 </div>
                 <div class="media-body">
                   <div class="media-heading">
                     <strong>
                       <a ng-href="#/{{ exchange.speaker.type }}/{{ exchange.speaker.encodedUri }}">
-                                                {{ exchange.speaker.name }}
-                                            </a>
+                        {{ exchange.speaker.name }}
+                      </a>
                       <span ng-show="!exchange.speaker">
                         {{ exchange.speakerInitials }}
                       </span>
