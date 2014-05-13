@@ -27,6 +27,11 @@ angular.module('angularApp')
             }
         }
 
+        $scope.clearCompletionDate = function () {
+            // delete structure[Uris.QA_COMPLETION_DATE];
+            structure[Uris.QA_COMPLETION_DATE] = '';
+        };
+
 
         $scope.updateStructure = function (structure) {
             if (structure.uri) {
