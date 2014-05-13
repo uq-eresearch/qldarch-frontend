@@ -154,7 +154,17 @@
 
                                         <div class="form-group">
                                             <label for="">Publication Date</label>
-                                            <input type="text" class="form-control" placeholder="Publication Date" ng-model="expression.$article[Uris.QA_DATE_PUBLISHED]">
+                                            <div>
+                                                {{ expression.$article[Uris.QA_DATE_PUBLISHED] | date:'dd-MM-yyyy' }}
+                                            </div>
+
+                                            <div class="well well-sm">
+                                                <datepicker ng-model="expression.$article[Uris.QA_DATE_PUBLISHED]" show-weeks="false"></datepicker>
+                                                <div style="margin-top: 10px;" ng-show="expression.$article[Uris.QA_DATE_PUBLISHED]">
+                                                    <button type="button" class="btn btn-sm btn-primary" ng-click="expression.$article[Uris.QA_DATE_PUBLISHED] = ''">Clear</button>    
+                                                </div>
+                                            </div>
+
                                         </div>
 
                                         <div class="form-group">
