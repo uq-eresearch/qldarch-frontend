@@ -1,18 +1,36 @@
 'use strict';
 
 angular.module('angularApp')
-    .service('Uris', function Uris() {
+    .service('Uris', function (ENV) {
         // AngularJS will instantiate a singleton by calling 'new' on this function
         this.local = true;
 
         this.JSON_ROOT = '/ws/rest/';
         this.SOLR_ROOT = '/solr/collection1/';
-        this.OMEKA_FILE_ROOT = 'http://qldarch-test.metadata.net/omeka/archive/files/';
-        this.OMEKA_THUMB_ROOT = 'http://qldarch-test.metadata.net/omeka/archive/square_thumbnails/';
-        this.SESAME_FILE_ROOT = 'http://qldarch-test.metadata.net/files/';
-        this.SESAME_THUMB_ROOT = 'http://qldarch-test.metadata.net/files/';
 
-        this.PROD_URL = 'http://qldarch-test.metadata.net/beta/';
+        if (ENV.name === 'development') {
+            this.OMEKA_FILE_ROOT = 'http://qldarch-test.metadata.net/omeka/archive/files/';
+            this.OMEKA_THUMB_ROOT = 'http://qldarch-test.metadata.net/omeka/archive/square_thumbnails/';
+            this.SESAME_FILE_ROOT = 'http://qldarch-test.metadata.net/files/';
+            this.SESAME_THUMB_ROOT = 'http://qldarch-test.metadata.net/files/';
+
+            this.PROD_URL = 'http://qldarch-test.metadata.net/beta/';
+        } else if (ENV.name === 'production') {
+            this.OMEKA_FILE_ROOT = 'http://qldarch.net/omeka/archive/files/';
+            this.OMEKA_THUMB_ROOT = 'http://qldarch.net/omeka/archive/square_thumbnails/';
+            this.SESAME_FILE_ROOT = 'http://qldarch.net/files/';
+            this.SESAME_THUMB_ROOT = 'http://qldarch.net/files/';
+            this.PROD_URL = 'http://qldarch.net/beta/';
+        }
+        /**/
+
+        // this.OMEKA_FILE_ROOT = 'http://qldarch.net/omeka/archive/files/';
+        // this.OMEKA_THUMB_ROOT = 'http://qldarch.net/omeka/archive/square_thumbnails/';
+        // this.SESAME_FILE_ROOT = 'http://qldarch.metadata.net/files/';
+        // this.SESAME_THUMB_ROOT = 'http://qldarch.metadata.net/files/';
+
+        // this.PROD_URL = 'http://qldarch-test.metadata.net/beta/';
+
         this.DEV_URL = 'http://localhost:8080/qldarch/';
 
         this.QA_NS = 'http://qldarch.net/ns/rdf/2012-06/terms#';

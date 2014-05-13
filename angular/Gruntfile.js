@@ -17,7 +17,22 @@ module.exports = function (grunt) {
     grunt.initConfig({
         secret: grunt.file.readJSON('secret.json'),
         sftp: {
-            deploy: {
+            dev: {
+                files: {
+                    './': 'dist/**'
+                },
+                options: {
+                    path: '/var/www/html/beta/',
+                    srcBasePath: 'dist/',
+                    host: '<%= secret.host %>',
+                    username: '<%= secret.username %>',
+                    password: '<%= secret.password %>',
+                    port: 6666,
+                    showProgress: true,
+                    createDirectories: false
+                }
+            },
+            prod: {
                 files: {
                     './': 'dist/**'
                 },
@@ -64,7 +79,18 @@ module.exports = function (grunt) {
                 space: '  '
             },
             // Environment targets
-            development: [{
+            local: [{
+                dest: '<%= yeoman.app %>/scripts/config.js',
+                wrap: '"use strict";\n\n <%= __ngModule %>',
+                name: 'config',
+                constants: {
+                    ENV: {
+                        name: 'local;',
+                        apiEndpoint: 'http://your-development.api.endpoint:3000'
+                    }
+                }
+            }],
+            dev: [{
                 dest: '<%= yeoman.app %>/scripts/config.js',
                 wrap: '"use strict";\n\n <%= __ngModule %>',
                 name: 'config',
@@ -75,7 +101,7 @@ module.exports = function (grunt) {
                     }
                 }
             }],
-            production: [{
+            prod: [{
                 dest: '<%= yeoman.dist %>/scripts/config.js',
                 wrap: '"use strict";\n\n <%= __ngModule %>',
                 name: 'config',
@@ -431,7 +457,7 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
-            'ngconstant:development', // 
+            'ngconstant:dev', // 
             'concurrent:server',
             'autoprefixer',
             'configureProxies:server',
@@ -450,7 +476,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
-        'ngconstant:production', // 
+        'ngconstant:dev', // 
         'useminPrepare',
         'concurrent:dist',
         'autoprefixer',
@@ -466,9 +492,51 @@ module.exports = function (grunt) {
         'copy:special'
     ]);
 
-    grunt.registerTask('deploy', [
-        'build',
-        'sftp:deploy'
+    grunt.registerTask('build:dev', [
+        'clean:dist',
+        'ngconstant:dev', // 
+        'useminPrepare',
+        'concurrent:dist',
+        'autoprefixer',
+        'concat',
+        'ngmin',
+        'copy:dist',
+        'cdnify',
+        'less',
+        'cssmin',
+        'uglify',
+        'rev',
+        'usemin',
+        'copy:special'
+    ]);
+
+    grunt.registerTask('build:prod', [
+        'clean:dist',
+        'ngconstant:prod', // 
+        'useminPrepare',
+        'concurrent:dist',
+        'autoprefixer',
+        'concat',
+        'ngmin',
+        'copy:dist',
+        'cdnify',
+        'less',
+        'cssmin',
+        'uglify',
+        'rev',
+        'usemin',
+        'copy:special'
+    ]);
+
+
+    grunt.registerTask('deploy:dev', [
+        'build:dev',
+        'sftp:dev'
+    ]);
+
+    grunt.registerTask('deploy:prod', [
+        'build:prod',
+        'sftp:prod'
     ]);
 
     grunt.registerTask('default', [
