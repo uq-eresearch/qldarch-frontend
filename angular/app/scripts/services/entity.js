@@ -45,7 +45,7 @@ angular.module('angularApp')
             GraphHelper.setupTypes(entities);
 
             // Get all the preferred images
-            var imageUris = GraphHelper.getAttributeValuesUnique(entities, Uris.QA_PREFERRED_IMAGE);
+            // var imageUris = GraphHelper.getAttributeValuesUnique(entities, Uris.QA_PREFERRED_IMAGE);
 
             // Set the default picture
             angular.forEach(entities, function (entity) {
@@ -56,7 +56,13 @@ angular.module('angularApp')
             });
 
             // Overwrite the pictures if we have them
-            return Expression.loadList(imageUris, 'qldarch:Photograph').then(function (expressions) {
+            // @todo: remove kludge
+            // This is a complete kludge because the server is not automatically setting 
+            // the preferred image of an entity to be a file
+            // 
+            return Expression.loadAllFull('qldarch:Photograph').then(function (expressions) {
+                console.log('expressions', expressions);
+                // return Expression.loadList(imageUris, 'qldarch:Photograph').then(function (expressions) {
                 angular.forEach(entities, function (entity) {
                     // Add images
                     // Add preferred images
@@ -73,6 +79,23 @@ angular.module('angularApp')
                     }
                 });
 
+                angular.forEach(expressions, function (expression) {
+                    // this.QA_DEPICTS_BUILDING = this.QA_NS + 'depictsBuilding';
+                    // this.QA_DEPICTS_ARCHITECT = this.QA_NS + 'depictsArchitect';
+                    var depictsUri = expression[Uris.QA_DEPICTS_BUILDING] || expression[Uris.QA_DEPICTS_ARCHITECT];
+                    if (depictsUri) {
+                        // console.log('expression depicts someone or something', depictsUri);
+                        if (depictsUri === 'http://qldarch.net/users/patriciadowling/Architect#63377814877') {
+                            console.log('MATCH');
+                        }
+                        // its a photo of an architect or building
+                        angular.forEach(entities, function (entity) {
+                            if (entity.uri === depictsUri && angular.isDefined(expression.file)) {
+                                entity.picture = expression.file;
+                            }
+                        });
+                    }
+                });
                 return entities;
             });
         };
