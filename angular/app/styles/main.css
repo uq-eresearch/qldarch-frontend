@@ -5829,6 +5829,7 @@ footer .footer-logo {
   text-align: center;
 }
 footer .footer-logo img {
+  max-height: 35px;
   display: inline-block;
 }
 .navbar .dropdown-menu {
