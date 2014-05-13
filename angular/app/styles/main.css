@@ -5824,6 +5824,8 @@ footer {
   border-top: 3px solid #11c3b6;
 }
 footer .footer-logo {
+  height: 100px;
+  line-height: 100px;
   text-align: center;
 }
 footer .footer-logo img {
