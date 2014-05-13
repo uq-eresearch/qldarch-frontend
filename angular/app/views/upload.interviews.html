@@ -81,7 +81,16 @@
 
         <div class="form-group">
           <label for="">Date of Interview</label>
-          <input type="text" class="form-control" placeholder="When was the interview conducted?" ng-model="interview[Uris.DCT_CREATED]">
+          <div>
+              {{ interview[Uris.DCT_CREATED] | date:'dd-MM-yyyy' }}
+          </div>
+          
+          <div class="well well-sm">
+              <datepicker ng-model="interview[Uris.DCT_CREATED]" show-weeks="false"></datepicker>
+              <div style="margin-top: 10px;" ng-show="interview[Uris.DCT_CREATED]">
+                  <button type="button" class="btn btn-sm btn-primary" ng-click="interview[Uris.DCT_CREATED] = ''">Clear</button>    
+              </div>
+          </div>
         </div>
 
         <div class="form-group">
