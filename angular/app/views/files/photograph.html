@@ -135,8 +135,23 @@
 
                   <!-- Created Date -->
                   <div class="form-group">
+                    <!-- <label>Created Date</label> -->
+                    <!-- <input type="text" placeholder="When was this created?" ng-model="expression[Uris.DCT_CREATED]" class="form-control"> -->
+
                     <label>Created Date</label>
-                    <input type="text" placeholder="When was this created?" ng-model="expression[Uris.DCT_CREATED]" class="form-control">
+                    <div>
+                        {{ expression[Uris.DCT_CREATED] | date:'dd-MM-yyyy' }}
+                    </div>
+                    
+                    <!-- <input type="text" ng-model="structure[Uris.QA_COMPLETION_DATE]" class="form-control" placeholder="Completion date of project" /> -->
+
+                    <div class="well well-sm">
+                        <datepicker ng-model="expression[Uris.DCT_CREATED]" show-weeks="false"></datepicker>
+                        <div style="margin-top: 10px;" ng-show="expression[Uris.DCT_CREATED]">
+                            <button type="button" class="btn btn-sm btn-primary" ng-click="expression[Uris.DCT_CREATED] = ''">Clear</button>    
+                        </div>
+                    </div>
+
                   </div>
 
                   <!-- Rights -->

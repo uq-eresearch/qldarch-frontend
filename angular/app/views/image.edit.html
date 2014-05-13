@@ -55,7 +55,12 @@
                 <!-- Created Date -->
                 <div class="form-group">
                     <label>Created Date</label>
-                    <input type="text" placeholder="When was this created?" ng-model="image[Uris.DCT_CREATED]" class="form-control">
+                    <div class="well well-sm">
+                        <datepicker ng-model="image[Uris.DCT_CREATED]" show-weeks="false"></datepicker>
+                        <div style="margin-top: 10px;" ng-show="image[Uris.DCT_CREATED]">
+                            <button type="button" class="btn btn-sm btn-primary" ng-click="image[Uris.DCT_CREATED] = ''">Clear</button>    
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Rights -->

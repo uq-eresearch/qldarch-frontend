@@ -51,7 +51,9 @@
         </p>
 
         <h5>Year</h5>
-        <p>{{ article[Uris.QA_DATE_PUBLISHED] }}</p>
+        <p>
+            {{ article[Uris.QA_DATE_PUBLISHED] | date:'dd-MM-yyyy' }}
+        </p>
 
         <h5>Volume</h5>
         <p>{{ article[Uris.QA_VOLUME] }}</p>

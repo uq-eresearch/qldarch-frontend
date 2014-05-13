@@ -54,7 +54,7 @@
         <a ng-show="youtubeUrl.length" ng-href="{{ youtubeUrl }}" target="_blank" class="pull-right">Watch on YouTube</a> 
 
         <h5 ng-click="isShowingInterviewDetails = !isShowingInterviewDetails" style="margin: 0; padding: 0;">
-          <i class="fa fa-fw" ng-class="{'fa-chevron-right': !isShowingInterviewDetails, 'fa-chevron-down': isShowingInterviewDetails}"></i> {{ title }}
+          <i class="fa fa-fw" ng-class="{'fa-chevron-right': !isShowingInterviewDetails, 'fa-chevron-down': isShowingInterviewDetails}"></i>{{ interview[Uris.DCT_CREATED] | date:'dd MMMM yyyy' }}
         </h5>
       </div>
     </div>
@@ -72,8 +72,8 @@
                 </a>
                 <div class="media-body">
                   <a ng-href="#/{{ interviewee.type }}/{{ interviewee.encodedUri }}">
-                                        {{ interviewee.name }}
-                                    </a>
+                      {{ interviewee.name }}
+                  </a>
                 </div>
               </li>
             </ul>
