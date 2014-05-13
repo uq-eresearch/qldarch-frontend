@@ -1,10 +1,11 @@
 'use strict';
 
 angular.module('angularApp')
-    .factory('File', function(Request, Uris, $upload) {
+    .factory('File', function (Request, Uris, $upload) {
 
         function setupFileUrls(files) {
-            angular.forEach(files, function(file) {
+            angular.forEach(files, function (file) {
+                console.log('file is', file);
 
                 var thumbRoot, fileRoot;
                 if (file[Uris.QA_MANAGED_FILE]) {
@@ -32,10 +33,10 @@ angular.module('angularApp')
              * @param type
              * @returns {*}
              */
-            load: function(uri) {
+            load: function (uri) {
                 console.log('uri is', uri);
                 if (uri) {
-                    return Request.getUri('file', uri, true).then(function(file) {
+                    return Request.getUri('file', uri, true).then(function (file) {
                         if (angular.isDefined(file)) {
                             return setupFileUrls([file])[0];
                         } else {
@@ -53,8 +54,8 @@ angular.module('angularApp')
              * Loads all the files
              * @returns {Promise | Object}
              */
-            loadAll: function() {
-                return Request.getIndex('expression', 'qldarch:DigitalFile', true).then(function(files) {
+            loadAll: function () {
+                return Request.getIndex('expression', 'qldarch:DigitalFile', true).then(function (files) {
                     return setupFileUrls(files);
                 });
             },
@@ -65,15 +66,15 @@ angular.module('angularApp')
              * @param type
              * @returns {Promise | Object}
              */
-            loadList: function(uris) {
-                return Request.getIndexForUris('file', uris, true).then(function(files) {
+            loadList: function (uris) {
+                return Request.getIndexForUris('file', uris, true).then(function (files) {
                     return setupFileUrls(files);
                 });
             },
-            setupImageUrls: function(data) {
+            setupImageUrls: function (data) {
                 return setupFileUrls([data])[0];
             },
-            upload: function(data, file) {
+            upload: function (data, file) {
                 return $upload.upload({
                     url: Uris.JSON_ROOT + 'file/user', //upload.php script, node.js route, or servlet url
                     // method: POST or PUT,
