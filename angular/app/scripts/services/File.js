@@ -5,8 +5,6 @@ angular.module('angularApp')
 
         function setupFileUrls(files) {
             angular.forEach(files, function (file) {
-                console.log('file is', file);
-
                 var thumbRoot, fileRoot;
                 if (file[Uris.QA_MANAGED_FILE]) {
                     // @todo: get thumbs working for sesame
@@ -34,7 +32,6 @@ angular.module('angularApp')
              * @returns {*}
              */
             load: function (uri) {
-                console.log('uri is', uri);
                 if (uri) {
                     return Request.getUri('file', uri, true).then(function (file) {
                         if (angular.isDefined(file)) {
