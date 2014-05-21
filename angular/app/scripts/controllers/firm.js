@@ -101,5 +101,95 @@ angular.module('angularApp')
             }
         };
 
+        $scope.$watch('firm.$precededByFirms', function(firms) {
+            if (firms) {
+                if (firms.length) {
+                	firm[Uris.QA_PRECEDED_BY_FIRM] = [];
+                    angular.forEach(firms, function (precededByFirm) {
+                        firm[Uris.QA_PRECEDED_BY_FIRM].push(precededByFirm.uri);
+                    });
+                } else {
+                    delete firm[Uris.QA_PRECEDED_BY_FIRM];
+                }
+            }
+        });
+        
+        // Setup the entity select boxes
+        $scope.precededBySelect = {
+            placeholder: 'Select a Firm',
+            dropdownAutoWidth: true,
+            multiple: true,
+            query: function(options) {
+                Entity.findByName(options.term, false).then(function(entities) {
+                    var data = {
+                        results: []
+                    };
 
+                    angular.forEach(entities, function(entity) {
+                        if (entity.type !== 'firm') {
+                            return
+                        }
+
+                        var label = entity.name + ' (Firm)';
+
+                        data.results.unshift({
+                            id: entity.uri,
+                            uri: entity.uri,
+                            text: label,
+                            type: entity.type,
+                            name: entity.name,
+                            encodedUri: entity.encodedUri,
+                            picture: entity.picture
+                        });
+                    });
+                    options.callback(data);
+                });
+            }
+        };
+
+        $scope.$watch('firm.$succeededByFirms', function(firms) {
+            if (firms) {
+                if (firms.length) {
+                	firm[Uris.QA_SUCCEEDED_BY_FIRM] = [];
+                    angular.forEach(firms, function (succeededByFirm) {
+                        firm[Uris.QA_SUCCEEDED_BY_FIRM].push(succeededByFirm.uri);
+                    });
+                } else {
+                    delete firm[Uris.QA_SUCCEEDED_BY_FIRM];
+                }
+            }
+        });
+        
+     // Setup the entity select boxes
+        $scope.succeededBySelect = {
+            placeholder: 'Select a Firm',
+            dropdownAutoWidth: true,
+            multiple: true,
+            query: function(options) {
+                Entity.findByName(options.term, false).then(function(entities) {
+                    var data = {
+                        results: []
+                    };
+
+                    angular.forEach(entities, function(entity) {
+                        if (entity.type !== 'firm') {
+                            return
+                        }
+
+                        var label = entity.name + ' (Firm)';
+
+                        data.results.unshift({
+                            id: entity.uri,
+                            uri: entity.uri,
+                            text: label,
+                            type: entity.type,
+                            name: entity.name,
+                            encodedUri: entity.encodedUri,
+                            picture: entity.picture
+                        });
+                    });
+                    options.callback(data);
+                });
+            }
+        };
     });

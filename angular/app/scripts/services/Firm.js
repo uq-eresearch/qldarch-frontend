@@ -20,7 +20,43 @@ angular.module('angularApp')
              * @returns {Promise | Object}
              */
             load: function (uri, summary) {
-                return Entity.load(uri, summary);
+                return Entity.load(uri, summary).then(function (firm) {
+                    var precededByFirmsUris = firm['http://qldarch.net/ns/rdf/2012-06/terms#precededByFirm'];
+                    if (angular.isDefined(precededByFirmsUris)) {
+	                    var precededByFirmsUrisArray = [];
+	                    if (angular.isArray(precededByFirmsUris)) {
+	                    	precededByFirmsUrisArray = precededByFirmsUris;
+	                    } else {
+	                    	precededByFirmsUrisArray = [precededByFirmsUris];
+	                    }
+	                    Entity.loadList(precededByFirmsUrisArray).then(function (precededByFirms) {
+	                        var results = [];
+	                        angular.forEach(precededByFirms, function(graph) {
+	                            results.push(graph);
+	                        });
+	                        firm.$precededByFirms = results;
+	                    });
+                    }
+                    
+                    var succeededByFirmsUris = firm['http://qldarch.net/ns/rdf/2012-06/terms#succeededByFirm'];
+                    if (angular.isDefined(succeededByFirmsUris)) {
+                        var succeededByFirmsUrisArray = [];
+	                    if (angular.isArray(succeededByFirmsUris)) {
+	                    	succeededByFirmsUrisArray = succeededByFirmsUris;
+	                    } else {
+	                    	succeededByFirmsUrisArray = [succeededByFirmsUris];
+	                    }
+	                    Entity.loadList(succeededByFirmsUrisArray).then(function (succeededByFirms) {
+	                        var results = [];
+	                        angular.forEach(succeededByFirms, function(graph) {
+	                            results.push(graph);
+	                        });
+	                        firm.$succeededByFirms = results;
+	                    });
+                    }
+                    
+                    return firm;
+                });
             },
 
             /**

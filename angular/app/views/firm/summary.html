@@ -30,7 +30,35 @@
                 </p>
                 <p ng-hide="firm[Uris.QA_START_DATE].length" class="text-muted">No operating years recorded.</p>
 
-
+				
+				<h5 style="margin-top: 24px;" ng-show="firm.$precededByFirms.length">Preceded By</h5>
+                <ul class="media-list">
+                    <li class="media" ng-repeat="pf in firm.$precededByFirms">
+                        <a class="pull-left" ng-href="{{ firm.$link }}">
+                            <img class="media-object img-responsive img-circle" ng-src="{{ pf.picture.file }}" style="display:block; width:32px">
+                        </a>
+                        <div class="media-body">
+                            <a ng-href="{{ pf.$link }}">
+                                {{ pf.name }}
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+				
+				<h5 style="margin-top: 24px;" ng-show="firm.$succeededByFirms.length">Succeded By</h5>
+                <ul class="media-list">
+                    <li class="media" ng-repeat="pf in firm.$succeededByFirms">
+                        <a class="pull-left" ng-href="{{ firm.$link }}">
+                            <img class="media-object img-responsive img-circle" ng-src="{{ pf.picture.file }}" style="display:block; width:32px">
+                        </a>
+                        <div class="media-body">
+                            <a ng-href="{{ pf.$link }}">
+                                {{ pf.name }}
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+                
             </div>
             <div class="col-sm-5">
                 <img ng-if="firm.picture" class="img-responsive" ng-src="{{ firm.picture.file }}" alt=""/>
@@ -61,7 +89,16 @@
                         <label>End Year</label>
                         <input type="text" class="form-control" ng-model="firm[Uris.QA_END_DATE]" placeholder="End Year">
                     </div>
-
+                    <div class="form-group">
+                        <label>Preceded By</label>
+                        <div ui-select2="precededBySelect" ng-model="firm.$precededByFirms" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Succeeded By</label>
+                        <div ui-select2="succeededBySelect" ng-model="firm.$succeededByFirms" class="form-control">
+                        </div>
+                    </div>
 
                     <div class="checkbox">
                         <label>

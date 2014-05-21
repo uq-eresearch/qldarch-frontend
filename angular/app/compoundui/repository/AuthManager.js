@@ -131,9 +131,6 @@ lore.AuthManager = Ext.extend(Ext.util.Observable, {
             var authorities = principal.authorities;
             var authorised = this.hasAuthority(authorities, "ROLE_USER") &&
                 this.hasAuthority(authorities, "ROLE_ORE");
-
-            console.log("Yoman");
-            console.log(principal);
             
             if (principal.username) {
             	principal.userName = principal.username;
