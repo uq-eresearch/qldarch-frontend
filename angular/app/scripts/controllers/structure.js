@@ -217,6 +217,26 @@ angular.module('angularApp')
                 }
             }
         });
+        $scope.$watch('structure[Uris.QA_LOCATION]', function(location) {
+        	if (location) {
+        		if (!structure[Uris.GEO_LAT] && !structure[Uris.GEO_LONG]) {
+	        		clearTimeout($scope.typingTimer);
+	        		$scope.typingTimer = setTimeout(function () {
+	                	$.getJSON( "https://maps.googleapis.com/maps/api/geocode/json?address=" 
+	                			+ $scope.structure[Uris.QA_LOCATION], function( data ) {
+	                		if (data.results.length == 1) {
+	                    		if (!structure[Uris.GEO_LAT] && !structure[Uris.GEO_LONG]) {
+		                			structure[Uris.GEO_LAT] = data.results[0].geometry.location.lat;
+		                			structure[Uris.GEO_LONG] = data.results[0].geometry.location.lng;
+		                			$("#LAT").val(data.results[0].geometry.location.lat);
+		                			$("#LNG").val(data.results[0].geometry.location.lng);
+	                    		}
+	                		}
+	                	});
+	        		}, 3000);
+        		}
+        	}
+        });
         $scope.typologySelect = {
             placeholder: 'Select a Building Typology',
             dropdownAutoWidth: true,
