@@ -19,6 +19,20 @@
 	                    <li ng-class="{'active': $state.includes('other.relationships')}" ng-show="other.uri">
 	                    	<a ui-sref="other.relationships({ otherId: other.encodedUri })">Relationships</a>
                     	</li>
+						<li ui-sref-active="active" ng-if="interviews.length == 1" ng-show="other.uri">
+	                    	<a ui-sref="other.interview({ otherId: other.encodedUri, interviewId: interviews[0].encodedUri })">Interview</a>
+                    	</li>
+                    	<!-- 
+                    	<li class="dropdown" ng-show="interviews.length > 1" ng-class="{'active': $state.includes('architect.interview')}" ng-show="architect.uri">
+	                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+	                            Interviews <span class="caret"></span>
+	                        </a>
+	                        <ul class="dropdown-menu">
+	                            <li role="presentation" ng-repeat="interview in interviews">
+	                                <a role="menuitem" tabindex="-1" href ui-sref="architect.interview({ architectId: architect.encodedUri, interviewId: interview.encodedUri })">Interview #{{ $index + 1 }}</a>
+	                            </li>
+	                        </ul>
+	                    </li> -->
 	                </ul>
 	            </div>
 	        </div>

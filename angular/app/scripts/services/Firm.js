@@ -21,7 +21,7 @@ angular.module('angularApp')
              */
             load: function (uri, summary) {
                 return Entity.load(uri, summary).then(function (firm) {
-                    var precededByFirmsUris = firm['http://qldarch.net/ns/rdf/2012-06/terms#precededByFirm'];
+                	var precededByFirmsUris = firm['http://qldarch.net/ns/rdf/2012-06/terms#precededByFirm'];
                     if (angular.isDefined(precededByFirmsUris)) {
 	                    var precededByFirmsUrisArray = [];
 	                    if (angular.isArray(precededByFirmsUris)) {

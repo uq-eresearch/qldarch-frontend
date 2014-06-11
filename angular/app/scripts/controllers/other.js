@@ -9,6 +9,16 @@ angular.module('angularApp')
 
         $scope.types = types;
 
+        $scope.delete = function (other) {
+            Entity.delete(other.uri, other).then(function () {
+                // Success
+                $state.go('main');
+            }, function (reason) {
+                // Failure
+                console.log('Something went wrong', reason);
+            });
+        };
+        
         function goToTypePage(typeUri) {
             if (typeUri === Uris.QA_ARCHITECT_TYPE) {
                 $state.go('architect.summary', {

@@ -114,10 +114,16 @@ angular.module('angularApp')
         this.QA_DIGITAL_THING = this.QA_NS + 'DigitalThing';
         this.QA_EDUCATIONAL_INSTITUTION = this.QA_NS + 'EducationalInstitution';
 
+        this.QA_ORGANISATION = this.QA_NS + 'Organisation';
+        this.QA_GOVERNMENT_INSTITUTION = this.QA_NS + 'GovernmentInstitution';
+        
         this.QA_ARCHITECT_TYPE = this.QA_NS + 'Architect';
         this.QA_FIRM_TYPE = this.QA_NS + 'Firm';
         this.QA_STRUCTURE_TYPE = this.QA_NS + 'Structure';
         this.FOAF_AGENT_TYPE = this.FOAF_NS + 'Agent';
+        this.QA_ACADEMIC_TYPE = this.QA_NS + 'Academic';
+        this.QA_ARCHITECT_TYPE = this.QA_NS + 'Architect';
+        this.QA_PROFESSIONAL_TYPE = this.QA_NS + 'Professional';
         this.FOAF_PERSON_TYPE = this.FOAF_NS + 'Person';
 
         this.QA_TRANSCRIPT_FILE = this.QA_NS + 'transcriptFile';
@@ -151,6 +157,8 @@ angular.module('angularApp')
 
         this.QA_AWARD_TYPE = this.QA_NS + 'Award';
         this.QA_AWARD_TITLE = this.QA_NS + 'awardTitle';
+
+        this.QA_PLACE_TYPE = this.QA_NS + 'Place';
 
         this.DCT_TITLE = this.DCT_NS + 'title';
         this.DCT_CREATED = this.DCT_NS + 'created';

@@ -130,8 +130,7 @@ angular.module('angularApp')
                 });
             } else {
                 Expression.create(expression).then(function() {
-                    var interviewee = $scope.interview.$interviewers[0];
-                    $state.go(interviewee.$state + '.summary', interviewee.$stateParams);
+                    $state.go($scope.interview.$state, $scope.interview.$stateParams);
                 });
             }
         };

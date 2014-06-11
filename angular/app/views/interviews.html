@@ -5,13 +5,11 @@
 </div>
 
 <section>
-    <div class="container">
-        <div class="row" ng-repeat="interviewRow in interviewRows">
-            <div class="col-sm-3" ng-repeat="interview in interviewRow">
+    <div class="container" infinite-scroll="addMoreInterviewRows()">
+        <div class="row" ng-repeat="interviewRow in interviewRows | limitTo:interviewRowDisplayCount">
+            <div class="col-sm-2" ng-repeat="interview in interviewRow">
                 <div ng-include="'views/thumbs/interview.html'"></div>
             </div>
         </div>
     </div>
 </section>
-
-

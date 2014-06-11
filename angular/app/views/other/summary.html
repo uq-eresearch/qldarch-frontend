@@ -1,3 +1,11 @@
+<div class="alert alert-warning" ng-show="(Auth.role === 'editor' || Auth.role === 'root') && !$state.includes('other.summary.edit')" style="margin: 0;" >
+    <div class="container">
+        <div ng-hide="$state.includes('other.summary.edit')">
+            <button class="btn btn-default btn-xs" ng-click="delete(other)" ng-show="Auth.role === 'root'"><i class="fa fa-trash-o"></i> Delete</button>
+        </div>
+    </div>
+</div>
+
 <div class="l-frame l-frame-tight">
     <div class="container">
    

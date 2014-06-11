@@ -8,7 +8,7 @@
         <div class="col-md-12">
             <ul>
                 <li ng-repeat="article in articles">
-                    <a href="#/article/{{ article.encodedUri}}">{{ article[Uris.DCT_TITLE] }}</a>
+                    <a href="#/article?articleId={{ article.encodedUri}}">{{ article[Uris.DCT_TITLE] }}</a>
                 </li>
             </ul>
         </div>

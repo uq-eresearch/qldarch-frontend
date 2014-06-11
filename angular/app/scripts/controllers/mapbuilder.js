@@ -145,7 +145,7 @@ angular.module('angularApp')
          */
         function addStructuresAsLocations(structures) {
             $scope.map.$import.locations = [];
-            $scope.map.$import.filter = {};
+            $scope.map.$import.filter = {australian: 'all'};
 
             $scope.map.$import.architects = [];
             $scope.map.$import.firms = [];
@@ -340,6 +340,16 @@ angular.module('angularApp')
                 // Firm filter
                 if ($scope.map.$import.filter.firmUri) {
                     result = result && location[Uris.QA_ASSOCIATED_FIRM] === $scope.map.$import.filter.firmUri;
+                }
+                // Australian filter
+                if ($scope.map.$import.filter.australian) {
+                	if ($scope.map.$import.filter.australian == "australian") {
+                		result = result && ((parseFloat(location.lat) < -10) && (parseFloat(location.lat) > -45) 
+                    			&& (parseFloat(location.lon) > 109) && (parseFloat(location.lat) < 155));
+                	} else if ($scope.map.$import.filter.australian == "other") {
+                		result = result && ((parseFloat(location.lat) > -10) || (parseFloat(location.lat) < -45) 
+                				|| (parseFloat(location.lon) < 109) || (parseFloat(location.lat) > 155));
+                	}
                 }
                 // architect filter
                 if ($scope.map.$import.filter.architectUri) {

@@ -13,7 +13,8 @@ angular.module('angularApp')
                 }
                 return personName;
             } else {
-                return entity[Uris.QA_TOPIC_HEADING] || entity[Uris.QA_AWARD_TITLE] || entity[Uris.QA_FIRM_NAME] || entity[Uris.FOAF_NAME] || entity[Uris.QA_LABEL] || 'Unknown';
+                return entity[Uris.QA_CITATION] || entity[Uris.QA_TOPIC_HEADING] || entity[Uris.QA_EVENT_TITLE] || entity[Uris.QA_AWARD_TITLE] || 
+                				entity[Uris.QA_FIRM_NAME] || entity[Uris.FOAF_NAME] || entity[Uris.QA_LABEL] || 'Unknown';
             }
         };
 

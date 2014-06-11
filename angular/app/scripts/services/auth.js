@@ -29,7 +29,7 @@ angular.module('angularApp')
          * @return {[type]}     [description]
          */
         this.canDelete = function (uri) {
-            return this.role === 'root' || uri.indexOf(this.user) !== -1;
+            return this.role === 'root' || (this.user && uri.indexOf(this.user) !== -1);
         };
 
         this.isEditor = function () {

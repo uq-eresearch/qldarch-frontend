@@ -143,6 +143,17 @@
 													</div>
 												</div>
 											</div>
+											<div class="row">
+												<div class="col-sm-12">
+													<div class="form-group">
+														<label>Region</label>
+														<br />
+														<input type="radio" name="location" ng-model="map.$import.filter.australian" value="australian">Australian
+														<input type="radio" name="location" ng-model="map.$import.filter.australian" value="other">Other
+														<input type="radio" name="location" ng-model="map.$import.filter.australian" value="all">All
+													</div>
+												</div>
+											</div>
 										</li>
 									</ul>
 
@@ -257,7 +268,7 @@
 	    			<!-- /Import location -->
 
 					<!-- New Location -->
-	    			<tab heading="New Location" select="$state.go('ugc.map.edit.add.location')">
+	    			<tab heading="New Location" select="map.$import.entity = null; $state.go('ugc.map.edit.add.location')">
 	    				<form style="padding: 8px; margin-top: 8px;">
 	    					<p class="text-muted">Create a new location to add to the map.</p>
 	    					<div class="form-group">

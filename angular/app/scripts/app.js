@@ -65,7 +65,8 @@ angular.module('angularApp', [
                 tempFromState.fromState = fromState;
                 tempFromState.fromParams = fromParams;
             }
-            if (fromState.name === 'login') {
+            if (fromState.name === 'login' && toState.name !== 'forgot' &&
+            		tempFromState.fromState.name !== 'forgot') {
                 // Do we have a previous state stored?
                 if (tempFromState.fromState) {
                     event.preventDefault();
@@ -719,11 +720,24 @@ angular.module('angularApp', [
                             console.log('got to here');
                             return Entity.load(uri, false);
                         }
-                    ]
+                    ],
+                    interviews: ['Interview', '$stateParams', 'GraphHelper',
+	                    function(Interview, $stateParams, GraphHelper) {
+	                        if (!$stateParams.otherId) {
+	                            return null;
+	                        }
+	                        var uri = GraphHelper.decodeUriString($stateParams.otherId);
+	                        return Interview.findByIntervieweeUri(uri).then(function(interviews) {
+	                            console.log('got interviews for', uri, interviews);
+	                            return interviews;
+	                        });
+	                    }
+	                 ]
                 },
-                controller: ['$scope', 'other',
-                    function($scope, other) {
+                controller: ['$scope', 'other', 'interviews',
+                    function($scope, other, interviews) {
                         $scope.other = other;
+                        $scope.interviews = interviews;
                     }
                 ]
             })
@@ -758,6 +772,70 @@ angular.module('angularApp', [
                                     return data;
                                 });
                             });
+                        }
+                    ]
+                }
+            })
+            .state('other.interview', {
+                url: '/interview/:interviewId?time',
+                templateUrl: 'views/other/interview.html',
+                controller: 'InterviewCtrl',
+                // reloadOnSearch: false,
+                resolve: {
+                    interview: ['$http', '$stateParams', '$q', 'Uris', 'Interview', 'Transcript', 'Relationship', 'GraphHelper', 'Entity', 'Ontology', 'File',
+                        function($http, $stateParams, $q, Uris, Interview, Transcript, Relationship, GraphHelper, Entity, Ontology, File) {
+                            var interviewUri = atob($stateParams.interviewId);
+
+                            // Get all the interview
+                            return Interview.load(interviewUri).then(function(interview) {
+
+                                var transcriptUrls = GraphHelper.asArray(interview[Uris.QA_TRANSCRIPT_LOCATION]);
+                                if (transcriptUrls.length === 0) {
+                                    console.log('No transcript');
+                                    return interview;
+                                }
+                                var transcriptUrl = transcriptUrls[0];
+                                console.log('transcript urls', transcriptUrls);
+
+                                console.log('interview is', interview);
+                                return Transcript.findFileFromInterviewKludge(interview[Uris.QA_HAS_TRANSCRIPT]).then(function(transcriptFile) {
+                                    interview.transcriptFile = transcriptFile;
+                                    return Transcript.findWithUrl(transcriptUrl).then(function(transcript) {
+                                        console.log('transcript file is', transcript);
+                                        return Relationship.findByInterviewUri(interviewUri).then(function(relationships) {
+                                            // Get all the subject, object, and predicate data
+                                            var entities = GraphHelper.getAttributeValuesUnique(relationships, [Uris.QA_SUBJECT, Uris.QA_OBJECT]);
+                                            var relatedRequests = [Entity.loadList(entities), Ontology.loadAllProperties()];
+
+                                            return $q.all(relatedRequests).then(function(relatedData) {
+                                                var entities = relatedData[0];
+                                                var properties = relatedData[1];
+
+                                                // Insert that data
+                                                angular.forEach(relationships, function(relationship) {
+                                                    relationship.subject = entities[relationship[Uris.QA_SUBJECT]];
+                                                    relationship.object = entities[relationship[Uris.QA_OBJECT]];
+                                                    relationship.predicate = properties[relationship[Uris.QA_PREDICATE]];
+                                                });
+
+                                                //                                      // Setup the transcript with all this new data
+                                                interview.transcript = Transcript.setupTranscript(transcript, {
+                                                    interviewers: interview.interviewers,
+                                                    interviewees: interview.interviewees,
+                                                    relationships: relationships
+                                                });
+                                                return interview;
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        }
+                    ],
+                    types: ['Ontology',
+                        function(Ontology) {
+                            console.log('loading summary');
+                            return Ontology.loadAllEditableEntityTypes();
                         }
                     ]
                 }
@@ -956,12 +1034,19 @@ angular.module('angularApp', [
                             ngProgress.reset();
                             return Interview.load(interviewUri).then(function(interview) {
                                 var interviewee = interview.interviewees[0];
-                                $state.go('architect.interview', {
-                                    architectId: interviewee.encodedUri,
-                                    interviewId: $stateParams.interviewId,
-                                    time: $stateParams.time
-                                });
-
+                                if (interviewee.$state == 'other') {
+                                    $state.go(interviewee.$state + '.interview', {
+                                        otherId: interviewee.encodedUri,
+                                        interviewId: $stateParams.interviewId,
+                                        time: $stateParams.time
+                                    });
+                                } else {
+                                    $state.go(interviewee.$state + '.interview', {
+                                        architectId: interviewee.encodedUri,
+                                        interviewId: $stateParams.interviewId,
+                                        time: $stateParams.time
+                                    });
+                                }
                             });
                         }
                     ]
@@ -991,7 +1076,6 @@ angular.module('angularApp', [
                                 console.log('interview is', interview);
                                 return Transcript.findFileFromInterviewKludge(interview[Uris.QA_HAS_TRANSCRIPT]).then(function(transcriptFile) {
                                     interview.transcriptFile = transcriptFile;
-
                                     return Transcript.findWithUrl(transcriptUrl).then(function(transcript) {
                                         console.log('transcript file is', transcript);
                                         return Relationship.findByInterviewUri(interviewUri).then(function(relationships) {
@@ -1553,6 +1637,49 @@ angular.module('angularApp', [
                 },
                 controller: 'RelationshipCtrl'
             })
+            .state('interviews', {
+                url: '/interviews',
+                templateUrl: 'views/interviews.html',
+                resolve: {
+                    // @todo: change this for building
+            		interviews: ['Expression', 'GraphHelper', 'Uris', 'Architect', '$filter', 'Interview',
+                         function(Expression, GraphHelper, Uris, Architect, $filter, Interview) {
+                             return Interview.loadAll().then(function(interviews) {
+                                 interviews = GraphHelper.graphValues(interviews);
+                                 interviews = $filter('filter')(interviews, function(interview) {
+                                	 return interview.interviewees[0];
+                                 });
+                                 
+                                 interviews = $filter('orderBy')(interviews, function(interview) {
+                                     return interview.interviewees[0].encodedUri;
+                                 });
+                                 
+                                 for(var i = interviews.length - 1; i >= 1; i--) {
+                                	 if(interviews[i].interviewees[0] == interviews[i - 1].interviewees[0]) {
+                                		 interviews.splice(i, 1);
+                                     }
+                                 }
+                                 
+                                 console.log('interview count', interviews);
+                                 // Filter only the interviews with pictures
+                                 // Looks better for the front page
+                                 var interviewsWithPictures = $filter('orderBy')(interviews, function(interview) {
+                                     if (angular.isDefined(interview.interviewees) && interview.interviewees.length 
+                                    		 && angular.isDefined(interview.interviewees[0].picture) 
+                                    		 && interview.interviewees[0].picture.file.indexOf('icon') === -1) {
+                                         return 0;
+                                     } else {
+                                         return 1;
+                                     }
+                                 });
+                                 
+                                 return interviewsWithPictures;
+                             });
+                         }
+                     ],
+                },
+                controller: 'InterviewsCtrl'
+            })
             .state('articles', {
                 url: '/articles',
                 templateUrl: 'views/articles.html',
@@ -1571,7 +1698,7 @@ angular.module('angularApp', [
                 ]
             })
             .state('article', {
-                url: '/article/:articleId',
+                url: '/article?articleId',
                 templateUrl: 'views/article.html',
                 resolve: {
                     // @todo: change this for building
@@ -1585,6 +1712,9 @@ angular.module('angularApp', [
                     ]
                 },
                 controller: 'ArticleCtrl'
+            })
+            .state('article.edit', {
+                url: '/edit'
             })
             .state('search', {
                 url: '/search?query',
