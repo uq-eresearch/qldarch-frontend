@@ -1189,96 +1189,57 @@ Ext.apply(lore.ore.Controller.prototype, {
      * @param {} uri
      * @param {} relations
      */
-    addHuNIResource: function(uri, relations){
-    	var params = {};
-	    params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
-	    params[gadgets.io.RequestParameters.METHOD] = gadgets.io.MethodType.GET;
-	    gadgets.io.makeRequest(encodeURI(uri), function(response){
-	    	var xmldoc = xhr.responseXML;
-            var result = xmldoc.getElementsByTagNameNS(lore.constants.NAMESPACES["sparql"], "result");
-            
-            if (result.length > 0){
-            	var graphuri, value, name, first, last, type, prefLabel;
-                for (var i = 0; i < result.length; i++) {
-                	var s, p, o, g, resource;
-                	var bindings = result[i].getElementsByTagName('binding');
-                    for (var j = 0; j < bindings.length; j++){  
-                    	attr = bindings[j].getAttribute('name');
-                    	if (attr == 's') {
-                    		s = lore.util.safeGetFirstChildValue(
-                    				bindings[j].getElementsByTagName('uri'));
-                    	} else if (attr == 'p') {
-                    		p = lore.util.safeGetFirstChildValue(
-                    				bindings[j].getElementsByTagName('uri'));
-                    	} else if (attr == 'o') {
-                    		o = lore.util.safeGetFirstChildValue(
-                    				bindings[j].getElementsByTagName('uri'));
-                    		if (!o) {
-                    			o = lore.util.safeGetFirstChildValue(
-                        				bindings[j].getElementsByTagName('literal'));
-                    		}
-                    	} else if (attr == 'g') {
-                    		g = lore.util.safeGetFirstChildValue(
-                    				bindings[j].getElementsByTagName('uri'));
-                    	} else if (attr == 'resource') {
-                    		resource = lore.util.safeGetFirstChildValue(
-                    				bindings[j].getElementsByTagName('uri'));
-                    	}
-                    }
-                	if (s == resource && uri == resource) {
-                		graphuri = g;
-                		
-                    	if (p == "http://www.w3.org/1999/02/22-rdf-syntax-ns#value") {
-                    		value = o;
-                    	} else if (p == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type") {
-                    		type = o;
-                    	} else if (p == "http://www.w3.org/2004/02/skos/core#prefLabel") {
-                    		prefLabel = o;
-                    	} else if (p == "http://xmlns.com/foaf/0.1/name") {
-                    		name = o;
-                    	} else if (p == "http://xmlns.com/foaf/0.1/firstName") {
-                    		first = o;
-                    	} else if (p == "http://xmlns.com/foaf/0.1/lastName") {
-                    		last = o;
-                    	}
-                	}
-                }
+    addQLDArchResource: function(uri){
+    	var xhr = new XMLHttpRequest();                
+        xhr.overrideMimeType('text/xml');
+        var oThis = this;
+        xhr.open("GET", "http://qldarch.net/ws/rest/entity/description?SUMMARY=false&IDLIST=" + escape(uri));
+        //xhr.open("GET", "http://localhost:8080/ws/rest/entity/description?SUMMARY=false&IDLIST=" + escape(uri));
+        xhr.onreadystatechange= function(){
+            if (xhr.readyState == 4) {
+            	var jsonObj = JSON.parse(xhr.response);
+            	
+            	var text;
+            	if (jsonObj[uri]['http://xmlns.com/foaf/0.1/firstName'] && 
+            			jsonObj[uri]['http://xmlns.com/foaf/0.1/lastName']) {
+            		text = jsonObj[uri]['http://xmlns.com/foaf/0.1/firstName'] 
+            	    	+ ' ' + jsonObj[uri]['http://xmlns.com/foaf/0.1/lastName'];
+            	} else {
+            		text = jsonObj[uri]['http://qldarch.net/ns/rdf/2012-06/terms#citation'] 
+                		|| jsonObj[uri]['http://qldarch.net/ns/rdf/2012-06/terms#topicHeading'] 
+                		|| jsonObj[uri]['http://qldarch.net/ns/rdf/2012-06/terms#eventTitle'] 
+                		|| jsonObj[uri]['http://qldarch.net/ns/rdf/2012-06/terms#awardTitle'] 
+                		|| jsonObj[uri]['http://qldarch.net/ns/rdf/2012-06/terms#firmName'] 
+                		|| jsonObj[uri]['http://xmlns.com/foaf/0.1/name'] 
+                		|| jsonObj[uri]['http://qldarch.net/ns/rdf/2012-06/terms#label'] ;
+            	}
+            	var type = jsonObj[uri]['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'];
+            	if (type.length){
+            		type = type[0];
+            	}
 
-                var title;
-                if (prefLabel) {
-                	title = prefLabel;
-                } else if (first && last) {
-                	title = first + " " + last;
-                } else if (name){
-                	title = name
-                } else if (value){
-                	title = value
-                } else if (type){
-                	title = type
+            	var url = "http://qldarch.net/beta/#";
+            	//var url = "http://localhost:8080/beta/#";
+            	if (type === 'http://qldarch.net/ns/rdf/2012-06/terms#Architect') {
+                    url += '/architect/summary?architectId=' + window.btoa(uri);
+                } else if (type === 'http://qldarch.net/ns/rdf/2012-06/terms#Structure') {
+                    url += '/project/summary?structureId=' + window.btoa(uri);
+                } else if (type === 'http://qldarch.net/ns/rdf/2012-06/terms#Firm') {
+                    url += '/firm/summary?firmId=' + window.btoa(uri);
                 } else {
-                	title = graphuri;
+                    url += '/other/summary?otherId=' + window.btoa(uri);
                 }
-                
-                title = title.split("/");
-                title = title[title.length - 1];
-                
-                lore.ore.reposAdapter.loadCompoundObject(graphuri, function(rdf) {
-        			lore.ore.controller.loadHuNICompoundObject(title, uri, rdf);
-        			
-        			if (relations) {
-        				for (var i = 0; i < relations.length; i++) {
-        					if (relations[i].subject == uri || relations[i].obj == uri) {
-        						if ((relations[i].subject == uri && lore.ore.ui.graphicalEditor.lookupFigure(relations[i].obj)) || 
-        								(relations[i].obj == uri && lore.ore.ui.graphicalEditor.lookupFigure(relations[i].subject))) {
-        							lore.ore.ui.graphicalEditor.addConnection(relations[i]).updateModel();
-        						}
-        					}
-        				}
-        			}
-        		}, 
-        		lore.ore.controller.afterLoadCompoundObjectFail);
+            	
+            	lore.ore.ui.graphicalEditor.addFigure({
+            		url: url, 
+            		props: {
+            			"dc:title_0" : text
+            		},
+        			rdftype : type
+            	}, true);
             }
-	    }, params);
+        };
+        xhr.send(null);
     },
     loadHuNICompoundObject : function(title, uri, rdf, x, y) {
     	var props = {"dc:title_0" : title, "rdftype" : lore.constants.BASIC_OBJECT_TYPE};

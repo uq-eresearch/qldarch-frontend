@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('ImageCtrl', function ($scope, image, images, depicts, $state, Expression, Uris, Auth) {
+    .controller('ImageCtrl', function ($scope, image, images, depicts, $state, Expression, Entity, Uris, Auth) {
 
         $scope.image = image;
         $scope.images = images;
@@ -47,6 +47,23 @@ angular.module('angularApp')
             });
         };
 
+        $scope.setDefault = function (image) {        	
+        	depicts[Uris.QA_PREFERRED_IMAGE] = image.uri;
+        	
+        	Entity.update(depicts.uri, depicts).then(function () {
+                console.log('saved');
+
+                angular.forEach($scope.images, function (galleryImage) {
+                    if (galleryImage.uri === image.uri) {
+                        angular.copy(image, galleryImage);
+                    }
+                });
+                
+                Entity.clearAll();
+                depicts.picture = image.file;
+            });
+        };
+        
         $scope.delete = function (photograph) {
             Expression.delete(photograph.uri, photograph).then(function () {
                 $state.go(photograph.$parentState, photograph.$parentStateParams);

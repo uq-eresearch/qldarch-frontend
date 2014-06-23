@@ -16,6 +16,9 @@
                         <li ng-class="{'active': $state.includes('firm.summary')}">
                             <a href ui-sref="firm.summary({ firmId: firm.encodedUri })">Summary</a>
                         </li>
+                        <li ng-class="{active: $state.includes('firm.photograph') || $state.includes('firm.photographs')}" ng-show="firm.uri">
+                            <a href ui-sref="firm.photographs({ firmId: firm.encodedUri })">Photographs</a>
+                        </li>
                         <li ui-sref-active="active" ng-show="firm.uri">
                             <a href ui-sref="firm.employees({ firmId: firm.encodedUri })">Employees</a>
                         </li>

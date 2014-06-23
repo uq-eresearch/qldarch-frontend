@@ -171,7 +171,7 @@ angular.module('angularApp')
     $scope.$on('audioplayer:play', playing);
 
     // Setup the select boxes
-    $scope.entitySelectOptions = {
+    $scope.subjectSelectOptions = {
         placeholder: 'Subject',
         dropdownAutoWidth: true,
         minimumInputLength: 2,
@@ -221,6 +221,29 @@ angular.module('angularApp')
 
 
 
+    $scope.objectSelectOptions = {
+        placeholder: 'Object',
+        dropdownAutoWidth: true,
+        minimumInputLength: 2,
+        query: function (options) {
+            Entity.findByName(options.term, false).then(function (entities) {
+                var data = {
+                    results: []
+                };
+                angular.forEach(entities, function (entity) {
+                    data.results.push({
+                        id: entity.uri,
+                        uri: entity.uri,
+                        text: entity.name,
+                        type: entity.type,
+                        name: entity.name,
+                        encodedUri: entity.encodedUri
+                    });
+                });
+                options.callback(data);
+            });
+        }
+    };
 
 
 
@@ -231,6 +254,98 @@ angular.module('angularApp')
         $scope.exchangeDisplayCount += 10;
     };
 
+    $scope.addEntity = function (exchange) {
+    	Entity.create(exchange.$entityForm, exchange.$entityForm[Uris.RDF_TYPE].uri).then(function () {
+        	$scope.showAddRelationship(exchange);
+            exchange.newRelationship[exchange.entityName] = exchange.$entityForm;
+            exchange.newRelationship[exchange.entityName].text = exchange.$entityForm.name;
+        });
+    }
+    
+    $scope.showCreateEntity = function (exchange, entityName, defaultType) {
+    	exchange.isAddingRelationship = false;
+    	exchange.isCreatingEntity = true;
+    	exchange.entityName = entityName;
+    	
+    	exchange.$entityForm = {};
+    	
+    	if (defaultType === 'Architect') {
+        	exchange.$entityForm[Uris.RDF_TYPE] = {
+        			id: "http://qldarch.net/ns/rdf/2012-06/terms#Architect", 
+        			uri: "http://qldarch.net/ns/rdf/2012-06/terms#Architect", 
+        			text: "Architect", 
+        			name: "Architect", 
+        			encodedUri: "aHR0cDovL3FsZGFyY2gubmV0L25zL3JkZi8yMDEyLTA2L3Rlcm1zI0FyY2hpdGVjdA=="
+        	}
+    	} else if (defaultType === 'Project') {
+        	exchange.$entityForm[Uris.RDF_TYPE] = {
+        			id: "http://qldarch.net/ns/rdf/2012-06/terms#Structure", 
+        			uri: "http://qldarch.net/ns/rdf/2012-06/terms#Structure", 
+        			text: "Structure", 
+        			name: "Structure",
+        			encodedUri: "aHR0cDovL3FsZGFyY2gubmV0L25zL3JkZi8yMDEyLTA2L3Rlcm1zI1N0cnVjdHVyZQ=="
+        	}
+    	} else if (defaultType === 'Firm') {
+    		exchange.$entityForm[Uris.RDF_TYPE] = {
+		    		id: "http://qldarch.net/ns/rdf/2012-06/terms#Firm", 
+		    		uri: "http://qldarch.net/ns/rdf/2012-06/terms#Firm", 
+		    		text: "Firm", 
+		    		name: "Firm", 
+		    		encodedUri: "aHR0cDovL3FsZGFyY2gubmV0L25zL3JkZi8yMDEyLTA2L3Rlcm1zI0Zpcm0="
+    		}
+    	} else {
+    		exchange.$entityForm[Uris.RDF_TYPE] = null;
+    	}
+    }
+    
+    $scope.typeSelect = {
+        placeholder: 'Select a Type',
+        dropdownAutoWidth: true,
+        multiple: false,
+        query: function (options) {
+            var data = {
+                results: []
+            };
+            //exchange.isFullName
+            angular.forEach(types, function (type) {
+                if (type.uri !== Uris.QA_BUILDING_TYPOLOGY && type[Uris.QA_SINGULAR].toLowerCase().indexOf(options.term.toLowerCase()) !== -1) {
+                    data.results.push({
+                        id: type.uri,
+                        uri: type.uri,
+                        text: type[Uris.QA_SINGULAR],
+                        name: type[Uris.QA_SINGULAR],
+                        encodedUri: type.encodedUri,
+                    });
+                }
+            });
+            options.callback(data);
+        }
+    };
+    
+    $scope.typologySelect = {
+        placeholder: 'Select a Building Typology',
+        dropdownAutoWidth: true,
+        multiple: true,
+        query: function (options) {
+            Entity.loadAll('qldarch:BuildingTypology', true).then(function (typologies) {
+                var data = {
+                    results: []
+                };
+
+                angular.forEach(typologies, function (typology) {
+                    data.results.push({
+                        id: typology.uri,
+                        uri: typology.uri,
+                        text: typology[Uris.QA_LABEL],
+                        name: typology[Uris.QA_LABEL],
+                        encodedUri: typology.encodedUri,
+                    });
+                });
+                options.callback(data);
+            });
+        }
+    };
+    
     /**
      * Shows the add relationship box.
      *
@@ -239,14 +354,92 @@ angular.module('angularApp')
      * @param  {Object} exchange The exchange to add the relationship
      */
     $scope.showAddRelationship = function (exchange) {
+    	var subjectSubject;
+    	var subjectText;
+    	var predicateSubject;
+    	var predicateText;
+    	var objectSubject;
+    	var objectText;
+    	var startYearSubject;
+    	var startYearText;
+    	var endYearSubject;
+    	var endYearText;
+    	var noteSubject;
+    	var noteText;
+    	if (exchange.newRelationship) {
+            subjectSubject = exchange.newRelationship.subject;
+            if (exchange.newRelationship.subject) {
+              subjectText = exchange.newRelationship.subject.text;
+            }
+            predicateSubject = exchange.newRelationship.predicate
+            if (exchange.newRelationship.predicate) {
+              predicateText = exchange.newRelationship.predicate.text;
+            }
+    		objectSubject = exchange.newRelationship.object;
+            if (exchange.newRelationship.object) {
+    		  objectText = exchange.newRelationship.object.text;
+            }
+    		startYearSubject = exchange.newRelationship.startYear;
+            if (exchange.newRelationship.startYear) {
+            	startYearText = exchange.newRelationship.startYear.text;
+            }
+            endYearSubject = exchange.newRelationship.endYear;
+            if (exchange.newRelationship.endYear) {
+            	endYearText = exchange.newRelationship.endYear.text;
+            }
+            noteSubject = exchange.newRelationship.note;
+            if (exchange.newRelationship.note) {
+            	noteText = exchange.newRelationship.note.text;
+            }
+        } else {
+            subjectSubject = $scope.interview.interviewees[0];
+            subjectText = $scope.interview.interviewees[0].name;
+        }
+    	
         // Close any other ones that may be open
         angular.forEach($scope.interview.transcript.exchanges, function (exchange) {
             $scope.hideAddRelationship(exchange);
         });
+    	exchange.isCreatingEntity = false;
         $scope.audioPlayer.pause();
         exchange.isAddingRelationship = true;
-        exchange.newRelationship.subject = $scope.interview.interviewees[0];
-        exchange.newRelationship.subject.text = $scope.interview.interviewees[0].name;
+        
+        if (subjectSubject) {
+        	exchange.newRelationship.subject = subjectSubject;
+        }
+        if (subjectText) {
+        	exchange.newRelationship.subject.text = subjectText;
+        }
+        if (predicateSubject) {
+        	exchange.newRelationship.predicate = predicateSubject;
+        }
+        if (predicateText) {
+        	exchange.newRelationship.predicate.text = predicateText;
+        }
+        if (objectSubject) {
+        	exchange.newRelationship.object = objectSubject;
+        }
+        if (objectText) {
+        	exchange.newRelationship.object.text = objectText;
+        }
+        if (startYearSubject) {
+        	exchange.newRelationship.startYear = startYearSubject;
+        }
+        if (startYearText) {
+        	exchange.newRelationship.startYear.text = startYearText;
+        }
+        if (endYearSubject) {
+        	exchange.newRelationship.endYear = endYearSubject;
+        }
+        if (endYearText) {
+        	exchange.newRelationship.endYear.text = endYearText;
+        }
+        if (noteSubject) {
+        	exchange.newRelationship.note = noteSubject;
+        }
+        if (noteText) {
+        	exchange.newRelationship.note.text = noteText;
+        }
     };
     /**
      * Removes the add relationship box for an exchange.
@@ -254,6 +447,7 @@ angular.module('angularApp')
      */
     $scope.hideAddRelationship = function (exchange) {
         exchange.isAddingRelationship = false;
+    	exchange.isCreatingEntity = false;
         exchange.newRelationship = {};
     };
 

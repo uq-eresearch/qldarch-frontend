@@ -75,6 +75,8 @@ angular.module('angularApp')
                 expression[Uris.QA_DEPICTS_BUILDING] = $scope.selectedProject.uri;
             } else if ($scope.selectedProject.type === 'architect') {
                 expression[Uris.QA_DEPICTS_ARCHITECT] = $scope.selectedProject.uri;
+            } else if ($scope.selectedProject.type === 'firm') {
+            	expression[Uris.QA_DEPICTS_FIRM] = $scope.selectedProject.uri;
             }
 
             expression.$depicts = $scope.selectedProject;
@@ -104,6 +106,11 @@ angular.module('angularApp')
         =====================================================
          */
         $scope.$watch('selectedProject', function(project) {
+        	if ($scope.selectedProject && $scope.selectedProject.type !== 'structure') {
+        		for (var i=0; i<$scope.expressions.length; i++) {
+        			$scope.expressions[i][Uris.RDF_TYPE] = Uris.QA_PHOTOGRAPH_TYPE;
+        		}
+        	}
             if (project && project.id === 'new') {
                 $state.go('structure.summary.edit', {
                     structureId: null
@@ -113,7 +120,7 @@ angular.module('angularApp')
 
         // Setup the entity select boxes
         $scope.structureSelect = {
-            placeholder: 'Select an Architect or Project',
+            placeholder: 'Select an Architect, Project or Firm',
             dropdownAutoWidth: true,
             multiple: false,
             // minimumInputLength: 2,
@@ -124,13 +131,16 @@ angular.module('angularApp')
                     };
 
                     angular.forEach(entities, function(entity) {
-                        if (entity.type !== 'architect' && entity.type !== 'structure') {
+                        if (entity.type !== 'architect' && entity.type !== 'structure' && entity.type !== 'firm') {
                             return
                         }
 
                         var label = entity.name + ' (' + entity.type.charAt(0).toUpperCase() + entity.type.slice(1) + ')';
                         if (entity.type === 'structure') {
                             label = entity.name + ' (Project)';
+                        }
+                        if (entity.type === 'firm') {
+                            label = entity.name + ' (Firm)';
                         }
 
                         data.results.unshift({

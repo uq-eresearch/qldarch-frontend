@@ -92,7 +92,7 @@
 
                 <form name="expression.$form" novalidate>
                   <!-- Type (Line drawing, photograph) -->
-                  <div class="form-group">
+                  <div class="form-group" ng-if="selectedProject.type === 'structure'">
                     <label class="control-label" style="display:block;">Type <i class="fa fa-asterisk fa-asterisk-required"></i>
                     </label>
                     <label class="radio-inline">

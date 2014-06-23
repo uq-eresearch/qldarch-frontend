@@ -150,11 +150,15 @@ angular.module('angularApp')
                     throw ('Type needs to be defined');
                 }
                 return Request.getIndex('expression', type, false, false).then(function (expressions) {
-                    var photographs = [];
-                    angular.forEach(expressions, function (expression) {
-                        if (angular.isDefined(expression[Uris.QA_ASSOCIATED_FIRM]) && firmUris.indexOf(expression[Uris.QA_ASSOCIATED_FIRM]) !== -1) {
-                            photographs.push(expression);
-                        }
+                    var photographs = $filter('filter')(GraphHelper.graphValues(expressions), function (expression) {
+                        var relatedFirmUris = GraphHelper.asArray(expression[Uris.QA_RELATED_TO]).concat(GraphHelper.asArray(expression[Uris.QA_DEPICTS_FIRM]));
+                        var found = false;
+                        angular.forEach(firmUris, function (firmUri) {
+                            if (relatedFirmUris.indexOf(firmUri) !== -1) {
+                                found = true;
+                            }
+                        });
+                        return found;
                     });
                     return attachFiles(photographs);
                 });

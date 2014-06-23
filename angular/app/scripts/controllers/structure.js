@@ -3,6 +3,9 @@
 angular.module('angularApp')
     .controller('StructureCtrl', function ($scope, structure, types, designers, Entity, $state, Uris) {
         $scope.structure = structure;
+        if (typeof $scope.structure.uri === 'undefined') {
+        	$scope.structure[Uris.QA_AUSTRALIAN] = true;
+        }
         var originalStructure = angular.copy(structure);
         $scope.designers = designers;
         console.log('structure', structure);

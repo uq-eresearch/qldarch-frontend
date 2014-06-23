@@ -167,8 +167,13 @@
                     </div>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" ng-model="structure[Uris.QA_DEMOLISHED]">Demolished
+                            <input type="checkbox" ng-model="structure[Uris.QA_AUSTRALIAN]">Australian Project
                         </label>
+                    </div>
+                    <div class="checkbox">
+	                    <label>
+	                        <input type="checkbox" ng-model="structure[Uris.QA_DEMOLISHED]">Demolished
+	                    </label>
                     </div>
                     <div class="form-group">
                         <label>Summary</label>
@@ -188,12 +193,6 @@
                                 <input id="LNG" type="text" placeholder="Longitude" ng-model="structure[Uris.GEO_LONG]" class="form-control">
                             </div>
                         </div>
-                    </div>
-
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" ng-model="structure[Uris.QA_AUSTRALIAN]">Australian Project
-                        </label>
                     </div>
                     <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid || structure.$typologies.length == 0">Save</button>
                     <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>

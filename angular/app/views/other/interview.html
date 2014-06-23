@@ -190,7 +190,7 @@
                 <div class="panel-heading" ng-if="(Auth.role === 'editor' || Auth.role === 'root') && Auth.auth && !isSearching">
 
                   <!-- Control buttons -->
-                  <span ng-hide="exchange.isAddingRelationship || exchange.isEditingRelationships">
+                  <span ng-hide="exchange.isAddingRelationship || exchange.isEditingRelationships || exchange.isCreatingEntity">
                     <button type="button" class="btn btn-default btn-xs" ng-click="showAddRelationship(exchange)"><i class="fa fa-plus fa-fw"></i>
                     </button>
 
@@ -201,11 +201,91 @@
                   </button>
                   <!-- /Control Buttons -->
 
+				  <form name="exchange.$entityForm" ng-if="exchange.isCreatingEntity">
+				    <div class="form-group">
+                      <label>Type <i class="fa fa-asterisk fa-asterisk-required"></i></label>
+                      <div ui-select2="typeSelect" ng-model="exchange.$entityForm[Uris.RDF_TYPE]" class="form-control"></div>
+                    </div>
+                    <div class="form-group" ng-if="((exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_EDUCATIONAL_INSTITUTION) || 
+                    									(exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_ORGANISATION) || 
+                    									(exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_GOVERNMENT_INSTITUTION))">
+                      <label>Name<i class="fa fa-asterisk fa-asterisk-required"></i></label>
+                      <input type="text" ng-model="exchange.$entityForm[Uris.FOAF_NAME]" class="form-control"  placeholder="Name">
+                    </div>
+                    <div class="form-group" ng-if="exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_PUBLICATION_TYPE">
+                      <label>Title<i class="fa fa-asterisk fa-asterisk-required"></i></label>
+                      <input type="text" ng-model="exchange.$entityForm[Uris.QA_CITATION]" class="form-control"  placeholder="Title">
+                    </div>
+                    <div class="form-group" ng-if="exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_EVENT_TYPE">
+                      <label>Title<i class="fa fa-asterisk fa-asterisk-required"></i></label>
+                      <input type="text" ng-model="exchange.$entityForm[Uris.QA_EVENT_TITLE]" class="form-control"  placeholder="Title">
+                    </div>
+                    <div class="form-group" ng-if="exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_AWARD_TYPE">
+                      <label>Title<i class="fa fa-asterisk fa-asterisk-required"></i></label>
+                      <input type="text" ng-model="exchange.$entityForm[Uris.QA_AWARD_TITLE]" class="form-control"  placeholder="Title">
+                    </div>
+                    <div class="form-group" ng-if="((exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_PLACE_TYPE) ||
+                    									(exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_STRUCTURE_TYPE))">
+                      <label>Name<i class="fa fa-asterisk fa-asterisk-required"></i></label>
+                      <input type="text" ng-model="exchange.$entityForm[Uris.QA_LABEL]" class="form-control"  placeholder="Name">
+                    </div>
+                    <div class="form-group" ng-if="exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_TOPIC_TYPE">
+                      <label>Topic Heading<i class="fa fa-asterisk fa-asterisk-required"></i></label>
+                      <input type="text" ng-model="exchange.$entityForm[Uris.QA_TOPIC_HEADING]" class="form-control"  placeholder="Topic Heading">
+                    </div>
+                    <div class="form-group" ng-if="exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_FIRM_TYPE">
+                      <label>Name<i class="fa fa-asterisk fa-asterisk-required"></i></label>
+                      <input type="text" ng-model="exchange.$entityForm[Uris.QA_FIRM_NAME]" class="form-control"  placeholder="Name">
+                    </div>
+                    <div class="form-group" ng-if="((exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.FOAF_PERSON_TYPE) || 
+                    									(exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_ARCHITECT_TYPE) || 
+                    									(exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_PROFESSIONAL_TYPE) || 
+                    									(exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_ACADEMIC_TYPE))">
+                      <label>Name<i class="fa fa-asterisk fa-asterisk-required"></i></label>
+                      <div class="row">
+                        <div class="col-sm-6">
+                      		<input type="text" ng-model="exchange.$entityForm[Uris.FOAF_FIRST_NAME]" class="form-control"  placeholder="First Name">
+                        </div>
+                        <div class="col-sm-6">
+                       		<input type="text" ng-model="exchange.$entityForm[Uris.FOAF_LAST_NAME]" class="form-control"  placeholder="Last Name">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group" ng-if="exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_STRUCTURE_TYPE">
+                      <label>Building Typology <i class="fa fa-asterisk fa-asterisk-required"></i></label>
+                      <div name="typology" ui-select2="typologySelect" ng-model="exchange.$entityForm[Uris.QA_BUILDING_TYPOLOGY_P]" class="form-control required" ng-required="true"></div>
+                    </div>
+                    <div class="form-group" ng-if="exchange.$entityForm[Uris.RDF_TYPE].uri">
+                      <label for="summary">Summary</label>
+                      <textarea rows="4" id="summary" class="form-control" placeholder="Summary" ng-model="exchange.$entityForm[Uris.QA_SUMMARY]"></textarea>
+                    </div>
+                        
+                    <button type="submit" class="btn btn-sm btn-primary" ng-click="addEntity(exchange)">Add</button>
+                    <button class="btn btn-sm btn-default" ng-click="showAddRelationship(exchange)">Cancel</button>
+                  </form>
+
+
                   <!-- New relationship -->
-                  <form name="exchange.$form" ng-if="exchange.isAddingRelationship">
+                  <form name="exchange.$form" ng-hide="!exchange.isAddingRelationship">
                     <div class="form-group">
                       <label>Subject</label>
-                      <div name="subject" ui-select2="entitySelectOptions" ng-model="exchange.newRelationship.subject" class="form-control" ng-required="true"></div>
+                      <div class="row">
+                        <div class="col-sm-9">
+                          <div name="subject" ui-select2="subjectSelectOptions" ng-model="exchange.newRelationship.subject" class="form-control" ng-required="true"></div>
+                        </div>
+                        <div class="col-sm-3">
+				            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+				            		style="width:109px;padding-top: 4px;padding-bottom: 4px;">
+				                Add New&nbsp;&nbsp;&nbsp;<span class="caret"></span>
+				            </button>
+	                        <ul class="dropdown-menu" role="addNew">
+				                <li><a ng-click="showCreateEntity(exchange, 'subject', 'Architect')" target="_blank">Architect</a></li>
+				                <li><a ng-click="showCreateEntity(exchange, 'subject', 'Project')" target="_blank">Project</a></li>
+				                <li><a ng-click="showCreateEntity(exchange, 'subject', 'Firm')" target="_blank">Firm</a></li>
+				                <li><a ng-click="showCreateEntity(exchange, 'subject', 'Other')" target="_blank">Other</a></li>
+				            </ul>
+                        </div>
+                      </div>
                     </div>
 
                     <div class="form-group">
@@ -214,7 +294,23 @@
                     </div>
                     <div class="form-group">
                       <label>Object</label>
-                      <div name="object" ui-select2="entitySelectOptions" ng-model="exchange.newRelationship.object" class="form-control" ng-required="true"></div>
+                      <div class="row">
+                        <div class="col-sm-9">
+                      	  <div name="object" ui-select2="objectSelectOptions" ng-model="exchange.newRelationship.object" class="form-control" ng-required="true"></div>
+                        </div>
+                        <div class="col-sm-3">
+				          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+				          		style="width:109px;padding-top: 4px;padding-bottom: 4px;">
+				                 Add New&nbsp;&nbsp;&nbsp;<span class="caret"></span>
+				          </button>
+	                      <ul class="dropdown-menu" role="addNew">
+				            <li><a ng-click="showCreateEntity(exchange, 'object', 'Architect')" target="_blank">Architect</a></li>
+				            <li><a ng-click="showCreateEntity(exchange, 'object', 'Project')" target="_blank">Project</a></li>
+				            <li><a ng-click="showCreateEntity(exchange, 'object', 'Firm')" target="_blank">Firm</a></li>
+				            <li><a ng-click="showCreateEntity(exchange, 'object', 'Other')" target="_blank">Other</a></li>
+				          </ul>
+                        </div>
+                      </div>
                     </div>
                     <div class="form-group">
                       <label>Dates</label>

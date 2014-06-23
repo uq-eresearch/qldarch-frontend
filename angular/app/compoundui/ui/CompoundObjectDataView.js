@@ -8,7 +8,7 @@ lore.ore.ui.CompoundObjectDataView = Ext.extend(Ext.DataView, {
             plugins: new Ext.DataView.DragSelector({dragSafe:true}),
             tpl :  new Ext.XTemplate(               
                 '<tpl for=".">',
-                '<tpl if="!entryType.match(lore.constants.COMPOUND_OBJECT_TYPE)"><div class="coListing"></tpl>',
+                '<tpl if="!entryType.match(lore.constants.COMPOUND_OBJECT_TYPE)"><div class="coListing" onclick="lore.ore.controller.addQLDArchResource(\'{uri}\')"></tpl>',
                 '<tpl if="entryType.match(lore.constants.COMPOUND_OBJECT_TYPE)"><div class="coListing" onclick="lore.ore.controller.loadCompoundObjectFromURL(\'{uri}\')"></tpl>',
                     '<table><tr valign="top"><td>{[this.genNumber(values.uri)]}</td><td>',
                     '<div style="float:left;padding:2px;">',
@@ -127,7 +127,7 @@ lore.ore.ui.CompoundObjectDataView = Ext.extend(Ext.DataView, {
                      iconCls: "add-icon",
                      scope: this,
                      handler : function(obj,evt) {
-                         lore.ore.controller.addHuNIResource(this.sel.data.uri);
+                         lore.ore.controller.addQLDArchResource(this.sel.data.uri);
                      }
                   });
                   
@@ -242,7 +242,7 @@ lore.ore.ui.CompoundObjectDataView = Ext.extend(Ext.DataView, {
                         menu.remoteLoad.hide();
                         menu.remoteMsg.hide();
                         menu.addBasic.show();
-                        menu.addCompound.show();
+                        menu.addCompound.hide();
                         menu.addResource.hide();
                         menu.showBrowser.hide();
                     }

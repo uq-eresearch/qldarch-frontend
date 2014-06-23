@@ -36,7 +36,129 @@ lore.ore.repos.SPARQLAdapter = Ext.extend(lore.ore.repos.RepositoryAdapter,{
         }
         lore.ore.repos.SPARQLAdapter.maskCount = 0;
         
+        if (isSearchQuery) {
+        	lore.ore.reposAdapter.getBasicObjects(matchval);
+        }
         lore.ore.reposAdapter.getResourceMapObjects(matchuri, matchpred, matchval, isSearchQuery);
+    },
+    getBasicObjects : function(matchval){            
+    	try {
+	    	if (matchval == null || matchval == "") {
+	    		return;
+	    	}
+	    	
+	    	var queryURL = "/openrdf-sesame/repositories/QldarchMetadataServer?query=" 
+	    	queryURL += encodeURIComponent("SELECT distinct(?item as ?hit) ?name ?type ");
+	    	queryURL += encodeURIComponent("WHERE {");
+	    	queryURL += encodeURIComponent("{?item a ?type.");
+	    	queryURL += encodeURIComponent("?item (<http://xmlns.com/foaf/0.1/name>|<http://xmlns.com/foaf/0.1/firstName>|");
+	    	queryURL += encodeURIComponent("<http://qldarch.net/ns/rdf/2012-06/terms#label>|<http://qldarch.net/ns/rdf/2012-06/terms#topicHeading>|");
+	    	queryURL += encodeURIComponent("<http://qldarch.net/ns/rdf/2012-06/terms#citation>|<http://qldarch.net/ns/rdf/2012-06/terms#firmName>|");
+	    	queryURL += encodeURIComponent("<http://qldarch.net/ns/rdf/2012-06/terms#eventTitle>|<http://qldarch.net/ns/rdf/2012-06/terms#awardTitle>|");
+	    	queryURL += encodeURIComponent("<http://xmlns.com/foaf/0.1/lastName>|<http://www.w3.org/2004/02/skos/core#prefLabel>) ?textValue. ");
+	    	queryURL += encodeURIComponent("FILTER(REGEX(?textValue, '" + matchval + "', 'i'))} ");
+	    	queryURL += encodeURIComponent("OPTIONAL {");
+	    	queryURL += encodeURIComponent("SELECT ?item (CONCAT(?fname, ' ', ?lname) AS ?name)");
+	    	queryURL += encodeURIComponent("WHERE {");
+	    	queryURL += encodeURIComponent("?item <http://xmlns.com/foaf/0.1/firstName> ?fname.");
+	    	queryURL += encodeURIComponent("?item <http://xmlns.com/foaf/0.1/lastName> ?lname.");
+	    	queryURL += encodeURIComponent("?item <http://xmlns.com/foaf/0.1/lastName> ?lname.");
+	    	queryURL += encodeURIComponent("}");
+	    	//queryURL += encodeURIComponent("GROUP BY ?item ?fname ?lname");
+	    	queryURL += encodeURIComponent("}");
+	    	queryURL += encodeURIComponent("OPTIONAL {?item <http://xmlns.com/foaf/0.1/name> ?name}");
+	    	queryURL += encodeURIComponent("OPTIONAL {?item <http://qldarch.net/ns/rdf/2012-06/terms#citation> ?name}");
+	    	queryURL += encodeURIComponent("OPTIONAL {?item <http://qldarch.net/ns/rdf/2012-06/terms#firmName> ?name}");
+	    	queryURL += encodeURIComponent("OPTIONAL {?item <http://qldarch.net/ns/rdf/2012-06/terms#eventTitle> ?name}");
+	    	queryURL += encodeURIComponent("OPTIONAL {?item <http://qldarch.net/ns/rdf/2012-06/terms#awardTitle> ?name}");
+	    	queryURL += encodeURIComponent("OPTIONAL {?item <http://qldarch.net/ns/rdf/2012-06/terms#label> ?name}");
+	    	queryURL += encodeURIComponent("OPTIONAL {?item <http://www.w3.org/2004/02/skos/core#prefLabel> ?name}");
+	    	queryURL += encodeURIComponent("OPTIONAL {?item <http://qldarch.net/ns/rdf/2012-06/terms#topicHeading> ?name}");
+	    	queryURL += encodeURIComponent("}");
+		   	queryURL += "&output=xml&limit=9999";   
+		   	lore.debug.ore("SPARQLAdapter.getBasicObjects", queryURL);
+
+		   	if (lore.ore.repos.SPARQLAdapter.maskCount == 0) {
+			   	lore.ore.repos.SPARQLAdapter.mask.show();
+		   	}
+		   	lore.ore.repos.SPARQLAdapter.maskCount += 1;
+		   			   	
+		   	var xhr = new XMLHttpRequest();                
+	        xhr.overrideMimeType('text/xml');
+	        var oThis = this;
+	        xhr.open("GET", queryURL);
+	        xhr.setRequestHeader("Accept","application/sparql-results+xml");    
+	        xhr.onreadystatechange= function(){
+	            if (xhr.readyState == 4) {
+		    	
+	            	lore.ore.repos.SPARQLAdapter.maskCount += -1;
+	    		   	if (lore.ore.repos.SPARQLAdapter.maskCount <= 0) {
+	    			   	lore.ore.repos.SPARQLAdapter.mask.hide();
+	    		   	}
+	    		   	
+	            	var xmldoc = xhr.responseXML;
+	                var results = {};
+	                if (xmldoc) {
+	                    results = xmldoc.getElementsByTagNameNS(lore.constants.NAMESPACES["sparql"], "result");
+	                }
+	                
+	                if (results.length > 0){
+	                    var coList = [];
+	                    
+	                    for (var i = 0; i < results.length; i++) {                    	
+	                    	var bindings = results[i].getElementsByTagName("binding");
+	                    	
+	                    	var props = {};
+	                    	props.creator = "QLDArch";
+	                    	props.type = "";
+	                    	props.entryType = lore.constants.BASIC_OBJECT_TYPE;
+	                    	
+	                        for (var j = 0; j < bindings.length; j++){  
+		                         attr = bindings[j].getAttribute('name');
+		                         if (attr =='hit'){
+		                             var node = bindings[j].getElementsByTagName('uri'); 
+		                             props.uri = lore.util.safeGetFirstChildValue(node);
+		                         } else if (attr == 'type'){
+		                             var node = bindings[j].getElementsByTagName('uri'); 
+		                             var type = lore.util.safeGetFirstChildValue(node);
+
+		                             while (type.indexOf("/") != -1) {
+		                            	 type = type.substring(type.indexOf("/") + 1);
+	                            	 }
+		                             while (type.indexOf("_") != -1) {
+		                            	 type = type.substring(type.indexOf("_") + 1);
+	                            	 }
+		                             while (type.indexOf("#") != -1) {
+		                            	 type = type.substring(type.indexOf("#") + 1);
+	                            	 }
+		                             props.type = type;
+		                         } else if (attr == 'name'){
+		                             var node = bindings[j].getElementsByTagName('literal');
+		                             var nodeVal = lore.util.safeGetFirstChildValue(node);
+		                             if (!nodeVal){
+		                                 node = bindings[j].getElementsByTagName('uri');
+		                                 nodeVal = lore.util.safeGetFirstChildValue(node);
+		                             }
+		                             props.title = nodeVal;
+		                         } 
+	                        }
+	                        
+	                        coList.push(props);
+	                    }
+	                    lore.ore.coListManager.add(coList, "search");
+	                }
+	            } else {
+	            	lore.ore.repos.SPARQLAdapter.maskCount += -1;
+	    		   	if (lore.ore.repos.SPARQLAdapter.maskCount <= 0) {
+	    			   	lore.ore.repos.SPARQLAdapter.mask.hide();
+	    		   	}
+	            }
+	        };
+	        xhr.send(null);
+	    } catch (e) {
+	        lore.debug.ore("Error: Unable to retrieve Resource Maps",e);
+	        lore.ore.ui.vp.warning("Unable to retrieve Resource Maps");
+	    }
     },
     getResourceMapObjects : function(matchuri, matchpred, matchval, isSearchQuery){ 
     	try {

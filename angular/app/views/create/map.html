@@ -22,40 +22,6 @@
 				<div class="panel-body">
 					<i class="fa fa-times pull-right" ui-sref="create.map"></i>
 					<tabset>
-						<!-- New Location -->
-		    			<tab heading="New" select="$state.go('create.map.add.location')">
-		    				<form style="padding: 8px; margin-top: 8px;">
-		    					<p class="text-muted">Create a new location to add to the map.</p>
-		    					<div class="form-group">
-									<label class="control-label" for="dateHeadline">
-										Name
-										<i class="fa fa-asterisk" style="font-size: 10px;"></i>
-									</label>
-									<input ng-model="map.$tempLocation.name" name="dateHeadline" type="text" class="form-control" id="dateHeadline" placeholder="What is the name of your location?" required>
-								</div>
-								<div class="form-group">
-									<label>
-										Position
-										<i class="fa fa-asterisk" style="font-size: 10px;"></i>
-									</label>
-									<div class="row">
-										<div class="col-sm-6">
-											<input type="text" class="form-control" placeholder="Latitude" ng-model="map.$tempLocation.lat" required/>
-										</div>
-										<div class="col-sm-6">
-											<input type="text" class="form-control" placeholder="Longitude" ng-model="map.$tempLocation.lon" required/>
-										</div>
-									</div>
-								</div>
-								
-								<div style="margin-top: 24px;">
-									<button type="submit" class="btn btn-primary" ng-click="addLocation(map.$tempLocation)"
-									ng-disabled="!map.$tempLocation.name || !map.$tempLocation.lat || !map.$tempLocation.lon">Add to Map</button>
-								</div>
-		    				</form>
-		    			</tab>
-		    			<!-- /New Location -->
-
 		    			<!-- Import location -->
 		    			<tab heading="From Architect, Project or Typology" select="$state.go('create.map.add.import')">
 		    				<div style="padding: 8px; margin-top: 8px;">
@@ -93,6 +59,40 @@
 		    				</div>
 		    			</tab>
 		    			<!-- /Import location -->
+		    			
+						<!-- New Location -->
+		    			<tab heading="New" select="$state.go('create.map.add.location')">
+		    				<form style="padding: 8px; margin-top: 8px;">
+		    					<p class="text-muted">Create a new location to add to the map.</p>
+		    					<div class="form-group">
+									<label class="control-label" for="dateHeadline">
+										Name
+										<i class="fa fa-asterisk" style="font-size: 10px;"></i>
+									</label>
+									<input ng-model="map.$tempLocation.name" name="dateHeadline" type="text" class="form-control" id="dateHeadline" placeholder="What is the name of your location?" required>
+								</div>
+								<div class="form-group">
+									<label>
+										Position
+										<i class="fa fa-asterisk" style="font-size: 10px;"></i>
+									</label>
+									<div class="row">
+										<div class="col-sm-6">
+											<input type="text" class="form-control" placeholder="Latitude" ng-model="map.$tempLocation.lat" required/>
+										</div>
+										<div class="col-sm-6">
+											<input type="text" class="form-control" placeholder="Longitude" ng-model="map.$tempLocation.lon" required/>
+										</div>
+									</div>
+								</div>
+								
+								<div style="margin-top: 24px;">
+									<button type="submit" class="btn btn-primary" ng-click="addLocation(map.$tempLocation)"
+									ng-disabled="!map.$tempLocation.name || !map.$tempLocation.lat || !map.$tempLocation.lon">Add to Map</button>
+								</div>
+		    				</form>
+		    			</tab>
+		    			<!-- /New Location -->
 		  			</tabset>
 				</div>
 			</div>

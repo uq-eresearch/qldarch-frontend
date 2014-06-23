@@ -82,49 +82,64 @@ lore.ore.ui.graphicalEditor = Ext.extend(Ext.Panel,{
 		        });
 		        droptarget.notifyDrop = function(dd, e, data) {		        	
 		        	if (data.draggedRecord.data.entryType == lore.constants.BASIC_OBJECT_TYPE) {
-	        	    	var xhr = new XMLHttpRequest();                
-	        	        xhr.overrideMimeType('text/xml');
-	        	        var oThis = this;
-	        	        xhr.open("GET", data.draggedRecord.data.uri);
-	        	        xhr.onreadystatechange= function(){
-	        	            if (xhr.readyState == 4) {
-			        	    	var xmldoc = xhr.responseXML;
-			                    var result = xmldoc.getElementsByTagNameNS(lore.constants.NAMESPACES["sparql"], "result");
-		                    	var graphuri;
+		        		var ge = lore.ore.ui.graphicalEditor;
+		            	var coGraph = ge.coGraph;
+		            	
+		        		var uri = data.draggedRecord.data.uri;
+		        		var xhr = new XMLHttpRequest();                
+		                xhr.overrideMimeType('text/xml');
+		                var oThis = this;
+		                xhr.open("GET", "http://qldarch.net/ws/rest/entity/description?SUMMARY=false&IDLIST=" 
+		                //xhr.open("GET", "http://localhost:8080/ws/rest/entity/description?SUMMARY=false&IDLIST=" 
+		                		+ escape(uri));
+		                
+		                xhr.onreadystatechange= function(){
+		                    if (xhr.readyState == 4) {
+		                    	var jsonObj = JSON.parse(xhr.response);
+
+		                    	var text;
+		                    	if (jsonObj[uri]['http://xmlns.com/foaf/0.1/firstName'] && 
+		                    			jsonObj[uri]['http://xmlns.com/foaf/0.1/lastName']) {
+		                    		text = jsonObj[uri]['http://xmlns.com/foaf/0.1/firstName'] 
+		                    	    	+ ' ' + jsonObj[uri]['http://xmlns.com/foaf/0.1/lastName'];
+		                    	} else {
+		                    		text = jsonObj[uri]['http://qldarch.net/ns/rdf/2012-06/terms#citation'] 
+			                    		|| jsonObj[uri]['http://qldarch.net/ns/rdf/2012-06/terms#topicHeading'] 
+			                    		|| jsonObj[uri]['http://qldarch.net/ns/rdf/2012-06/terms#eventTitle'] 
+			                    		|| jsonObj[uri]['http://qldarch.net/ns/rdf/2012-06/terms#awardTitle'] 
+			                    		|| jsonObj[uri]['http://qldarch.net/ns/rdf/2012-06/terms#firmName'] 
+			                    		|| jsonObj[uri]['http://xmlns.com/foaf/0.1/name'] 
+			                    		|| jsonObj[uri]['http://qldarch.net/ns/rdf/2012-06/terms#label'] ;
+		                    	}
+		                    	var type = jsonObj[uri]['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'];
+		                    	if (type.length){
+		                    		type = type[0];
+		                    	}
+
+		                    	var url = "http://qldarch.net/beta/#";
+		                    	//var url = "http://localhost:8080/beta/#";
+		                    	if (type === 'http://qldarch.net/ns/rdf/2012-06/terms#Architect') {
+		                            url += '/architect/summary?architectId=' + window.btoa(uri);
+		                        } else if (type === 'http://qldarch.net/ns/rdf/2012-06/terms#Structure') {
+		                            url += '/project/summary?structureId=' + window.btoa(uri);
+		                        } else if (type === 'http://qldarch.net/ns/rdf/2012-06/terms#Firm') {
+		                            url += '/firm/summary?firmId=' + window.btoa(uri);
+		                        } else {
+		                            url += '/other/summary?otherId=' + window.btoa(uri);
+		                        }
 		                    	
-			                    if (result.length > 0){
-			                        for (var i = 0; i < result.length; i++) {
-			                        	var s,  g, resource;
-			                        	var bindings = result[i].getElementsByTagName('binding');
-			                            for (var j = 0; j < bindings.length; j++){  
-			                            	attr = bindings[j].getAttribute('name');
-			                            	if (attr == 's') {
-			                            		s = lore.util.safeGetFirstChildValue(
-			                            				bindings[j].getElementsByTagName('uri'));
-			                            	} else if (attr == 'g') {
-			                            		g = lore.util.safeGetFirstChildValue(
-			                            				bindings[j].getElementsByTagName('uri'));
-			                            	} else if (attr == 'resource') {
-			                            		resource = lore.util.safeGetFirstChildValue(
-			                            				bindings[j].getElementsByTagName('uri'));
-			                            	}
-			                            }
-			                        	if (s == resource && data.draggedRecord.data.uri == resource) {
-			                        		graphuri = g;
-			                        	}
-			                        }
-			                    }
-	
-			                	var coGraph = lore.ore.ui.graphicalEditor.coGraph;
-			                    lore.ore.reposAdapter.loadCompoundObject(graphuri, function(rdf) {
-				        			lore.ore.controller.loadHuNICompoundObject(
-				        					data.draggedRecord.data.title, data.draggedRecord.data.uri, rdf, 
-				        					(e.xy[0] - coGraph.getAbsoluteX() + coGraph.getScrollLeft()),
-				        					(e.xy[1] - coGraph.getAbsoluteY() + coGraph.getScrollTop()));
-				                });
-	        	            }
-	        	        };
-	        	        xhr.send(null);     
+		                    	ge.addFigure({
+		                    		url: url, 
+				                	x : (e.xy[0] - coGraph.getAbsoluteX() + coGraph.getScrollLeft()),
+				                	y : (e.xy[1] - coGraph.getAbsoluteY() + coGraph.getScrollTop()),
+		                    		props: {
+		                    			"dc:title_0" : text
+		                    		},
+		                			rdftype : type
+		                    	}, true);
+		                    }
+		                };
+		                xhr.send(null);    
 		        	} else if (data.draggedRecord.data.entryType == lore.constants.HUNI_OBJECT_TYPE) {
 		        		var ge = lore.ore.ui.graphicalEditor;
 		            	var coGraph = ge.coGraph;

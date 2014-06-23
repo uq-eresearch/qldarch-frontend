@@ -263,6 +263,9 @@ angular.module('angularApp', [
                                 if (expression[Uris.QA_DEPICTS_ARCHITECT]) {
                                     return Entity.load(expression[Uris.QA_DEPICTS_ARCHITECT]);
                                 }
+                                if (expression[Uris.QA_DEPICTS_FIRM]) {
+                                    return Entity.load(expression[Uris.QA_DEPICTS_FIRM]);
+                                }
                                 return [];
                             });
 
@@ -293,6 +296,11 @@ angular.module('angularApp', [
                                 } else if (expression[Uris.QA_DEPICTS_ARCHITECT]) {
                                     return Expression.findByArchitectUris(GraphHelper.asArray(expression[Uris.QA_DEPICTS_ARCHITECT]), type).then(function(expressions) {
                                         console.log('architect expressions', expressions);
+                                        return expressions;
+                                    });
+                                } else if (expression[Uris.QA_DEPICTS_FIRM]) {
+                                    return Expression.findByFirmUris(GraphHelper.asArray(expression[Uris.QA_DEPICTS_FIRM]), type).then(function(expressions) {
+                                        console.log('firm expressions', expressions);
                                         return expressions;
                                     });
                                 } else {
@@ -1242,6 +1250,23 @@ angular.module('angularApp', [
                     function($scope, firm, employees, LayoutHelper) {
                         $scope.firm = firm;
                         $scope.employeeRows = LayoutHelper.group(employees, 6);
+                    }
+                ]
+            })
+            .state('firm.photographs', {
+                url: '/photographs',
+                templateUrl: 'views/firm/photographs.html',
+                resolve: {
+                    photographs: ['GraphHelper', 'Firm', 'Expression', '$stateParams',
+                        function(GraphHelper, Firm, Expression, $stateParams) {
+                            var firmUri = GraphHelper.decodeUriString($stateParams.firmId);
+                            return Expression.findByFirmUris([firmUri], 'qldarch:Photograph');
+                        }
+                    ]
+                },
+                controller: ['$scope', 'photographs', 'LayoutHelper',
+                    function($scope, photographs, LayoutHelper) {
+                        $scope.photographRows = LayoutHelper.group(photographs, 6);
                     }
                 ]
             })

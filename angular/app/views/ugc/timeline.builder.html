@@ -15,7 +15,50 @@
 			<div class="panel-body">
 				<i class="fa fa-times pull-right" ui-sref="ugc.timeline.edit"></i>
 				<tabset>
-					<!-- New Date -->
+					<!-- Import date -->
+	    			<tab heading="From Architect, Project or Typology" select="$state.go('ugc.timeline.edit.add.import')">
+	    				<div style="padding: 8px; margin-top: 8px;">
+	    					<p>Search for architects, projects or firms to import dates from their timeline.</p>
+							<div 
+								ui-select2="architectStructureFirmSelect" 
+								ng-model="timeline.$import.entity" 
+								class="form-control">
+							</div>
+
+							<div style="margin-top: 16px;">
+								<div ng-show="timeline.$import.entity && timeline.$import.dates == null" style="text-align: center;">
+									<i class="fa fa-spin fa-refresh"></i>
+								</div>
+
+								<div ng-show="timeline.$import.dates && !timeline.$import.dates.length">
+									No dates found.
+								</div>
+								<div ng-repeat="date in timeline.$import.dates" class="row" style="margin-top: 8px;">
+									<div>
+										<div class="col-sm-1" style="text-align: right">
+											<input type="checkbox" ng-model="date.$selected" ng-change="importSelectionChanged()">
+										</div>
+										<div class="col-sm-1">
+											<img ng-src="{{ date.asset.thumbnail }}" alt="thumbnail" class="img-responsive">
+										</div>
+										<div class="col-sm-10">
+											<strong>{{ date.startDate }} <span ng-show="date.endDate">- {{ date.endDate }}</span></strong> 
+											{{ date.headline }}
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+							<div style="margin-top: 10px;" >
+								<button class="btn btn-primary" ng-click="import(timeline.$import.dates)" ng-show="timeline.$import.dates.length">Add to timeline ({{ timeline.$import.numberToImport }})</button>
+								<button class="btn btn-default" ui-sref="ugc.timeline.edit" >Cancel</button>
+							</div>
+	    				</div>
+	    			</tab>
+	    			<!-- /Import date -->
+	    			
+	    			<!-- New Date -->
 	    			<tab heading="New" select="$state.go('ugc.timeline.edit.add.date')">
 	    				<form style="padding: 8px; margin-top: 8px;">
 							<div class="form-group">
@@ -89,49 +132,6 @@
 						</form>
 	    			</tab>
 	    			<!-- /New Date -->
-
-	    			<!-- Import date -->
-	    			<tab heading="From Architect, Project or Typology" select="$state.go('ugc.timeline.edit.add.import')">
-	    				<div style="padding: 8px; margin-top: 8px;">
-	    					<p>Search for architects, projects or firms to import dates from their timeline.</p>
-							<div 
-								ui-select2="architectStructureFirmSelect" 
-								ng-model="timeline.$import.entity" 
-								class="form-control">
-							</div>
-
-							<div style="margin-top: 16px;">
-								<div ng-show="timeline.$import.entity && timeline.$import.dates == null" style="text-align: center;">
-									<i class="fa fa-spin fa-refresh"></i>
-								</div>
-
-								<div ng-show="timeline.$import.dates && !timeline.$import.dates.length">
-									No dates found.
-								</div>
-								<div ng-repeat="date in timeline.$import.dates" class="row" style="margin-top: 8px;">
-									<div>
-										<div class="col-sm-1" style="text-align: right">
-											<input type="checkbox" ng-model="date.$selected" ng-change="importSelectionChanged()">
-										</div>
-										<div class="col-sm-1">
-											<img ng-src="{{ date.asset.thumbnail }}" alt="thumbnail" class="img-responsive">
-										</div>
-										<div class="col-sm-10">
-											<strong>{{ date.startDate }} <span ng-show="date.endDate">- {{ date.endDate }}</span></strong> 
-											{{ date.headline }}
-										</div>
-									</div>
-								</div>
-							</div>
-
-
-							<div style="margin-top: 10px;" >
-								<button class="btn btn-primary" ng-click="import(timeline.$import.dates)" ng-show="timeline.$import.dates.length">Add to timeline ({{ timeline.$import.numberToImport }})</button>
-								<button class="btn btn-default" ui-sref="ugc.timeline.edit" >Cancel</button>
-							</div>
-	    				</div>
-	    			</tab>
-	    			<!-- /Import date -->
 	  			</tabset>
 			</div>
 		</div>

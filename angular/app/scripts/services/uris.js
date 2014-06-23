@@ -2,11 +2,13 @@
 
 angular.module('angularApp')
     .service('Uris', function (ENV) {
-        // AngularJS will instantiate a singleton by calling 'new' on this function
+    	// AngularJS will instantiate a singleton by calling 'new' on this function
         this.local = true;
 
         this.JSON_ROOT = '/ws/rest/';
         this.SOLR_ROOT = '/solr/collection1/';
+
+        this.THUMB_ROOT = '';
 
         if (ENV.name === 'development') {
             this.OMEKA_FILE_ROOT = 'http://qldarch-test.metadata.net/omeka/archive/files/';
@@ -83,6 +85,7 @@ angular.module('angularApp')
         this.QA_DOCUMENTED_BY = this.QA_NS + 'documentedBy';
         this.QA_DEPICTS_BUILDING = this.QA_NS + 'depictsBuilding';
         this.QA_DEPICTS_ARCHITECT = this.QA_NS + 'depictsArchitect';
+        this.QA_DEPICTS_FIRM = this.QA_NS + 'depictsFirm';
         this.QA_MANAGED_FILE = this.QA_NS + 'managedFile';
 
         this.QA_ISSUE = this.QA_NS + 'issue';

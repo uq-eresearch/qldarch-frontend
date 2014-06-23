@@ -6146,6 +6146,9 @@ h6 {
   display: block;
   margin-bottom: 8px;
 }
+.page-header.page-header-compoundobject {
+  background-color: #69c0dd;
+}
 .page-header.page-header-timeline {
   background-color: #ccda6a;
 }
