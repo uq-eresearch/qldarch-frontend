@@ -9,6 +9,7 @@ angular.module('angularApp')
         $scope.australian = australian;
         $scope.$stateParams = $stateParams;
         $scope.indexes = {
+            '#': false,
             'A': false,
             'B': false,
             'C': false,
@@ -91,6 +92,10 @@ angular.module('angularApp')
             });
         }
 
+        function isLetter(char) {
+        	return char.match(/[a-z]/i);
+        }
+        
         function makeChart(data) {
             // Setup the chart 
             var container = document.getElementById('chart');
@@ -147,10 +152,16 @@ angular.module('angularApp')
                                 // Enable indexes because we have a firm that starts with that letter
                                 if (cell.length) {
                                     var startLetter = cell.substring(0, 1).toUpperCase();
-                                    $scope.indexes[startLetter] = true;
+                                    if (!isNaN(startLetter)) {
+                                        $scope.indexes['#'] = true;
+                                    } else if (isLetter(startLetter)) {
+                                        $scope.indexes[startLetter] = true;
+                                    }
                                 }
 
-                                if (!$stateParams.index || ($stateParams.index && cell.substring(0, 1) === $stateParams.index)) {
+                                if (!$stateParams.index || $stateParams.index == 'null' 
+                                		|| ($stateParams.index && cell.substring(0, 1) === $stateParams.index) 
+                                		|| ($stateParams.index === '#' && !isNaN(cell.substring(0, 1)))) {
                                     // Create a new date
                                     hasData = true;
                                     date.startDate = cellYear;

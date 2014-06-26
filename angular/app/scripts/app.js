@@ -855,7 +855,7 @@ angular.module('angularApp', [
                 //template: '<ui-view autoscroll="false"></ui-view>'
             })
             .state('architects.queensland', {
-                url: '',
+                url: '?index',
                 templateUrl: 'views/architects/architects.html',
                 controller: 'ArchitectsCtrl',
                 resolve: {
@@ -872,7 +872,7 @@ angular.module('angularApp', [
                 }
             })
             .state('architects.other', {
-                url: '/other',
+                url: '/other?index',
                 templateUrl: 'views/architects/architects.html',
                 controller: 'ArchitectsCtrl',
                 resolve: {
@@ -1379,7 +1379,7 @@ angular.module('angularApp', [
                 template: '<ui-view autoscroll="false"></ui-view>'
             })
             .state('structures.australian', {
-                url: '',
+                url: '?index',
                 templateUrl: 'views/structures.html',
                 controller: 'StructuresCtrl',
                 resolve: {
@@ -1397,7 +1397,7 @@ angular.module('angularApp', [
                 }
             })
             .state('structures.other', {
-                url: '/other',
+                url: '/other?index',
                 templateUrl: 'views/structures.html',
                 controller: 'StructuresCtrl',
                 resolve: {
