@@ -13,4 +13,4 @@ Setup
     "password": GLADYS_PASSWORD
 }
 ```
-* Run `grunt serve`
+* Run `grunt server`
