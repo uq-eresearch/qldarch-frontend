@@ -85,7 +85,7 @@ angular.module('angularApp')
                 var newFile = {};
                 // $scope.interview.$transcriptFiles.unshift(newFile);
                 newFile.uploadFile = file;
-                newFile.uploadFn = File.upload($scope.myModelObj, file)
+                newFile.uploadFn = File.upload({id: atob($state.params.id)}, file)
                     .progress(function(evt) {
                         newFile.uploadFile.percent = parseInt(100.0 * evt.loaded / evt.total);
                         newFile.uploadFile.isComplete = newFile.uploadFile.percent === 100;
