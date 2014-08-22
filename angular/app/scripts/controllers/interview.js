@@ -174,7 +174,6 @@ angular.module('angularApp')
     $scope.subjectSelectOptions = {
         placeholder: 'Subject',
         dropdownAutoWidth: true,
-        minimumInputLength: 2,
         query: function (options) {
             Entity.findByName(options.term, false).then(function (entities) {
                 var data = {
@@ -190,6 +189,7 @@ angular.module('angularApp')
                         encodedUri: entity.encodedUri
                     });
                 });
+                data.results.sort(function(a,b) { return a.text.localeCompare(b.text);});
                 options.callback(data);
             });
         }
@@ -197,7 +197,6 @@ angular.module('angularApp')
     $scope.relationshipSelectOptions = {
         placeholder: 'Relationship',
         dropdownAutoWidth: true,
-        minimumInputLength: 2,
         query: function (options) {
             console.log('querying', options);
             Ontology.findPropertyByName(options.term).then(function (properties) {
@@ -214,6 +213,7 @@ angular.module('angularApp')
                         entailsRelationship: property[Uris.QA_ENTAILS_RELATIONSHIP]
                     });
                 });
+                data.results.sort(function(a,b) { return a.text.localeCompare(b.text);});
                 options.callback(data);
             });
         }
@@ -224,7 +224,6 @@ angular.module('angularApp')
     $scope.objectSelectOptions = {
         placeholder: 'Object',
         dropdownAutoWidth: true,
-        minimumInputLength: 2,
         query: function (options) {
             Entity.findByName(options.term, false).then(function (entities) {
                 var data = {
@@ -240,6 +239,7 @@ angular.module('angularApp')
                         encodedUri: entity.encodedUri
                     });
                 });
+                data.results.sort(function(a,b) { return a.text.localeCompare(b.text);});
                 options.callback(data);
             });
         }
@@ -318,6 +318,7 @@ angular.module('angularApp')
                     });
                 }
             });
+            data.results.sort(function(a,b) { return a.text.localeCompare(b.text);});
             options.callback(data);
         }
     };
@@ -331,7 +332,6 @@ angular.module('angularApp')
                 var data = {
                     results: []
                 };
-
                 angular.forEach(typologies, function (typology) {
                     data.results.push({
                         id: typology.uri,
@@ -341,6 +341,7 @@ angular.module('angularApp')
                         encodedUri: typology.encodedUri,
                     });
                 });
+                data.results.sort(function(a,b) { return a.text.localeCompare(b.text);});
                 options.callback(data);
             });
         }
