@@ -61,7 +61,9 @@ angular.module('angularApp')
                 angular.forEach(data.relationships, function (relationship) {
                     if ((angular.isDefined(relationship.subject) && (relationship.subject.uri === node.uri)) ||
                         (angular.isDefined(relationship.object) && (relationship.object.uri === node.uri))) {
+                      if(!relationship.implicit || (relationship.implicit && (relationship.implicit === false))) {
                         $scope.selectedRelationships.push(relationship);
+                      }
                     }
                 });
             }
