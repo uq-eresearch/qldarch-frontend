@@ -103,7 +103,14 @@
                                 <div class="square-content">
                                     <div class="center">
                                         <div class="center-content">
-                                            <i class="fa fa-microphone" style="font-size: 16px;"></i>  
+                                            <div ng-switch on="relationship.implicit">
+                                                <div ng-switch-when="true">
+                                                    <i class="fa fa-plus" style="font-size: 16px;"></i>  
+                                                </div>
+                                                <div ng-switch-default>
+                                                    <i class="fa fa-microphone" style="font-size: 16px;"></i>  
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -111,11 +118,20 @@
                           </a>
                           <div class="media-body">
                             <h5 style="line-height: 24px; font-weight: normal; margin-bottom: 0;">
-                                <a ui-sref="interview({interviewId: relationship.evidence.encodedDocumentedBy, time: relationship.evidence[Uris.QA_TIME_FROM] })" >
-                                    {{ relationship.subject.name }}
-                                    {{ relationship.predicate.name || relationship.predicate[Uris.QA_LABEL] }}
-                                    {{ relationship.object.name }}
-                                </a>
+                              <div ng-switch on="relationship.implicit">
+                                  <div ng-switch-when="true">
+                                      {{ relationship.subject.name }}
+                                      {{ relationship.predicate.name || relationship.predicate[Uris.QA_LABEL] }}
+                                      {{ relationship.object.name }}
+                                  </div>
+                                  <div ng-switch-default>
+                                      <a ui-sref="interview({interviewId: relationship.evidence.encodedDocumentedBy, time: relationship.evidence[Uris.QA_TIME_FROM] })" >
+                                          {{ relationship.subject.name }}
+                                          {{ relationship.predicate.name || relationship.predicate[Uris.QA_LABEL] }}
+                                          {{ relationship.object.name }}
+                                      </a>
+                                  </div>
+                              </div>
                             </h5>
                             
                             <!-- Date -->
