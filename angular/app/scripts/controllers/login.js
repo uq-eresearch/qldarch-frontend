@@ -18,6 +18,7 @@ angular.module('angularApp')
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             }).then(function (response) {
+                Auth.clear();
                 angular.extend(Auth, response.data);
                 console.log('going to main!');
                 $state.go('main');

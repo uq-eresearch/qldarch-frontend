@@ -36,4 +36,9 @@ angular.module('angularApp')
             return this.role === 'editor' || this.role === 'root';
         };
 
+        this.clear = function() {
+          // from http://stackoverflow.com/a/19316998
+          for(var k in this) if(!this[k].constructor.toString().match(/^function Function\(/)) delete this[k];
+        };
+
     });
