@@ -37,7 +37,7 @@ angular.module('angularApp')
         };
 
         this.clear = function() {
-          // from http://stackoverflow.com/a/19316998
+          // remove all properties from this singleton. from http://stackoverflow.com/a/19316998
           for(var k in this) if(!this[k].constructor.toString().match(/^function Function\(/)) delete this[k];
         };
 
