@@ -152,8 +152,16 @@ angular.module('angularApp')
             if (index >= 0) {
                 $scope.currentExchangeIndex = index;
                 $scope.currentExchange = $scope.interview.transcript.exchanges[index];
-                $scope.currentSpeaker = $scope.interview.transcript.exchanges[index].speaker;
+                // change request #36, only show photos of the interviewees.
+                // i think the currentSpeaker is used for the photo on the interview page and for nothing else (Andre)
+                if($scope.currentExchange.speaker && !$scope.currentExchange.speaker.isInterviewer) {
+                  $scope.currentSpeaker = $scope.currentExchange.speaker;
+                } else {
+                  $scope.currentSpeaker = interview.interviewees[0];
+                }
             }
+        } else {
+          $scope.currentSpeaker = interview.interviewees[0];
         }
     }
 
