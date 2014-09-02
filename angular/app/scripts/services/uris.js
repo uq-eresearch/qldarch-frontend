@@ -23,6 +23,14 @@ angular.module('angularApp')
             this.SESAME_FILE_ROOT = 'http://qldarch.net/files/';
             this.SESAME_THUMB_ROOT = 'http://qldarch.net/files/';
             this.PROD_URL = 'http://qldarch.net/beta/';
+        } else if (ENV.name === 'local') {
+            // TODO try to make this the default and remove the development and production configuration
+            this.OMEKA_FILE_ROOT = '/omeka/archive/files/';
+            this.OMEKA_THUMB_ROOT = '/omeka/archive/square_thumbnails/';
+            this.SESAME_FILE_ROOT = '/files/';
+            this.SESAME_THUMB_ROOT = '/files/';
+            // TODO try to ditch the PROD_URL
+            this.PROD_URL = 'http://localhost:9000/';
         }
         /**/
 
