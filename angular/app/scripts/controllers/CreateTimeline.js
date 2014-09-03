@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('CreateTimelineCtrl', function ($scope, Entity, Uris, $stateParams, $location, $http, ENV, $filter, Relationship, GraphHelper, $q, Timeline, $state, Expression, LayoutHelper, Auth, CompoundObject) {
+    .controller('CreateTimelineCtrl', function ($scope, Entity, Uris, $stateParams, $location, $http, $filter, Relationship, GraphHelper, $q, Timeline, $state, Expression, LayoutHelper, Auth, CompoundObject) {
 
         var DEFAULT_IMPORT = {
             entity: null,
