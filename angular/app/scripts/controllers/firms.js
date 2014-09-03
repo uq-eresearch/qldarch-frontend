@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('FirmsCtrl', function ($scope, firms, Uris, GraphHelper, LayoutHelper, $http, ENV, australian, $stateParams, $state, $location, $timeout, $filter, Firm) {
+    .controller('FirmsCtrl', function ($scope, firms, Uris, GraphHelper, LayoutHelper, $http, australian, $stateParams, $state, $location, $timeout, $filter, Firm) {
 
         var DEFAULT_FIRM_ROW_COUNT = 5,
             data = null;
@@ -77,11 +77,7 @@ angular.module('angularApp')
         if (australian) {
 
             var url;
-            if (ENV.name === 'development') {
-                url = 'files/firms.json';
-            } else {
-                url = 'files/firms.json';
-            }
+            url = 'resources/firms.json';
 
             $http.get(url).then(function (response) {
                 data = response.data;

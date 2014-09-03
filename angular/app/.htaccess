@@ -541,3 +541,10 @@ FileETag None
 # <IfModule mod_headers.c>
 #    Header set Connection Keep-Alive
 # </IfModule>
+
+# renamed files to resources because of a name conflict in the dev environment
+<IfModule mod_rewrite.c>
+  RewriteEngine on
+  RewriteRule ^files/firms.(json|csv)$ resources/firms.$1 [L]
+</IfModule>
+
