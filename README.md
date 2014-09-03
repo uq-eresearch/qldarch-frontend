@@ -1,8 +1,11 @@
-qldarch-frontend-2
+qldarch-frontend
 ==================
 
 Setup
 -----
+* Get NPM
+* Install yo `npm install -g yo`
+* Install generator for angular `npm install -g generator-angular`
 * Go to `angular` directory
 * Run `npm install`
 * Run `bower install`
