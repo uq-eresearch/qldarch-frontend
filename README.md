@@ -3,7 +3,7 @@ qldarch-frontend
 
 Setup
 -----
-* Get NPM
+* Install NPM (bunch of different wants to do this)
 * Install yo `npm install -g yo`
 * Install generator for angular `npm install -g generator-angular`
 * Go to `angular` directory
