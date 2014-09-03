@@ -41,8 +41,7 @@ angular.module('angularApp')
         firms = $filter('orderBy')(GraphHelper.graphValues(firms), function (firm) {
             return firm.name;
         });
-        $scope.firmRows = LayoutHelper.group(GraphHelper.graphValues(firms), 6);
-
+        $scope.firmRows = frows();
         /**
          * Adds more exchanges to the UI
          */
@@ -55,7 +54,7 @@ angular.module('angularApp')
                 index: index
             });
             $stateParams.index = index;
-
+            $scope.firmRows = frows();
             $timeout(function () {
                 $timeout(function () {
                     makeChart(data);
@@ -86,6 +85,17 @@ angular.module('angularApp')
                 }
                 makeChart(data);
             });
+        }
+
+        function frows() {
+          return LayoutHelper.group(GraphHelper.graphValues($.grep(firms, function(firm) {
+              if($stateParams.index) {
+                var c0 = firm.name.charAt(0);
+                return $stateParams.index === '#'?$.isNumeric(c0):(c0.toUpperCase() === $stateParams.index);
+              } else {
+                return true;
+              }
+            })), 6);
         }
 
         function isLetter(char) {
