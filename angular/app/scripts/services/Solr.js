@@ -234,9 +234,6 @@ angular.module('angularApp')
                 // http://qldarch-test.metadata.net/solr/collection1/select?q=article%3Agraham%20article%3Abligh&wt=json&rows=100
 
                 var url = Uris.SOLR_ROOT + 'select?wt=json&rows=300&q=' + encodeURIComponent(urlTerms);
-                // if (ENV.name === 'development') {
-                //     url = 'scripts/searchresults.json';
-                // }
 
                 return $http.get(url).then(function (response) {
 
