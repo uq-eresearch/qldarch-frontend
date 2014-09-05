@@ -5,7 +5,7 @@ angular.module('angularApp')
 .controller('InterviewCtrl', function ($scope, interview, $state, $http, Uris, Entity, Ontology, types, 
 		interviews, $stateParams, $location, $anchorScroll, $timeout, GraphHelper, Expression, $cacheFactory) {
     // Setup
-	
+
     $scope.delete = function (interview) {
         var interviewee = $scope.interview.$interviewees[0];
         Expression.delete(interview.uri, interview).then(function () {
@@ -592,19 +592,34 @@ angular.module('angularApp')
         }
     };
 
+    var nextMatch = 0;
+
     /**
      * Search for text in the exchanges
      * @param transcriptSearchInput
      */
     $scope.transcriptSearchInputChanged = function (transcriptSearchInput) {
         $scope.isSearching = true;
+        nextMatch = 0;
         $scope.audioPlayer.pause();
-        $scope.exchangeDisplayCount = exchangeDisplayCountDefault;
+        $scope.exchangeDisplayCount = interview.transcript.exchanges.length
 
         if (transcriptSearchInput === '') {
             // cleared
             playing();
         }
+    };
+
+    $scope.transcriptSearchKeydown = function(e) {
+      if (e.keyCode == 13) {
+        var m = jQuery('.ui-match');
+        if(m.length > 0) {
+          if(nextMatch >= m.length) {
+            nextMatch = 0;
+          }
+          jQuery('html, body').scrollTop(jQuery(m[nextMatch++]).offset().top - 20);
+        }
+      }
     };
 
     /**

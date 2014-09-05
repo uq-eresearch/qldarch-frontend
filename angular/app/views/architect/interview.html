@@ -137,7 +137,7 @@
             <div class="input-group" style="padding: 0 15px; ">
               <span class="input-group-addon"><i class="fa fa-search"></i>
               </span>
-              <input type="text" class="form-control" placeholder="Search transcript" ng-model="transcriptSearchInput" ng-change="transcriptSearchInputChanged(transcriptSearchInput)">
+              <input type="text" class="form-control" placeholder="Search transcript" ng-model="transcriptSearchInput" ng-change="transcriptSearchInputChanged(transcriptSearchInput)" ng-keydown="transcriptSearchKeydown($event)">
             </div>
 
           </div>
@@ -145,7 +145,7 @@
 
         <!-- exchanges -->
         <div infinite-scroll="addMoreExchanges()" class="interview-exchanges" style="margin-top: 24px;">
-          <div ng-repeat="exchange in interview.transcript.exchanges | filter:{'transcript': transcriptSearchInput} | filter:timeFilter | limitTo:exchangeDisplayCount" class="row exchange" ng-class="{'exchange-searching': isSearching}" id="{{ exchange.startTime }}" style="margin-bottom:20px">
+          <div ng-repeat="exchange in interview.transcript.exchanges | filter:timeFilter | limitTo:exchangeDisplayCount" class="row exchange" ng-class="{'exchange-searching': isSearching}" id="{{ exchange.startTime }}" style="margin-bottom:20px">
             <!-- transcript -->
             <div class="col-sm-6">
               <div class="media">
