@@ -1843,20 +1843,20 @@ select[multiple].input-lg {
 .has-success .form-control,
 form input.ng-valid.ng-dirty,
 form .select2-container.ng-valid.ng-dirty .select2-choice {
-  border-color: #3eb283;
+  border-color: #11c3b6;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 .has-success .form-control:focus,
 form input.ng-valid.ng-dirty:focus,
 form .select2-container-active.ng-valid.ng-dirty .select2-choice {
-  border-color: #318d68;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #83d4b3;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #83d4b3;
+  border-color: #0d948a;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #4befe3;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #4befe3;
 }
 .has-success .input-group-addon {
   color: #11c3b6;
-  border-color: #3eb283;
+  border-color: #11c3b6;
   background-color: #4ac0a4;
 }
 .has-success .form-control-feedback {
@@ -1871,18 +1871,18 @@ form .select2-container-active.ng-valid.ng-dirty .select2-choice {
   color: #8a6d3b;
 }
 .has-warning .form-control {
-  border-color: #faebcc;
+  border-color: #8a6d3b;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 .has-warning .form-control:focus {
-  border-color: #f5d89e;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ffffff;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ffffff;
+  border-color: #66512c;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #c0a16b;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #c0a16b;
 }
 .has-warning .input-group-addon {
   color: #8a6d3b;
-  border-color: #faebcc;
+  border-color: #8a6d3b;
   background-color: #fcf8e3;
 }
 .has-warning .form-control-feedback {
@@ -1899,20 +1899,20 @@ form .select2-container-active.ng-valid.ng-dirty .select2-choice {
 .has-error .form-control,
 form input.ng-invalid.ng-dirty,
 form .select2-container.ng-invalid.ng-dirty .select2-choice {
-  border-color: #ebccd1;
+  border-color: #a94442;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 .has-error .form-control:focus,
 form input.ng-invalid.ng-dirty:focus,
 form .select2-container-active.ng-invalid.ng-dirty .select2-choice {
-  border-color: #dca7b0;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ffffff;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ffffff;
+  border-color: #843534;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ce8483;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ce8483;
 }
 .has-error .input-group-addon {
   color: #a94442;
-  border-color: #ebccd1;
+  border-color: #a94442;
   background-color: #f2dede;
 }
 .has-error .form-control-feedback {
@@ -6725,4 +6725,14 @@ form .select2-container-active.ng-invalid.ng-dirty .select2-choice {
   background-color: white;
   border-bottom: 3px solid #53C6BB;
   border-radius: 0px;
+}
+@media (min-width: 992px) {
+  .container {
+    width: 750px !important;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px !important;
+  }
 }
