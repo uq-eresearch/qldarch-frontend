@@ -7,7 +7,7 @@
   </div>
 </div>
 
-<div class="alert alert-warning" ng-show="Auth.isUQSLQ() && !$state.includes('article.edit')" style="margin: 0;">
+<div class="alert alert-warning" ng-show="Auth.isUQSLQ()" style="margin: 0;" ng-hide="$state.includes('article.edit')">
   <div class="container">
     <!-- Download dropdown -->
     <div class="btn-group" ng-hide="$state.includes('article.edit')">
