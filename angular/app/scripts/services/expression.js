@@ -11,6 +11,7 @@ angular.module('angularApp')
         var attachFiles = function (expressions) {
             var fileUris = GraphHelper.getAttributeValuesUnique(expressions, Uris.QA_HAS_FILE);
             return File.loadList(fileUris).then(function (files) {
+                console.log('Got all the files', files);
                 //              console.log("got files", files);
                 angular.forEach(expressions, function (expression) {
 
@@ -285,6 +286,7 @@ angular.module('angularApp')
              */
             load: function (uri) {
                 return Request.getUri('expression', uri, false).then(function (expression) {
+                    console.log('Attaching files to expression', expression[Uris.DCT_TITLE]);
                     return attachFiles([expression]).then(function () {
                         return expression;
                     });

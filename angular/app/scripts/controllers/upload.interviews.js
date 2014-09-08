@@ -64,10 +64,12 @@ angular.module('angularApp')
                         newFile.uploadFile.isComplete = newFile.uploadFile.percent === 100;
                     }).success(function(data) {
                         // file is uploaded successfully
+                        $scope.interview[Uris.QA_HAS_FILE] = $scope.interview[Uris.QA_HAS_FILE] || [];
                         $scope.interview[Uris.QA_HAS_FILE].push(data.uri);
 
                         // Set the transcript
                         // expression[Uris.QA_HAS_TRANSCRIPT] = data.uri;
+                        $scope.interview[Uris.QA_EXTERNAL_LOCATION] = $scope.interview[Uris.QA_EXTERNAL_LOCATION] || [];
                         $scope.interview[Uris.QA_EXTERNAL_LOCATION].push(Uris.SESAME_FILE_ROOT + data[Uris.QA_SYSTEM_LOCATION]);
 
                         // expression.$file = File.setupImageUrls(data);
