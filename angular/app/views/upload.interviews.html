@@ -171,7 +171,7 @@
                 </div>
 
                 <div class="form-group">
-                    <button class="btn btn-primary" ng-click="create(interview)" ng-disabled="form.$invalid || !(interview.$audioFiles.length || interview.files.length)">
+                    <button class="btn btn-primary" ng-click="create(interview)" ng-disabled="form.$invalid">
                         {{ interview.uri && 'Update' || 'Create' }}
                     </button>
                     <button class="btn btn-default" ng-click="cancel()">Cancel</button>
