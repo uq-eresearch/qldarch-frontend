@@ -7,7 +7,7 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
     require('load-grunt-tasks')(grunt);
     require('time-grunt')(grunt);
 
@@ -74,6 +74,7 @@ module.exports = function (grunt) {
                 }
             }
         },
+
         ngconstant: {
             options: {
                 space: '  '
@@ -165,20 +166,28 @@ module.exports = function (grunt) {
             },
             proxies: [{
                 context: '/ws',
-                host: 'qldarch-test.metadata.net',
-                changeOrigin: true
+                host: 'qldarch.net',
+                headers: {
+                    host: 'qldarch.net:80'
+                }
             }, {
                 context: '/solr',
-                host: 'qldarch-test.metadata.net',
-                changeOrigin: true,
+                host: 'qldarch.net',
+                headers: {
+                    host: 'qldarch.net:80'
+                }
             }, {
                 context: '/static',
-                host: 'qldarch-test.metadata.net',
-                changeOrigin: true,
+                host: 'qldarch.net',
+                headers: {
+                    host: 'qldarch.net:80'
+                }
             }, {
                 context: '/files',
-                host: 'qldarch-test.metadata.net',
-                changeOrigin: true,
+                host: 'qldarch.net',
+                headers: {
+                    host: 'qldarch.net:80'
+                }
             }],
             livereload: {
                 options: {
@@ -187,7 +196,7 @@ module.exports = function (grunt) {
                         '.tmp',
                         '<%= yeoman.app %>'
                     ],
-                    middleware: function (connect, options) {
+                    middleware: function(connect, options) {
                         if (!Array.isArray(options.base)) {
                             options.base = [options.base];
                         }
@@ -196,7 +205,7 @@ module.exports = function (grunt) {
                         var middlewares = [require('grunt-connect-proxy/lib/utils').proxyRequest];
 
                         // Serve static files.
-                        options.base.forEach(function (base) {
+                        options.base.forEach(function(base) {
                             middlewares.push(connect.static(base));
                         });
 
@@ -450,14 +459,14 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('server', function (target) {
+    grunt.registerTask('server', function(target) {
         if (target === 'dist') {
             return grunt.task.run(['build', 'connect:dist:keepalive']);
         }
 
         grunt.task.run([
             'clean:server',
-            'ngconstant:dev', // 
+            // 'ngconstant:dev', // 
             'concurrent:server',
             'autoprefixer',
             'configureProxies:server',

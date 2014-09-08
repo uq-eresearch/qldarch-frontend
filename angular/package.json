@@ -25,6 +25,7 @@
     "grunt-contrib-watch": "~0.5.2",
     "grunt-google-cdn": "~0.2.0",
     "grunt-karma": "~0.6.2",
+    "grunt-ng-constant": "^0.4.8",
     "grunt-ngmin": "~0.0.2",
     "grunt-rev": "~0.1.0",
     "grunt-ssh": "~0.10.0",
