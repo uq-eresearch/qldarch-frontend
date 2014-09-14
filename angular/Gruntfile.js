@@ -380,7 +380,7 @@ module.exports = function(grunt) {
                         'images/{,*/}*.{gif,webp}',
                         'images/header.jpg',
                         'fonts/*',
-                        'files/*'
+                        'resources/*'
                     ]
                 }, {
                     expand: true,
