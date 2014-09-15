@@ -120,9 +120,9 @@
                             <h5 style="line-height: 24px; font-weight: normal; margin-bottom: 0;">
                               <div ng-switch on="relationship.implicit">
                                   <div ng-switch-when="true">
-                                      {{ relationship.subject.name }}
-                                      {{ relationship.predicate.name || relationship.predicate[Uris.QA_LABEL] }}
-                                      {{ relationship.object.name }}
+                                    <a href="{{relationship.subject.$link}}">{{ relationship.subject.name }}</a>
+                                    {{ relationship.predicate.name || relationship.predicate[Uris.QA_LABEL] }}
+                                    <a href="{{relationship.object.$link}}">{{ relationship.object.name }}</a>
                                   </div>
                                   <div ng-switch-default>
                                       <a ui-sref="interview({interviewId: relationship.evidence.encodedDocumentedBy, time: relationship.evidence[Uris.QA_TIME_FROM] })" >
