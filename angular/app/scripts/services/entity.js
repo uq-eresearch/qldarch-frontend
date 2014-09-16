@@ -93,7 +93,7 @@ angular.module('angularApp')
                             imageUri = imageUri[0];
                         }
                         var expression = expressions[imageUri];
-                        if (angular.isDefined(expression.file)) {
+                        if (expression && angular.isDefined(expression.file)) {
                             entity.picture = expression.file;
                         }
                     }
