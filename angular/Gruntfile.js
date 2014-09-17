@@ -408,6 +408,11 @@ module.exports = function(grunt) {
                 cwd: '<%= yeoman.app %>/styles',
                 dest: '.tmp/styles/',
                 src: '{,*/}*.css'
+            },
+            //workaround: copy a fixed timeline.js into the bower_components directory
+            timeline : {
+              dest: 'app/bower_components/timelinejs/build/js/timeline.js',
+              src: 'timeline.js'
             }
         },
         concurrent: {
@@ -466,6 +471,7 @@ module.exports = function(grunt) {
 
         grunt.task.run([
             'clean:server',
+            'copy:timeline',
             // 'ngconstant:dev', // 
             'concurrent:server',
             'autoprefixer',
@@ -521,6 +527,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build:prod', [
         'clean:dist',
+        'copy:timeline',
         'ngconstant:prod', // 
         'useminPrepare',
         'concurrent:dist',

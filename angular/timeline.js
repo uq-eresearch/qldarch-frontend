@@ -5223,6 +5223,9 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 			VMM.Lib.width($slides_items, (slides.length * config.slider.content.width));
 			
 			if (_from_start) {
+        if(current_slide >= slides.length) {
+          current_slide = 0;
+        }
 				VMM.Lib.css($slider_container, "left", slides[current_slide].leftpos());
 			}
 			
@@ -5646,6 +5649,9 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 			
 			// Set current slide
 			current_slide	= n;
+      if(current_slide >= slides.length) {
+        current_slide = 0;
+      }
 			_pos			= slides[current_slide].leftpos();
 			
 			
@@ -7936,6 +7942,9 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 				is_first	= false;
 			
 			current_marker = 	n;
+      if(current_marker >= markers.length) {
+        current_marker = 0;
+      }
 			
 			timenav_pos.left			= (config.width/2) - markers[current_marker].pos_left
 			timenav_pos.visible.left	= Math.abs(timenav_pos.left) - 100;
