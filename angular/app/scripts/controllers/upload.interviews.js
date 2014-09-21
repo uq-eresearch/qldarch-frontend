@@ -102,7 +102,11 @@ angular.module('angularApp')
                             // Set a shortcut to the transcript file
                             $scope.interview[Uris.QA_TRANSCRIPT_LOCATION] = Uris.SESAME_FILE_ROOT + data[Uris.QA_TRANSCRIPT_FILE];
                         } else {
+                          if(data.msg) {
+                            toaster.pop('error', data.msg);
+                          } else {
                             toaster.pop('error', 'Transcript couldn\'t be processed', 'Sorry this transcript couldn\'t be processed');
+                          }
                         }
                         // Set the transcript
                         // expression[Uris.QA_HAS_TRANSCRIPT] = data.uri;
