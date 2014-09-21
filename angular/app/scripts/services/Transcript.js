@@ -115,7 +115,7 @@ angular.module('angularApp')
 
                     angular.forEach(speakers, function (speaker) {
                         // console.log('interviewers', speaker);
-                        if (getInitials(speaker) === exchange.speakerInitials) {
+                        if ((getInitials(speaker) === exchange.speakerInitials) || (speaker.name === exchange.speakerInitials)) {
                             exchange.speaker = speaker;
                             if (args.interviewers.indexOf(speaker) !== -1) {
                                 exchange.speaker.isInterviewer = true;
