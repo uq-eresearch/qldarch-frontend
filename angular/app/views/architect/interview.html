@@ -168,7 +168,7 @@
                 <div class="media-body">
                   <div class="media-heading">
                     <strong>
-                      <a ng-href="#/{{ exchange.speaker.type }}/{{ exchange.speaker.encodedUri }}">
+                      <a ng-href="{{exchange.speaker.$link}}">
                         {{ exchange.speaker.name }}
                       </a>
                       <span ng-show="!exchange.speaker">
