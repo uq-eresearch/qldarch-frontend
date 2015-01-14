@@ -8,7 +8,7 @@ angular.module('angularApp')
             return parseInt(parts[0]) * 60 * 60 + parseInt(parts[1]) * 60 + parseInt(parts[2]);
         };
 
-        var getInitials = function (speaker) {
+        var extractInitials = function (speaker) {
             if (speaker.name === 'Deborah van der Plaat') {
                 return 'DV';
             } else {
@@ -25,6 +25,88 @@ angular.module('angularApp')
         };
 
         // Public API here
+        function getStartTime(exchange) {
+            if (!exchange.time) {
+                return 0;
+            }
+            return convertToSeconds(exchange.time);
+        }
+
+        function isLastExchange(exchange, exchanges) {
+            return exchanges.indexOf(exchange) === exchanges.length - 1;
+        }
+        function nextExchange(exchange, exchanges) {
+            var nextIndex = exchanges.indexOf(exchange) + 1;
+            if(nextIndex >= exchanges.length) {
+                throw new Error('Can\'t find next exchange');
+            }
+            return exchanges[nextIndex];
+        }
+
+        function getEndTime(exchange, exchanges) {
+            if (isLastExchange(exchange, exchanges)) {
+                return exchange.endTime = 999999;
+            }
+            return convertToSeconds(nextExchange(exchange, exchanges).time);
+        }
+
+        function evidenceHasTimes(evidence) {
+            return angular.isDefined(evidence[Uris.QA_TIME_FROM]) && angular.isDefined(evidence[Uris.QA_TIME_TO]);
+        }
+
+        function getEvidenceStartTime(evidence) {
+            return parseInt(evidence[Uris.QA_TIME_FROM]);
+        }
+
+        function evidenceRelatesToExchange(evidence, exchange, exchanges) {
+            if(!evidenceHasTimes(evidence)) {
+                return false;
+            }
+            evidence.startTime = getEvidenceStartTime(evidence);
+            if(isLastExchange(exchange, exchanges)) {
+                return exchange.startTime <= evidence.startTime
+            }
+            return timeIsBetween(evidence.startTime, exchange.startTime, exchange.endTime);
+        }
+
+        function timeIsBetween(time, startTime, endTime) {
+            return startTime <= time && time <= endTime;
+        }
+
+        function relationshipMentionedInExchange(relationship, exchange, exchanges) {
+            var isMentioned = false;
+            angular.forEach(relationship.evidences, function (evidence) {
+                isMentioned = isMentioned || evidenceRelatesToExchange(evidence, exchange, exchanges);
+            });
+            return isMentioned;
+        }
+
+        function getRelationships(exchange, exchanges, allRelationships) {
+            return allRelationships.filter(function(relationship) {
+                return relationshipMentionedInExchange(relationship, exchange, exchanges);
+            });
+        }
+
+        function getInitials(exchange) {
+            return exchange.speaker;
+        }
+
+        function getSpeakerMatchingInitials(initials, interviewers, interviewees) {
+            var speakers = interviewers.concat(interviewees);
+
+            var possibleSpeakers = speakers.filter(function(speaker) {
+                return extractInitials(speaker) === initials;
+            });
+            if(!possibleSpeakers.length) {
+                return null;
+            }
+            var speaker = possibleSpeakers[0];
+            if (interviewers.indexOf(speaker) !== -1) {
+                speaker.isInterviewer = true;
+            }
+            return speaker;
+        }
+
         return {
 
             /**
@@ -92,55 +174,11 @@ angular.module('angularApp')
 
                 // Transform start and end times to seconds for each exchange
                 angular.forEach(transcript.exchanges, function (exchange, exchangeIndex) {
-                    // Setup the start time in seconds
-                    if (exchangeIndex !== 0) {
-                        exchange.startTime = convertToSeconds(exchange.time);
-                    } else {
-                        exchange.startTime = 0;
-                    }
-
-                    // Setup the end time in seconds
-                    if (angular.isDefined(transcript.exchanges[exchangeIndex + 1])) {
-                        exchange.endTime = convertToSeconds(transcript.exchanges[exchangeIndex + 1].time);
-                    } else {
-                        exchange.endTime = 0;
-                    }
-
-                    // Try and match the supplied speaker initials, to the people
-                    // we know were in the room
-                    exchange.speakerInitials = exchange.speaker;
-                    delete exchange.speaker;
-
-                    var speakers = args.interviewers.concat(args.interviewees);
-
-                    angular.forEach(speakers, function (speaker) {
-                        // console.log('interviewers', speaker);
-                        if (getInitials(speaker) === exchange.speakerInitials) {
-                            exchange.speaker = speaker;
-                            if (args.interviewers.indexOf(speaker) !== -1) {
-                                exchange.speaker.isInterviewer = true;
-                            }
-                        }
-                    });
-
-                    // Add in relationships to exchange
-                    angular.forEach(args.relationships, function (relationship) {
-
-                        angular.forEach(relationship.evidences, function (evidence) {
-                            // Check that it has a from and to time
-                            if (angular.isDefined(evidence[Uris.QA_TIME_FROM]) && angular.isDefined(evidence[Uris.QA_TIME_TO])) {
-
-                                if (evidence[Uris.QA_TIME_FROM] >= exchange.startTime && evidence[Uris.QA_TIME_TO] <= exchange.endTime) {
-                                    // We found a match
-                                    if (!angular.isDefined(exchange.relationships)) {
-                                        exchange.relationships = [];
-                                    }
-                                    // Add the relationship to the exchange
-                                    exchange.relationships.push(relationship);
-                                }
-                            }
-                        });
-                    });
+                    exchange.startTime = getStartTime(exchange);
+                    exchange.endTime = getEndTime(exchange, transcript.exchanges);
+                    exchange.speakerInitials = getInitials(exchange);
+                    exchange.speaker = getSpeakerMatchingInitials(exchange.speakerInitials, args.interviewers, args.interviewees);
+                    exchange.relationships = getRelationships(exchange, transcript.exchanges, args.relationships);
                 });
                 return transcript;
             }
