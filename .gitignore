@@ -11,3 +11,5 @@ angular/.sublime-grunt.cache
 
 angular/.sublime-grunt.cache
 angular/app/scripts/config.js
+
+*.orig
