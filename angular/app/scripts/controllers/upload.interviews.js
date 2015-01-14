@@ -7,25 +7,32 @@ angular.module('angularApp')
         interview.$audioFiles = [];
         interview.$transcriptFiles = [];
 
+        activate();
 
-        $scope.isValidYoutubeUrl = function(url) {
+        //////
+
+        function activate() {
+            setupYoutubeUrls();
+        }
+
+        function isValidYoutubeUrl(url) {
             return url.indexOf('you') !== -1 && url.indexOf('ogg') === -1 && url.indexOf('mp3') === -1;
-        };
+        }
 
-        $scope.setupYoutubeUrls = function() {
+        function setupYoutubeUrls() {
             // Setup the youtube url
             angular.forEach($scope.interview[Uris.QA_EXTERNAL_LOCATION], function(externalLocation) {
-                if ($scope.isValidYoutubeUrl(externalLocation)) {
+                if (isValidYoutubeUrl(externalLocation)) {
                     // found the youtube url
                     $scope.interview.$youtubeUrl = externalLocation;
                 }
             });
-        };
+        }
 
-        $scope.removeYoutubeUrlsFromExternalLocations = function() {
+        function removeYoutubeUrlsFromExternalLocations() {
             var youtubeUrlIndex;
             angular.forEach($scope.interview[Uris.QA_EXTERNAL_LOCATION], function(externalLocation, index) {
-                if ($scope.isValidYoutubeUrl(externalLocation)) {
+                if (isValidYoutubeUrl(externalLocation)) {
                     // found the youtube url
                     youtubeUrlIndex = index;
                 }
@@ -33,21 +40,20 @@ angular.module('angularApp')
             if (angular.isDefined(youtubeUrlIndex)) {
                 $scope.interview[Uris.QA_EXTERNAL_LOCATION].splice(youtubeUrlIndex, 1);
             }
+        }
 
-        };
-
-        $scope.moveYoutubeUrlIntoInterview = function() {
+        function moveYoutubeUrlIntoInterview() {
             // Remove any existing ones
-            $scope.removeYoutubeUrlsFromExternalLocations();
+            removeYoutubeUrlsFromExternalLocations();
 
             // Add in the new one (if it exists)
             if ($scope.interview.$youtubeUrl && $scope.interview.$youtubeUrl.length) {
                 $scope.interview[Uris.QA_EXTERNAL_LOCATION] = GraphHelper.asArray($scope.interview[Uris.QA_EXTERNAL_LOCATION]);
                 $scope.interview[Uris.QA_EXTERNAL_LOCATION].push($scope.interview.$youtubeUrl);
             }
-        };
+        }
 
-        $scope.setupYoutubeUrls();
+
 
 
         $scope.onAudioFileSelect = function($files) {
@@ -116,33 +122,39 @@ angular.module('angularApp')
         };
 
 
-
-        $scope.create = function(expression) {
+        function clearInterviewCache(expression) {
             $cacheFactory.get('$http').remove('/ws/rest/expression/detail/qldarch%3AInterview?INCSUBCLASS=false&');
             $cacheFactory.get('$http').remove('/ws/rest/expression/summary/qldarch%3AInterview?INCSUBCLASS=false&');
             $cacheFactory.get('$http').remove('/ws/rest/expression/description?SUMMARY=false&IDLIST=' + encodeURIComponent(expression.uri));
+        }
 
+        function isNewInterview(interview) {
+            var isNew = !interview.uri;
+            console.log('New interview', isNew);
+            return isNew;
+        }
 
-            $scope.moveYoutubeUrlIntoInterview();
+        function goToInterview() {
+            $state.go($scope.interview.$state, $scope.interview.$stateParams);
+        }
 
-            if (expression.uri) {
-                Expression.update(expression.uri, expression).then(function() {
-                    // var interviewee = $scope.interview.$interviewees[0];
-                    $state.go($scope.interview.$state, $scope.interview.$stateParams);
-                });
-            } else {
-                Expression.create(expression).then(function() {
-                    $state.go($scope.interview.$state, $scope.interview.$stateParams);
-                });
+        $scope.create = function(expression) {
+            clearInterviewCache(expression);
+
+            moveYoutubeUrlIntoInterview();
+
+            if (isNewInterview(expression)) {
+                Expression.create(expression).then(goToInterview);
+                return;
             }
+            Expression.update(expression.uri, expression).then(goToInterview);
         };
         $scope.cancel = function() {
-            if ($scope.interview.uri) {
-                // Go back to interview
-                $state.go($scope.interview.$state, $scope.interview.$stateParams);
-            } else {
+            if (isNewInterview($scope.interview)) {
                 $state.go('user.files.interviews');
+                return;
             }
+            $state.go($scope.interview.$state, $scope.interview.$stateParams);
         };
 
         $scope.removeAudioFile = function(file) {
