@@ -28,6 +28,7 @@
     "grunt-ng-constant": "^0.4.8",
     "grunt-ngmin": "~0.0.2",
     "grunt-rev": "~0.1.0",
+    "grunt-rsync": "^0.6.2",
     "grunt-ssh": "~0.10.0",
     "grunt-svgmin": "~0.2.0",
     "grunt-usemin": "~2.0.0",

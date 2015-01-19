@@ -376,7 +376,11 @@ module.exports = function(grunt) {
                     src: [
                         '*.{ico,png,txt}',
                         '.htaccess',
-                        'bower_components/**/*', //FIXME: this shouldnt be here
+                        'bower_components/angular-file-upload/dist/angular-file-upload-shim.js',
+                        'bower_components/jquery/jquery.js',
+                        'bower_components/angular/angular.js',
+                        'bower_components/bootstrap/dist/js/bootstrap.js',
+                        'bower_components/timelinejs/*', //FIXME: this shouldnt be here
                         'images/{,*/}*.{gif,webp}',
                         'images/header.jpg',
                         'fonts/*',
