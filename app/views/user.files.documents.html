@@ -1,0 +1,17 @@
+<div>
+    <div class="alert alert-warning" style="margin: 0;">
+        <div class="container">
+            <button class="btn btn-default btn-xs" ui-sref="upload.documents"><i class="fa fa-cloud-upload"></i> Upload Documents</button>
+        </div>
+    </div>
+
+    <div class="l-frame">
+        <div class="container">
+            <ul>
+                <li ng-repeat="expression in expressions">
+                    <a ng-href="{{ expression.$link }}">{{ expression[Uris.DCT_TITLE ]}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

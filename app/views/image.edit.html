@@ -1,0 +1,116 @@
+<div class="content">
+    <div class="l-frame l-frame-media l-frame-tight">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-10 col-sm-offset-1">
+                    <img class="img-responsive" ng-src="{{ image.file.file }}" alt="" style="margin: 0 auto;" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="l-frame">
+        <div class="container">
+            <form name="image.$form" novalidate>
+                <!-- Type (Line drawing, photograph) -->
+                <div class="form-group">
+                    <label class="control-label" style="display:block;">Type <i class="fa fa-asterisk fa-asterisk-required"></i></label>
+                    <label class="radio-inline">
+                        <input type="radio" value="{{ Uris.QA_PHOTOGRAPH_TYPE }}" ng-model="image[Uris.RDF_TYPE]">Photograph
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" id="inlineCheckbox2" value="{{ Uris.QA_LINEDRAWING_TYPE }}" ng-model="image[Uris.RDF_TYPE]">Line Drawing
+                    </label>
+                </div>
+
+                <!-- Title -->
+                <div class="form-group">
+                    <label for="" class="control-label">Title</label>
+                    <input name="title" type="text" class="form-control" ng-model="image[Uris.DCT_TITLE]" placeholder="What is this a photograph of?" required/>
+                </div>
+
+
+                <!-- Description -->
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea placeholder="Describe this item" ng-model="image[Uris.DCT_DESCRIPTION]" class="form-control"></textarea>
+                </div>
+
+                <!-- Creator -->
+                <div class="form-group" class="form-group">
+                    <label>Creator <i class="fa fa-asterisk fa-asterisk-required"></i></label>
+                    <input type="text" class="form-control" ng-model="image[Uris.DCT_CREATOR]" placeholder="Who is the creator?" />
+                    <!--    <div class="radio">
+                        <label>
+                            <input name="creator" type="radio" ng-model="image.$creator" value="creator" ng-change="image[Uris.DCT_CREATOR] = Auth.email; image[Uris.DCT_RIGHTS] = Auth.email; image.$rights = 'owner'" required>I am the creator
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input name="creator" type="radio" ng-model="image.$creator" value="other" required>Other
+                        </label>
+                    </div>
+                    <input type="text" placeholder="Who created this item?" ng-model="image[Uris.DCT_CREATOR]" class="form-control" ng-show="image.$creator === 'other'"> -->
+                </div>
+
+                <!-- Created Date -->
+                <div class="form-group">
+                    <label>Created Date</label>
+                    <div class="well well-sm">
+                        <datepicker ng-model="image[Uris.DCT_CREATED]" show-weeks="false"></datepicker>
+                        <div style="margin-top: 10px;" ng-show="image[Uris.DCT_CREATED]">
+                            <button type="button" class="btn btn-sm btn-primary" ng-click="image[Uris.DCT_CREATED] = ''">Clear</button>    
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rights -->
+                <div class="form-group">
+                    <label>Rights <i class="fa fa-asterisk fa-asterisk-required"></i></label>
+                    <input type="text" class="form-control" ng-model="image[Uris.DCT_RIGHTS]" placeholder="Who owns the rights to this item?" />
+                    <!-- <div class="radio">
+                        <label>
+                            <input name="rights" type="radio" value="owner" ng-model="image.$rights" ng-change="image[Uris.DCT_RIGHTS] = Auth.email;" required>I own the rights
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input name="rights" type="radio" value="permission" ng-model="image.$rights" ng-change="image[Uris.DCT_RIGHTS] = ''; image.$permissionFrom = ''" required>I have permission
+                        </label>
+                    </div>
+                    <input type="text" placeholder="Who owns the rights to this item?" ng-model="image.$permissionFrom" class="form-control" ng-show="image.$rights == 'permission'" ng-change="image[Uris.DCT_RIGHTS] = Auth.email + ' with permission from ' + image.$permissionFrom">
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" value="orphaned" ng-model="image.$rights" ng-change="image[Uris.DCT_RIGHTS] = 'Orphaned'">It is orphaned
+                        </label>
+                    </div>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" value="other" ng-model="image.$rights" ng-change="image[Uris.DCT_RIGHTS] = ''" required name="rights">Other
+                        </label>
+                    </div>
+                    <input type="text" placeholder="Who owns the rights to this item?" ng-model="image[Uris.DCT_RIGHTS]" class="form-control" ng-show="image.$rights == 'other'"> -->
+                </div>
+
+                <!-- External Identifier -->
+                <div class="form-group">
+                    <label>External Identifier</label>
+                    <input type="text" placeholder="Does this item have an external identifier?" ng-model="image[Uris.DCT_IDENTIFIER]" class="form-control">
+                </div>
+
+                <button class="btn btn-primary" ng-click="save(image)" ng-disabled="image.$form.$invalid">Save</button>
+
+                <a class="btn btn-default" ng-href="{{ image.$linkTo('view') }}">Cancel</a>
+                <!--<div class="form-group">
+						        				<label class="control-label">Project</label>
+						        				<div 
+													ui-select2="structureSelect" 
+													ng-model="image.$depicts" 
+													class="form-control">
+												</div>
+						        			</div>-->
+            </form>
+        </div>
+    </div>
+</div>

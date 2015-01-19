@@ -1,0 +1,97 @@
+/* for status pop-up */
+.ext-mb-icon, .ext-mb-content, .ext-mb-text, .ext-mb-fix-cursor,.ext-mb-input,.ext-mb-textarea {
+	background:none;
+}
+.x-window-dlg .ext-mb-text {
+	font-size:10px;	
+}
+.x-layout-split {
+	width: 3px;
+}
+.x-date-picker {
+	width: 200px;
+}		
+.welcome-icon {
+    background-image: url(./skin/icons/information.png) !important;
+}
+/* Tree styles */
+/* suppress icons for top level tree nodes */
+.tree-anno, .tree-ore {
+    display:none;
+}
+.x-tree-node a {
+	color:blue !important;
+	cursor: auto;
+}
+
+/* #90 visibility bug in sidebar*/
+.x-tree-node-ct {
+	visibility: inherit !important;
+}
+.x-tree-node a:hover {
+	color:blue;
+	text-decoration:underline;
+}
+/* status bar/pop-up styles */
+.info-icon {
+	padding-left: 25px !important;
+	background: transparent url(./skin/icons/information.png) no-repeat 3px 3px;
+}
+.warning-icon {
+	padding-left: 25px !important;
+	background: transparent url(./skin/icons/warning.png) no-repeat 3px 3px;
+}
+.error-icon {
+	padding-left: 25px !important;
+	background: transparent url(./skin/icons/error.png) no-repeat 3px 3px;
+}
+.loading-icon {
+    padding-left: 25px !important;
+    background: transparent url(lib/ext3.2/resources/images/default/grid/loading.gif) no-repeat 3px 3px;
+}
+.x-grid3-cell-inner {
+	height: 1.2em;
+}
+/* Editor styles */
+.textfield {
+    padding:1px; 
+    padding-left:3px;
+    margin:0; 
+    height:1.8em; 
+    width:400px;
+    border: solid #363636 1px;
+}
+.button {
+    font-weight:bold; 
+    padding:0;
+    margin:0;
+    height:1.8em; 
+    border:none;
+    background:#363636;
+    color:white;
+}
+.x-edit-img {
+	background-image: url(./skin/icons/picture_add.png) !important;
+}
+.x-edit-outdent {
+	background: url(./skin/icons/ore/edit-outdent.png) 0 0 no-repeat !important;
+}
+.x-edit-indent {
+	background: url(./skin/icons/ore/edit-indent.png) 0 0 no-repeat !important;
+}
+.x-form-item {
+	margin-bottom:2px
+}
+.x-hide-label {
+	padding:0;margin:0
+}
+.x-combo-list, .x-combo-list-inner {
+	min-width:100px;
+}
+.x-form-field-wrap .x-form-ellipsis-trigger{
+    background-image:url(./skin/icons/ore/ellipsis-trigger-grey.gif);
+    border-bottom-color:#b5b8c8;
+}
+.x-form-text, textarea.x-form-field{
+    background-image: none;
+} 

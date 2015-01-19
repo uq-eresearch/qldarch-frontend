@@ -1,0 +1,31 @@
+<div class="alert alert-warning" ng-show="!$state.includes('ugc.timeline.edit') && (isEditable || isDeletable)" style="margin: 0;">
+    <div class="container">
+        <!-- Edit -->
+		<button class="btn btn-default btn-xs" ui-sref="ugc.timeline.edit" ng-show="isEditable">
+			<i class="fa fa-pencil"></i> Edit
+		</button>
+		<!-- /Edit -->
+		<!-- Delete -->
+		<button class="btn btn-default btn-xs" ng-click="delete()" ng-show="isDeletable">
+			<i class="fa fa-trash-o"></i> Delete
+		</button>
+		<!-- /Delete -->   
+    </div>
+</div>
+
+
+<div class="l-frame l-frame-media" ng-show="timeline.dates.length">
+	<div class="container">
+
+		<h3 style="text-align: center; margin-bottom: 24px;" ng-show="compoundObject.title.length">
+			<!-- Map title -->
+			{{ compoundObject.title }}<br/>
+			<!-- /Map title -->
+
+			<!-- Author name -->
+			<small ng-show="compoundObject.user.user.length">By {{ compoundObject.user.email }}</small>
+			<!-- /Author name -->
+		</h3>
+		<timeline headline="{{ timeline.headline }}" subtitle="{{ timeline.subtitle }}" dates="timeline.dates"></timeline>
+	</div>
+</div>

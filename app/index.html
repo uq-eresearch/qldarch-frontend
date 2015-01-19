@@ -1,0 +1,217 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head >
+    <link rel='shortcut icon' type='image/x-icon' href='http://qldarch-test.metadata.net/beta/favicon.ico' />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Digital Archive of Queensland Architecture</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+      <style>
+          .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+          .map-canvas { height: 400px; }
+      </style>
+
+
+
+        <!-- build:css(.tmp) styles/main.css -->
+        <link rel="stylesheet" href="styles/main.css">
+        <!-- endbuild -->
+
+        <!-- @fixme: work out why this cannot be included in the usemin group for css -->
+        <link rel="stylesheet" href="bower_components/ngprogress/ngProgress.css"/>
+        <link rel="stylesheet" href="bower_components/select2/select2.css">
+        <!--<link rel="stylesheet" href="bower_components/select2/select2-bootstrap.css">-->
+        <link rel="stylesheet" href="bower_components/select2-bootstrap-css/select2-bootstrap.css">
+        <link href="bower_components/AngularJS-Toaster/toaster.css" rel="stylesheet" />
+
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+        <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+      
+</head>
+  <body>
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!--[if lt IE 9]>
+      <script src="bower_components/es5-shim/es5-shim.js"></script>
+      <script src="bower_components/json3/lib/json3.min.js"></script>
+    <![endif]-->
+
+    <!-- Add your site or application content here -->
+    <ng-progress></ng-progress>
+
+    <toaster-container toaster-options="{}"> </toaster-container>
+    <div ng-include="'views/header.html'"></div>
+    <div ui-view autoscroll="false"></div>
+    <div ng-include="'views/footer.html'"></div>
+
+
+    <!-- shim for angular file upload -->
+    <script src="bower_components/angular-file-upload/dist/angular-file-upload-shim.js"></script> 
+
+    <script src="bower_components/jquery/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+
+    <!-- ENV Angular Constants -->
+    <script src="scripts/config.js"></script>
+
+    <!-- build:js scripts/plugins.js -->
+    <script src="bower_components/select2/select2.js"></script>
+    <script src="bower_components/d3/d3.js"></script>
+    <script type="text/javascript" src="bower_components/timelinejs/build/js/storyjs-embed.js"></script>
+    <script type="text/javascript" src="bower_components/jquery-csv/src/jquery.csv.js"></script>
+    <script type="text/javascript" src="bower_components/d3-cloud/d3.layout.cloud.js"></script>
+    <!-- endbuild -->   
+
+    <!-- build:js scripts/modules.js -->
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="/bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
+    <script src="bower_components/angular-audio-player/dist/angular-audio-player.js"></script>
+    <script src="bower_components/angular-ui-map/ui-map.js"></script>
+    <script src="bower_components/angular-ui-utils/ui-utils.min.js"></script>
+    <script src="bower_components/angular-ui-select2/src/select2.js"></script>
+    <script src="bower_components/ngprogress/build/ngProgress.js"></script>
+    <script src="bower_components/angular-file-upload/dist/angular-file-upload.js"></script>
+    <script src="bower_components/AngularJS-Toaster/toaster.js"></script>
+    <script src="bower_components/lodash/dist/lodash.js"></script>
+    <!-- endbuild -->   
+
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/controllers/myroute.js"></script>
+    <script src="scripts/controllers/someroute.js"></script>
+    <script src="scripts/controllers/architect.js"></script>
+    <script src="scripts/controllers/architects.js"></script>
+    <script src="scripts/controllers/join.js"></script>
+    <script src="scripts/controllers/interview.js"></script>
+    <script src="scripts/controllers/interviews.js"></script>
+    <script src="scripts/directives/videoplayer.js"></script>
+    <script src="scripts/services/uris.js"></script>
+    <script src="scripts/controllers/firm.js"></script>
+    <script src="scripts/controllers/firms.js"></script>
+    <script src="scripts/controllers/structures.js"></script>
+    <script src="scripts/controllers/structure.js"></script>
+    <script src="scripts/services/entity.js"></script>
+    <script src="scripts/services/expression.js"></script>
+    <script src="scripts/controllers/search.js"></script>
+    <script src="scripts/controllers/browse.js"></script>
+    <script src="scripts/services/relationship.js"></script>
+    <script src="scripts/services/GraphHelper.js"></script>
+    <script src="scripts/services/File.js"></script>
+    <script src="scripts/services/Request.js"></script>
+    <script src="scripts/services/Architect.js"></script>
+    <script src="scripts/services/Solr.js"></script>
+    <script src="scripts/services/LayoutHelper.js"></script>
+    <script src="scripts/services/Interview.js"></script>
+    <script src="scripts/services/Structure.js"></script>
+    <script src="scripts/services/Firm.js"></script>
+    <script src="scripts/filters/slice.js"></script>
+    <script src="scripts/controllers/photograph.js"></script>
+    <script src="scripts/controllers/about.js"></script>
+    <script src="scripts/controllers/compound.js"></script>
+    <script src="scripts/controllers/contribute.js"></script>
+    <script src="scripts/services/Annotation.js"></script>
+    <script src="scripts/services/Ontology.js"></script>
+    <script src="scripts/services/Transcript.js"></script>
+    <script src="scripts/controllers/buildingTypology.js"></script>
+    <script src="scripts/controllers/buildingTypologies.js"></script>
+    <script src="scripts/controllers/articles.js"></script>
+    <script src="scripts/controllers/article.js"></script>
+    <script src="scripts/controllers/signin.js"></script>
+    <script src="scripts/controllers/register.js"></script>
+    <script src="scripts/controllers/login.js"></script>
+    <script src="scripts/controllers/ArchitectStructures.js"></script>
+    <script src="scripts/controllers/ArchitectRelationships.js"></script>
+    <script src="scripts/controllers/ArchitectArticles.js"></script>
+    <script src="scripts/directives/force.js"></script>
+    <script src="scripts/controllers/Relationship.js"></script>
+    <script src="scripts/controllers/StructureMap.js"></script>
+    <script src="scripts/controllers/Timeline.js"></script>
+    <script src="scripts/controllers/CreateTimeline.js"></script>
+    <script src="scripts/directives/Timeline.js"></script>
+    <script src="scripts/controllers/CreateMap.js"></script>
+    <script src="scripts/services/Timeline.js"></script>
+    <script src="scripts/services/auth.js"></script>
+    <script src="scripts/controllers/logout.js"></script>
+    <script src="scripts/directives/projectmap.js"></script>
+    <script src="scripts/services/compoundObject.js"></script>
+    <script src="scripts/controllers/CreateTextAnalysis.js"></script>
+    <script src="scripts/services/stopwords.js"></script>
+    <script src="scripts/controllers/mapviewer.js"></script>
+    <script src="scripts/controllers/mapbuilder.js"></script>
+    <script src="scripts/controllers/timelinebuilder.js"></script>
+    <script src="scripts/controllers/timelineviewer.js"></script>
+    <script src="scripts/controllers/wordcloudbuilder.js"></script>
+    <script src="scripts/controllers/wordcloudviewer.js"></script>
+    <script src="scripts/controllers/adminusers.js"></script>
+    <script src="scripts/controllers/UserContent.js"></script>
+    <script src="scripts/controllers/filephotograph.js"></script>
+    <script src="scripts/controllers/other.js"></script>
+    <script src="scripts/controllers/user.ugcs.js"></script>
+    <script src="scripts/controllers/user.files.js"></script>
+    <script src="scripts/controllers/user.settings.js"></script>
+    <script src="scripts/controllers/admin.merge.js"></script>
+    <script src="scripts/controllers/photograph.edit.js"></script>
+    <script src="scripts/controllers/image.js"></script>
+    <script src="scripts/controllers/upload.documents.js"></script>
+    <script src="scripts/controllers/user.files.images.js"></script>
+    <script src="scripts/controllers/user.files.documents.js"></script>
+    <script src="scripts/controllers/user.files.interviews.js"></script>
+    <script src="scripts/controllers/upload.js"></script>
+    <script src="scripts/controllers/upload.interviews.js"></script>
+    <script src="scripts/controllers/others.js"></script>
+    <script src="scripts/directives/test.js"></script>
+    <!-- endbuild -->
+
+
+
+<script type="text/javascript">
+
+    function onGoogleReady() {
+        console.log('Bootstraping angularjs now');
+        angular.bootstrap(document, ['angularApp']);
+    }
+
+    /**
+     * Returns a number whose value is limited to the given range.
+     *
+     * Example: limit the output of this computation to between 0 and 255
+     * (x * 255).clamp(0, 255)
+     *
+     * @param {Number} min The lower boundary of the output range
+     * @param {Number} max The upper boundary of the output range
+     * @returns A number in the range [min, max]
+     * @type Number
+     */
+    Number.prototype.clamp = function(min, max) {
+      return Math.min(Math.max(this, min), max);
+    };
+
+    </script>
+
+    <!-- @todo: Get this to trigger angular bootstrap when loaded -->
+    <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization',
+       'version':'1','packages':['timeline']}]}"></script>
+
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=onGoogleReady"></script> 
+       
+</body>
+</html>

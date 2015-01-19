@@ -1,0 +1,16 @@
+<div class="alert alert-warning" ng-show="Auth.role === 'editor' || Auth.role === 'root'" style="margin: 0;">
+    <div class="container">
+        <button class="btn btn-default btn-sm btn-xs" ui-sref="upload.images({uri: architect.uri, name: architect.name, type: architect.type })"><i class="fa fa-cloud-upload"></i> Upload Image</button>       
+    </div>
+</div>
+
+<div class="l-frame l-frame-tight">
+    <div class="container">
+        <p class="text-muted" ng-hide="photographRows.length">No photographs</p>
+        <div class="row" ng-repeat="photographRow in photographRows">
+            <div class="col-sm-2" ng-repeat="photograph in photographRow">
+                <div ng-include="'views/thumb.image.html'"  ng-init="image = photograph"></div>
+            </div>
+        </div>
+    </div>
+</div>

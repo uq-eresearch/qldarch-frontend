@@ -1,0 +1,53 @@
+/* Changing Headings to Single Direction Margins // (http://csswizardry.com/2012/06/single-direction-margin-declarations/)  */
+ h1, h2, h3 {
+    margin-top: 0;
+    margin-bottom: (@line-height-computed / 2);
+    // font-weight: 200;
+    font-weight: bold;
+}
+h4, h5, h6 {
+    margin-top: 0;
+    margin-bottom: (@line-height-computed / 2);
+    font-weight: bold;
+}
+
+.page-header {
+    // padding-top: @line-height-computed;
+    // padding-bottom: ((@line-height-computed / 2) - 1);
+    padding-top: 16px;
+    padding-bottom: 5px;
+    margin: 0 0 @line-height-computed;
+    
+    border-bottom: none;
+    background-color: darken(@brand-green, 5%);
+    h1 {
+        color: white;
+        text-transform: capitalize;
+        font-size: 32px;
+    }
+    small a {
+        color: desaturate(lighten(@brand-green, 30%), 40%);
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    &.page-header-compoundobject {
+        background-color: @brand-compound;
+    }
+    &.page-header-timeline {
+        background-color: @brand-timeline;
+    }
+    &.page-header-map {
+        background-color: @brand-greenpea;
+    }
+    &.page-header-wordcloud {
+        background-color: @brand-wordcloud;
+    }
+    &.has-subnav {
+        margin-bottom:0px;
+    }
+}
+
+.highlight {
+    background-color: @brand-highlight;
+}

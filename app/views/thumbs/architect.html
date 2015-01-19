@@ -1,0 +1,12 @@
+<div class="thumbnail thumbnail-fix">
+
+    <a ui-sref="architect.summary({architectId: architect.encodedUri})" class="thumbnail-image">
+        <img ng-src="{{ architect.picture.thumb }}" alt="{{ architect.name }}">
+    </a>
+
+    <div class="caption">
+        <h4><a ui-sref="architect.summary({architectId: architect.encodedUri})" >
+            {{ architect.name }}
+        </a></h4>
+    </div>
+</div>

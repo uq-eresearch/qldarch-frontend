@@ -1,0 +1,36 @@
+<div>
+    <div class="l-frame l-frame-media" ng-if="isShowingMap">
+        <div class="container">
+            <project-map structures="structures"></project-map>
+        </div>
+    </div>
+
+  <!--   <div class="l-frame l-frame-tight l-frame-highlight">
+        <div class="container">
+                  <span class="text-muted">Filters</span>
+                    <label ng-repeat="buildingTypology in buildingTypologies" class="text-muted">
+                        {{ buildingTypology.name }}
+                        <input type="checkbox" disabled checked>
+                    </label> 
+        </div>
+    </div> -->
+
+    <div class="l-frame">
+        <div class="container" >
+            <p ng-show="!structureRows.length">
+                No projects found.
+            </p>
+
+                    
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row" ng-repeat="structureRow in structureRows">
+                        <div class="col-sm-2" ng-repeat="structure in structureRow">
+                            <div ng-include="'views/thumbs/structure.html'"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

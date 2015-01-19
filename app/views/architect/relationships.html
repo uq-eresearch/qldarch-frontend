@@ -1,0 +1,108 @@
+<style>
+
+    .link {
+        fill: none;
+        stroke: black;
+        opacity: 0.1;
+    }
+
+    .node circle {
+        fill: #ccc;
+        stroke: #fff;
+        stroke-width: 1.5px;
+    }
+
+    .node rect {
+        fill: green;
+        stroke: #fff;
+        stroke-width: 1.5px;
+    }
+
+    text {
+        font: 10px sans-serif;
+        pointer-events: none;
+    }
+
+    .node {
+
+    }
+
+    .node.selected circle {
+        stroke: yellow;
+        stroke-width: 5px;
+    }
+    .node.node-architect circle {
+        fill: #0FACA1;
+    }
+    .node.node-structure circle {
+        fill: #2153B7;
+    }
+    .node.node-firm circle {
+        fill: #26D813;
+    }
+</style>
+
+
+<!-- visualisation -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <!-- <div class="panel-heading">
+                    filters here
+                </div> -->
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <force data="data" selected="nodeSelected(node)"></force>        
+                        </div>
+                        <div class="col-md-4" ng-show="selected">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="media">
+                                        <a class="pull-left" ng-href="#/{{ selected.type }}/{{ selected.encodedUri }}">
+                                            <img class="media-object" ng-if="!selected.picture" ng-src="images/icon.png" style="display:block; width:60px;">
+                                            <img class="media-object" ng-if="selected.picture" ng-src="{{ Uris.FILE_ROOT + selected.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ selected.name }}" style="width: 60px;">
+                                        </a>
+                                        <div class="media-body">
+                                            <h4 class="media-heading">
+                                                <a ng-href="#/{{ selected.type }}/{{ selected.encodedUri }}">
+                                                    {{ selected.name }}
+                                                </a>
+                                            </h4>
+                                            <p style="text-transform: capitalize">
+                                                {{ selected.type }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="list-group">
+                                    <li class="list-group-item" ng-repeat="relationship in selectedRelationships">
+                                        <!--<i class="fa fa-bars"> </i>-->
+                                        <a href="#/{{ relationship.subject.type }}/{{ relationship.subject.encodedUri }}" ng-bind-html="relationship.subject.name || '' | highlight:transcriptSearchInput"></a>
+
+                                        <span style="text-transform: lowercase" ng-bind-html="relationship.predicate[Uris.QA_LABEL] || relationship.predicate.name || '' | highlight:transcriptSearchInput">
+                                        </span>
+
+                                        <a href="#/{{ relationship.object.type }}/{{ relationship.object.encodedUri }}" ng-bind-html="relationship.object.name || '' | highlight:transcriptSearchInput"></a>
+
+                                        <!-- Date -->
+                                        {{ relationship[Uris.QA_START_DATE] }}
+                                        <span ng-show="relationship[Uris.QA_START_DATE] && relationship[Uris.QA_END_DATE]"> - </span>
+                                        {{ relationship[Uris.QA_END_DATE] }}
+
+                                        <div style="font-style: italic">
+                                            {{ relationship[Uris.QA_TEXTUAL_NOTE] }}
+                                        </div>
+
+
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

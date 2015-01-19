@@ -1,0 +1,182 @@
+<style>
+
+    .link {
+        fill: none;
+        stroke: black;
+        opacity: 0.1;
+    }
+
+    
+
+    .node rect {
+        fill: green;
+        stroke: #fff;
+        stroke-width: 1.5px;
+    }
+
+    text {
+        font: 10px sans-serif;
+        pointer-events: none;
+    }
+
+    .node {
+
+    }
+
+    .node circle {
+        fill: #ccc;
+        stroke: #fff;
+        stroke-width: 5px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .node.selected circle {
+        stroke: yellow;
+        stroke-width: 5px;
+    }
+    .node.node-architect circle {
+        fill: #0FACA1;
+    }
+    .node.node-architect:hover circle {
+        fill: #3CCDC2;
+    }
+    .node.node-architect.node-architect-nonqueensland circle {
+        fill: #E42962;
+    }
+    .node.node-architect.node-architect-nonqueensland:hover circle {
+        fill: #E42962;
+    }
+    .node.node-structure circle {
+        fill: #2153B7;
+    }
+    .node.node-structure:hover circle {
+        fill: #5389F5;
+    }
+    .node.node-firm circle {
+        fill: #26D813;
+    }
+    .node.node-firm:hover circle {
+        fill: #87ED7C;
+    }
+</style>
+
+
+<!-- visualisation -->
+<div>
+    <div class="l-frame l-frame-tight" ng-hide="data.nodes.length">
+        <div class="container">
+            <p class="text-muted" >No relationships.</p>
+        </div>    
+    </div>
+    
+    <div class="l-frame l-frame-highlight" ng-show="data.nodes.length" style="position: relative; padding: 0;">
+        <force data="data" selected="nodeSelected(node)"></force>   
+        <div class="panel panel-default" style="width: 300px; position: absolute; top: 16px; bottom: 0; right: 16px;; overflow: scroll;" ng-show="selected">
+                <div class="panel-heading" style="padding: 16px 16px;">
+                    <i class="fa fa-times pull-right" ng-click="selected = null"></i>
+                    <div class="media" style="margin-top: 0">
+                        <div class="pull-left">
+                            <img class="media-object" ng-src="{{ selected.picture.thumb }}" alt="{{ selected.name }}" style="width: 50px;">
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading">
+                                <a ng-href="{{ $state.href(selected.$state + '.relationships', selected.$stateParams) }}">
+                                    {{ selected.name }}
+                                </a>
+                            </h4>
+                            <div style="text-transform: capitalize; color: black;">
+                                {{ selected.type }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selected relationships -->
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="relationship in selectedRelationships">
+                        <!--<i class="fa fa-bars"> </i>-->
+                        <!-- ({interviewId: relationship.evidence.encodedDocumentedBy, time: relationship.evidence[Uris.QA_TIME_FROM]} -->
+
+                        <div class="media">
+                          <a class="pull-left" href="#">
+                            <div class="square square-icon square-interview" style="width: 30px;">
+                                <div class="square-content">
+                                    <div class="center">
+                                        <div class="center-content">
+                                            <div ng-switch on="relationship.implicit">
+                                                <div ng-switch-when="true">
+                                                    <i class="fa fa-plus" style="font-size: 16px;"></i>  
+                                                </div>
+                                                <div ng-switch-default>
+                                                    <i class="fa fa-microphone" style="font-size: 16px;"></i>  
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                          </a>
+                          <div class="media-body">
+                            <h5 style="line-height: 24px; font-weight: normal; margin-bottom: 0;">
+                              <div ng-switch on="relationship.implicit">
+                                  <div ng-switch-when="true">
+                                    <a href="{{relationship.subject.$link}}">{{ relationship.subject.name }}</a>
+                                    {{ relationship.predicate.name || relationship.predicate[Uris.QA_LABEL] }}
+                                    <a href="{{relationship.object.$link}}">{{ relationship.object.name }}</a>
+                                  </div>
+                                  <div ng-switch-default>
+                                      <a ui-sref="interview({interviewId: relationship.evidence.encodedDocumentedBy, time: relationship.evidence[Uris.QA_TIME_FROM] })" >
+                                          {{ relationship.subject.name }}
+                                          {{ relationship.predicate.name || relationship.predicate[Uris.QA_LABEL] }}
+                                          {{ relationship.object.name }}
+                                      </a>
+                                  </div>
+                              </div>
+                            </h5>
+                            
+                            <!-- Date -->
+                            <div style="color: black;">
+                                {{ relationship[Uris.QA_START_DATE] }}
+                                <span ng-show="relationship[Uris.QA_START_DATE] && relationship[Uris.QA_END_DATE]"> -   </span>
+                                {{ relationship[Uris.QA_END_DATE] }}    
+                            </div>
+                            
+
+                            <div style="color: black; font-size: 14px;">
+                                {{ relationship[Uris.QA_TEXTUAL_NOTE] }}
+                            </div>
+                          </div>
+                        </div>
+                    </li>
+                </ul>
+                <!-- /Selected relationships -->
+            </div>
+
+        <div class="container" style="position: relative;">
+            <div>
+            </div>
+            <div style="text-align: center; margin-bottom: 16px;" ng-show="selected && selected.uri !== $parent.entity.uri" class="text-muted">
+                Double click circle to center.
+            </div>
+        </div>
+    </div>
+
+    <div class="l-frame l-frame-tight l-frame-divided">
+        <div class="container">
+            <h3>Legend</h3>
+            <ul class="list-unstyled">
+                <li><div style="display: inline-block; height: 20px; width: 20px; background-color: #0FACA1; margin-right: 8px;"></div> Architect (Practiced in Queensland)</li>
+                <li><div style="display: inline-block; height: 20px; width: 20px; background-color: #E42962; margin-right: 8px;"></div> Architect (Other)</li>
+                <li><div style="display: inline-block; height: 20px; width: 20px; background-color: #2153B7; margin-right: 8px;"></div> Project</li>
+                <li><div style="display: inline-block; height: 20px; width: 20px; background-color: #26D813; margin-right: 8px;"></div> Firm</li>
+                <li><div style="display: inline-block; height: 20px; width: 20px; background-color: #ccc; margin-right: 8px;"></div> Other</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- <div class="l-frame l-frame-tight l-frame-highlight">
+        <div class="container">
+            <span class="text-muted">Filters</span>    
+        </div>
+    </div> -->
+</div>

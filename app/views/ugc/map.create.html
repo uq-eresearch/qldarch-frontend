@@ -1,0 +1,16 @@
+<div class="l-frame l-frame-tighter" ng-show="map.locations.length">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-10">
+				<input type="text" class="form-control" placeholder="Title: What is your map about?" ng-model="map.title">
+			</div>
+			<div class="col-sm-2">
+				<button class="btn btn-primary form-control" ng-click="save()"
+					ng-disabled="!map.title || !map.locations.length || !Auth.auth"
+					ng-click="save()">
+						Save Map
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

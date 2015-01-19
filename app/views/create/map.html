@@ -1,0 +1,156 @@
+<div class="content">
+	<div class="page-header page-header-map has-subnav">
+		<div class="container">
+			<h1><img src="images/icon_32152.svg" style="width: 50px; margin-right: 8px;" /> Map Builder</h1>
+		</div>
+	</div>
+	<div class="alert alert-info" style="margin-bottom: 8px;">
+		<div class="container">
+			<i class="fa fa-info-circle"></i> Plot data on a map and build geographical relationships.		
+		</div>
+	</div>
+
+	<div class="l-frame l-frame-tighter l-frame-divided">
+		<div class="container">
+			<div ng-hide="$state.includes('create.map.add')">
+				<button class="btn" ui-sref="create.map.add.location" ng-class="{'btn-primary': !map.locations.length, 'btn-default': map.locations.length}">
+					<i class="fa fa-plus"></i> Add Location 
+				</button>	
+			</div>
+			
+			<div class="panel panel-default" ng-if="$state.includes('create.map.add')">
+				<div class="panel-body">
+					<i class="fa fa-times pull-right" ui-sref="create.map"></i>
+					<tabset>
+		    			<!-- Import location -->
+		    			<tab heading="From Architect, Project or Typology" select="$state.go('create.map.add.import')">
+		    				<div style="padding: 8px; margin-top: 8px;">
+		    					<p class="text-muted">Search for architects, projects or firms to import locations.</p>
+								<div 
+									ui-select2="architectStructureFirmTypologySelect" 
+									ng-model="map.$import.entity" 
+									class="form-control">
+								</div>
+								<div style="margin-top: 16px;">
+									<div ng-show="map.$import.entity && map.$import.locations == null" style="text-align: center;">
+										<i class="fa fa-spin fa-refresh"></i>
+									</div>
+									<div ng-show="map.$import.locations && !map.$import.locations.length">
+										No locations found.
+									</div>
+									<div ng-repeat="location in map.$import.locations" class="row" style="margin-top: 8px;">
+										<div>
+											<div class="col-sm-1">
+												<input type="checkbox" ng-model="location.$selected" ng-change="importSelectionChanged()">
+											</div>
+											<div class="col-sm-1">
+												<img ng-src="{{ location.asset.thumbnail }}" alt="thumbnail" class="img-responsive">
+											</div>
+											<div class="col-sm-10" ng-click="expression">
+												<p><strong>{{ location.name }}</strong> ({{ location.lat }} {{ location.lon }})</p> 
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div style="margin-top: 24px;" ng-show="map.$import.locations.length">
+									<button class="btn btn-primary" ng-click="import(map.$import.locations)">Add to Map ({{ map.$import.numberToImport }})</button>
+								</div>
+		    				</div>
+		    			</tab>
+		    			<!-- /Import location -->
+		    			
+						<!-- New Location -->
+		    			<tab heading="New" select="$state.go('create.map.add.location')">
+		    				<form style="padding: 8px; margin-top: 8px;">
+		    					<p class="text-muted">Create a new location to add to the map.</p>
+		    					<div class="form-group">
+									<label class="control-label" for="dateHeadline">
+										Name
+										<i class="fa fa-asterisk" style="font-size: 10px;"></i>
+									</label>
+									<input ng-model="map.$tempLocation.name" name="dateHeadline" type="text" class="form-control" id="dateHeadline" placeholder="What is the name of your location?" required>
+								</div>
+								<div class="form-group">
+									<label>
+										Position
+										<i class="fa fa-asterisk" style="font-size: 10px;"></i>
+									</label>
+									<div class="row">
+										<div class="col-sm-6">
+											<input type="text" class="form-control" placeholder="Latitude" ng-model="map.$tempLocation.lat" required/>
+										</div>
+										<div class="col-sm-6">
+											<input type="text" class="form-control" placeholder="Longitude" ng-model="map.$tempLocation.lon" required/>
+										</div>
+									</div>
+								</div>
+								
+								<div style="margin-top: 24px;">
+									<button type="submit" class="btn btn-primary" ng-click="addLocation(map.$tempLocation)"
+									ng-disabled="!map.$tempLocation.name || !map.$tempLocation.lat || !map.$tempLocation.lon">Add to Map</button>
+								</div>
+		    				</form>
+		    			</tab>
+		    			<!-- /New Location -->
+		  			</tabset>
+				</div>
+			</div>
+
+			<!-- Location list -->
+			<div style="margin-top: 24px;">
+				<div class="text-muted" ng-hide="map.locations.length">No locations added. Try adding some locations.</div>
+				<!--  | slice:currentPage:currentPage+10 -->
+				<div ng-repeat="location in map.locations" style="margin-top: 8px;">
+					<div class="row">
+						<div class="col-sm-1">
+							<img ng-src="{{ location.asset.thumbnail }}" alt="thumbnail" class="img-responsive">
+						</div>
+						<div class="col-sm-11">
+							<button class="btn btn-default btn-xs pull-right" ng-click="remove(location)">
+								<i class="fa fa-trash-o"></i>
+							</button>
+							<p>
+								<i class="fa fa-map-marker" style="margin-right: 8px;"></i> <strong>{{ location.name }}</strong> ({{ location.lat }} {{ location.lon }})
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /Location List -->
+		</div>
+	</div>
+
+	<div class="l-frame l-frame-tighter" ng-show="map.locations.length">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-10">
+					<input type="text" class="form-control" placeholder="Title: What is your map about?" ng-model="map.title">
+				</div>
+				<div class="col-sm-2">
+					<button class="btn btn-primary form-control" ng-click="save()"
+						ng-disabled="!map.title || !map.locations.length || !Auth.auth"
+						ng-click="save()">
+							Save Map
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="l-frame l-frame-media" ng-show="map.locations.length">
+		<div class="container">
+			<h3 style="text-align: center; margin-bottom: 24px;" ng-show="map.title.length">
+				<!-- Map title -->
+				{{ map.title }}<br/>
+				<!-- /Map title -->
+
+				<!-- Author name -->
+				<small ng-show="Auth.auth">By {{ Auth.email }}</small>
+				<!-- /Author name -->
+			</h3>
+			<div ui-map="myMap" class="map-canvas map"
+				ui-options="mapOptions">
+			</div>	
+		</div>
+	</div>
+</div>

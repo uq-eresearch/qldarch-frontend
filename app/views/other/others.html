@@ -1,0 +1,41 @@
+<div class="page-header has-subnav">
+    <div class="container">
+        <h1>Others</h1>
+    </div>
+</div>
+
+<!-- <div class="subnav" style="margin-bottom: 0px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-pills">
+                    <li ui-sref-active="active">
+                        <a href ui-sref="structures.australian">Australian</a>
+                    </li>
+                    <li ui-sref-active="active">
+                        <a href href ui-sref="structures.other">Other</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<div class="alert alert-warning" ng-show="Auth.role === 'editor' || Auth.role === 'root'" style="margin: 0;">
+    <div class="container">
+         <button class="btn btn-default btn-xs" ui-sref="other.summary.edit({otherId:null})" ng-show="Auth.role === 'editor' || Auth.role === 'root'"><i class="fa fa-plus"></i> New</button>  
+    </div>
+</div>
+
+<div class="l-frame">
+    <div class="container">
+        <!-- <div infinite-scroll="addMoreStructureRows()"> -->
+            <div class="row" ng-repeat="otherRow in otherRows">
+                <div class="col-sm-2" ng-repeat="other in otherRow">
+                    <div ng-include="'views/thumbs/other.html'"></div>
+                </div>
+            </div>    
+        <!-- </div> -->
+    </div>
+</div>
+

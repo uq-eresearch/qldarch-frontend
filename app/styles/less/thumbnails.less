@@ -1,0 +1,120 @@
+//
+// Thumbnails
+// --------------------------------------------------
+.thumbnail {
+  // &:extend(.thumbnail);
+
+  &.thumbnail-fix {
+
+  }
+  position: relative;
+  border: none;
+  border-radius: 0;
+  // background-color: @brand-green;
+
+  .thumbnail-image {
+    display: block;
+    width: 100%;
+    padding-bottom: 100%;
+    overflow: hidden;
+    position: relative;
+    background-color: @gray-lighter;
+    border: 1px solid darken(@gray-lighter, 5);
+    text-align: center;
+    transition: opacity 0.25s;
+    overflow: hidden;
+    img {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      max-width: none;
+      top: 0;
+      left: 0;  
+      transition: 0.25s;
+      // border-radius: 3px;
+    }
+  }
+
+  &:hover {
+    background-image: none !important;
+    background-color: @brand-green;
+    
+    .thumbnail-image {
+      
+      opacity: 0.8;
+      img {
+        // top: -3%;
+        // left: -3%;
+        // height: 106%;
+      }
+    }
+    a {
+      color: @brand-green !important;
+    }
+  }
+
+  .caption {
+    width: 100%;
+    background-color: white;
+    border-radius: 0;
+    text-transform: capitalize;
+//    position: absolute;
+//    bottom:0;
+
+    h3, h4 {
+      margin-bottom: 0;
+      font-size: @font-size-base;
+      text-align: center;
+    }
+
+    a {
+      font-weight: normal;
+      color: @gray;
+      line-height: 24px;
+      transition: color 0.25s;
+    }
+    .btn {
+      display: none;
+    }
+  }
+}
+
+//// Mixin and adjust the regular image class
+//.thumbnail {
+//  display: block;
+//  padding: @thumbnail-padding;
+//  margin-bottom: @line-height-computed;
+//  line-height: @line-height-base;
+//  background-color: @thumbnail-bg;
+//  border: 1px solid @thumbnail-border;
+//  border-radius: @thumbnail-border-radius;
+//  .transition(all .2s ease-in-out);
+//
+//  > img,
+//  a > img {
+//    .img-responsive();
+//    margin-left: auto;
+//    margin-right: auto;
+//  }
+//
+//  // Add a hover state for linked versions only
+//  a&:hover,
+//  a&:focus,
+//  a&.active {
+//    border-color: @link-color;
+//  }
+//
+//  position: relative;
+//
+//  // Image captions
+//  .caption {
+//    position: absolute;
+//    width: 100%;
+//    background-color: @gray-darker;
+//    color: @gray-lighter;
+//    bottom: 0;
+//
+//    padding: @thumbnail-caption-padding;
+//    color: @thumbnail-caption-color;
+//  }
+//}

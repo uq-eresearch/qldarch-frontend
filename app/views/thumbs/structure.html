@@ -1,0 +1,11 @@
+<div class="thumbnail" >
+    <a href ui-sref="structure.summary({structureId: structure.encodedUri})" class="thumbnail-image">
+        <img ng-src="{{ structure.picture.thumb }}" alt="{{ structure.name }}">
+    </a>
+
+    <div class="caption">
+        <h4><a href ui-sref="structure.summary({structureId: structure.encodedUri})">
+            {{ structure.name }}
+        </a></h4>
+    </div>
+</div>

@@ -1,0 +1,44 @@
+<div class="content">
+    <div class="page-header has-subnav">
+        <div class="container">
+            <small ng-show="firm.uri"><a href ui-sref="firms.australian">Firms »</a></small>
+            <h1>{{ firm.name || 'New Firm' }}</h1>
+        </div>
+    </div>
+
+    <div class="subnav" style="margin-bottom: 0;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- <button class="btn btn-default pull-right" ng-click="delete(firm)" ng-show="Auth.role === 'root'"><i class="fa fa-trash-o"></i> Delete</button> -->
+
+                    <ul class="nav nav-pills">
+                        <li ng-class="{'active': $state.includes('firm.summary')}">
+                            <a href ui-sref="firm.summary({ firmId: firm.encodedUri })">Summary</a>
+                        </li>
+                        <li ng-class="{active: $state.includes('firm.photograph') || $state.includes('firm.photographs')}" ng-show="firm.uri">
+                            <a href ui-sref="firm.photographs({ firmId: firm.encodedUri })">Photographs</a>
+                        </li>
+                        <li ui-sref-active="active" ng-show="firm.uri">
+                            <a href ui-sref="firm.employees({ firmId: firm.encodedUri })">Employees</a>
+                        </li>
+                        <li ui-sref-active="active" ng-show="firm.uri">
+                            <a href ui-sref="firm.structures({ firmId: firm.encodedUri })">Projects</a>
+                        </li>
+                        <li ui-sref-active="active" ng-show="firm.uri">
+                            <a href ui-sref="firm.articles({ firmId: firm.encodedUri })">Articles</a>
+                        </li>
+                        <li ui-sref-active="active" ng-show="firm.uri">
+                            <a href ui-sref="firm.relationships({ firmId: firm.encodedUri })">Relationships</a>
+                        </li>
+                        <li ui-sref-active="active" ng-show="firm.uri">
+                            <a href ui-sref="firm.timeline({ firmId: firm.encodedUri })">Timeline</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ui-view autoscroll="false"></div>
+</div>

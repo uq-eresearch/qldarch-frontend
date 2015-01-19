@@ -1,0 +1,10 @@
+This tool requires access to a SPARQL Repository. I would suggest the Apache Jena's Fuseki. 
+
+It is available for zip download here.
+[https://repository.apache.org/content/repositories/snapshots/org/apache/jena/jena-fuseki/1.0.1-SNAPSHOT/jena-fuseki-1.0.1-20130914.081056-2-distribution.zip]
+Documentation can be found here.
+[http://jena.apache.org/documentation/serving_data/#getting-started-with-fuseki]
+
+The variables baseUrl, repositoryBaseURL, repositoryGraphStoreEndPoint and repositoryGraphNamePrefix 
+in contants.js may need to be configured depending on your repository details.
+
