@@ -376,7 +376,7 @@ module.exports = function(grunt) {
                     src: [
                         '*.{ico,png,txt}',
                         '.htaccess',
-                        'bower_components/**/*',
+                        'bower_components/**/*', //FIXME: this shouldnt be here
                         'images/{,*/}*.{gif,webp}',
                         'images/header.jpg',
                         'fonts/*',
