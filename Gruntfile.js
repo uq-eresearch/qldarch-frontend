@@ -48,16 +48,24 @@ module.exports = function(grunt) {
                 }
             }
         },
-        // sshexec: {
+        //sshexec: {
         //     test: {
-        //         command: 'ssh -L 6666:qldarch-test:22 uqcmcna1@gladys',
+        //         command: 'ssh -N -L 6666:qldarch-test:22 uqcmcna1@gladys',
         //         options: {
         //             host: '<%= secret.host %>',
         //             username: '<%= secret.username %>',
         //             password: '<%= secret.password %>'
         //         }
         //     }
-        // },
+        //},
+        shell: {
+            tunnel: {
+                command: 'ssh -N -L 6666:qldarch-test:22 uqcmcna1@gladys',
+                options: {
+                    timeout: 5000
+                }
+            }
+        },
         yeoman: {
             // configurable paths
             app: require('./bower.json').appPath || 'app',
