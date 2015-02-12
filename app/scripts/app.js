@@ -190,26 +190,30 @@ angular.module('angularApp', [
                 controller: 'MainCtrl',
                 resolve: {
                     // Load X number of interviews
-                    interviews: ['Expression', 'GraphHelper', 'Uris', 'Architect', '$filter', 'Interview',
-                        function(Expression, GraphHelper, Uris, Architect, $filter, Interview) {
-                            console.log('resolving main');
-                            return Interview.loadAll().then(function(interviews) {
-                                interviews = GraphHelper.graphValues(interviews);
-                                interviews = $filter('filter')(interviews, function(interview) {
-                                    return interview.interviewees[0];
-                                });
-                                console.log('interview count', interviews);
-                                // Filter only the interviews with pictures
-                                // Looks better for the front page
-                                var interviewsWithPictures = $filter('orderBy')(interviews, function(interview) {
-                                    if (angular.isDefined(interview.interviewees) && interview.interviewees.length && angular.isDefined(interview.interviewees[0].picture) && interview.interviewees[0].picture.file.indexOf('icon') === -1) {
-                                        return 0;
-                                    } else {
-                                        return 1;
-                                    }
-                                });
-                                return interviewsWithPictures;
-                            });
+                    interviews: ['interviewRepository', 'Expression', 'GraphHelper', 'Uris', 'Architect', '$filter', 'Interview',
+                        function(interviewRepository, Expression, GraphHelper, Uris, Architect, $filter, Interview) {
+
+                            //return [];
+                            return interviewRepository.getInterviewsForCarousel();
+
+                            //console.log('resolving main');
+                            //return Interview.loadAll().then(function(interviews) {
+                            //    interviews = GraphHelper.graphValues(interviews);
+                            //    interviews = $filter('filter')(interviews, function(interview) {
+                            //        return interview.interviewees[0];
+                            //    });
+                            //    console.log('interview count', interviews);
+                            //    // Filter only the interviews with pictures
+                            //    // Looks better for the front page
+                            //    var interviewsWithPictures = $filter('orderBy')(interviews, function(interview) {
+                            //        if (angular.isDefined(interview.interviewees) && interview.interviewees.length && angular.isDefined(interview.interviewees[0].picture) && interview.interviewees[0].picture.file.indexOf('icon') === -1) {
+                            //            return 0;
+                            //        } else {
+                            //            return 1;
+                            //        }
+                            //    });
+                            //    return interviewsWithPictures;
+                            //});
                         }
                     ],
                     // architects: ['Architect', 'GraphHelper', '$filter',
