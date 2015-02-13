@@ -1,14 +1,3 @@
-/**
- Feature: Age of Onsent
- I want to be able to read the age of onset
- As a medical professional
- So that I can understand more about the disorder
-
- Scenario:
- Given I am on a disorder page
- Then I should be able to see the age of onset
- */
-
 describe("Article", function() {
     describe("Publication Date", function () {
 

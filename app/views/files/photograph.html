@@ -32,6 +32,9 @@
 
   <div class="l-frame l-frame-highlight" ng-show="selectedProject">
     <div class="container">
+        <div class="alert alert-info">
+            <p>Remember, all <strong>scanned images</strong> should be <strong>no more than 72DPI</strong>.</p>
+        </div>
       <form action="">
         <div class="form-group upload">
           <div ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="upload-dropzone-dragover" ng-show="dropSupported" class="upload-dropzone">
