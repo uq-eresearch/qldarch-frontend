@@ -185,6 +185,10 @@ angular.module('angularApp', [
 
         // Now set up the states
         $stateProvider
+            .state('attributions', {
+                url: '/attributions',
+                templateUrl: 'views/attributions.html'
+            })
             .state('main', {
                 url: '/',
                 controller: 'MainCtrl',
