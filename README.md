@@ -1,10 +1,10 @@
 qldarch-frontend
 ==================
 
-Setup
+Running the Front End locally (pointing at qldarch server)
 -----
-* Install NPM (bunch of different wants to do this)
-* Install yo `npm install -g yo`
+* Install NPM
+* Install yo, bower, grunt `npm install -g yo bower grunt-cli`
 * Install generator for angular `npm install -g generator-angular`
 * Go to `angular` directory
 * Run `npm install`
