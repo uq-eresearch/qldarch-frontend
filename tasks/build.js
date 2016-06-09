@@ -59,7 +59,7 @@ module.exports = function(grunt) {
   // concat is auto configed by useminPrepare, run 'grunt --verbose useminPrepare' to see configuration
   grunt.config('concat', {
     options: {
-      process: function(src, filepath, foo) {
+      process: function(src, filepath) {
         console.log(filepath);
         return '/* Source: ' + filepath + ' */\n' + src;
       }
@@ -180,6 +180,16 @@ module.exports = function(grunt) {
       html: ['dist/*.html']
     }
   });
+  grunt.config('less', {
+    development: {
+      options: {
+        paths: ['app/styles/less']
+      },
+      files: {
+        'app/styles/main.css': 'app/styles/less/main.less'
+      }
+    }
+  });
 
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
@@ -193,7 +203,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-autoprefixer');
   grunt.loadNpmTasks('grunt-google-cdn');
+  grunt.loadNpmTasks('grunt-contrib-less');
 
-  grunt.registerTask('default', ['clean', 'useminPrepare', 'concat', 'autoprefixer', 'copy', 'imagemin',
+  grunt.registerTask('default', ['clean', 'less', 'useminPrepare', 'concat', 'autoprefixer', 'copy', 'imagemin',
     'htmlmin', 'ngconstant:prod', 'uglify', 'cssmin', 'rev', 'usemin', 'copy:special', 'cdnify']);
 };
