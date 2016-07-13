@@ -1752,18 +1752,19 @@ angular.module('angularApp', [
             .state('search', {
                 url: '/search?query',
                 templateUrl: 'views/search.html',
-                controller: 'SearchCtrl',
-                resolve: {
-                    results: ['$stateParams', 'Solr',
-                        function($stateParams, Solr) {
-                            var query = $stateParams.query;
-
-                            return Solr.query({
-                                query: query,
-                            });
-                        }
-                    ]
-                }
+                controller: 'SearchCtrl'
+                // ,
+                // resolve: {
+                //     results: ['$stateParams', 'Solr',
+                //         function($stateParams, Solr) {
+                //             var query = $stateParams.query;
+                //
+                //             return Solr.query({
+                //                 query: query,
+                //             });
+                //         }
+                //     ]
+                // }
             });
     });
 // .config(function ($routeProvider) {

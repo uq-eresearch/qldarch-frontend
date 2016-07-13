@@ -22,7 +22,7 @@ module.exports = function(grunt) {
       livereload: 35729,
       middleware: function(connect, options, middlewares) {
         // inject a custom middleware into the array of default middlewares
-        middlewares.unshift(prx('/ws'), prx('/files'), prx('/omeka'), prx('/static'), prx('/solr'));
+        middlewares.unshift(prx('/ws', 'http://qldarch-test.metadata.net/qldarch'), prx('/files'), prx('/omeka'), prx('/static'), prx('/solr'));
         return middlewares;
       }
     },
