@@ -1,6 +1,9 @@
 <div class="l-frame l-frame-tight">
   <div class="container">
 
+    <p class="text-muted" ng-hide="articles.length">
+      No articles found.
+    </p>
     <div ng-repeat="article in articles" class="row" style="margin-bottom: 20px;">
       <div class="col-md-1">
         <!-- Icon Square -->
@@ -23,8 +26,8 @@
         <h4>
           <!-- /Title -->
           <a ui-sref="article({ articleId: article.encodedUri })">
-                        {{ article.title }}
-                    </a>
+            {{ article.label }}
+          </a>
           <!-- Title -->
         </h4>
 
@@ -34,7 +37,7 @@
           <!-- /Authors -->
 
           <!-- Periodical Title -->
-          {{ article.periodicalTitle }}
+          {{ article.periodicaltitle }}
           <!-- /Periodical Title -->
 
           <!-- Date Published -->
