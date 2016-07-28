@@ -13,30 +13,46 @@
     </div>
   </div>
 
+  <div class="text-center" ng-show="!results">
+    <i class="fa fa-spinner fa-spin"></i>
+  </div>
+
   <section>
     <div class="container">
       <!--<div ng-include="'views/searchbox.html'"></div>-->
       <div ng-repeat="result in results | orderBy:'-score'" class="row" style="margin-bottom: 40px;">
+        <img src="" alt="">
         <div class="col-md-1">
-          <div class="square square-icon" ng-class="{'square-interview': result.type=='interview', 'square-article': result.type == 'article'}">
+          <img ng-src="http://qldarch-test.metadata.net/omeka/archive/square_thumbnails/{{ result.image }}"
+               alt=""
+               class="img-responsive"
+               ng-show="result.image">
+          <div class="square square-icon" ng-class="{'square-interview': result.type=='person', 'square-article': result.type == 'structure'}">
             <div class="square-content">
               <div class="center">
                 <div class="center-content">
-                  <i class="fa fa-book" ng-show="result.type == 'article'"></i> 
-                  <i class="fa fa-microphone" ng-show="result.type == 'interview'"></i> 
+                  <i class="fa fa-book" ng-show="result.type == 'article'"></i>
+                  <i class="fa fa-microphone" ng-show="result.type == 'interview'"></i>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div class="col-md-8">
+          <!-- Title -->
           <h3>
-            <!-- Title -->
-            <a ng-href="{{ result.$link }}" style="color: #333">
-                            {{ result.title }}
-                        </a>
-            <!-- /Title -->
+            <!--<a ng-href="#/architect/summary?architectId={{ atob('http://qldarch.net/person/672' + result.id) }}" style="color: #333">-->
+              {{ result.label }}
+            <!--</a>-->
+            <small class="text-muted" style="text-transform: capitalize;">
+              {{ result.type }}
+            </small>
           </h3>
+          <!-- /Title -->
+          <p class="text-muted">
+            {{ result.summary }}
+          </p>
+
 
           <h5 class="text-muted">
             <!-- Authors -->

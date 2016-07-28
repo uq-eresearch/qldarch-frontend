@@ -5,12 +5,33 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
+  // workaround for http-proxy with gzip chunked server responses
+  // found here: https://github.com/nodejitsu/node-http-proxy/issues/1007
+  function handleGzip(proxyRes, req, res) {
+    var gzipped = /gzip/.test(proxyRes.headers["content-encoding"]);
+    if(gzipped) {
+      res.write = (function(override) {
+        return function(chunk, encoding, callback) {
+          override.call(res, chunk, "binary", callback);
+        };
+      })(res.write);
+      res.end = (function(override) {
+        return function(chunk, encoding, callback) {
+          override.call(res, chunk, "binary", callback);
+        };
+      })(res.end);
+    }
+  }
+
   function prx(path, target) {
     return proxy(path, {
       target: typeof target !== 'undefined' ? target : 'http://qldarch.net',
       changeOrigin: true,
       prependPath: true,
-      logLevel: 'info'
+      logLevel: 'info',
+      onProxyRes: function(proxyRes, req, res) {
+        handleGzip(proxyRes, req, res);
+      }
     });
   }
 
@@ -22,7 +43,7 @@ module.exports = function(grunt) {
       livereload: 35729,
       middleware: function(connect, options, middlewares) {
         // inject a custom middleware into the array of default middlewares
-        middlewares.unshift(prx('/ws'), prx('/files'), prx('/omeka'), prx('/static'), prx('/solr'));
+        middlewares.unshift(prx('/ws', 'http://qldarch-test.metadata.net/qldarch'), prx('/files'), prx('/omeka'), prx('/static'), prx('/solr'));
         return middlewares;
       }
     },
