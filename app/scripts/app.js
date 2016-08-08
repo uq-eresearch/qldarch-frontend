@@ -1309,7 +1309,7 @@ angular.module('angularApp', [
                 resolve: {
                     articles: ['searchService', 'firm',
                         function(searchService, firm) {
-                            return searchService.getArticles(architect.name);
+                            return searchService.getArticles(firm.name);
                         }
                     ]
                 },
