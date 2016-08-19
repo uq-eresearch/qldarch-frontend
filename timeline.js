@@ -5226,7 +5226,12 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
         if(current_slide >= slides.length) {
           current_slide = 0;
         }
-				VMM.Lib.css($slider_container, "left", slides[current_slide].leftpos());
+        if(slides[current_slide]) {
+          VMM.Lib.css($slider_container, "left", slides[current_slide].leftpos());
+        } else {
+          VMM.Lib.css($slider_container, "left", 0);
+        }
+				
 			}
 			
 			// RESIZE SLIDES
@@ -5407,8 +5412,10 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 					slides[current_slide + i].enqueue = false;
 				}
 				if ( !( (current_slide - i) < 0 ) ) {
-					slides[current_slide - i].show();
-					slides[current_slide - i].enqueue = false;
+          if(slides[current_slide - i]) {
+            slides[current_slide - i].show();
+            slides[current_slide - i].enqueue = false;
+          }
 				}
 			}
 			
@@ -5652,8 +5659,12 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
       if(current_slide >= slides.length) {
         current_slide = 0;
       }
-			_pos			= slides[current_slide].leftpos();
-			
+
+      if(slides[current_slide]) {
+        _pos			= slides[current_slide].leftpos();
+      } else {
+        _pos = 0;
+      }
 			
 			if (current_slide == 0) {is_first = true};
 			if (current_slide +1 >= slides.length) {is_last = true};
@@ -5723,7 +5734,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 			
 			/* SET Vertical Scoll
 			================================================== */
-			if (slides[current_slide].height() > config.slider_height) {
+			if (slides[current_slide] && (slides[current_slide].height() > config.slider_height)) {
 				VMM.Lib.css(".slider", "overflow-y", "scroll" );
 			} else {
 				VMM.Lib.css(layout, "overflow-y", "hidden" );
@@ -7946,7 +7957,11 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
         current_marker = 0;
       }
 			
-			timenav_pos.left			= (config.width/2) - markers[current_marker].pos_left
+			if(markers[current_marker]) {
+        timenav_pos.left			= (config.width/2) - markers[current_marker].pos_left
+      } else {
+        timenav_pos.left = 0;
+      }
 			timenav_pos.visible.left	= Math.abs(timenav_pos.left) - 100;
 			timenav_pos.visible.right	= Math.abs(timenav_pos.left) + config.width + 100;
 			
@@ -7969,7 +7984,9 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 				VMM.Lib.addClass(markers[0].marker, "start");
 			}
 			
-			VMM.Lib.addClass(markers[current_marker].marker, "active");
+			if(markers[current_marker]) {
+        VMM.Lib.addClass(markers[current_marker].marker, "active");
+      }
 			
 			// ANIMATE MARKER
 			VMM.Lib.stop($timenav);
@@ -8046,8 +8063,14 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 		
 		function calculateInterval() {
 			// NEED TO REWRITE ALL OF THIS
-			var _first								= getDateFractions(data[0].startdate),
-				_last								= getDateFractions(data[data.length - 1].enddate);
+      var startdate = new Date();
+      var enddate = new Date();
+      if(data.length > 0) {
+        startdate = data[0].startdate;
+        enddate = data[data.length - 1].enddate;
+      }
+			var _first								= getDateFractions(startdate),
+				_last								= getDateFractions(enddate);
 			
 			// EON
 			interval_calc.eon.type					=	"eon";
@@ -8672,7 +8695,12 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 			
 			VMM.attachElement(_element_parent, "");
 			
-			_interval.date = new Date(data[0].startdate.getFullYear(), 0, 1, 0,0,0);
+      if(data.length > 0) {
+        _interval.date = new Date(data[0].startdate.getFullYear(), 0, 1, 0,0,0);
+      } else {
+        _interval.date = new Date(2000, 0, 1, 0,0,0);
+      }
+			
 			_timezone_offset = _interval.date.getTimezoneOffset();
 			
 			for(i = 0; i < int_number; i++) {
@@ -8959,7 +8987,11 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 			var i	= 0,
 				j	= 0;
 			// CALCULATE INTERVAL
-			timespan = getDateFractions((data[data.length - 1].enddate) - (data[0].startdate), true);
+      if(data.length > 0) {
+        timespan = getDateFractions((data[data.length - 1].enddate) - (data[0].startdate), true);
+      } else {
+        timespan = 0;
+      }
 			trace(timespan);
 			calculateInterval();
 
