@@ -10,7 +10,7 @@ angular.module('angularApp')
 
         function activate() {
             $scope.query = $location.search().query;
-            $http.get('ws/search?q=' + $scope.query + '&p=0&pc=20&pretty').then(function (response) {
+            $http.get('/ws/search?q=' + $scope.query + '&p=0&pc=20').then(function (response) {
                 $scope.results = response.data.documents;
             });
         }
