@@ -21,7 +21,7 @@ module.exports = function(grunt) {
           'bower_components/jquery/jquery.js',
           'bower_components/angular/angular.js',
           'bower_components/bootstrap/dist/js/bootstrap.js',
-          'bower_components/timelinejs/*', //FIXME: this shouldnt be here
+          'bower_components/timelinejs/**', //FIXME: this shouldnt be here
           'images/{,*/}*.{gif,webp}',
           'images/header.jpg',
           'fonts/*',
@@ -117,7 +117,7 @@ module.exports = function(grunt) {
     },
     dev: {
       options: {
-        dest: 'app/scripts/config.js',
+        dest: 'dist/scripts/config.js',
         name: 'config',
         space: '  ',
       },
@@ -205,6 +205,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-google-cdn');
   grunt.loadNpmTasks('grunt-contrib-less');
 
-  grunt.registerTask('default', ['clean', 'less', 'useminPrepare', 'concat', 'autoprefixer', 'copy', 'imagemin',
+  grunt.registerTask('build:dev', ['clean', 'less', 'useminPrepare', 'concat', 'autoprefixer', 'copy', 'imagemin',
+    'htmlmin', 'ngconstant:dev', 'uglify', 'cssmin', 'rev', 'usemin', 'copy:special', 'cdnify']);
+
+  grunt.registerTask('build:prod', ['clean', 'less', 'useminPrepare', 'concat', 'autoprefixer', 'copy', 'imagemin',
     'htmlmin', 'ngconstant:prod', 'uglify', 'cssmin', 'rev', 'usemin', 'copy:special', 'cdnify']);
+  
 };
