@@ -1068,8 +1068,7 @@ pre code {
     margin-left: 25%;
   }
   .col-sm-offset-2 {
-    /*margin-left: 16.66666667%;*//*commented and changed due to removal of bottom 'Create a Compound Object' icon/link*/
-    margin-left: 25%;
+    margin-left: 16.66666667%;
   }
   .col-sm-offset-1 {
     margin-left: 8.33333333%;
