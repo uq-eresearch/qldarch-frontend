@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
+  var version = grunt.file.read('version.txt').split('\n')[0];
   grunt.config('clean', ['dist', '.tmp']);
-
   // Put files not handled in other tasks here
   grunt.config('copy', {
     //workaround: copy a fixed timeline.js into the bower_components directory
@@ -54,6 +54,10 @@ module.exports = function(grunt) {
       cwd: 'app/styles',
       dest: 'dist/styles/',
       src: '{,*/}*.css'
+    },
+    version: {
+      src: 'version.txt',
+      dest: 'dist/'
     }
   });
   // concat is auto configed by useminPrepare, run 'grunt --verbose useminPrepare' to see configuration
@@ -190,6 +194,20 @@ module.exports = function(grunt) {
       }
     }
   });
+  grunt.config('compress', {
+    main: {
+      options: {
+        mode: 'tgz',
+        archive: function() {
+          return 'frontend-'+version+'.tar.gz';
+        }
+      },
+      expand: true,
+      cwd: 'dist/',
+      src: ['**/*'],
+      dest: 'frontend-'+version+'/'
+    }
+  });
 
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
@@ -204,11 +222,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-autoprefixer');
   grunt.loadNpmTasks('grunt-google-cdn');
   grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-compress');
 
-  grunt.registerTask('build:dev', ['clean', 'less', 'useminPrepare', 'concat', 'autoprefixer', 'copy', 'imagemin',
-    'htmlmin', 'ngconstant:dev', 'uglify', 'cssmin', 'rev', 'usemin', 'copy:special', 'cdnify']);
+  grunt.registerTask('build', ['clean', 'less', 'useminPrepare', 'concat', 'autoprefixer', 'copy', 'imagemin',
+    'htmlmin', 'uglify', 'cssmin', 'rev', 'usemin', 'copy:special', 'cdnify', 'compress']);
 
-  grunt.registerTask('build:prod', ['clean', 'less', 'useminPrepare', 'concat', 'autoprefixer', 'copy', 'imagemin',
-    'htmlmin', 'ngconstant:prod', 'uglify', 'cssmin', 'rev', 'usemin', 'copy:special', 'cdnify']);
-  
 };

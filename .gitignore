@@ -21,3 +21,5 @@ angular/app/scripts/config.js
 *.orig
 
 .idea/workspace.xml
+
+frontend*.tar.gz
