@@ -284,7 +284,7 @@ angular.module('angularApp', [
                             var imageUri = GraphHelper.decodeUriString($stateParams.imageId);
                             return Expression.load(imageUri).then(function(expression) {
                                 var type;
-                                if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_PHOTOGRAPH_TYPE) !== -1) {
+                                if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_PHOTOGRAPH_TYPE) !== -1 || GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_PORTRAIT_TYPE !== -1)) {
                                     type = 'qldarch:Photograph';
                                 }
                                 if (GraphHelper.asArray(expression[Uris.RDF_TYPE]).indexOf(Uris.QA_LINEDRAWING_TYPE) !== -1) {
