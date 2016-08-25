@@ -40,9 +40,12 @@ angular.module('angularApp')
         return Expression.findByBuildingUris(uris, 'qldarch:Photograph').then(function (pictures) {
                 angular.forEach(pictures, function (picture) {
                     angular.forEach(structures, function (structure) {
-                        if (picture[Uris.QA_DEPICTS_BUILDING] === structure.uri) {
-                            structure.picture = picture.file;
-                        }
+                      // only setup the structure.picture if it not already has one. 
+                      // this fixes the issue with the preferred image being accidentally overidden
+                      // (the preferred image is setup in services/entity.js)
+                      if ((picture[Uris.QA_DEPICTS_BUILDING] === structure.uri) && (!structure.picture)) {
+                        structure.picture = picture.file;
+                      }
                     });
                 });
 
