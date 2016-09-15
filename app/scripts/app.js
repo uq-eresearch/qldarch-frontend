@@ -816,6 +816,10 @@ angular.module('angularApp', [
                                 console.log('interview is', interview);
                                 return Transcript.findFileFromInterviewKludge(interview[Uris.QA_HAS_TRANSCRIPT]).then(function(transcriptFile) {
                                     interview.transcriptFile = transcriptFile;
+                                    if (transcriptFile.file.indexOf('undefined') !== -1) {
+                                      interview.transcriptFile.file = transcriptUrl;
+                                      console.log('transcriptFile.file is undefined, override to transcriptUrl');
+                                    }
                                     return Transcript.findWithUrl(transcriptUrl).then(function(transcript) {
                                         console.log('transcript file is', transcript);
                                         return Relationship.findByInterviewUri(interviewUri).then(function(relationships) {
@@ -1082,6 +1086,10 @@ angular.module('angularApp', [
                                 console.log('interview is', interview);
                                 return Transcript.findFileFromInterviewKludge(interview[Uris.QA_HAS_TRANSCRIPT]).then(function(transcriptFile) {
                                     interview.transcriptFile = transcriptFile;
+                                    if (transcriptFile.file.indexOf('undefined') !== -1) {
+                                      interview.transcriptFile.file = transcriptUrl;
+                                      console.log('transcriptFile.file is undefined, override to transcriptUrl');
+                                    }
                                     return Transcript.findWithUrl(transcriptUrl).then(function(transcript) {
                                         console.log('transcript file is', transcript);
                                         return Relationship.findByInterviewUri(interviewUri).then(function(relationships) {
