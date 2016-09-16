@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('WordCloudBuilderCtrl', function ($scope, compoundObject, Auth, $filter, Uris, Solr, $state, Entity, CompoundObject) {
+    .controller('WordCloudBuilderCtrl', function ($scope, compoundObject, Auth, $filter, Uris, searchService, $state, Entity, CompoundObject) {
 
         /*
         =====================================================
@@ -54,9 +54,7 @@ angular.module('angularApp')
             $scope.wordcloud.$import.documents = null;
 
             // Do a search for documents
-            Solr.query({
-                query: entity.name
-            }).then(function (documents) {
+            searchService.getArticlesInterviews(entity.name).then(function (documents) {
                 // Got the documents
                 $scope.wordcloud.$import.documents = documents;
                 angular.forEach(documents, function (document) {
@@ -77,10 +75,7 @@ angular.module('angularApp')
             $scope.wordcloud.$import.documents = null;
 
             // Do a search for documents
-            Solr.query({
-                query: query,
-                containFullQuery: true
-            }).then(function (documents) {
+            searchService.getArticlesInterviews(query).then(function (documents) {
                 $scope.wordcloud.$import.isSearching = false;
                 // Got the documents
                 $scope.wordcloud.$import.documents = documents;
