@@ -3,7 +3,8 @@
 angular.module('angularApp')
     .controller('SearchCtrl', function ($scope,
                                         $location,
-                                        $http) {
+                                        $http,
+                                        Uris) {
 
 
         activate();
@@ -26,6 +27,13 @@ angular.module('angularApp')
                   path = '/interview/';
                 }
                 data[i].link = path + btoa(item.uri);
+                if (item.hasOwnProperty('image')) {
+                  if (item.image.indexOf('amuys/amuys') !== -1) {
+                    data[i].image = Uris.SESAME_THUMB_ROOT + item.image;
+                  } else {
+                    data[i].image = Uris.OMEKA_THUMB_ROOT + item.image;
+                  }
+                }
               });
               $scope.results = data;
             });

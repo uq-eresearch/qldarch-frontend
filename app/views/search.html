@@ -23,7 +23,7 @@
       <div ng-repeat="result in results | orderBy:'-score'" class="row" style="margin-bottom: 40px;">
         <img src="" alt="">
         <div class="col-md-1">
-          <img ng-src="/omeka/archive/square_thumbnails/{{ result.image }}"
+          <img ng-src="{{ result.image }}"
                alt=""
                class="img-responsive"
                ng-show="result.image">
