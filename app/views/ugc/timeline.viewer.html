@@ -19,12 +19,8 @@
 
 		<h3 style="text-align: center; margin-bottom: 24px;" ng-show="compoundObject.title.length">
 			<!-- Map title -->
-			{{ compoundObject.title }}<br/>
+			{{ compoundObject.title }} <small>By {{ compoundObject.user.name }}</small>
 			<!-- /Map title -->
-
-			<!-- Author name -->
-			<small ng-show="compoundObject.user.user.length">By {{ compoundObject.user.name }}</small>
-			<!-- /Author name -->
 		</h3>
 		<timeline headline="{{ timeline.headline }}" subtitle="{{ timeline.subtitle }}" dates="timeline.dates"></timeline>
 	</div>
