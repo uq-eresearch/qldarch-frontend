@@ -84,7 +84,7 @@ angular.module('angularApp')
                 });
             } else {
                 infowindow = new google.maps.InfoWindow({
-                    content: location.name
+                    content: '<span style="color:black">' + location.name + '</span>'
                 });
             }
 
