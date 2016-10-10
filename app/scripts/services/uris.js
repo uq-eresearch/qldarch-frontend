@@ -11,6 +11,7 @@ angular.module('angularApp')
         this.THUMB_ROOT = '';
 
         if (ENV.name === 'development') {
+            this.OMEKA_ROOT = 'http://qldarch-test.metadata.net/omeka/archive/';
             this.OMEKA_FILE_ROOT = 'http://qldarch-test.metadata.net/omeka/archive/files/';
             this.OMEKA_THUMB_ROOT = 'http://qldarch-test.metadata.net/omeka/archive/square_thumbnails/';
             this.SESAME_FILE_ROOT = 'http://qldarch-test.metadata.net/files/';
@@ -18,6 +19,7 @@ angular.module('angularApp')
 
             this.PROD_URL = 'http://qldarch-test.metadata.net/beta/';
         } else if (ENV.name === 'production') {
+            this.OMEKA_ROOT = 'http://qldarch.net/omeka/archive/';
             this.OMEKA_FILE_ROOT = 'http://qldarch.net/omeka/archive/files/';
             this.OMEKA_THUMB_ROOT = 'http://qldarch.net/omeka/archive/square_thumbnails/';
             this.SESAME_FILE_ROOT = 'http://qldarch.net/files/';
@@ -25,6 +27,7 @@ angular.module('angularApp')
             this.PROD_URL = 'http://qldarch.net/beta/';
         } else if (ENV.name === 'local') {
             // TODO try to make this the default and remove the development and production configuration
+            this.OMEKA_ROOT = '/omeka/archive/';
             this.OMEKA_FILE_ROOT = '/omeka/archive/files/';
             this.OMEKA_THUMB_ROOT = '/omeka/archive/square_thumbnails/';
             this.SESAME_FILE_ROOT = '/files/';

@@ -76,7 +76,7 @@ angular.module('angularApp')
                         // Set the transcript
                         // expression[Uris.QA_HAS_TRANSCRIPT] = data.uri;
                         $scope.interview[Uris.QA_EXTERNAL_LOCATION] = $scope.interview[Uris.QA_EXTERNAL_LOCATION] || [];
-                        $scope.interview[Uris.QA_EXTERNAL_LOCATION].push(Uris.SESAME_FILE_ROOT + data[Uris.QA_SYSTEM_LOCATION]);
+                        $scope.interview[Uris.QA_EXTERNAL_LOCATION].push(Uris.OMEKA_ROOT + data[Uris.QA_SYSTEM_LOCATION]);
 
                         // expression.$file = File.setupImageUrls(data);
                         // {"uri":"http://qldarch.net/users/amuys/DigitalFile#70211253214","http://qldarch.net/ns/rdf/2012-06/terms#managedFile":true,"http://qldarch.net/ns/rdf/2012-06/terms#basicMimeType":"text/plain","http://qldarch.net/ns/rdf/2012-06/terms#dateUploaded":1398229653214,"http://qldarch.net/ns/rdf/2012-06/terms#sourceFilename":"91f43085d59092db9ed9c59bac06ffa2.txt","http://www.w3.org/1999/02/22-rdf-syntax-ns#type":"http://qldarch.net/ns/rdf/2012-06/terms#DigitalFile","http://qldarch.net/ns/rdf/2012-06/terms#transcriptFile":"amuys/transcript/amuys-1398229653098-91f43085d59092db9ed9c59bac06ffa2.txt.json","http://qldarch.net/ns/rdf/2012-06/terms#uploadedBy":"http://qldarch.net/users/amuys","http://qldarch.net/ns/rdf/2012-06/terms#hasFileSize":39724,"http://qldarch.net/ns/rdf/2012-06/terms#systemLocation":"amuys/amuys-1398229653072-91f43085d59092db9ed9c59bac06ffa2.txt"}
@@ -106,7 +106,7 @@ angular.module('angularApp')
                             // Set the hasTrascript property
                             $scope.interview[Uris.QA_HAS_TRANSCRIPT] = data.uri; //data[Uris.QA_TRANSCRIPT_FILE];
                             // Set a shortcut to the transcript file
-                            $scope.interview[Uris.QA_TRANSCRIPT_LOCATION] = Uris.SESAME_FILE_ROOT + data[Uris.QA_TRANSCRIPT_FILE];
+                            $scope.interview[Uris.QA_TRANSCRIPT_LOCATION] = Uris.OMEKA_FILE_ROOT + data[Uris.QA_TRANSCRIPT_FILE];
                         } else {
                           if(data.msg) {
                             toaster.pop('error', data.msg);
@@ -168,7 +168,7 @@ angular.module('angularApp')
             index = $scope.interview[Uris.QA_HAS_FILE].indexOf(file.uri);
             $scope.interview[Uris.QA_HAS_FILE].splice(index, 1);
 
-            index = $scope.interview[Uris.QA_EXTERNAL_LOCATION].indexOf(Uris.SESAME_FILE_ROOT + file[Uris.QA_SYSTEM_LOCATION]);
+            index = $scope.interview[Uris.QA_EXTERNAL_LOCATION].indexOf(Uris.OMEKA_ROOT + file[Uris.QA_SYSTEM_LOCATION]);
             $scope.interview[Uris.QA_EXTERNAL_LOCATION].splice(index, 1);
         };
         $scope.removeNewAudioFile = function(file) {
@@ -178,7 +178,7 @@ angular.module('angularApp')
             index = $scope.interview[Uris.QA_HAS_FILE].indexOf(file.uri);
             $scope.interview[Uris.QA_HAS_FILE].splice(index, 1);
 
-            index = $scope.interview[Uris.QA_EXTERNAL_LOCATION].indexOf(Uris.SESAME_FILE_ROOT + file[Uris.QA_SYSTEM_LOCATION]);
+            index = $scope.interview[Uris.QA_EXTERNAL_LOCATION].indexOf(Uris.OMEKA_ROOT + file[Uris.QA_SYSTEM_LOCATION]);
             $scope.interview[Uris.QA_EXTERNAL_LOCATION].splice(index, 1);
         };
 
