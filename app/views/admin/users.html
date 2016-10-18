@@ -9,6 +9,8 @@
 			<tr>
 				<th>User</th>
 				<th>Role</th>
+				<th>Contact</th>
+				<th></th>
 			</tr>
 			<tr ng-repeat="user in users | orderBy:'email'">
 				<td><strong>{{ user.email }}</strong> ({{ user.username }})</td>	
@@ -19,7 +21,10 @@
 						<option value="disabled">Disabled</option>
 					</select>
 					<span ng-show="user.role == 'root'">Admin - Build, Add, Upload, Delete</span>
-					<span ng-hide="Auth.user == user.username || user.role == 'root'">
+				</td>
+				<td><input type="checkbox" ng-model="user.contact" ng-change="user.$isChanged = true"></td>
+				<td>
+					<span>
 						<button class="btn btn-primary btn-xs" ng-click="!user.$isSaving && saveUser(user)" ng-show="user.$isChanged">
 							<i class="fa fa-save"></i> 
 							<span ng-show="user.$isSaving"><i class="fa fa-refresh fa-spin"></i></span> 

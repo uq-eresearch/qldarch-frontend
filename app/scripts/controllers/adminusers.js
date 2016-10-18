@@ -7,9 +7,10 @@ angular.module('angularApp')
         $scope.saveUser = function (user) {
             user.$isSaving = true;
             console.log('user is', user);
-            $http.put(Uris.JSON_ROOT + 'user/role', jQuery.param({
+            $http.put(Uris.JSON_ROOT + 'user/update', jQuery.param({
                 username: user.username,
-                role: user.role
+                role: user.role,
+                contact: user.contact
             }), {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
