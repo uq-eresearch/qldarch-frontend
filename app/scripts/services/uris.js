@@ -5,6 +5,7 @@ angular.module('angularApp')
     	// AngularJS will instantiate a singleton by calling 'new' on this function
         this.local = true;
 
+        this.WS_ROOT   = '/ws/';
         this.JSON_ROOT = '/ws/rest/';
         this.SOLR_ROOT = '/solr/collection1/';
 

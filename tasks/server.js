@@ -7,20 +7,19 @@ module.exports = function(grunt) {
 
   // workaround for http-proxy with gzip chunked server responses
   // found here: https://github.com/nodejitsu/node-http-proxy/issues/1007
+  // also had issues with images being returned through this proxy
+  // so this now done for every request
   function handleGzip(proxyRes, req, res) {
-    var gzipped = /gzip/.test(proxyRes.headers["content-encoding"]);
-    if(gzipped) {
-      res.write = (function(override) {
-        return function(chunk, encoding, callback) {
-          override.call(res, chunk, "binary", callback);
-        };
-      })(res.write);
-      res.end = (function(override) {
-        return function(chunk, encoding, callback) {
-          override.call(res, chunk, "binary", callback);
-        };
-      })(res.end);
-    }
+    res.write = (function(override) {
+      return function(chunk, encoding, callback) {
+        override.call(res, chunk, "binary", callback);
+      };
+    })(res.write);
+    res.end = (function(override) {
+      return function(chunk, encoding, callback) {
+        override.call(res, chunk, "binary", callback);
+      };
+    })(res.end);
   }
 
   function prx(path, target) {

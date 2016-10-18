@@ -8,7 +8,7 @@
  * Factory in the angularApp.
  */
 angular.module('angularApp')
-    .factory('interviewRepository', function (Expression, GraphHelper, Uris, Architect, $filter, Interview) {
+    .factory('interviewRepository', function (Expression, GraphHelper, Uris, Architect, $filter, Interview, $http) {
 
         var interviewRepository = {
             getInterviewsForCarousel: getInterviewsForCarousel
@@ -23,17 +23,18 @@ angular.module('angularApp')
         }
 
         function getInterviewsForCarousel() {
-            return getAll().then(function (interviews) {
-                interviews = _.filter(interviews, function(interview) {
-                     return interview.interviewees.length;
-                });
-                // Filter only the interviews with pictures
-                // Looks better for the front page
-                interviews = _.sortBy(interviews, function(interview) {
-                    return !hasPicture(interview);
-                });
-                return interviews;
+          return $http.get(Uris.WS_ROOT + 'interviews').then(function(result) {
+            var interviews = result.data;
+            interviews.forEach(function(interview) {
+              interview.encodedUri = btoa('http://qldarch.net/interview/' + interview.id);
             });
+            return _.shuffle(_.uniqBy(interviews, function(interview) {
+              return interview.interviewee;
+            }).filter(function(interview) {
+              // only show the interviews that have an interviewee picture on the home page carousel
+              return typeof interview.media !== 'undefined';
+            }));
+          });
         }
 
         function hasInterviewees(interview) {

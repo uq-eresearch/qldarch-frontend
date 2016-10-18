@@ -111,7 +111,19 @@
                             </div>
                         </div>
                         <div class="col-sm-2" ng-repeat="interview in architectRow">
-                            <div ng-include="'views/thumbs/interview.html'"></div>
+                          <div class="thumbnail" >
+                              <!-- image -->
+                              <a class="thumbnail-image" ui-sref="interview({interviewId: interview.encodedUri})">
+                                  <img ng-src="/ws/media/{{interview.media}}?dimension=163x165" class="img-responsive">
+                              </a>
+
+                              <!-- caption -->
+                              <div class="caption">
+                                  <h4><a ui-sref="interview({interviewId: interview.encodedUri})">
+                                      {{ interview.name }}
+                                  </a></h4>
+                              </div>
+                          </div>
                         </div>
                         <div class="col-sm-1" class="hidden-phone">
                             <div class="carousel-nav carousel-nav-right" ng-click="nextArchitects()" ng-hide="architectsEnd === architectRows.length">
