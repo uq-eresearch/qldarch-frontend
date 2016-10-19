@@ -461,6 +461,7 @@ angular.module('angularApp', [
             })
             .state('contribute', {
                 url: '/contribute',
+                controller: 'ContributeCtrl',
                 templateUrl: 'views/contribute.html',
             })
             .state('compound', {

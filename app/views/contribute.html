@@ -24,26 +24,26 @@
                 </div>
 
                 <div class="col-lg-6">
-                    <form role="form" action="mailto:d.vanderplaat@uq.edu.au?subject=QLDArch.net" method="post" enctype="text/plain">
+                    <form role="form" ng-submit="postMsg(msg)">
                         <div class="form-group">
                             <label for="yourcomments">Your Comments</label>
-                            <textarea name="comments" class="form-control" id="yourcomments" rows="10" placeholder="Have your say"></textarea>
+                            <textarea name="comments" class="form-control" id="yourcomments" rows="10" placeholder="Have your say" ng-model="msg.content"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="firstname">First Name</label>
-                            <input name="firstName" type="text" class="form-control" id="firstname" placeholder="What's your first name?">
+                            <input name="firstName" type="text" class="form-control" id="firstname" placeholder="What's your first name?" ng-model="msg.firstname">
                         </div>
                         <div class="form-group">
                             <label for="lastname">Last Name</label>
-                            <input name="lastName" type="text" class="form-control" id="lastname" placeholder="What's your last name?">
+                            <input name="lastName" type="text" class="form-control" id="lastname" placeholder="What's your last name?" ng-model="msg.lastname">
                         </div>
                         <div class="form-group">
                             <label for="email">Email Address</label>
-                            <input name="email" type="email"  class="form-control" id="email" placeholder="What's your email address?">
+                            <input name="email" type="email"  class="form-control" id="email" placeholder="What's your email address?" ng-model="msg.from">
                         </div>
                         <div class="checkbox">
                             <label>
-                                <input name="newsletter" type="checkbox"> Please send me the latest news via email
+                                <input name="newsletter" type="checkbox" ng-model="msg.newsletter"> Please send me the latest news via email
                             </label>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
