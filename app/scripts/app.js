@@ -29,7 +29,8 @@ angular.module('angularApp', [
     'infinite-scroll',
     'ui.router',
     'angularFileUpload',
-    'toaster'
+    'toaster',
+    'vcRecaptcha'
 ])
     .run(function($rootScope, $route, $location, ngProgress, Uris, Entity, $http, GraphHelper, $state, $stateParams, Auth, $filter) {
 
