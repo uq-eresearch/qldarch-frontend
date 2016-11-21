@@ -48,7 +48,7 @@ angular.module('angularApp')
             		if (!((!c || !c.length || !/\S/.test(c)) || (!fn || !fn.length || !/\S/.test(fn))
             				|| (!ln || !ln.length || !/\S/.test(ln)) || (!f || !f.length || !/\S/.test(f)))) {
             			console.log('msg', msg);
-            			$http.post(Uris.JSON_ROOT + 'contact/message', jQuery.param(msg), {
+            			$http.post(Uris.JSON_ROOT + 'contact/message', jQuery.param(msg) + '&g-recaptcha-response=' + $scope.recaptchaResponse, {
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded'
                             }
