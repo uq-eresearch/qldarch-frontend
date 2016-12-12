@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularApp')
-    .controller('MainCtrl', function ($scope, $location, Uris, Entity, interviews, LayoutHelper, GraphHelper, compoundObjects) {
+    .controller('MainCtrl', function ($scope, $location, $sce, Uris, Entity, interviews, LayoutHelper, GraphHelper, compoundObjects) {
         $scope.searchType = 'entities';
         $scope.query = '';
 
@@ -37,6 +37,10 @@ angular.module('angularApp')
         $scope.prevCompoundObjects = function () {
             $scope.compoundObjectsStart--;
             $scope.compoundObjectsEnd--;
+        };
+
+        $scope.trustedUrl = function (url) {
+            return $sce.trustAsResourceUrl(url);
         };
 
         // $scope.end = $scope.index + $scope.length;

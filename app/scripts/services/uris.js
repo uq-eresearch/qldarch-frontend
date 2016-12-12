@@ -5,6 +5,8 @@ angular.module('angularApp')
     	// AngularJS will instantiate a singleton by calling 'new' on this function
         this.local = true;
 
+        this.QLDARCH_UI = 'https://swift.rc.nectar.org.au:8888/v1/AUTH_3b88d73c121e460ab8acd3c031c2d6ed/qldarch-ui/';
+
         this.WS_ROOT   = '/ws/';
         this.JSON_ROOT = '/ws/rest/';
         this.SOLR_ROOT = '/solr/collection1/';
