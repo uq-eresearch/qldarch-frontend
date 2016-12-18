@@ -101,7 +101,7 @@
     </div>
 
     <div class="l-frame l-frame-highlight">
-        <div class="container">
+        <div class="container" style="">
             <div class="overview">
                 <div class="overview-header">
                     <h2>Start Exploring</h2>
@@ -111,14 +111,14 @@
                 <div class="row" ng-repeat="architectRow in architectRows | slice:architectsStart:architectsEnd">
                     <div class="carousel">
                         <div class="col-sm-1" class="hidden-phone">
-                            <div class="carousel-nav carousel-nav-left" ng-click="prevArchitects()" ng-hide="architectsStart === 0">
+                            <div class="carousel-nav carousel-nav-left" style="user-select: none;" ng-click="prevArchitects()" ng-hide="architectsStart === 0">
                                 <i class="fa fa-chevron-left"></i>      
                             </div>
                         </div>
                         <div class="col-sm-2" ng-repeat="interview in architectRow">
                           <div class="thumbnail" >
                               <!-- image -->
-                              <a class="thumbnail-image" ui-sref="interview({interviewId: interview.encodedUri})">
+                              <a class="thumbnail-image" style="user-select: none;" ui-sref="interview({interviewId: interview.encodedUri})">
                                   <img ng-src="/ws/media/{{interview.media}}?dimension=163x165" class="img-responsive">
                               </a>
 
@@ -131,7 +131,7 @@
                           </div>
                         </div>
                         <div class="col-sm-1" class="hidden-phone">
-                            <div class="carousel-nav carousel-nav-right" ng-click="nextArchitects()" ng-hide="architectsEnd === architectRows.length">
+                            <div class="carousel-nav carousel-nav-right" style="user-select: none;" ng-click="nextArchitects()" ng-hide="architectsEnd === architectRows.length">
                                 <i class="fa fa-chevron-right"></i>
                             </div>
                         </div>    
