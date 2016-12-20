@@ -114,7 +114,7 @@
                                        class="form-control"
                                        ng-model="globalSearch.query"
                                        placeholder="Search"
-                                       typeahead="entity.name for entity in globalSearch($viewValue) | filter:$viewValue"
+                                       typeahead="entity.name for entity in globalSearch($viewValue)"
                                        typeahead-loading="loadingLocations" class="form-control"
                                        typeahead-min-length="1"
                                        typeahead-on-select="globalSearchOnSelect($item, $model, $label)" 

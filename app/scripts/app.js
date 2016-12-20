@@ -30,7 +30,8 @@ angular.module('angularApp', [
     'ui.router',
     'angularFileUpload',
     'toaster',
-    'vcRecaptcha'
+    'vcRecaptcha',
+    'ui.tinymce'
 ])
     .run(function($rootScope, $route, $location, ngProgress, Uris, Entity, $http, GraphHelper, $state, $stateParams, Auth, $filter) {
 
@@ -48,6 +49,11 @@ angular.module('angularApp', [
         $rootScope.$stateParams = $stateParams;
         $rootScope.Auth = Auth;
         $rootScope.Uris = Uris;
+        $rootScope.tinymceOptions = {
+            menubar: false,
+            toolbar: "bold | italic",
+            statusbar: false
+        };
 
         $http.get(Uris.JSON_ROOT + 'login/status').then(function(status) {
             angular.extend(Auth, status.data);
@@ -158,9 +164,11 @@ angular.module('angularApp', [
         };
 
     })
-    .config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+    .config(function($stateProvider, $urlRouterProvider, $httpProvider, $qProvider) {
 
         console.log('does this work?');
+        $qProvider.errorOnUnhandledRejections(false);
+
         $httpProvider.defaults.withCredentials = true;
 
         // For any unmatched url, redirect to /state1
