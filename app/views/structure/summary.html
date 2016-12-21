@@ -18,7 +18,7 @@
                 
 
                 <h5>Summary</h5>
-                <p style="white-space:pre-wrap;">{{ structure[Uris.QA_SUMMARY] }}</p>
+                <p style="white-space:pre-wrap;" ng-bind-html="structure[Uris.QA_SUMMARY]"></p>
                 <p ng-show="!structure[Uris.QA_SUMMARY].length">No summary.</p>
 
                 <h5 style="margin-top: 24px;">Associated Firm</h5>
@@ -177,7 +177,7 @@
                     </div>
                     <div class="form-group">
                         <label>Summary</label>
-                        <textarea rows="10" id="summary" class="form-control" placeholder="Summary" ng-model="structure[Uris.QA_SUMMARY]"></textarea>
+                        <textarea ui-tinymce="tinymceOptions" rows="10" id="summary" class="form-control" placeholder="Summary" ng-model="structure[Uris.QA_SUMMARY]"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="biography">Address</label>

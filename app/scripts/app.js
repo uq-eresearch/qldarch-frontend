@@ -50,6 +50,8 @@ angular.module('angularApp', [
         $rootScope.Auth = Auth;
         $rootScope.Uris = Uris;
         $rootScope.tinymceOptions = {
+            plugins: 'paste',
+            paste_as_text: true,
             menubar: false,
             toolbar: "bold | italic",
             statusbar: false

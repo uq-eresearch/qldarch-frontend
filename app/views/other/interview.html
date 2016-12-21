@@ -257,7 +257,7 @@
                     </div>
                     <div class="form-group" ng-if="exchange.$entityForm[Uris.RDF_TYPE].uri">
                       <label for="summary">Summary</label>
-                      <textarea rows="4" id="summary" class="form-control" placeholder="Summary" ng-model="exchange.$entityForm[Uris.QA_SUMMARY]"></textarea>
+                      <textarea ui-tinymce="tinymceOptions" rows="4" id="summary" class="form-control" placeholder="Summary" ng-model="exchange.$entityForm[Uris.QA_SUMMARY]"></textarea>
                     </div>
                         
                     <button type="submit" class="btn btn-sm btn-primary" ng-click="addEntity(exchange)">Add</button>
