@@ -1,9 +1,9 @@
 <div class="content">
     <div class="page-header">
         <div class="container">
-            <small style="text-transform: capitalize"><a ng-href="#/{{ structure.type }}s">{{ structure.type }}s »</a></small>
+            <small style="text-transform: capitalize"><a ng-href="#!/{{ structure.type }}s">{{ structure.type }}s »</a></small>
             <h1>{{ structure.name }}</h1>
-            <a class="btn btn-sm btn-info" ng-href="#/explore?uri={{ structure.encodedUri}}">Explore {{ structure.name }}</a>
+            <a class="btn btn-sm btn-info" ng-href="#!/explore?uri={{ structure.encodedUri}}">Explore {{ structure.name }}</a>
         </div>
     </div>
 
@@ -24,7 +24,7 @@
                             <h5>Typology</h5>
                             <ul>
                                 <li ng-repeat="buildingTypology in structure.buildingTypologies">
-                                    <a href="#/building-typology/{{ buildingTypology.encodedUri }}">{{ buildingTypology.name }}</a>
+                                    <a href="#!/building-typology/{{ buildingTypology.encodedUri }}">{{ buildingTypology.name }}</a>
                                 </li>
                             </ul>
                             <p ng-show="!structure.buildingTypologies.length">
@@ -33,7 +33,7 @@
 
                             <h5>Associated Firm</h5>
                             <p>
-                                <a href="#/firm/{{ structure.firm.encodedUri }}">{{ structure.firm.name }}</a>
+                                <a href="#!/firm/{{ structure.firm.encodedUri }}">{{ structure.firm.name }}</a>
                             </p>
 
                             <h5>Designers</h5>
@@ -43,12 +43,12 @@
 
                             <ul class="media-list">
                                 <li class="media" ng-repeat="designer in designers">
-                                    <a class="pull-left" href="#/{{ designer.type }}/{{ designer.encodedUri }}">
+                                    <a class="pull-left" href="#!/{{ designer.type }}/{{ designer.encodedUri }}">
                                         <img class="media-object img-responsive img-circle" ng-if="!designer.picture" ng-src="images/icon.png" style="display:block; width:32px">
                                         <img class="media-object img-responsive img-circle" ng-if="designer.picture" ng-src="{{ Uris.FILE_ROOT + designer.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ designer.name }}" style="width:32px">
                                     </a>
                                     <div class="media-body">
-                                        <a ng-href="#/{{ designer.type }}/{{ designer.encodedUri }}">
+                                        <a ng-href="#!/{{ designer.type }}/{{ designer.encodedUri }}">
                                             {{ designer.name }}
                                         </a>
                                     </div>

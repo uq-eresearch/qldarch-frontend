@@ -296,7 +296,7 @@ angular.module('angularApp')
         //         date.asset = {
         //             media: 'images/icon.png',
         //             thumbnail: 'images/icon.png',
-        //             caption: '<h4><a href="#/' + date.entity.type + '/' + date.entity.encodedUri + '">' + date.entity.name + '</a></h4>'
+        //             caption: '<h4><a href="#!/' + date.entity.type + '/' + date.entity.encodedUri + '">' + date.entity.name + '</a></h4>'
         //         };
         //         if (date.entity.picture) {
         //             date.asset.media = Uris.FILE_ROOT + date.entity.picture[Uris.QA_SYSTEM_LOCATION];

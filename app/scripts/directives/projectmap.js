@@ -59,7 +59,7 @@ angular.module('angularApp')
 
                                 // Create an info window
                                 var infowindow = new google.maps.InfoWindow({
-                                    content: '<a href="#/project/summary?structureId=' + structure.encodedUri + '">' + structure.name + '</a>'
+                                    content: '<a href="#!/project/summary?structureId=' + structure.encodedUri + '">' + structure.name + '</a>'
                                 });
 
                                 google.maps.event.addListener(marker, 'click', function () {

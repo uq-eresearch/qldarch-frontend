@@ -60,13 +60,13 @@
                             <div class="panel panel-default">
                                 <div class="panel-body">
                                     <div class="media">
-                                        <a class="pull-left" ng-href="#/{{ selected.type }}/{{ selected.encodedUri }}">
+                                        <a class="pull-left" ng-href="#!/{{ selected.type }}/{{ selected.encodedUri }}">
                                             <img class="media-object" ng-if="!selected.picture" ng-src="images/icon.png" style="display:block; width:60px;">
                                             <img class="media-object" ng-if="selected.picture" ng-src="{{ Uris.FILE_ROOT + selected.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="{{ selected.name }}" style="width: 60px;">
                                         </a>
                                         <div class="media-body">
                                             <h4 class="media-heading">
-                                                <a ng-href="#/{{ selected.type }}/{{ selected.encodedUri }}">
+                                                <a ng-href="#!/{{ selected.type }}/{{ selected.encodedUri }}">
                                                     {{ selected.name }}
                                                 </a>
                                             </h4>
@@ -79,12 +79,12 @@
                                 <ul class="list-group">
                                     <li class="list-group-item" ng-repeat="relationship in selectedRelationships">
                                         <!--<i class="fa fa-bars"> </i>-->
-                                        <a href="#/{{ relationship.subject.type }}/{{ relationship.subject.encodedUri }}" ng-bind-html="relationship.subject.name || '' | highlight:transcriptSearchInput"></a>
+                                        <a href="#!/{{ relationship.subject.type }}/{{ relationship.subject.encodedUri }}" ng-bind-html="relationship.subject.name || '' | highlight:transcriptSearchInput"></a>
 
                                         <span style="text-transform: lowercase" ng-bind-html="relationship.predicate[Uris.QA_LABEL] || relationship.predicate.name || '' | highlight:transcriptSearchInput">
                                         </span>
 
-                                        <a href="#/{{ relationship.object.type }}/{{ relationship.object.encodedUri }}" ng-bind-html="relationship.object.name || '' | highlight:transcriptSearchInput"></a>
+                                        <a href="#!/{{ relationship.object.type }}/{{ relationship.object.encodedUri }}" ng-bind-html="relationship.object.name || '' | highlight:transcriptSearchInput"></a>
 
                                         <!-- Date -->
                                         {{ relationship[Uris.QA_START_DATE] }}

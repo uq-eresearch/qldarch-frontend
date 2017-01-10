@@ -130,7 +130,7 @@ angular.module('angularApp')
                 //         timelineDate.endDate = relationship[Uris.QA_END_DATE].substring(0, 4);
                 //     }
 
-                //     timelineDate.headline = '<a href="#/' + relationship.subject.type + '/' + relationship.subject.encodedUri + '">' + relationship.subject.name + '</a> ' + relationship.predicate[Uris.QA_LABEL].toLowerCase() + ' <a href="#/' + relationship.object.type + '/' + relationship.object.encodedUri + '">' + relationship.object.name + '</a>';
+                //     timelineDate.headline = '<a href="#!/' + relationship.subject.type + '/' + relationship.subject.encodedUri + '">' + relationship.subject.name + '</a> ' + relationship.predicate[Uris.QA_LABEL].toLowerCase() + ' <a href="#!/' + relationship.object.type + '/' + relationship.object.encodedUri + '">' + relationship.object.name + '</a>';
                 //     if (angular.isDefined(relationship[Uris.QA_TEXTUAL_NOTE])) {
                 //         timelineDate.text = '<p>' + relationship[Uris.QA_TEXTUAL_NOTE] + '</p>';
                 //     }
