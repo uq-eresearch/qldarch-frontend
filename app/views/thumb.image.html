@@ -1,17 +1,13 @@
-<div class="thumbnail" >
-    <!-- Image -->
-    <a href ui-sref="image.view({imageId: image.encodedUri})" class="thumbnail-image">
-        <img class="img-responsive" ng-src="{{ image.file.thumb }}" alt=""/>
-    </a>
-    <!-- /Image -->
-
-    <!-- Caption -->
-    <div class="caption">
-        <h4>
-            <a href ui-sref="image.view({imageId: image.encodedUri})">
-                {{ image[Uris.DCT_TITLE] }}
-            </a>
-        </h4>
-    </div>
-    <!-- /Caption -->
+<div class="thumbnail">
+  <!-- Image -->
+  <a href ui-sref="image.view({imageId: image.encodedUri})" class="thumbnail-image"> <img class="img-responsive" ng-src="{{ image.file.thumb }}" alt="" />
+  </a>
+  <!-- /Image -->
+  <!-- Caption -->
+  <div class="caption">
+    <h4>
+      <a href ui-sref="image.view({imageId: image.encodedUri})"> {{ image[Uris.DCT_TITLE] }} </a>
+    </h4>
+  </div>
+  <!-- /Caption -->
 </div>

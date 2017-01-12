@@ -1,45 +1,39 @@
 <div class="content">
-    <div class="page-header has-subnav">
-        <div class="container">
-            <h1>Sign In</h1>
-        </div>
+  <div class="page-header has-subnav">
+    <div class="container">
+      <h1>Sign In</h1>
     </div>
-
-    <!-- info -->
-    <div class="alert alert-info" style="margin-bottom: 8px">
-        <div class="container">
-            <i class="fa fa-info-circle"></i> Log in with your existing account.
-        </div>
+  </div>
+  <!-- info -->
+  <div class="alert alert-info" style="margin-bottom: 8px">
+    <div class="container">
+      <i class="fa fa-info-circle"></i> Log in with your existing account.
     </div>
-    <!-- /info -->
-
-
-    <div class="l-frame">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-7">
-                    <form name="form" ng-submit="login(credentials)" style="border-right: 1px solid #ccc; padding-right: 30px;">
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input name="email" type="text"  class="form-control" id="email" placeholder="Email address" ng-model="credentials.username" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input name="password" type="password"  class="form-control" id="password" placeholder="Password" ng-model="credentials.password" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid">Log In</button> <a class="btn btn-link" ui-sref="forgot">Forgot your password</a>
-                    </form>
-                </div>
-                <div class="col-md-4">
-                    <div>
-                        <h5>Don't have an account?</h5>
-                        <p>Join the Digital Archive of Queensland Architecture today.</p>
-                        <button class="btn btn-primary" ui-sref="register">Join</button>    
-                    </div>
-                    
-                </div>
+  </div>
+  <!-- /info -->
+  <div class="l-frame">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-7">
+          <form name="form" ng-submit="login(credentials)" style="border-right: 1px solid #ccc; padding-right: 30px;">
+            <div class="form-group">
+              <label for="email">Email Address</label> <input name="email" type="text" class="form-control" id="email" placeholder="Email address" ng-model="credentials.username" required>
             </div>
+            <div class="form-group">
+              <label for="password">Password</label> <input name="password" type="password" class="form-control" id="password" placeholder="Password" ng-model="credentials.password" required>
+            </div>
+            <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid">Log In</button>
+            <a class="btn btn-link" ui-sref="forgot">Forgot your password</a>
+          </form>
         </div>
+        <div class="col-md-4">
+          <div>
+            <h5>Don't have an account?</h5>
+            <p>Join the Digital Archive of Queensland Architecture today.</p>
+            <button class="btn btn-primary" ui-sref="register">Join</button>
+          </div>
+        </div>
+      </div>
     </div>
-
+  </div>
 </div>

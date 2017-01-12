@@ -1,40 +1,25 @@
 <div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <img  ng-src="{{ lineDrawing.file.file }}" style="display:block; width:100%">
-        </div>
+  <div class="row">
+    <div class="col-md-12">
+      <img ng-src="{{ lineDrawing.file.file }}" style="display: block; width: 100%">
     </div>
-    <div class="row">
-        <div class="col-md-6">
-            <h5>Title</h5>
-            <p>
-                {{ lineDrawing[Uris.DCT_TITLE] }}
-            </p>
-
-            <h5>Rights</h5>
-            <p>
-                {{ lineDrawing[Uris.DCT_RIGHTS] }}
-            </p>
-
-            <h5>Identifier</h5>
-            <p>
-                {{ lineDrawing[Uris.DCT_IDENTIFIER] }}
-            </p>
-        </div>
-        <div class="col-md-6">
-            <h5>
-                Building
-            </h5>
-            <p>
-                <a href ui-sref="structure.summary({structureId: lineDrawing.building.encodedUri})" >
-                    {{ lineDrawing.building.name }}
-                </a>
-            </p>
-            <h5>Location</h5>
-            <p>
-                {{ lineDrawing[Uris.QA_LOCATION] }}
-            </p>
-
-        </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h5>Title</h5>
+      <p>{{ lineDrawing[Uris.DCT_TITLE] }}</p>
+      <h5>Rights</h5>
+      <p>{{ lineDrawing[Uris.DCT_RIGHTS] }}</p>
+      <h5>Identifier</h5>
+      <p>{{ lineDrawing[Uris.DCT_IDENTIFIER] }}</p>
     </div>
+    <div class="col-md-6">
+      <h5>Building</h5>
+      <p>
+        <a href ui-sref="structure.summary({structureId: lineDrawing.building.encodedUri})"> {{ lineDrawing.building.name }} </a>
+      </p>
+      <h5>Location</h5>
+      <p>{{ lineDrawing[Uris.QA_LOCATION] }}</p>
+    </div>
+  </div>
 </div>

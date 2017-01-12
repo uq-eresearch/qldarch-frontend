@@ -1,148 +1,91 @@
 <div class="page-header has-subnav">
-    <div class="container">
-        <small>
-            <a ng-href="#!/articles">Articles »</a>
-        </small>
-        <h1>{{ article[Uris.DCT_TITLE] }}</h1>
-    </div>
+  <div class="container">
+    <small> <a ng-href="#!/articles">Articles »</a>
+    </small>
+    <h1>{{ article[Uris.DCT_TITLE] }}</h1>
+  </div>
 </div>
-
 <div class="alert alert-warning" ng-show="Auth.isUQSLQ()" style="margin: 0;" ng-hide="$state.includes('article.edit')">
-    <div class="container">
-        <!-- Download dropdown -->
-        <div class="btn-group" ng-hide="$state.includes('article.edit')">
-            <div class="dropdown">
-                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                    Download
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-
-                    <li ng-repeat="file in article.files">
-                        <a ng-href="{{ file.file }}" alt="" target="_blank">{{ file[Uris.QA_SOURCE_FILENAME] }}</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <button class="btn btn-default btn-xs" ui-sref="article.edit({ articleId: article.encodedUri })"
-                ng-show="Auth.isEditor()">
-            <i class="fa fa-pencil"></i> Edit
+  <div class="container">
+    <!-- Download dropdown -->
+    <div class="btn-group" ng-hide="$state.includes('article.edit')">
+      <div class="dropdown">
+        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+          Download <span class="caret"></span>
         </button>
-
-        <!-- Delete button -->
-        <button class="btn btn-default btn-xs" ng-click="delete(article)" ng-show="Auth.canDelete(article.uri)"><i
-                class="fa fa-trash-o"></i> Delete
-        </button>
-        <!-- /Delete button -->
+        <ul class="dropdown-menu" role="menu">
+          <li ng-repeat="file in article.files"><a ng-href="{{ file.file }}" alt="" target="_blank">{{ file[Uris.QA_SOURCE_FILENAME] }}</a></li>
+        </ul>
+      </div>
     </div>
+    <button class="btn btn-default btn-xs" ui-sref="article.edit({ articleId: article.encodedUri })" ng-show="Auth.isEditor()">
+      <i class="fa fa-pencil"></i> Edit
+    </button>
+    <!-- Delete button -->
+    <button class="btn btn-default btn-xs" ng-click="delete(article)" ng-show="Auth.canDelete(article.uri)">
+      <i class="fa fa-trash-o"></i> Delete
+    </button>
+    <!-- /Delete button -->
+  </div>
 </div>
-
 <div class="l-frame">
-    <div class="container">
-
-        <div class="row" ng-hide="$state.includes('article.edit')">
-            <!-- <div class="col-md-6">
-                      <img ng-src="images/icon.png" style="display:block; width:100%">
-                  </div> -->
-            <div class="col-md-6">
-                <h5>Authors</h5>
-
-                <p>
-                    {{ article[Uris.QA_AUTHORS] }}
-                </p>
-
-                <h5>Periodical Title</h5>
-
-                <p>
-                    {{ article[Uris.QA_PERIODICAL_TITLE] }}
-                </p>
-
-                <h5>Volume</h5>
-
-                <p>{{ article[Uris.QA_VOLUME] }}</p>
-
-                <h5>Issue</h5>
-
-                <p>
-                    {{ article[Uris.QA_ISSUE] }}
-                </p>
-
-                <h5>Publication Date</h5>
-                <p class="text-muted" data-ng-hide="article[Uris.QA_DATE_PUBLISHED].length">
-                    No date recorded
-                </p>
-                <p>
-                    {{ article[Uris.QA_DATE_PUBLISHED] | date:'dd-MM-yyyy' }}
-                </p>
-
-                <h5>Pages</h5>
-                <p>
-                    {{ article[Uris.QA_PAGES] }}
-                </p>
-
-                <h5>Summary</h5>
-
-                <p>{{ article[Uris.DCT_DESCRIPTION] || "No summary" }}</p>
-            </div>
-        </div>
-        <div class="row" ng-show="$state.includes('article.edit')">
-            <div class="col-md-6">
-                <form action="" ng-submit="updateArticle(article)">
-                    <div class="form-group">
-                        <label>Author(s)</label>
-                        <input type="text" class="form-control" placeholder="Authors"
-                               ng-model="article[Uris.QA_AUTHORS]"/>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="">Periodical Title</label>
-                        <input type="text" class="form-control" placeholder="Periodical Title"
-                               ng-model="article[Uris.QA_PERIODICAL_TITLE]">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="">Volume</label>
-                        <input type="text" class="form-control" placeholder="Volume" ng-model="article[Uris.QA_VOLUME]">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="">Issue</label>
-                        <input type="text" class="form-control" placeholder="Issue" ng-model="article[Uris.QA_ISSUE]">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="">Publication Date</label>
-
-                        <div>
-                            {{ expression.$article[Uris.QA_DATE_PUBLISHED] | date:'dd-MM-yyyy' }}
-                        </div>
-
-                        <div class="well well-sm">
-                            <datepicker ng-model="article[Uris.QA_DATE_PUBLISHED]" show-weeks="false"></datepicker>
-                            <div style="margin-top: 10px;" ng-show="article[Uris.QA_DATE_PUBLISHED]">
-                                <button type="button" class="btn btn-sm btn-primary"
-                                        ng-click="article[Uris.QA_DATE_PUBLISHED] = ''">Clear
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="">Pages</label>
-                        <input type="text" class="form-control" placeholder="Pages" ng-model="article[Uris.QA_PAGES]">
-                    </div>
-
-                    <!-- Description -->
-                    <div class="form-group">
-                        <label>Summary</label>
-                        <textarea placeholder="Summary" ng-model="article[Uris.DCT_DESCRIPTION]"
-                                  class="form-control"></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Save</button>
-                    <button type="button" class="btn btn-default" ng-click="cancel(article)">Cancel</button>
-                </form>
-            </div>
-        </div>
+  <div class="container">
+    <div class="row" ng-hide="$state.includes('article.edit')">
+      <div class="col-md-6">
+        <h5>Authors</h5>
+        <p>{{ article[Uris.QA_AUTHORS] }}</p>
+        <h5>Periodical Title</h5>
+        <p>{{ article[Uris.QA_PERIODICAL_TITLE] }}</p>
+        <h5>Volume</h5>
+        <p>{{ article[Uris.QA_VOLUME] }}</p>
+        <h5>Issue</h5>
+        <p>{{ article[Uris.QA_ISSUE] }}</p>
+        <h5>Publication Date</h5>
+        <p class="text-muted" data-ng-hide="article[Uris.QA_DATE_PUBLISHED].length">No date recorded</p>
+        <p>{{ article[Uris.QA_DATE_PUBLISHED] | date:'dd-MM-yyyy' }}</p>
+        <h5>Pages</h5>
+        <p>{{ article[Uris.QA_PAGES] }}</p>
+        <h5>Summary</h5>
+        <p>{{ article[Uris.DCT_DESCRIPTION] || "No summary" }}</p>
+      </div>
     </div>
+    <div class="row" ng-show="$state.includes('article.edit')">
+      <div class="col-md-6">
+        <form action="" ng-submit="updateArticle(article)">
+          <div class="form-group">
+            <label>Author(s)</label> <input type="text" class="form-control" placeholder="Authors" ng-model="article[Uris.QA_AUTHORS]" />
+          </div>
+          <div class="form-group">
+            <label for="">Periodical Title</label> <input type="text" class="form-control" placeholder="Periodical Title" ng-model="article[Uris.QA_PERIODICAL_TITLE]">
+          </div>
+          <div class="form-group">
+            <label for="">Volume</label> <input type="text" class="form-control" placeholder="Volume" ng-model="article[Uris.QA_VOLUME]">
+          </div>
+          <div class="form-group">
+            <label for="">Issue</label> <input type="text" class="form-control" placeholder="Issue" ng-model="article[Uris.QA_ISSUE]">
+          </div>
+          <div class="form-group">
+            <label for="">Publication Date</label>
+            <div>{{ expression.$article[Uris.QA_DATE_PUBLISHED] | date:'dd-MM-yyyy' }}</div>
+            <div class="well well-sm">
+              <datepicker ng-model="article[Uris.QA_DATE_PUBLISHED]" show-weeks="false"></datepicker>
+              <div style="margin-top: 10px;" ng-show="article[Uris.QA_DATE_PUBLISHED]">
+                <button type="button" class="btn btn-sm btn-primary" ng-click="article[Uris.QA_DATE_PUBLISHED] = ''">Clear</button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="">Pages</label> <input type="text" class="form-control" placeholder="Pages" ng-model="article[Uris.QA_PAGES]">
+          </div>
+          <!-- Description -->
+          <div class="form-group">
+            <label>Summary</label>
+            <textarea placeholder="Summary" ng-model="article[Uris.DCT_DESCRIPTION]" class="form-control"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-default" ng-click="cancel(article)">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,11 +1,9 @@
-<div class="thumbnail" >
-    <a ui-sref="firm.summary({firmId:firm.encodedUri})" class="thumbnail-image">
-        <img ng-src="{{ firm.picture.thumb }}" alt="{{ firm.name }}">    
-    </a>
-
-    <div class="caption">
-        <h4><a ui-sref="firm.summary({firmId:firm.encodedUri})">
-            {{ firm.name }}
-        </a></h4>
-    </div>
+<div class="thumbnail">
+  <a ui-sref="firm.summary({firmId:firm.encodedUri})" class="thumbnail-image"> <img ng-src="{{ firm.picture.thumb }}" alt="{{ firm.name }}">
+  </a>
+  <div class="caption">
+    <h4>
+      <a ui-sref="firm.summary({firmId:firm.encodedUri})"> {{ firm.name }} </a>
+    </h4>
+  </div>
 </div>

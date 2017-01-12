@@ -1,41 +1,18 @@
-<!-- <div class="l-frame l-frame-divided l-frame-tighter">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-4">
-                <div class="input-group">
-                    <input type="search" class="form-control" placeholder="Find an architect" ng-model="filter.architectName">
-                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div> -->
 <div class="l-frame l-frame-media l-frame-tighter" ng-hide="$state.includes('architects.other')">
-    <div class="container">
-        <div class="chart-index" style="text-align: center;">
-            <button class="btn btn-dark" style="margin-right:1px;" 
-                ng-click="goToIndex(null)"
-                ng-class="{'btn-primary': $stateParams.index == null}">
-                    All
-            </button>
-            <button style="margin-right:1px;" 
-                ng-repeat="(index, exists) in indexes"
-                class="btn" 
-                ng-class="{'btn-primary': $stateParams.index === index, 'btn-dark': $stateParams.index !== index}" 
-                ng-disabled="!exists"
-                ng-click="goToIndex(index)">
-                    {{ index }}
-            </button>
-        </div>
+  <div class="container">
+    <div class="chart-index" style="text-align: center;">
+      <button class="btn btn-dark" style="margin-right: 1px;" ng-click="goToIndex(null)" ng-class="{'btn-primary': $stateParams.index == null}">All</button>
+      <button style="margin-right: 1px;" ng-repeat="(index, exists) in indexes" class="btn" ng-class="{'btn-primary': $stateParams.index === index, 'btn-dark': $stateParams.index !== index}" ng-disabled="!exists" ng-click="goToIndex(index)">
+        {{ index }}</button>
     </div>
+  </div>
 </div>
 <div class="l-frame l-frame-tight">
-    <div class="container" infinite-scroll="addMoreArchitectRows()">
-        <div class="row" ng-repeat="architectRow in architectRows | limitTo:architectRowDisplayCount">
-            <div class="col-sm-2" ng-repeat="architect in architectRow">
-                <div ng-include="'views/thumbs/architect.html'"></div>
-            </div>
-        </div>
+  <div class="container" infinite-scroll="addMoreArchitectRows()">
+    <div class="row" ng-repeat="architectRow in architectRows | limitTo:architectRowDisplayCount">
+      <div class="col-sm-2" ng-repeat="architect in architectRow">
+        <div ng-include="'views/thumbs/architect.html'"></div>
+      </div>
     </div>
+  </div>
 </div>

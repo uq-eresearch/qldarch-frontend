@@ -1,24 +1,18 @@
 'use strict';
 
-angular.module('angularApp')
-	.factory('Annotation', function (Request, Uris, GraphHelper) {
-		// Service logic
-		// ...
+angular.module('qldarchApp').factory('Annotation', function(Request, Uris) {
 
-		var meaningOfLife = 42;
-
-		// Public API here
-		return {
-			findForInterviewUri: function (interviewUri) {
-				return Request.http(Uris.JSON_ROOT + "annotation", {
-					"RESOURCE": interviewUri,
-					"TIME": 0,
-					"DURATION": "99999"
-				}).then(function(annotations) {
-
-					// Setup the subject, predicate, objects
-
-				})
-			}
-		};
-	});
+  // Public API here
+  return {
+    findForInterviewUri : function(interviewUri) {
+      return Request.http(Uris.JSON_ROOT + 'annotation', {
+        'RESOURCE' : interviewUri,
+        'TIME' : 0,
+        'DURATION' : '99999'
+      }).then(function(annotations) {
+        console.log('annotations', annotations);
+        // Setup the subject, predicate, objects
+      });
+    }
+  };
+});

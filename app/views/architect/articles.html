@@ -1,14 +1,13 @@
 <div class="alert alert-warning" style="margin: 0;">
   <div class="container">
-    <button class="btn btn-default btn-xs" ui-sref="upload.documents"><i class="fa fa-cloud-upload"></i> Upload Documents</button>
+    <button class="btn btn-default btn-xs" ui-sref="upload.documents">
+      <i class="fa fa-cloud-upload"></i> Upload Documents
+    </button>
   </div>
 </div>
 <div class="l-frame l-frame-tight">
   <div class="container">
-
-    <p class="text-muted" ng-hide="articles.length">
-      No articles found.
-    </p>
+    <p class="text-muted" ng-hide="articles.length">No articles found.</p>
     <div ng-repeat="article in articles" class="row" style="margin-bottom: 20px;">
       <div class="col-md-1">
         <!-- Icon Square -->
@@ -17,8 +16,7 @@
             <div class="center">
               <div class="center-content">
                 <!-- Icon -->
-                <i class="fa fa-book" ng-show="article.type == 'article'"></i> 
-                <i class="fa fa-microphone" ng-show="article.type == 'interview'"></i> 
+                <i class="fa fa-book" ng-show="article.type == 'article'"></i> <i class="fa fa-microphone" ng-show="article.type == 'interview'"></i>
                 <!-- /Icon -->
               </div>
             </div>
@@ -30,42 +28,31 @@
         <!-- Article Details -->
         <h4>
           <!-- /Title -->
-          <a ui-sref="article({ articleId: article.encodedUri })">
-            {{ article.label }}
-          </a>
+          <a ui-sref="article({ articleId: article.encodedUri })"> {{ article.label }} </a>
           <!-- Title -->
         </h4>
-
         <h5 class="text-muted">
           <!-- Authors -->
           <span ng-show="article.authors">{{ article.authors }},</span>
           <!-- /Authors -->
-
           <!-- Periodical Title -->
           {{ article.periodicaltitle }}
           <!-- /Periodical Title -->
-
           <!-- Date Published -->
           <span ng-show="article.datePublished">, {{ article.datePublished }}</span>
           <!-- /Date Published -->
-
           <!-- Volume -->
           <span ng-show="article.volume">, volume {{ article.volume }}</span>
           <!-- /Volume -->
-
           <!-- Issue -->
           <span ng-show="article.issue">, issue {{ article.issue }}</span>
           <!-- /Issue -->
-
           <!-- Pages -->
           <span ng-show="article.issue">, {{ article.pages }}</span>
           <!-- /Pages -->
-
         </h5>
-
         <!-- article: Snippet -->
-        <div ng-bind-html="article.snippet">
-        </div>
+        <div ng-bind-html="article.snippet"></div>
       </div>
     </div>
   </div>

@@ -1,21 +1,21 @@
 <div class="page-header">
-    <div class="container">
-        <h1>Articles</h1>
-    </div>
+  <div class="container">
+    <h1>Articles</h1>
+  </div>
 </div>
 <div class="alert alert-warning" style="margin: 0;">
-    <div class="container">
-        <button class="btn btn-default btn-xs" ui-sref="upload.documents"><i class="fa fa-cloud-upload"></i> Upload Documents</button>
-    </div>
+  <div class="container">
+    <button class="btn btn-default btn-xs" ui-sref="upload.documents">
+      <i class="fa fa-cloud-upload"></i> Upload Documents
+    </button>
+  </div>
 </div>
 <div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <ul>
-                <li ng-repeat="article in articles">
-                    <a href="#!/article?articleId={{ article.encodedUri}}">{{ article[Uris.DCT_TITLE] }}</a>
-                </li>
-            </ul>
-        </div>
+  <div class="row">
+    <div class="col-md-12">
+      <ul>
+        <li ng-repeat="article in articles"><a href="#!/article?articleId={{ article.encodedUri}}">{{ article[Uris.DCT_TITLE] }}</a></li>
+      </ul>
     </div>
+  </div>
 </div>

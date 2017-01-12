@@ -1,13 +1,12 @@
 <div>
-	<div class="l-frame l-frame-media" ng-if="dates.length">
-		<div class="container" >
-			<timeline headline="{{ entity.name }}" subtitle="" asset="asset" dates="dates"></timeline>	
-		</div>
-	</div>
-
-	<div class="l-frame l-frame-tight" ng-hide="dates.length">
-		<div class="container">
-			<p class="text-muted">No timeline information.</p>
-		</div>
-	</div>
+  <div class="l-frame l-frame-media" ng-if="dates.length">
+    <div class="container">
+      <timeline headline="{{ entity.name }}" subtitle="" asset="asset" dates="dates"></timeline>
+    </div>
+  </div>
+  <div class="l-frame l-frame-tight" ng-hide="dates.length">
+    <div class="container">
+      <p class="text-muted">No timeline information.</p>
+    </div>
+  </div>
 </div>

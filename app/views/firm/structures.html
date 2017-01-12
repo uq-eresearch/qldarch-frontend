@@ -1,19 +1,15 @@
 <div class="l-frame l-frame-tight">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="row" ng-repeat="structureRow in structureRows">
-                    <div class="col-sm-2" ng-repeat="structure in structureRow">
-                        <div ng-include="'views/thumbs/structure.html'"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                
-            </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row" ng-repeat="structureRow in structureRows">
+          <div class="col-sm-2" ng-repeat="structure in structureRow">
+            <div ng-include="'views/thumbs/structure.html'"></div>
+          </div>
         </div>
-        <p ng-show="!structureRows.length">
-            No structures found.
-        </p>
+      </div>
+      <div class="col-md-6"></div>
     </div>
+    <p ng-show="!structureRows.length">No structures found.</p>
+  </div>
 </div>

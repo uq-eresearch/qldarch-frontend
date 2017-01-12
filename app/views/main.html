@@ -5,7 +5,6 @@
       <p>Search for architects, firms and projects or use the interactive tools</p>
     </div>
   </div>
-
   <div class="l-frame l-frame-highlight l-frame-tight">
     <div class="container">
       <form class="form form-horizontal jumbosearch">
@@ -23,7 +22,6 @@
       </form>
     </div>
   </div>
-
   <div class="l-frame ">
     <div class="container">
       <div class="overview">
@@ -47,7 +45,6 @@
     </div>
   </div>
 </div>
-
 <div class="l-frame l-frame-highlight">
   <div class="container" style="">
     <div class="overview">
@@ -55,7 +52,6 @@
         <h2>Start Exploring</h2>
         <p>Listen to interviews with prominent Queensland architects</p>
       </div>
-
       <div class="row" ng-repeat="architectRow in architectRows | slice:architectsStart:architectsEnd">
         <div class="carousel">
           <div class="col-sm-1" class="hidden-phone">
@@ -68,7 +64,6 @@
               <!-- image -->
               <a class="thumbnail-image" style="user-select: none;" ui-sref="interview({interviewId: interview.encodedUri})"> <img ng-src="/ws/media/{{interview.media}}?dimension=163x165" class="img-responsive">
               </a>
-
               <!-- caption -->
               <div class="caption">
                 <h4>
@@ -88,7 +83,6 @@
     </div>
   </div>
 </div>
-
 <div class="l-frame">
   <div class="container">
     <div class="overview">
@@ -96,7 +90,6 @@
         <h2>Start Building</h2>
         <p>Create your customised map, timeline or word cloud</p>
       </div>
-
       <div class="row">
         <div class="col-sm-2 col-sm-offset-3">
           <a href ui-sref="ugc.map.edit({})">
@@ -113,7 +106,6 @@
           </a>
           <p>Plot data on a map and build geographical relationships</p>
         </div>
-
         <div class="col-sm-2">
           <a href ui-sref="ugc.wordcloud.edit({})">
             <div class="square square-wordcloud square-tool">
@@ -129,7 +121,6 @@
           </a>
           <p>Select textual data to build a semantic text analysis</p>
         </div>
-
         <div class="col-sm-2">
           <a href ui-sref="ugc.timeline.edit({})">
             <div class="square square-timeline square-tool">
@@ -149,7 +140,6 @@
     </div>
   </div>
 </div>
-
 <div class="l-frame l-frame-highlight">
   <div class="container">
     <div class="overview">
@@ -157,7 +147,6 @@
         <h2>Gallery</h2>
         <p>Check out what some of our users have created.</p>
       </div>
-
       <div class="row" ng-repeat="compoundObjectRow in compoundObjectRows | slice:compoundObjectsStart:compoundObjectsEnd">
         <div class="carousel">
           <div class="col-sm-1" class="hidden-phone">
@@ -176,11 +165,9 @@
         </div>
       </div>
       <div style="text-align: center; font-weight: bold;" class="hidden-phone">{{ compoundObjectsStart + 1 }} / {{ compoundObjectRows.length }}</div>
-
     </div>
   </div>
 </div>
-
 <div class="l-frame ">
   <div class="container">
     <div class="overview">
@@ -199,7 +186,6 @@
                 </div>
               </div>
             </div>
-
             <div class="caption" style="padding: 8px 0">
               <h3>Facebook</h3>
             </div>
@@ -216,7 +202,6 @@
                 </div>
               </div>
             </div>
-
             <div class="caption" style="padding: 8px 0">
               <h3>Email</h3>
             </div>
@@ -225,6 +210,4 @@
       </div>
     </div>
   </div>
-</div>
-
 </div>

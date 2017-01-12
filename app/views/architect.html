@@ -1,138 +1,97 @@
 <div class="content">
-    <div class="page-header">
-        <div class="container">
-            <small><a ng-href="#!/architects">Architects »</a></small>
-            <h1>{{ architect.name }} TEST</h1>
-            <!--<a class="btn btn-sm btn-info" ng-href="#!/explore?uri={{ architect.encodedUri}}">Explore {{ architect.name }}</a>-->
-        </div>
-    </div>
-
-    <div class="subnav">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <ul class="nav nav-pills">
-                        <li class="active"><a href="#!/architect/{{ architect.encodedUri }}">Summary</a></li>
-                        <li><a href="#!/architect/{{ architect.encodedUri }}/structures">Structures</a></li>
-                        <li><a href="#!/architect/{{ architect.encodedUri }}/articles">Articles</a></li>
-                        <li><a href="#!/architect/{{ architect.encodedUri }}/relationships">Relationships</a></li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#!">
-                                Interviews <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li role="presentation" ng-repeat="interview in interviews">
-                                    <a role="menuitem" tabindex="-1" href="#!/interview/{{ interview.encodedUri }}">Interview #{{ $index + 1 }}</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <h1>HELLO WORLD</h1>
-
-    <div class="container" style="margin-top: 24px;">
-        <div class="row">
-            <div class="col-sm-7">
-                <h5>Biography</h5>
-                <p style="white-space:pre-wrap;" ng-bind-html="architect[Uris.QA_SUMMARY]"></p>
-                <p ng-show="!architect[Uris.QA_SUMMARY].length">
-                    No biography.
-                </p>
-
-                <h5>Worked for</h5>
-                <ul>
-                    <li ng-repeat="firm in firms">
-                        <a href="#!/firm/{{ firm.encodedUri }}">
-                            {{ firm.name }}
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-sm-5">
-                <img ng-if="architect.picture" class="img-responsive" ng-src="{{ Uris.FILE_ROOT + architect.picture[Uris.QA_SYSTEM_LOCATION] }}" alt=""/>
-                <img ng-if="!architect.picture" ng-src="images/icon.png" style="display:block; width:100%">
-            </div>
-        </div>
-    </div>
-
+  <div class="page-header">
     <div class="container">
-        <tabset type="'pills'">
-
-
-            <tab heading="Details">
-                <section>
-                </section>
-            </tab>
-            <tab heading="Interviews">
-
-                <section>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <h4>Subject of Interview</h4>
-                            <p ng-hide="interviewRows.length">No interviews.</p>
-                        </div>
-                    </div>
-                    <div class="row" ng-repeat="interviewRow in interviewRows">
-                        <div class="col-sm-2" ng-repeat="interview in interviewRow">
-                            <div ng-include="'views/thumbs/interview.html'"></div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <h4>Mentioned in Interviews</h4>
-                            <p ng-hide="mentionedInterviewRows.length">No interviews.</p>
-                        </div>
-                    </div>
-                    <div class="row" ng-repeat="interviewRow in mentionedInterviewRows">
-                        <div class="col-sm-2" ng-repeat="interview in interviewRow">
-                            <div ng-include="'views/thumbs/interview.html'"></div>
-                        </div>
-                    </div>
-                </section>
-            </tab>
-            <tab heading="Structures" select="refreshMap()">
-                <section>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="row" ng-repeat="structureRow in structureRows">
-                                <div class="col-sm-4" ng-repeat="structure in structureRow">
-                                    <div ng-include="'views/thumbs/structure.html'"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div ui-map="$parent.myMap" class="map-canvas map"
-                                 ui-event="mapEvents"
-                                 ui-options="mapOptions">
-                            </div>
-                        </div>
-
-                    </div>
-                    <p ng-show="!structureRows.length">
-                        No structures found.
-                    </p>
-
-                    <div class="row">
-                        <div class="col-md-12">
-
-                        </div>
-                    </div>
-
-                </section>
-            </tab>
-            <tab heading="Articles">
-                <div class="row">
-                    <div class="col-sm-12">
-                        No articles found.
-                    </div>
-                </div>
-            </tab>
-            <tab heading="Relationships" select="explore()"></tab>
-        </tabset>
+      <small><a ng-href="#!/architects">Architects »</a></small>
+      <h1>{{ architect.name }} TEST</h1>
     </div>
+  </div>
+  <div class="subnav">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <ul class="nav nav-pills">
+            <li class="active"><a href="#!/architect/{{ architect.encodedUri }}">Summary</a></li>
+            <li><a href="#!/architect/{{ architect.encodedUri }}/structures">Structures</a></li>
+            <li><a href="#!/architect/{{ architect.encodedUri }}/articles">Articles</a></li>
+            <li><a href="#!/architect/{{ architect.encodedUri }}/relationships">Relationships</a></li>
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#!"> Interviews <span class="caret"></span>
+            </a>
+              <ul class="dropdown-menu">
+                <li role="presentation" ng-repeat="interview in interviews"><a role="menuitem" tabindex="-1" href="#!/interview/{{ interview.encodedUri }}">Interview #{{ $index + 1 }}</a></li>
+              </ul></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <h1>HELLO WORLD</h1>
+  <div class="container" style="margin-top: 24px;">
+    <div class="row">
+      <div class="col-sm-7">
+        <h5>Biography</h5>
+        <p style="white-space: pre-wrap;" ng-bind-html="architect[Uris.QA_SUMMARY]"></p>
+        <p ng-show="!architect[Uris.QA_SUMMARY].length">No biography.</p>
+        <h5>Worked for</h5>
+        <ul>
+          <li ng-repeat="firm in firms"><a href="#!/firm/{{ firm.encodedUri }}"> {{ firm.name }} </a></li>
+        </ul>
+      </div>
+      <div class="col-sm-5">
+        <img ng-if="architect.picture" class="img-responsive" ng-src="{{ Uris.FILE_ROOT + architect.picture[Uris.QA_SYSTEM_LOCATION] }}" alt="" /> <img ng-if="!architect.picture" ng-src="images/icon.png" style="display: block; width: 100%">
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <tabset type="'pills'"> <tab heading="Details">
+    <section></section>
+    </tab> <tab heading="Interviews">
+    <section>
+      <div class="row">
+        <div class="col-sm-12">
+          <h4>Subject of Interview</h4>
+          <p ng-hide="interviewRows.length">No interviews.</p>
+        </div>
+      </div>
+      <div class="row" ng-repeat="interviewRow in interviewRows">
+        <div class="col-sm-2" ng-repeat="interview in interviewRow">
+          <div ng-include="'views/thumbs/interview.html'"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <h4>Mentioned in Interviews</h4>
+          <p ng-hide="mentionedInterviewRows.length">No interviews.</p>
+        </div>
+      </div>
+      <div class="row" ng-repeat="interviewRow in mentionedInterviewRows">
+        <div class="col-sm-2" ng-repeat="interview in interviewRow">
+          <div ng-include="'views/thumbs/interview.html'"></div>
+        </div>
+      </div>
+    </section>
+    </tab> <tab heading="Structures" select="refreshMap()">
+    <section>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="row" ng-repeat="structureRow in structureRows">
+            <div class="col-sm-4" ng-repeat="structure in structureRow">
+              <div ng-include="'views/thumbs/structure.html'"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div ui-map="$parent.myMap" class="map-canvas map" ui-event="mapEvents" ui-options="mapOptions"></div>
+        </div>
+      </div>
+      <p ng-show="!structureRows.length">No structures found.</p>
+      <div class="row">
+        <div class="col-md-12"></div>
+      </div>
+    </section>
+    </tab> <tab heading="Articles">
+    <div class="row">
+      <div class="col-sm-12">No articles found.</div>
+    </div>
+    </tab> <tab heading="Relationships" select="explore()"></tab> </tabset>
+  </div>
 </div>

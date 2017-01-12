@@ -1,68 +1,52 @@
 <div class="page-header has-subnav">
-    <div class="container">
-        <h1>Firms</h1>
-    </div>
+  <div class="container">
+    <h1>Firms</h1>
+  </div>
 </div>
-
 <style>
-    rect[height='22.991999999999997'] {
-        fill: #11c3b6 !important;
-    }
+rect[height='22.991999999999997'] {
+	fill: #11c3b6 !important;
+}
 
-    svg[height='600'] text[text-anchor='middle'] {
-        fill: white !important;
-    }
+svg[height='600'] text[text-anchor='middle'] {
+	fill: white !important;
+}
 </style>
 <div class="subnav" style="margin-bottom: 0px;">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <!-- <button class="btn btn-default pull-right" ui-sref="firm.summary.edit({firmId:null})" ng-show="Auth.role === 'editor' || Auth.role === 'root'"><i class="fa fa-plus"></i> New Firm</button> -->
-                <ul class="nav nav-pills">
-                    <li ui-sref-active="active">
-                        <a href ui-sref="firms.australian">Queensland-based</a>
-                    </li>
-                    <li ui-sref-active="active">
-                        <a href href ui-sref="firms.other">Other</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="nav nav-pills">
+          <li ui-sref-active="active"><a href ui-sref="firms.australian">Queensland-based</a></li>
+          <li ui-sref-active="active"><a href href ui-sref="firms.other">Other</a></li>
+        </ul>
+      </div>
     </div>
+  </div>
 </div>
 <div class="alert alert-warning" ng-show="Auth.role === 'editor' || Auth.role === 'root'" style="margin: 0;">
-    <div class="container">
-        <button class="btn btn-default btn-xs" ui-sref="firm.summary.edit({firmId:null})" ng-show="Auth.role === 'editor' || Auth.role === 'root'"><i class="fa fa-plus"></i> New Firm</button>     
-    </div>
+  <div class="container">
+    <button class="btn btn-default btn-xs" ui-sref="firm.summary.edit({firmId:null})" ng-show="Auth.role === 'editor' || Auth.role === 'root'">
+      <i class="fa fa-plus"></i> New Firm
+    </button>
+  </div>
 </div>
-
 <div class="l-frame l-frame-media l-frame-tighter" ng-hide="$state.includes('firms.other')">
-    <div class="container">
-        <div class="chart-index" style="margin-bottom: 16px; text-align: center;">
-            <button class="btn btn-dark" style="margin-right:1px;" 
-                ng-click="goToIndex(null)"
-                ng-class="{'btn-primary': $stateParams.index == null}">
-                    All
-            </button>
-            <button style="margin-right:1px;" 
-                ng-repeat="(index, exists) in indexes"
-                class="btn" 
-                ng-class="{'btn-primary': $stateParams.index === index, 'btn-dark': $stateParams.index !== index}" 
-                ng-disabled="!exists"
-                ng-click="goToIndex(index)">
-                    {{ index }}
-            </button>
-        </div>
-
-        <div id="chart"></div>
+  <div class="container">
+    <div class="chart-index" style="margin-bottom: 16px; text-align: center;">
+      <button class="btn btn-dark" style="margin-right: 1px;" ng-click="goToIndex(null)" ng-class="{'btn-primary': $stateParams.index == null}">All</button>
+      <button style="margin-right: 1px;" ng-repeat="(index, exists) in indexes" class="btn" ng-class="{'btn-primary': $stateParams.index === index, 'btn-dark': $stateParams.index !== index}" ng-disabled="!exists" ng-click="goToIndex(index)">
+        {{ index }}</button>
     </div>
+    <div id="chart"></div>
+  </div>
 </div>
 <div class="l-frame">
-    <div class="container" infinite-scroll="addMoreFirmRows()">
-        <div class="row" ng-repeat="firmRow in firmRows | limitTo:firmRowDisplayCount">
-            <div class="col-sm-2" ng-repeat="firm in firmRow">
-                <div ng-include="'views/thumbs/firm.html'"></div>
-            </div>
-        </div>
+  <div class="container" infinite-scroll="addMoreFirmRows()">
+    <div class="row" ng-repeat="firmRow in firmRows | limitTo:firmRowDisplayCount">
+      <div class="col-sm-2" ng-repeat="firm in firmRow">
+        <div ng-include="'views/thumbs/firm.html'"></div>
+      </div>
     </div>
+  </div>
 </div>
