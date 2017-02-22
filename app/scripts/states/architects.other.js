@@ -6,11 +6,11 @@ angular.module('qldarchApp').config(function($stateProvider) {
     templateUrl : 'views/architects/architects.html',
     controller : 'ArchitectsCtrl',
     resolve : {
-      architects : [ 'Architect', '$filter', 'Uris', 'GraphHelper', function(Architect, $filter, Uris, GraphHelper) {
-        return Architect.loadAll(false).then(function(architects) {
-          architects = GraphHelper.graphValues(architects);
+      architects : [ '$http', '$filter', 'Uris', 'GraphHelper', function($http, $filter, Uris, GraphHelper) {
+        return $http.get(Uris.WS_ROOT + 'architects').then(function(result) {
+          var architects = GraphHelper.graphValues(result.data);
           return $filter('filter')(architects, function(architect) {
-            return architect[Uris.QA_PRACTICED_IN_QUEENSLAND] !== true;
+            return architect.practicedinqueensland === false;
           });
         });
       } ]

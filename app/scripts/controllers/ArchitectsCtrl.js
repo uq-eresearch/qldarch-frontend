@@ -38,19 +38,21 @@ angular.module('qldarchApp').controller('ArchitectsCtrl',
         return char.match(/[a-z]/i);
       }
 
-      architects = $filter('filter')(GraphHelper.graphValues(architects), function(architect) {
-        $scope.indexes[architect[Uris.FOAF_LAST_NAME].substring(0, 1).toUpperCase()] = true;
+      architects = $filter('filter')(architects, function(architect) {
+        $scope.indexes[architect.label.substring(0, 1).toUpperCase()] = true;
         if ($stateParams.index && $stateParams.index.length === 1) {
-          if (isLetter($stateParams.index) && architect[Uris.FOAF_LAST_NAME].substring(0, 1).toUpperCase() === $stateParams.index) {
+          if (isLetter($stateParams.index) && architect.label.substring(0, 1).toUpperCase() === $stateParams.index) {
             return true;
           }
           return false;
         }
         return true;
       });
+
       architects = $filter('orderBy')(architects, function(architect) {
-        return (architect[Uris.FOAF_LAST_NAME] || '') + (architect[Uris.FOAF_FIRST_NAME].toLowerCase() || '');
+        return (architect.label || '');
       });
+
       $scope.architectRows = LayoutHelper.group(GraphHelper.graphValues(architects), 6);
       $scope.Uris = Uris;
 

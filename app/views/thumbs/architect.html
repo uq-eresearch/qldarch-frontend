@@ -1,9 +1,35 @@
 <div class="thumbnail thumbnail-fix">
-  <a ui-sref="architect.summary({architectId: architect.encodedUri})" class="thumbnail-image"> <img ng-src="{{ architect.picture.thumb }}" alt="{{ architect.name }}">
-  </a>
-  <div class="caption">
-    <h4>
-      <a ui-sref="architect.summary({architectId: architect.encodedUri})"> {{ architect.name }} </a>
-    </h4>
+  <div ng-if="!(architect.subjectype=='person'||architect.objecttype=='person')">
+    <a ui-sref="architect.summary({architectId: architect.id})" class="thumbnail-image"> <img ng-if="architect.media"
+      ng-src="{{Uris.WS_MEDIA+architect.media+'?dimension=163x165'}}" alt="{{ architect.label }}"> <img ng-if="!architect.media"
+      ng-src="images/icon.png" alt="{{ architect.label }}">
+    </a>
+    <div class="caption">
+      <h4>
+        <a ui-sref="architect.summary({architectId: architect.id})"> {{ architect.label }} </a>
+      </h4>
+    </div>
+  </div>
+  <div ng-if="architect.subjectype=='person'">
+    <a ui-sref="architect.summary({architectId: architect.subject})" class="thumbnail-image"> <img ng-if="architect.media"
+      ng-src="{{Uris.WS_MEDIA+architect.media+'?dimension=163x165'}}" alt="{{ architect.subjectlabel }}"> <img ng-if="!architect.media"
+      ng-src="images/icon.png" alt="{{ architect.subjectlabel }}">
+    </a>
+    <div class="caption">
+      <h4>
+        <a ui-sref="architect.summary({architectId: architect.subject})"> {{ architect.subjectlabel }} </a>
+      </h4>
+    </div>
+  </div>
+  <div ng-if="architect.objecttype=='person'">
+    <a ui-sref="architect.summary({architectId: architect.object})" class="thumbnail-image"> <img ng-if="architect.media"
+      ng-src="{{Uris.WS_MEDIA+architect.media+'?dimension=163x165'}}" alt="{{ architect.objectlabel }}"> <img ng-if="!architect.media"
+      ng-src="images/icon.png" alt="{{ architect.objectlabel }}">
+    </a>
+    <div class="caption">
+      <h4>
+        <a ui-sref="architect.summary({architectId: architect.object})"> {{ architect.objectlabel }} </a>
+      </h4>
+    </div>
   </div>
 </div>
