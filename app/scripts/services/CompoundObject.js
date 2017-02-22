@@ -21,7 +21,7 @@ angular.module('qldarchApp').factory('CompoundObject', function ($http, Uris, Gr
     },
 
     loadAll: function () {
-      return $http.get(Uris.JSON_ROOT + 'compoundObject').then(function (response) {
+      return $http.get('resources/compoundObject.json').then(function (response) {
         GraphHelper.encodeUris(response.data);
         angular.forEach(response.data, function (compoundObject) {
           compoundObject.jsonData = angular.fromJson(compoundObject[Uris.QA_JSON_DATA]);

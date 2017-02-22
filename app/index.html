@@ -108,9 +108,11 @@
   <script src="scripts/services/GraphHelper.js"></script>
   <script src="scripts/services/File.js"></script>
   <script src="scripts/services/Request.js"></script>
+  <script src="scripts/services/Relationshiplabels.js"></script>
   <script src="scripts/services/Architect.js"></script>
   <script src="scripts/services/Solr.js"></script>
   <script src="scripts/services/LayoutHelper.js"></script>
+  <script src="scripts/services/Interviews.js"></script>
   <script src="scripts/services/Interview.js"></script>
   <script src="scripts/services/Structure.js"></script>
   <script src="scripts/services/Firm.js"></script>
@@ -151,7 +153,6 @@
   <script src="scripts/controllers/ContributeCtrl.js"></script>
   <script src="scripts/controllers/BuildingtypologyCtrl.js"></script>
   <script src="scripts/controllers/BuildingtypologiesCtrl.js"></script>
-  <script src="scripts/controllers/ArticlesCtrl.js"></script>
   <script src="scripts/controllers/ArticleCtrl.js"></script>
   <script src="scripts/controllers/SigninCtrl.js"></script>
   <script src="scripts/controllers/RegisterCtrl.js"></script>
@@ -213,7 +214,7 @@
   <script src="scripts/states/login.js"></script>
   <script src="scripts/states/forgot.js"></script>
   <script src="scripts/states/logout.js"></script>
-  <script src="scripts/states/ugcs.js"></script>
+  <!-- <script src="scripts/states/ugcs.js"></script>
   <script src="scripts/states/ugcs.user.js"></script>
   <script src="scripts/states/upload.js"></script>
   <script src="scripts/states/upload.images.js"></script>
@@ -237,19 +238,19 @@
   <script src="scripts/states/ugc.wordcloud.edit.add.document.js"></script>
   <script src="scripts/states/ugc.wordcloud.edit.add.search.js"></script>
   <script src="scripts/states/ugc.wordcloud.edit.add.import.js"></script>
-  <script src="scripts/states/others.js"></script>
+  <script src="scripts/states/others.js"></script> -->
   <script src="scripts/states/other.js"></script>
   <script src="scripts/states/other.summary.js"></script>
-  <script src="scripts/states/other.summary.edit.js"></script>
+  <!-- <script src="scripts/states/other.summary.edit.js"></script> -->
   <script src="scripts/states/other.relationships.js"></script>
   <script src="scripts/states/other.interview.js"></script>
   <script src="scripts/states/architects.js"></script>
   <script src="scripts/states/architects.queensland.js"></script>
   <script src="scripts/states/architects.other.js"></script>
-  <script src="scripts/states/architects.create.js"></script>
+  <!-- <script src="scripts/states/architects.create.js"></script> -->
   <script src="scripts/states/architect.js"></script>
   <script src="scripts/states/architect.summary.js"></script>
-  <script src="scripts/states/architect.summary.edit.js"></script>
+  <!-- <script src="scripts/states/architect.summary.edit.js"></script> -->
   <script src="scripts/states/architect.photographs.js"></script>
   <script src="scripts/states/architect.articles.js"></script>
   <script src="scripts/states/architect.relationships.js"></script>
@@ -262,7 +263,7 @@
   <script src="scripts/states/firms.other.js"></script>
   <script src="scripts/states/firm.js"></script>
   <script src="scripts/states/firm.summary.js"></script>
-  <script src="scripts/states/firm.summary.edit.js"></script>
+  <!-- <script src="scripts/states/firm.summary.edit.js"></script> -->
   <script src="scripts/states/firm.employees.js"></script>
   <script src="scripts/states/firm.photographs.js"></script>
   <script src="scripts/states/firm.structures.js"></script>
@@ -274,11 +275,11 @@
   <script src="scripts/states/structures.other.js"></script>
   <script src="scripts/states/structure.js"></script>
   <script src="scripts/states/structure.summary.js"></script>
-  <script src="scripts/states/structure.summary.edit.js"></script>
+  <!-- <script src="scripts/states/structure.summary.edit.js"></script> -->
   <script src="scripts/states/structure.map.js"></script>
   <script src="scripts/states/structure.photographs.js"></script>
   <script src="scripts/states/structure.photograph.js"></script>
-  <script src="scripts/states/structure.photograph.edit.js"></script>
+  <!-- <script src="scripts/states/structure.photograph.edit.js"></script> -->
   <script src="scripts/states/structure.lineDrawings.js"></script>
   <script src="scripts/states/structure.lineDrawing.js"></script>
   <script src="scripts/states/structure.articles.js"></script>
@@ -287,7 +288,7 @@
   <script src="scripts/states/interviews.js"></script>
   <script src="scripts/states/articles.js"></script>
   <script src="scripts/states/article.js"></script>
-  <script src="scripts/states/article.edit.js"></script>
+  <!-- <script src="scripts/states/article.edit.js"></script> -->
   <script src="scripts/states/search.js"></script>
   <!-- endbuild -->
 
@@ -317,7 +318,8 @@
     </script>
 
   <!-- @todo: Get this to trigger angular bootstrap when loaded -->
-  <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization',
+  <script type="text/javascript"
+    src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization',
        'version':'1','packages':['timeline']}]}"></script>
 
   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=onGoogleReady"></script>
