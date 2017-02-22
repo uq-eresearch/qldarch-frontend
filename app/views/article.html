@@ -2,19 +2,20 @@
   <div class="container">
     <small> <a ng-href="#!/articles">Articles »</a>
     </small>
-    <h1>{{ article[Uris.DCT_TITLE] }}</h1>
+    <h1>{{ article.label }}</h1>
   </div>
 </div>
 <div class="alert alert-warning" ng-show="Auth.isUQSLQ()" style="margin: 0;" ng-hide="$state.includes('article.edit')">
   <div class="container">
     <!-- Download dropdown -->
-    <div class="btn-group" ng-hide="$state.includes('article.edit')">
+    <div class="btn-group" ng-hide="!(article.media|filter:{type:'Article'}).length">
       <div class="dropdown">
         <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
           Download <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
-          <li ng-repeat="file in article.files"><a ng-href="{{ file.file }}" alt="" target="_blank">{{ file[Uris.QA_SOURCE_FILENAME] }}</a></li>
+          <li ng-repeat="file in (article.media|filter:{type:'Article'})"><a ng-href="{{Uris.WS_DOWNLOAD+file.id}}" alt="" target="_blank">{{
+              file.filename }}</a></li>
         </ul>
       </div>
     </div>
@@ -33,23 +34,23 @@
     <div class="row" ng-hide="$state.includes('article.edit')">
       <div class="col-md-6">
         <h5>Authors</h5>
-        <p>{{ article[Uris.QA_AUTHORS] }}</p>
+        <p>{{ article.authors }}</p>
         <h5>Periodical Title</h5>
-        <p>{{ article[Uris.QA_PERIODICAL_TITLE] }}</p>
+        <p>{{ article.periodical }}</p>
         <h5>Volume</h5>
-        <p>{{ article[Uris.QA_VOLUME] }}</p>
+        <p>{{ article.volume }}</p>
         <h5>Issue</h5>
-        <p>{{ article[Uris.QA_ISSUE] }}</p>
+        <p>{{ article.issue }}</p>
         <h5>Publication Date</h5>
-        <p class="text-muted" data-ng-hide="article[Uris.QA_DATE_PUBLISHED].length">No date recorded</p>
-        <p>{{ article[Uris.QA_DATE_PUBLISHED] | date:'dd-MM-yyyy' }}</p>
+        <p class="text-muted" data-ng-hide="article.created.length">No date recorded</p>
+        <p>{{ article.created | date:'dd-MM-yyyy' }}</p>
         <h5>Pages</h5>
-        <p>{{ article[Uris.QA_PAGES] }}</p>
+        <p>{{ article.pages }}</p>
         <h5>Summary</h5>
-        <p>{{ article[Uris.DCT_DESCRIPTION] || "No summary" }}</p>
+        <p>{{ article.summary || "No summary" }}</p>
       </div>
     </div>
-    <div class="row" ng-show="$state.includes('article.edit')">
+    <!--<div class="row" ng-show="$state.includes('article.edit')">
       <div class="col-md-6">
         <form action="" ng-submit="updateArticle(article)">
           <div class="form-group">
@@ -76,9 +77,9 @@
           </div>
           <div class="form-group">
             <label for="">Pages</label> <input type="text" class="form-control" placeholder="Pages" ng-model="article[Uris.QA_PAGES]">
-          </div>
-          <!-- Description -->
-          <div class="form-group">
+          </div> -->
+    <!-- Description -->
+    <!-- <div class="form-group">
             <label>Summary</label>
             <textarea placeholder="Summary" ng-model="article[Uris.DCT_DESCRIPTION]" class="form-control"></textarea>
           </div>
@@ -86,6 +87,6 @@
           <button type="button" class="btn btn-default" ng-click="cancel(article)">Cancel</button>
         </form>
       </div>
-    </div>
+    </div> -->
   </div>
 </div>

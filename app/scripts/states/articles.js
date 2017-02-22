@@ -5,9 +5,10 @@ angular.module('qldarchApp').config(function($stateProvider) {
     url : '/articles',
     templateUrl : 'views/articles.html',
     resolve : {
-      // @todo: change this for building
-      articles : [ 'Expression', function(Expression) {
-        return Expression.loadAll('qldarch:Article');
+      articles : [ '$http', 'Uris', function($http, Uris) {
+        return $http.get(Uris.WS_ROOT + 'articles').then(function(result) {
+          return result.data;
+        });
       } ]
     },
     controller : [ '$scope', 'articles', function($scope, articles) {

@@ -5,12 +5,11 @@ angular.module('qldarchApp').config(function($stateProvider) {
     url : '/article?articleId',
     templateUrl : 'views/article.html',
     resolve : {
-      // @todo: change this for building
-      article : [ 'Expression', 'GraphHelper', '$stateParams', function(Expression, GraphHelper, $stateParams) {
-        console.log('loading article');
-        var articleUri = GraphHelper.decodeUriString($stateParams.articleId);
-        console.log('loading article', articleUri);
-        return Expression.load(articleUri, 'qldarch:Article');
+      article : [ '$stateParams', '$http', 'Uris', function($stateParams, $http, Uris) {
+        return $http.get(Uris.WS_ROOT + 'archobj/' + $stateParams.articleId).then(function(result) {
+          return result.data;
+
+        });
       } ]
     },
     controller : 'ArticleCtrl'
