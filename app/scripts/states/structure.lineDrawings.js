@@ -5,9 +5,10 @@ angular.module('qldarchApp').config(function($stateProvider) {
     url : '/line-drawings',
     templateUrl : 'views/structure/linedrawings.html',
     resolve : {
-      lineDrawings : [ 'GraphHelper', '$stateParams', 'Expression', function(GraphHelper, $stateParams, Expression) {
-        var structureUri = GraphHelper.decodeUriString($stateParams.structureId);
-        return Expression.findByBuildingUris([ structureUri ], 'qldarch:LineDrawing');
+      lineDrawings : [ 'structure', '$filter', function(structure, $filter) {
+        return $filter('filter')(structure.media, function(media) {
+          return media.type === 'LineDrawing';
+        });
       } ]
     },
     controller : [ '$scope', 'lineDrawings', 'LayoutHelper', function($scope, lineDrawings, LayoutHelper) {

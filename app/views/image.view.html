@@ -1,8 +1,13 @@
 <div class="l-frame l-frame-media l-frame-tight" style="min-height: 700px;">
   <div class="container" style="text-align: center;">
     <h1 style="font-size: 24px; margin-bottom: 32px;">
-      <a ng-href="{{ $state.href(depicts.$state + '.' + image.$type + 's', depicts.$stateParams) }}" style="color: white;"> {{ image.$typeName }}s ({{ images.length }}) </a> <span>-</span> <a
-        ng-href="{{ $state.href(depicts.$state + '.summary', depicts.$stateParams) }}" style="color: white;"> {{ depicts.name }} </a>
+      <a ng-if="depicts.type === 'structure'" ui-sref="structure.photographs({structureId: depicts.id})" style="color: white;"> {{ image.type }}s
+        ({{ images.length }}) </a> <a ng-if="depicts.type === 'firm'" ui-sref="firm.photographs({firmId: depicts.id})" style="color: white;"> {{
+        image.type }}s ({{ images.length }}) </a> <a ng-if="depicts.type === 'person'" ui-sref="architect.photographs({architectId: depicts.id})"
+        style="color: white;"> {{ image.type }}s ({{ images.length }}) </a> <span>-</span> <a ng-if="depicts.type === 'structure'"
+        ui-sref="structure.summary({structureId: depicts.id})" style="color: white;"> {{ depicts.label }} </a> <a ng-if="depicts.type === 'firm'"
+        ui-sref="firm.summary({firmId: depicts.id})" style="color: white;"> {{ depicts.label }} </a> <a ng-if="depicts.type === 'person'"
+        ui-sref="architect.summary({architectId: depicts.id})" style="color: white;"> {{ depicts.label }} </a>
     </h1>
     <div class="row carousel carousel-big">
       <div class="col-sm-1" class="hidden-phone">
@@ -11,7 +16,7 @@
         </div>
       </div>
       <div class="col-sm-10">
-        <img class="img-responsive" style="width: 100%;" ng-src="{{ image.file.file }}" alt="" style="margin: 0 auto;" />
+        <img class="img-responsive" style="width: 100%;" ng-src="{{Uris.WS_MEDIA+image.id}}" alt="" style="margin: 0 auto;" />
       </div>
       <div class="col-sm-1" class="hidden-phone">
         <div class="carousel-nav carousel-nav-right" ng-click="next()" ng-show="index < images.length - 1">
@@ -24,15 +29,16 @@
     </div>
   </div>
 </div>
-<div class="alert alert-warning" ng-show="(Auth.role === 'editor' || Auth.role === 'root')" style="margin: 0;">
+<!-- <div class="alert alert-warning" ng-show="(Auth.role === 'editor' || Auth.role === 'root')" style="margin: 0;">
   <div class="container">
     <div class="col-sm-offset-1 col-md-5">
-      <div>
-        <!-- Editor: &nbsp; &nbsp; -->
-        <button class="btn btn-default btn-xs" ng-if="image.$type === 'photograph' && depicts.picture.uri === image.file.uri">
+      <div> -->
+<!-- Editor: &nbsp; &nbsp; -->
+<!-- <button class="btn btn-default btn-xs" ng-if="image.$type === 'photograph' && depicts.picture.uri === image.file.uri">
           <i class="fa fa-picture-o"></i> Preferred image
         </button>
-        <button class="btn btn-default btn-xs" ng-click="setDefault(image)" ng-if="image.$type === 'photograph' && depicts.picture.uri !== image.file.uri">
+        <button class="btn btn-default btn-xs" ng-click="setDefault(image)"
+          ng-if="image.$type === 'photograph' && depicts.picture.uri !== image.file.uri">
           <i class="fa fa-picture-o"></i> Set as preferred image
         </button>
         <button class="btn btn-default btn-xs" ng-click="$state.go('image.edit', {imageId: image.encodedUri})">
@@ -44,28 +50,29 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 <div class="l-frame l-frame-tight">
   <div class="container">
     <div class="row">
       <div class="col-sm-offset-1 col-md-5">
         <h5>Title of Detail</h5>
-        <p>{{ image[Uris.DCT_TITLE] }}</p>
+        <p>{{ image.description || 'No detail.' }}</p>
         <h5>Rights</h5>
-        <p>{{ image[Uris.DCT_RIGHTS] || 'No rights.' }}</p>
+        <p>{{ image.rights || 'No rights.' }}</p>
         <h5>Identifier</h5>
-        <p>{{ image[Uris.DCT_IDENTIFIER] || 'No identifier.' }}</p>
+        <p>{{ image.identifier || 'No identifier.' }}</p>
       </div>
       <div class="col-md-5">
         <h5>Created Date</h5>
-        <p>{{ image[Uris.DCT_CREATED] | date:'dd-MM-yyyy' }}</p>
+        <p>{{ image.created | date:'dd-MM-yyyy' }}</p>
         <h5>Depicts</h5>
         <p>
-          <a ng-show="depicts.$state === 'structure'" href ui-sref="structure.summary({structureId: depicts.encodedUri})"> {{ depicts.name }} </a> <a ng-show="depicts.$state === 'firm'" href ui-sref="firm.summary({firmId: depicts.encodedUri})">
-            {{ depicts.name }} </a> <a ng-show="depicts.$state === 'architect'" href ui-sref="architect.summary({architectId: depicts.encodedUri})"> {{ depicts.name }} </a>
+          <a ng-if="depicts.type === 'structure'" ui-sref="structure.summary({structureId: depicts.id})"> {{ depicts.label }} </a> <a
+            ng-if="depicts.type === 'firm'" ui-sref="firm.summary({firmId: depicts.id})"> {{ depicts.label }} </a> <a
+            ng-if="depicts.type === 'person'" ui-sref="architect.summary({architectId: depicts.id})"> {{ depicts.label }} </a>
         </p>
         <h5>External Location</h5>
-        <p>{{ image[Uris.QA_LOCATION] || 'No external location.' }}</p>
+        <p>{{ image.externallocation || 'No external location.' }}</p>
       </div>
     </div>
   </div>

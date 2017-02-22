@@ -5,9 +5,10 @@ angular.module('qldarchApp').config(function($stateProvider) {
     url : '/photographs',
     templateUrl : 'views/structure/photographs.html',
     resolve : {
-      photographs : [ 'GraphHelper', 'Structure', 'Expression', '$stateParams', function(GraphHelper, Structure, Expression, $stateParams) {
-        var structureUri = GraphHelper.decodeUriString($stateParams.structureId);
-        return Expression.findByBuildingUris([ structureUri ], 'qldarch:Photograph');
+      photographs : [ 'structure', '$filter', function(structure, $filter) {
+        return $filter('filter')(structure.media, function(media) {
+          return media.type === 'Photograph' || 'Portrait' || 'Image';
+        });
       } ]
     },
     controller : [ '$scope', 'photographs', 'LayoutHelper', function($scope, photographs, LayoutHelper) {
