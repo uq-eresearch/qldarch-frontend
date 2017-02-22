@@ -6,12 +6,16 @@ angular.module('qldarchApp').config(function($stateProvider) {
     templateUrl : 'views/structures.html',
     controller : 'StructuresCtrl',
     resolve : {
-      structures : [ 'Structure', '$filter', 'GraphHelper', 'Uris', function(Structure, $filter, GraphHelper, Uris) {
-        return Structure.loadAll(false).then(function(structures) {
-          structures = GraphHelper.graphValues(structures);
-          console.log('got structures', structures);
-          return $filter('filter')(structures, function(structure) {
-            return structure[Uris.QA_AUSTRALIAN] === true;
+      structures : [ '$http', '$filter', 'Uris', function($http, $filter, Uris) {
+        return $http.get(Uris.WS_ROOT + 'projects').then(function(result) {
+          // console.log(result.data);
+          return $filter('filter')(result.data, function(structure) {
+            if (structure.australian === true) {
+              if (structure.lng) {
+                structure.lon = structure.lng;
+              }
+              return structure;
+            }
           });
         });
       } ]

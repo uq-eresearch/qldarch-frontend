@@ -41,7 +41,7 @@ angular.module('qldarchApp').controller('StructuresCtrl',
       }
 
       $scope.structures = $filter('filter')(GraphHelper.graphValues(structures), function(structure) {
-        var startLetter = structure.name.substring(0, 1).toUpperCase();
+        var startLetter = structure.label.substring(0, 1).toUpperCase();
         if (!isNaN(startLetter)) {
           $scope.indexes['#'] = true;
         } else if (isLetter(startLetter)) {
@@ -59,7 +59,7 @@ angular.module('qldarchApp').controller('StructuresCtrl',
       });
 
       $scope.structures = $filter('orderBy')(GraphHelper.graphValues($scope.structures), function(structure) {
-        return structure.name;
+        return structure.label;
       });
       $scope.structureRows = LayoutHelper.group(GraphHelper.graphValues($scope.structures), 6);
 

@@ -1,9 +1,32 @@
 <div class="thumbnail">
-  <a href ui-sref="structure.summary({structureId: structure.encodedUri})" class="thumbnail-image"> <img ng-src="{{ structure.picture.thumb }}" alt="{{ structure.name }}">
-  </a>
-  <div class="caption">
-    <h4>
-      <a href ui-sref="structure.summary({structureId: structure.encodedUri})"> {{ structure.name }} </a>
-    </h4>
+  <div ng-if="!(structure.subjectype=='structure'||structure.objecttype=='structure')">
+    <a ui-sref="structure.summary({structureId: structure.id})" class="thumbnail-image"> <img ng-if="structure.media"
+      ng-src="{{Uris.WS_MEDIA+structure.media+'?dimension=163x165'}}" alt="{{structure.label}}"> <img ng-if="!structure.media"
+      ng-src="images/icon.png" alt="{{structure.label}}"></a>
+    <div class="caption">
+      <h4>
+        <a ui-sref="structure.summary({structureId: structure.id})"> {{structure.label}} </a>
+      </h4>
+    </div>
+  </div>
+  <div ng-if="structure.subjectype=='structure'">
+    <a ui-sref="structure.summary({structureId: structure.subject})" class="thumbnail-image"> <img ng-if="structure.media"
+      ng-src="{{Uris.WS_MEDIA+structure.media+'?dimension=163x165'}}" alt="{{structure.subjectlabel}}"> <img ng-if="!structure.media"
+      ng-src="images/icon.png" alt="{{structure.subjectlabel}}"></a>
+    <div class="caption">
+      <h4>
+        <a ui-sref="structure.summary({structureId: structure.subject})"> {{structure.subjectlabel}} </a>
+      </h4>
+    </div>
+  </div>
+  <div ng-if="structure.objecttype=='structure'">
+    <a ui-sref="structure.summary({structureId: structure.object})" class="thumbnail-image"> <img ng-if="structure.media"
+      ng-src="{{Uris.WS_MEDIA+structure.media+'?dimension=163x165'}}" alt="{{structure.objectlabel}}"> <img ng-if="!structure.media"
+      ng-src="images/icon.png" alt="{{structure.objectlabel}}"></a>
+    <div class="caption">
+      <h4>
+        <a ui-sref="structure.summary({structureId: structure.object})"> {{structure.objectlabel}} </a>
+      </h4>
+    </div>
   </div>
 </div>

@@ -17,7 +17,8 @@
 </div>
 <div class="alert alert-warning" ng-show="Auth.role === 'editor' || Auth.role === 'root'" style="margin: 0;">
   <div class="container">
-    <button class="btn btn-default btn-xs" ui-sref="structure.summary.edit({structureId:null})" ng-show="Auth.role === 'editor' || Auth.role === 'root'">
+    <button class="btn btn-default btn-xs" ui-sref="structure.summary.edit({structureId:null})"
+      ng-show="Auth.role === 'editor' || Auth.role === 'root'">
       <i class="fa fa-plus"></i> New Project
     </button>
   </div>
@@ -26,8 +27,9 @@
   <div class="container">
     <div class="chart-index" style="text-align: center;">
       <button class="btn btn-dark" style="margin-right: 1px;" ng-click="goToIndex(null)" ng-class="{'btn-primary': $stateParams.index == null}">All</button>
-      <button style="margin-right: 1px;" ng-repeat="(index, exists) in indexes" class="btn" ng-class="{'btn-primary': $stateParams.index === index, 'btn-dark': $stateParams.index !== index}" ng-disabled="!exists" ng-click="goToIndex(index)">
-        {{ index }}</button>
+      <button style="margin-right: 1px;" ng-repeat="(index, exists) in indexes" class="btn"
+        ng-class="{'btn-primary': $stateParams.index === index, 'btn-dark': $stateParams.index !== index}" ng-disabled="!exists"
+        ng-click="goToIndex(index)">{{ index }}</button>
     </div>
     <div id="chart"></div>
   </div>
