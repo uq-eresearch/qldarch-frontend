@@ -6,11 +6,11 @@ angular.module('qldarchApp').config(function($stateProvider) {
     reloadOnSearch : false,
     templateUrl : 'views/firms.html',
     resolve : {
-      firms : [ 'Firm', '$filter', 'GraphHelper', 'Uris', function(Firm, $filter, GraphHelper, Uris) {
-        return Firm.loadAll(false).then(function(firms) {
-          firms = GraphHelper.graphValues(firms);
-          return $filter('filter')(firms, function(firm) {
-            return firm[Uris.QA_AUSTRALIAN] === true;
+      firms : [ '$http', '$filter', 'Uris', function($http, $filter, Uris) {
+        return $http.get(Uris.WS_ROOT + 'firms').then(function(result) {
+          console.log(result.data);
+          return $filter('filter')(result.data, function(firm) {
+            return firm.australian === true;
           });
         });
       } ],

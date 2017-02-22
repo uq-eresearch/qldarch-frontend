@@ -39,14 +39,14 @@ angular.module('qldarchApp').controller(
       };
 
       firms = $filter('orderBy')(GraphHelper.graphValues(firms), function(firm) {
-        return firm.name;
+        return firm.label;
       });
 
       function frows() {
         /* globals $:false */
         return LayoutHelper.group(GraphHelper.graphValues($.grep(firms, function(firm) {
           if ($stateParams.index) {
-            var c0 = firm.name.charAt(0);
+            var c0 = firm.label.charAt(0);
             return $stateParams.index === '#' ? $.isNumeric(c0) : (c0.toUpperCase() === $stateParams.index);
           } else {
             return true;
@@ -160,12 +160,12 @@ angular.module('qldarchApp').controller(
             $container.find('text').click(function() {
               var name = this.innerHTML;
               Firm.findByName(name).then(function(firms) {
-                console.log('got firms', firms);
+                // console.log('got firms', firms);
                 firms = GraphHelper.graphValues(firms);
                 if (firms.length) {
                   var firm = firms[0];
                   $state.go('firm.summary', {
-                    firmId : firm.encodedId
+                    firmId : firm.id
                   });
                 }
               });

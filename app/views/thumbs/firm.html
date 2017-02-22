@@ -1,9 +1,10 @@
 <div class="thumbnail">
-  <a ui-sref="firm.summary({firmId:firm.encodedUri})" class="thumbnail-image"> <img ng-src="{{ firm.picture.thumb }}" alt="{{ firm.name }}">
-  </a>
+  <a ui-sref="firm.summary({firmId:firm.id})" class="thumbnail-image"> <img ng-if="firm.media"
+    ng-src="{{Uris.WS_MEDIA+firm.media+'?dimension=163x165'}}" alt="{{firm.label}}"> <img ng-if="!firm.media" ng-src="images/icon.png"
+    alt="{{firm.label}}"></a>
   <div class="caption">
     <h4>
-      <a ui-sref="firm.summary({firmId:firm.encodedUri})"> {{ firm.name }} </a>
+      <a ui-sref="firm.summary({firmId:firm.id})"> {{firm.label}} </a>
     </h4>
   </div>
 </div>
