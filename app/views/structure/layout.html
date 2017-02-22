@@ -1,8 +1,15 @@
 <div class="content">
   <div class="page-header has-subnav">
     <div class="container">
-      <small ng-show="structure.uri"><a href ui-sref="structures.australian">Projects »</a></small>
-      <h1>{{ structure.name || 'New Project' }}</h1>
+      <small ng-show="structure.id"><a href ui-sref="structures.australian">Projects »</a></small>
+      <h1>
+        <img ng-if="structure.media.length>1"
+          ng-src="{{Uris.WS_MEDIA+((structure.media|filter:{preferred:'!!'})[0].id||structure.media[0].id)+'?dimension=40x40'}}" alt=""
+          style="height: 40px; width: 40px; position: relative; top: -4px; margin-right: 1px; border: 3px solid white;" class="" /> <img
+          ng-if="structure.media.length==1&&structure.media[0].id" ng-src="{{Uris.WS_MEDIA+structure.media[0].id+'?dimension=40x40'}}" alt=""
+          style="height: 40px; width: 40px; position: relative; top: -4px; margin-right: 1px; border: 3px solid white;" class="" /> {{
+        structure.label || 'New Project' }}
+      </h1>
     </div>
   </div>
   <div class="subnav" style="margin-bottom: 0;">
@@ -10,15 +17,17 @@
       <div class="row">
         <div class="col-md-12">
           <ul class="nav nav-pills">
-            <li ng-class="{'active': $state.includes('structure.summary')}"><a href ui-sref="structure.summary({ structureId: structure.encodedUri })">Summary</a></li>
-            <li ng-class="{active: $state.includes('structure.photograph') || $state.includes('structure.photographs')}" ng-show="structure.uri"><a href ui-sref="structure.photographs({ structureId: structure.encodedUri })">Photographs</a></li>
-            <li ng-class="{active: $state.includes('structure.lineDrawing') || $state.includes('structure.lineDrawings')}" ng-show="structure.uri"><a href ui-sref="structure.lineDrawings({ structureId: structure.encodedUri })">Line Drawings</a>
-            </li>
-            <li ng-class="{active: $state.includes('structure.map'), disabled: !structure.lat}" ng-show="structure.uri"><a href ui-sref="structure.map({ structureId: structure.encodedUri })" ng-show="structure.lat">Map</a> <a href
-              ng-show="!structure.lat" tooltip="No location stored.">Map</a></li>
-            <li ui-sref-active="active" ng-show="structure.uri"><a href ui-sref="structure.articles({ structureId: structure.encodedUri })">Articles</a></li>
-            <li ui-sref-active="active" ng-show="structure.uri"><a href ui-sref="structure.timeline({ structureId: structure.encodedUri })">Timeline</a></li>
-            <li ui-sref-active="active" ng-show="structure.uri"><a href ui-sref="structure.relationships({ structureId: structure.encodedUri })">Relationships</a></li>
+            <li ng-class="{'active': $state.includes('structure.summary')}"><a href ui-sref="structure.summary({ structureId: structure.id })">Summary</a></li>
+            <li ng-class="{active: $state.includes('structure.photograph') || $state.includes('structure.photographs')}" ng-show="structure.id"><a
+              href ui-sref="structure.photographs({ structureId: structure.id })">Photographs</a></li>
+            <li ng-class="{active: $state.includes('structure.lineDrawing') || $state.includes('structure.lineDrawings')}" ng-show="structure.id"><a
+              href ui-sref="structure.lineDrawings({ structureId: structure.id })">Line Drawings</a></li>
+            <li ng-class="{active: $state.includes('structure.map'), disabled: !structure.lat}" ng-show="structure.id"><a href
+              ui-sref="structure.map({ structureId: structure.id })" ng-show="structure.lat">Map</a> <a href ng-show="!structure.lat"
+              uibTooltip="No location stored.">Map</a></li>
+            <li ui-sref-active="active" ng-show="structure.id"><a href ui-sref="structure.articles({ structureId: structure.id })">Articles</a></li>
+            <li ui-sref-active="active" ng-show="structure.id"><a href ui-sref="structure.timeline({ structureId: structure.id })">Timeline</a></li>
+            <li ui-sref-active="active" ng-show="structure.id"><a href ui-sref="structure.relationships({ structureId: structure.id })">Relationships</a></li>
           </ul>
         </div>
       </div>

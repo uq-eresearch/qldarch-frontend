@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('qldarchApp').controller('FirmCtrl', function ($scope, firm, types, Entity, $state, Uris) {
+angular.module('qldarchApp').controller('FirmCtrl', function ($scope, firm/*, types*/, Entity, $state, Uris) {
   $scope.firm = firm;
 
   function goToTypePage(typeUri) {
@@ -60,45 +60,45 @@ angular.module('qldarchApp').controller('FirmCtrl', function ($scope, firm, type
    * ======================================================
    */
   $scope.firm.$type = null;
-  angular.forEach(types, function (type) {
-    if (type.uri === Uris.QA_FIRM_TYPE) {
-      $scope.firm.$type = {
-          id: type.uri,
-          uri: type.uri,
-          text: type[Uris.QA_LABEL],
-          name: type[Uris.QA_LABEL],
-          encodedUri: type.encodedUri,
-      };
-    }
-  });
+//  angular.forEach(types, function (type) {
+//    if (type.uri === Uris.QA_FIRM_TYPE) {
+//      $scope.firm.$type = {
+//          id: type.uri,
+//          uri: type.uri,
+//          text: type[Uris.QA_LABEL],
+//          name: type[Uris.QA_LABEL],
+//          encodedUri: type.encodedUri,
+//      };
+//    }
+//  });
   $scope.$watch('firm.$type', function (type) {
     // Delete all typologies on the structure
     if (type) {
       $scope.firm[Uris.RDF_TYPE] = type.uri;
     }
   });
-  $scope.typeSelect = {
-      placeholder: 'Select a Type',
-      dropdownAutoWidth: true,
-      multiple: false,
-      query: function (options) {
-        var data = {
-            results: []
-        };
-        angular.forEach(types, function (type) {
-          if (type.uri !== Uris.QA_BUILDING_TYPOLOGY && type[Uris.QA_LABEL].toLowerCase().indexOf(options.term.toLowerCase()) !== -1) {
-            data.results.push({
-              id: type.uri,
-              uri: type.uri,
-              text: type[Uris.QA_LABEL],
-              name: type[Uris.QA_LABEL],
-              encodedUri: type.encodedUri,
-            });
-          }
-        });
-        options.callback(data);
-      }
-  };
+//  $scope.typeSelect = {
+//      placeholder: 'Select a Type',
+//      dropdownAutoWidth: true,
+//      multiple: false,
+//      query: function (options) {
+//        var data = {
+//            results: []
+//        };
+//        angular.forEach(types, function (type) {
+//          if (type.uri !== Uris.QA_BUILDING_TYPOLOGY && type[Uris.QA_LABEL].toLowerCase().indexOf(options.term.toLowerCase()) !== -1) {
+//            data.results.push({
+//              id: type.uri,
+//              uri: type.uri,
+//              text: type[Uris.QA_LABEL],
+//              name: type[Uris.QA_LABEL],
+//              encodedUri: type.encodedUri,
+//            });
+//          }
+//        });
+//        options.callback(data);
+//      }
+//  };
 
   $scope.$watch('firm.$precededByFirms', function(firms) {
     if (firms) {

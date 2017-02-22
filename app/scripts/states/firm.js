@@ -2,40 +2,27 @@
 
 angular.module('qldarchApp').config(function($stateProvider) {
   $stateProvider.state('firm', {
-    abstract: true,
-    url: '/firm?firmId',
-    templateUrl: 'views/firm/layout.html',
-    resolve: {
-        firm: ['$stateParams', 'Firm', 'GraphHelper',
-            function($stateParams, Firm, GraphHelper) {
-                if (!$stateParams.firmId) {
-                    return {};
-                }
-                var firmUri = GraphHelper.decodeUriString($stateParams.firmId);
-                return Firm.load(firmUri);
-            }
-        ],
-        types: ['Ontology',
-            function(Ontology) {
-                console.log('loading summary');
-                return Ontology.loadAllEditableEntityTypes();
-            }
-        ]
-    },
-    controller: ['$scope', 'firm', 'Entity', '$state',
-        function($scope, firm, Entity, $state) {
-            $scope.firm = firm;
-            $scope.entity = firm;
-
-            $scope.delete = function(firm) {
-                var r = window.confirm('Delete firm ' + firm.name + '?');
-                if (r === true) {
-                    Entity.delete(firm.uri).then(function() {
-                        $state.go('firms.australian');
-                    });
-                }
-            };
+    abstract : true,
+    url : '/firm?firmId',
+    templateUrl : 'views/firm/layout.html',
+    resolve : {
+      firm : [ '$stateParams', '$http', 'Uris', 'Relationshiplabels', function($stateParams, $http, Uris, Relationshiplabels) {
+        if (!$stateParams.firmId) {
+          return {};
+        } else {
+          return $http.get(Uris.WS_ROOT + 'archobj/' + $stateParams.firmId).then(function(result) {
+            angular.forEach(result.data.relationships, function(relationship) {
+              if (Relationshiplabels.hasOwnProperty(relationship.relationship)) {
+                relationship.relationship = Relationshiplabels[relationship.relationship];
+              }
+            });
+            return result.data;
+          });
         }
-    ]
-});
+      } ]
+    },
+    controller : [ '$scope', 'firm', function($scope, firm) {
+      $scope.firm = firm;
+    } ]
+  });
 });

@@ -1,4 +1,5 @@
-<div class="alert alert-warning" ng-show="(Auth.role === 'editor' || Auth.role === 'root') && !$state.includes('firm.summary.edit')" style="margin: 0;">
+<div class="alert alert-warning" ng-show="(Auth.role === 'editor' || Auth.role === 'root') && !$state.includes('firm.summary.edit')"
+  style="margin: 0;">
   <div class="container">
     <div ng-hide="$state.includes('firm.summary.edit')">
       <!-- Editor: &nbsp; &nbsp; -->
@@ -16,35 +17,33 @@
     <div class="row" ng-hide="$state.includes('firm.summary.edit')">
       <div class="col-sm-7">
         <h5>Summary</h5>
-        <p style="white-space: pre-wrap;" ng-bind-html="firm[Uris.QA_SUMMARY]"></p>
-        <p ng-hide="firm[Uris.QA_SUMMARY].length" class="text-muted">No summary.</p>
+        <p style="white-space: pre-wrap;" ng-bind-html="firm.summary"></p>
+        <p ng-hide="firm.summary" class="text-muted">No summary.</p>
         <h5>Operating Years</h5>
         <p>
-          {{ firm[Uris.QA_START_DATE] }} <span ng-show="firm[Uris.QA_END_DATE]">- {{ firm[Uris.QA_END_DATE] }}</span>
+          {{ firm.start }} <span ng-show="firm.end">- {{ firm.end }}</span>
         </p>
-        <p ng-hide="firm[Uris.QA_START_DATE].length" class="text-muted">No operating years recorded.</p>
-        <h5 style="margin-top: 24px;" ng-show="firm.$precededByFirms.length">Preceded By</h5>
+        <p ng-hide="firm.start" class="text-muted">No operating years recorded.</p>
+        <h5 style="margin-top: 24px;" ng-show="firm.precededby">Preceded By</h5>
         <ul class="media-list">
-          <li class="media" ng-repeat="pf in firm.$precededByFirms"><a class="pull-left" ng-href="{{ firm.$link }}"> <img class="media-object img-responsive img-circle" ng-src="{{ pf.picture.file }}" style="display: block; width: 32px">
-          </a>
-            <div class="media-body">
-              <a ng-href="{{ pf.$link }}"> {{ pf.name }} </a>
-            </div></li>
+          <div class="media-body">
+            <a ui-sref="firm.summary({firmId:firm.precededby.id })"> {{ firm.precededby.label }} </a>
+          </div>
         </ul>
-        <h5 style="margin-top: 24px;" ng-show="firm.$succeededByFirms.length">Succeeded By</h5>
+        <h5 style="margin-top: 24px;" ng-show="firm.succeededby">Succeeded By</h5>
         <ul class="media-list">
-          <li class="media" ng-repeat="pf in firm.$succeededByFirms"><a class="pull-left" ng-href="{{ firm.$link }}"> <img class="media-object img-responsive img-circle" ng-src="{{ pf.picture.file }}" style="display: block; width: 32px">
-          </a>
-            <div class="media-body">
-              <a ng-href="{{ pf.$link }}"> {{ pf.name }} </a>
-            </div></li>
+          <div class="media-body">
+            <a ui-sref="firm.summary({ firmId: firm.succeededby.id })"> {{ firm.succeededby.label }} </a>
+          </div>
         </ul>
       </div>
       <div class="col-sm-5">
-        <img ng-if="firm.picture" class="img-responsive" ng-src="{{ firm.picture.file }}" alt="" />
+        <img ng-if="firm.media.length>1" class="img-responsive"
+          ng-src="{{Uris.WS_MEDIA+((firm.media|filter:{preferred:'!!'})[0].id||firm.media[0].id)+'?dimension=460x550'}}" /> <img
+          ng-if="firm.media.length==1&&firm.media[0].id" class="img-responsive" ng-src="{{Uris.WS_MEDIA+firm.media[0].id+'?dimension=460x550'}}" />
       </div>
     </div>
-    <div class="row" ng-show="$state.includes('firm.summary.edit')">
+    <!-- <div class="row" ng-show="$state.includes('firm.summary.edit')">
       <div class="col-md-12">
         <form action="" ng-submit="updateFirm(firm)">
           <div class="form-group">
@@ -52,7 +51,8 @@
             <div ui-select2="typeSelect" ng-model="firm.$type" class="form-control"></div>
           </div>
           <div class="form-group">
-            <label>Name <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control" ng-model="firm[Uris.QA_FIRM_NAME]" placeholder="Firm Name">
+            <label>Name <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control"
+              ng-model="firm[Uris.QA_FIRM_NAME]" placeholder="Firm Name">
           </div>
           <div class="form-group">
             <label>Summary</label>
@@ -80,6 +80,6 @@
           <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
         </form>
       </div>
-    </div>
+    </div> -->
   </div>
 </div>

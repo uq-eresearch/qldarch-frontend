@@ -1,47 +1,45 @@
 'use strict';
 
-angular.module('qldarchApp').config(
-    function($stateProvider) {
-      $stateProvider.state('structure.summary', {
-        url : '/summary',
-        templateUrl : 'views/structure/summary.html',
-        resolve : {
-          designers : [ '$stateParams', 'GraphHelper', 'Uris', 'Entity', 'Relationship', '$filter',
-              function($stateParams, GraphHelper, Uris, Entity, Relationship, $filter) {
-                var designers = {
-                  architects : [],
-                  firms : []
-                };
-
-                if (!$stateParams.structureId) {
-                  return designers;
-                }
-
-                var structureUri = GraphHelper.decodeUriString($stateParams.structureId);
-
-                return Relationship.findBySubjectPredicateObject({
-                  predicate : 'qldarch:designedBy',
-                  subject : structureUri
-                }).then(function(relationships) {
-                  // Get all the architects
-                  var designerUris = GraphHelper.getAttributeValuesUnique(relationships, Uris.QA_OBJECT);
-                  if (designerUris.length) {
-                    return Entity.loadList(designerUris, false).then(function(entities) {
-                      entities = GraphHelper.graphValues(entities);
-                      designers.architects = $filter('filter')(entities, function(entity) {
-                        return entity.type === 'architect';
-                      });
-                      designers.firms = $filter('filter')(entities, function(entity) {
-                        return entity.type === 'firm';
-                      });
-                      return designers;
-                    });
-                  } else {
-                    return designers;
-                  }
-                });
-              } ]
-        },
-        controller : 'StructureCtrl'
-      });
-    });
+angular.module('qldarchApp').config(function($stateProvider) {
+  $stateProvider.state('structure.summary', {
+    url : '/summary',
+    templateUrl : 'views/structure/summary.html',
+    resolve : {
+      designers : [ 'structure', '$filter', '$http', 'Uris', function(structure, $filter, $http, Uris) {
+        /* globals _:false */
+        var designers = {
+          architects : [],
+          firms : []
+        };
+        var person = $filter('filter')(structure.relationships, function(relationship) {
+          if (relationship.subjectype === 'person') {
+            return $http.get(Uris.WS_ROOT + 'archobj/' + relationship.subject).then(function(result) {
+              if (angular.isUndefined(relationship.media)) {
+                relationship.media = $filter('filter')(result.data.media, function(med) {
+                  return (med.preferred || (med.type === 'Photograph' || 'Portrait' || 'Image'));
+                }).id;
+              }
+              return relationship;
+            });
+          }
+        });
+        designers.architects = _.uniqBy(person, 'subjectlabel');
+        var firm = $filter('filter')(structure.relationships, function(relationship) {
+          if (relationship.subjectype === 'firm') {
+            return $http.get(Uris.WS_ROOT + 'archobj/' + relationship.subject).then(function(result) {
+              if (angular.isUndefined(relationship.media)) {
+                relationship.media = $filter('filter')(result.data.media, function(med) {
+                  return (med.preferred || (med.type === 'Photograph' || 'Portrait' || 'Image'));
+                }).id;
+              }
+              return relationship;
+            });
+          }
+        });
+        designers.firms = _.uniqBy(firm, 'subjectlabel');
+        return designers;
+      } ]
+    },
+    controller : 'StructureCtrl'
+  });
+});

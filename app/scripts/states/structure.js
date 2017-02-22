@@ -6,37 +6,39 @@ angular.module('qldarchApp').config(function($stateProvider) {
     url: '/project?structureId',
     templateUrl: 'views/structure/layout.html',
     resolve: {
-        structure: ['$http', '$stateParams', 'Uris', 'Structure', 'GraphHelper',
-            function($http, $stateParams, Uris, Structure, GraphHelper) {
-                if ($stateParams.structureId) {
-                    var structureUri = GraphHelper.decodeUriString($stateParams.structureId);
-                    return Structure.load(structureUri);
-                } else {
-                    return {};
-                }
+      structure: ['$stateParams', '$http', 'Uris', 'Relationshiplabels', function($stateParams, $http, Uris, Relationshiplabels) {
+        if (!$stateParams.structureId) {
+          return {};
+        } else {
+          return $http.get(Uris.WS_ROOT + 'archobj/' + $stateParams.structureId).then(function(result) {
+            angular.forEach(result.data.relationships, function(relationship) {
+              if (Relationshiplabels.hasOwnProperty(relationship.relationship)) {
+                relationship.relationship = Relationshiplabels[relationship.relationship];
+              }
+            });
+            if (result.data.latitude) {
+              result.data.lat = result.data.latitude;
             }
-        ],
-        types: ['Ontology',
-            function(Ontology) {
-                console.log('loading summary');
-                return Ontology.loadAllEditableEntityTypes();
+            if (result.data.longitude) {
+              result.data.lon = result.data.longitude;
             }
-        ]
-    },
-    controller: ['$scope', 'structure', 'Entity', '$state',
-        function($scope, structure, Entity, $state) {
-            $scope.structure = structure;
-            $scope.entity = structure;
-
-            $scope.delete = function(structure) {
-                var r = window.confirm('Delete project ' + structure.name + '?');
-                if (r === true) {
-                    Entity.delete(structure.uri).then(function() {
-                        $state.go('structures.australian');
-                    });
-                }
-            };
+            return result.data;
+          });
         }
-    ]
-});
+      }],
+    },
+    controller: ['$scope', 'structure', 'Entity', '$state',function($scope, structure, Entity, $state) {
+      $scope.structure = structure;
+      $scope.entity = structure;
+
+      $scope.delete = function(structure) {
+        var r = window.confirm('Delete project ' + structure.name + '?');
+        if (r === true) {
+          Entity.delete(structure.uri).then(function() {
+            $state.go('structures.australian');
+          });
+        }
+      };
+    }]
+  });
 });
