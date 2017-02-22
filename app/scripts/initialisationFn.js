@@ -26,7 +26,7 @@ angular.module('qldarchApp').run(
         statusbar : false
       };
 
-      $http.get(Uris.JSON_ROOT + 'login/status').then(function(status) {
+      $http.get(Uris.WS_ROOT + 'user').then(function(status) {
         angular.extend(Auth, status.data);
       });
 
@@ -73,17 +73,19 @@ angular.module('qldarchApp').run(
        * @returns {Promise|*}
        */
       $rootScope.globalSearch = function(val) {
-        return Entity.findByName(val, false).then(function(entities) {
-          var results = GraphHelper.graphValues(entities);
+        var syntax = '* AND (type:person OR type:firm OR type:structure)';
+        return $http.get(Uris.WS_ROOT + 'search?q=' + val + syntax + '&p=0&pc=20').then(function(output) {
+          var results = GraphHelper.graphValues(output.data.documents);
           results = $filter('filter')(results, function(result) {
-            return result.type === 'architect' || result.type === 'structure' || result.type === 'firm' || result.type === 'other';
+            return result.type === 'person' || result.type === 'firm' || result.type === 'structure';
           });
           results = $filter('orderBy')(results, function(result) {
-            return result.name.length;
+            return result.label.length;
           });
           results = results.slice(0, 10);
 
           angular.forEach(results, function(result) {
+            result.name = result.label;
             var label = result.name + ' (' + result.type.charAt(0).toUpperCase() + result.type.slice(1) + ')';
             if (result.type === 'structure') {
               label = result.name + ' (Project)';
@@ -94,7 +96,7 @@ angular.module('qldarchApp').run(
           var search = {
             name : ' <i class="fa fa-search"></i> Search for \'' + val + '\'',
             type : 'search',
-            query : val
+            query : val + syntax
           };
           results.push(search);
           return results;
@@ -117,17 +119,23 @@ angular.module('qldarchApp').run(
         } else {
           // already a result
           console.log('path is', $item.type);
-          var url;
-          if ($item.type === 'structure') {
-            url = '/project/summary?' + $item.type + 'Id=' + $item.encodedUri;
-          } else {
-            url = '/' + $item.type + '/summary?' + $item.type + 'Id=' + $item.encodedUri;
-          }
-
           var params = {};
-          params[$item.type + 'Id'] = $item.encodedUri;
-          $state.go($item.type + '.summary', params);
-          console.log('url is', url);
+          if ($item.type === 'person') {
+            params.architectId = $item.id;
+            $state.go('architect.summary', params);
+          } else if ($item.type === 'firm') {
+            params.firmId = $item.id;
+            $state.go('firm.summary', params);
+          } else if ($item.type === 'structure') {
+            params.structureId = $item.id;
+            $state.go('structure.summary', params);
+          } else if ($item.type === 'Article') {
+            params.articleId = $item.id;
+            $state.go('article', params);
+          } else if ($item.type === 'interview') {
+            params.interviewId = $item.id;
+            $state.go('interview', params);
+          }
         }
       };
     });

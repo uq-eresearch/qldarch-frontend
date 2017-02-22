@@ -11,8 +11,8 @@ angular.module('qldarchApp').controller('LoginCtrl', function($scope, Uris, $htt
    * @return {[type]} [description]
    */
   $scope.login = function(credentials) {
-    $http.post(Uris.JSON_ROOT + 'login', jQuery.param({
-      username : credentials.username,
+    $http.post(Uris.WS_ROOT + 'signin', jQuery.param({
+      email : credentials.username,
       password : credentials.password
     }), {
       headers : {

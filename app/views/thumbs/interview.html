@@ -1,12 +1,12 @@
 <div class="thumbnail">
   <!-- image -->
-  <a class="thumbnail-image" ui-sref="interview({interviewId: interview.encodedUri})"> <img ng-if="!interview.interviewees[0].picture" src="images/icon.png" style="display: block; width: 100%"> <img ng-if="interview.interviewees[0].picture"
-    ng-src="{{ interview.interviewees[0].picture.thumb }}" class="img-responsive">
+  <a ui-sref="interview({interviewId: interview.interviews[0]})" class="thumbnail-image"> <img ng-if="interview.media"
+    ng-src="{{Uris.WS_MEDIA+interview.media+'?dimension=163x165'}}" class="img-responsive"> <img ng-if="!interview.media" src="images/icon.png">
   </a>
   <!-- caption -->
   <div class="caption">
     <h4>
-      <a ui-sref="interview({interviewId: interview.encodedUri})"> {{ interview.interviewees[0].name || interview[Uris.DCT_TITLE] }} </a>
+      <a ui-sref="interview({interviewId: interview.interviews[0]})"> {{interview.label||interview.preflabel}} </a>
     </h4>
   </div>
 </div>

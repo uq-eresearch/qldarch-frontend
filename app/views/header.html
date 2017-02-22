@@ -29,20 +29,25 @@
                   <li ng-show="Auth.isEditor()"><a ui-sref="others">Other</a></li>
                 </ul>
               </li>
-              <li class="dropdown" ng-class="{'active': $state.includes('ugc') }"><a href class="dropdown-toggle" data-toggle="dropdown">Build <b class="caret"></b></a>
+              <li class="dropdown" ng-class="{'active': $state.includes('ugc') }"><a href class="dropdown-toggle" data-toggle="dropdown">Build
+                  <b class="caret"></b>
+              </a>
                 <ul class="dropdown-menu">
                   <li><a ui-sref="ugc.timeline.edit.add.import({id:null})">Timeline</a></li>
                   <li><a ui-sref="ugc.map.edit.add.import({id:null})">Map</a></li>
                   <li><a ui-sref="ugc.wordcloud.edit.add.import({id:null})">Word Cloud</a></li>
                 </ul></li>
               <li ng-class="{'active': $state.includes('contribute') }"><a ui-sref="contribute">Contribute</a></li>
-              <li class="" ng-hide="Auth.auth"><a>&nbsp;</a></li>
-              <li class="" ng-hide="Auth.auth" tooltip="Create an account" tooltip-placement="bottom" ng-class="{'active': $state.includes('register') }"><a ui-sref="register">Sign Up</a></li>
-              <li class="" ng-hide="Auth.auth" tooltip="Log in with an existing account" tooltip-placement="bottom" ng-class="{'active': $state.includes('login') }"><a href ui-sref="login">Log in</a></li>
+              <li class="" ng-hide="Auth.success"><a>&nbsp;</a></li>
+              <li class="" ng-hide="Auth.success" uibTooltip="Create an account" tooltip-placement="bottom"
+                ng-class="{'active': $state.includes('register') }"><a ui-sref="register">Sign Up</a></li>
+              <li class="" ng-hide="Auth.success" uibTooltip="Log in with an existing account" tooltip-placement="bottom"
+                ng-class="{'active': $state.includes('login') }"><a href ui-sref="login">Log in</a></li>
             </ul>
             <!-- Logged in user -->
             <ul class="nav navbar-nav">
-              <li class="dropdown" ng-show="Auth.auth" ng-class="{'active': $state.includes('user') }" style="margin-right: 8px;"><a href class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <b class="caret"></b></a>
+              <li class="dropdown" ng-show="Auth.success" ng-class="{'active': $state.includes('user') }" style="margin-right: 8px;"><a href
+                class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li><a>{{ Auth.email }}</a></li>
                   <li><a ui-sref="user.files.images">My Files</a></li>
@@ -59,9 +64,10 @@
             <!-- Search form -->
             <form class="navbar-form" role="search">
               <div class="input-group">
-                <input type="text" class="form-control" ng-model="globalSearch.query" placeholder="Search" typeahead="entity.name for entity in globalSearch($viewValue)" typeahead-loading="loadingLocations" class="form-control"
-                  typeahead-min-length="1" typeahead-on-select="globalSearchOnSelect($item, $model, $label)" /> <span class="input-group-addon"> <i ng-show="!loadingLocations" class="fa fa-search"></i> <i ng-show="loadingLocations"
-                  class="fa fa-spin fa-refresh"></i>
+                <input type="text" class="form-control" ng-model="globalSearch.query" placeholder="Search"
+                  uib-typeahead="entity.name for entity in globalSearch($viewValue)" typeahead-loading="loadingLocations" class="form-control"
+                  typeahead-min-length="1" typeahead-on-select="globalSearchOnSelect($item, $model, $label)" /> <span class="input-group-addon">
+                  <i ng-show="!loadingLocations" class="fa fa-search"></i> <i ng-show="loadingLocations" class="fa fa-spin fa-refresh"></i>
                 </span>
               </div>
             </form>

@@ -5,15 +5,12 @@
  * @name qldarchApp.InterviewRepository
  * @description # InterviewRepository Factory in the qldarchApp.
  */
-angular.module('qldarchApp').factory('InterviewRepository', function(Expression, GraphHelper, Uris, Architect, $filter, Interview, $http) {
+angular.module('qldarchApp').factory('InterviewRepository', function(Uris, $filter, $http) {
 
   /* globals _:false */
   function getInterviewsForCarousel() {
-    return $http.get(Uris.WS_ROOT + 'interviews').then(function(result) {
+    return $http.get(Uris.WS_ROOT + 'interviews/brief').then(function(result) {
       var interviews = result.data;
-      interviews.forEach(function(interview) {
-        interview.encodedUri = btoa('http://qldarch.net/interview/' + interview.id);
-      });
       return _.shuffle(_.uniqBy(interviews, function(interview) {
         return interview.interviewee;
       }).filter(function(interview) {

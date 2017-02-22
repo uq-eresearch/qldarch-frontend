@@ -3,24 +3,25 @@
 angular.module('qldarchApp')
 // interview, transcript, evidences
 // FIXME: start pulling these out into services!
-.controller('InterviewCtrl', function ($scope, interview, $state, $http, Uris, Entity, Ontology, types, 
-    interviews, $stateParams, $location, $anchorScroll, $timeout, GraphHelper, Expression, $cacheFactory, $q) {
+.controller('InterviewCtrl', function ($scope, interview, $state, $http, Uris, Entity, Ontology, /* types, */ 
+    interviews, relationships, $stateParams, $location, $anchorScroll, $timeout, GraphHelper, Expression, $cacheFactory, $q) {
   // Setup
 
-  $scope.delete = function (interview) {
-    var interviewee = $scope.interview.$interviewees[0];
-    Expression.delete(interview.uri, interview).then(function () {
-      $cacheFactory.get('$http').remove('/ws/rest/expression/detail/qldarch%3AInterview?INCSUBCLASS=false&');
-      $cacheFactory.get('$http').remove('/ws/rest/expression/summary/qldarch%3AInterview?INCSUBCLASS=false&');
-      $state.go(interviewee.$state + '.summary', interviewee.$stateParams);
-    });
-  };
+// $scope.delete = function (interview) {
+// var interviewee = $scope.interview.$interviewees[0];
+// Expression.delete(interview.uri, interview).then(function () {
+// $cacheFactory.get('$http').remove('/ws/rest/expression/detail/qldarch%3AInterview?INCSUBCLASS=false&');
+// $cacheFactory.get('$http').remove('/ws/rest/expression/summary/qldarch%3AInterview?INCSUBCLASS=false&');
+// $state.go(interviewee.$state + '.summary', interviewee.$stateParams);
+// });
+// };
 
   $scope.sub = 'interviews';
   $scope.interviews = interviews;
   $scope.interview = interview;
   if (interview.transcript) {
-    $scope.title = interview.transcript.date.toLowerCase();
+// $scope.title = interview.transcript.date.toLowerCase();
+    $scope.title = interview.label;
     $scope.isShowingTranscript = true;
   } else {
     $scope.title = 'Unknown Date';
@@ -31,38 +32,26 @@ angular.module('qldarchApp')
   var audioPlayerDom = document.getElementById('audio1');
   $scope.audioPlayer = {};
 
-
   // Look for our external locations
   $scope.audioPlayerPlaylist = [];
-  console.log('external locations', GraphHelper.asArray(interview[Uris.QA_EXTERNAL_LOCATION]));
-  angular.forEach(GraphHelper.asArray(interview[Uris.QA_EXTERNAL_LOCATION]), function (extLocation) {
 
-    // Youtube URL
-    if (extLocation.indexOf('you') !== -1) {
-      $scope.youtubeUrl = extLocation;
-      return;
-    }
-
-    var fileExtension = extLocation.substring(extLocation.length - 3);
-    console.log('fileExtension', fileExtension);
-    if (fileExtension === 'mp3') {
-      // its an mp3 file
-      $scope.audioPlayerPlaylist = [{
-        src: extLocation,
-        type: 'audio/mp3'
-      }];
-      $scope.download = {
-          mp3: extLocation.substring(0, extLocation.length - 3) + 'mp3'
-      };
-    } else if (fileExtension === 'ogg') {
-      // its an ogg file
-      $scope.audioPlayerPlaylist.push({
-        src: extLocation,
-        type: 'audio/ogg'
-      });
+  angular.forEach(interview.media, function (extLocation) {
+    if(extLocation.type === 'Audio') {
+      if (extLocation.mimetype ==='audio/mpeg'){
+        $scope.audioPlayerPlaylist = [{
+          src: Uris.WS_MEDIA + extLocation.id,
+          type: 'audio/mpeg'
+        }];
+      } 
+      else if (extLocation.mimetype ==='audio/ogg') {
+        $scope.audioPlayerPlaylist.push({
+          src: Uris.WS_MEDIA + extLocation.id,
+          type: 'audio/ogg'
+        });
+      }
     }
   });
-  console.log('playlist is', $scope.audioPlayerPlaylist);
+// console.log('playlist is', $scope.audioPlayerPlaylist);
 
   $scope.currentSpeaker = {};
   $scope.isSyncing = true;
@@ -70,6 +59,7 @@ angular.module('qldarchApp')
 
   function scrollToTime(time, duration) {
     console.log('scrolling to time!');
+    console.log(time);
     if (!duration) {
       duration = 2000;
     }
@@ -95,7 +85,7 @@ angular.module('qldarchApp')
   var exchangeDisplayCountDefault = 10;
   if ($stateParams.time) {
     $scope.startTime = $stateParams.time;
-    angular.forEach(interview.transcript.exchanges, function (exchange, index) {
+    angular.forEach(interview.transcript, function (exchange, index) {
       if (exchange.startTime.toString() === $stateParams.time.toString()) {
         console.log('once');
         $scope.exchangeDisplayCount = index + 20;
@@ -117,25 +107,25 @@ angular.module('qldarchApp')
   function setCurrentExchangeFromTime(currentTime) {
     var index;
     if (interview.transcript) {
-      angular.forEach($scope.interview.transcript.exchanges, function (exchange, exchangeIndex) {
+      angular.forEach($scope.interview.transcript, function (exchange, exchangeIndex) {
         if (currentTime < exchange.endTime && !angular.isDefined(index)) {
           index = exchangeIndex;
         }
       });
       if (index >= 0) {
         $scope.currentExchangeIndex = index;
-        $scope.currentExchange = $scope.interview.transcript.exchanges[index];
+        $scope.currentExchange = $scope.interview.transcript[index];
         // change request #36, only show photos of the interviewees.
         // i think the currentSpeaker is used for the photo on the
         // interview page and for nothing else (Andre)
         if($scope.currentExchange.speaker && !$scope.currentExchange.speaker.isInterviewer) {
           $scope.currentSpeaker = $scope.currentExchange.speaker;
         } else {
-          $scope.currentSpeaker = interview.interviewees[0];
+          $scope.currentSpeaker = interview.interviewee[0].label;
         }
       }
     } else {
-      $scope.currentSpeaker = interview.interviewees[0];
+      $scope.currentSpeaker = interview.interviewee[0].label;
     }
   }
 
@@ -227,7 +217,7 @@ angular.module('qldarchApp')
         debouncedGetEntitiesByName(options.term, options.callback);
       }
   };
-  
+
   $scope.objectSelectOptions = {
       placeholder: 'Object',
       dropdownAutoWidth: true,
@@ -287,30 +277,32 @@ angular.module('qldarchApp')
     }
   };
 
-  $scope.typeSelect = {
-      placeholder: 'Select a Type',
-      dropdownAutoWidth: true,
-      multiple: false,
-      query: function (options) {
-        var data = {
-            results: []
-        };
-        // exchange.isFullName
-        angular.forEach(types, function (type) {
-          if (type.uri !== Uris.QA_BUILDING_TYPOLOGY && type[Uris.QA_SINGULAR].toLowerCase().indexOf(options.term.toLowerCase()) !== -1) {
-            data.results.push({
-              id: type.uri,
-              uri: type.uri,
-              text: type[Uris.QA_SINGULAR],
-              name: type[Uris.QA_SINGULAR],
-              encodedUri: type.encodedUri,
-            });
-          }
-        });
-        data.results.sort(function(a,b) { return a.text.localeCompare(b.text);});
-        options.callback(data);
-      }
-  };
+// $scope.typeSelect = {
+// placeholder: 'Select a Type',
+// dropdownAutoWidth: true,
+// multiple: false,
+// query: function (options) {
+// var data = {
+// results: []
+// };
+// // exchange.isFullName
+// angular.forEach(types, function (type) {
+// if (type.uri !== Uris.QA_BUILDING_TYPOLOGY &&
+// type[Uris.QA_SINGULAR].toLowerCase().indexOf(options.term.toLowerCase()) !==
+// -1) {
+// data.results.push({
+// id: type.uri,
+// uri: type.uri,
+// text: type[Uris.QA_SINGULAR],
+// name: type[Uris.QA_SINGULAR],
+// encodedUri: type.encodedUri,
+// });
+// }
+// });
+// data.results.sort(function(a,b) { return a.text.localeCompare(b.text);});
+// options.callback(data);
+// }
+// };
 
   $scope.typologySelect = {
       placeholder: 'Select a Building Typology',
@@ -384,12 +376,12 @@ angular.module('qldarchApp')
         noteText = exchange.newRelationship.note.text;
       }
     } else {
-      subjectSubject = $scope.interview.interviewees[0];
-      subjectText = $scope.interview.interviewees[0].name;
+      subjectSubject = $scope.interview.interviewee[0];
+      subjectText = $scope.interview.interviewee[0].label;
     }
 
     // Close any other ones that may be open
-    angular.forEach($scope.interview.transcript.exchanges, function (exchange) {
+    angular.forEach($scope.interview.transcript, function (exchange) {
       $scope.hideAddRelationship(exchange);
     });
     exchange.isCreatingEntity = false;
@@ -433,7 +425,7 @@ angular.module('qldarchApp')
       exchange.newRelationship.note.text = noteText;
     }
   };
- 
+
   /**
    * Removes the add relationship box for an exchange.
    * 
@@ -448,7 +440,7 @@ angular.module('qldarchApp')
 
   $scope.showEditRelationships = function (exchange) {
     // Close any other ones that may be open
-    angular.forEach($scope.interview.transcript.exchanges, function (exchange) {
+    angular.forEach($scope.interview.transcript, function (exchange) {
       $scope.hideAddRelationship(exchange);
     });
     $scope.audioPlayer.pause();
@@ -467,8 +459,6 @@ angular.module('qldarchApp')
     // Splice out the relationship
     var index = exchange.relationships.indexOf(relationship);
     exchange.relationships.splice(index, 1);
-
-    console.log('relationship', relationship);
     angular.forEach(relationship.evidences, function (evidence) {
       $http.delete('/ws/rest/annotation/evidence?ID=' + encodeURIComponent(evidence.uri)).
       catch (function () {
@@ -536,6 +526,7 @@ angular.module('qldarchApp')
    * @returns {boolean}
    */
   $scope.timeFilter = function (exchange) {
+// console.log('audioPlayer currenttime: ' + $scope.audioPlayer.currentTime);
     if ($scope.isSyncing && !$scope.isSearching) {
       if ($scope.audioPlayer.currentTime === 0) {
         return true;
@@ -547,6 +538,7 @@ angular.module('qldarchApp')
     }
   };
 
+// console.log('audioPlayer currenttime' + $scope.audioPlayer.currentTime);
   var nextMatch = 0;
 
   /**
@@ -558,7 +550,7 @@ angular.module('qldarchApp')
     $scope.isSearching = true;
     nextMatch = 0;
     $scope.audioPlayer.pause();
-    $scope.exchangeDisplayCount = interview.transcript.exchanges.length;
+    $scope.exchangeDisplayCount = interview.transcript.length;
 
     if (transcriptSearchInput === '') {
       // cleared
@@ -585,9 +577,7 @@ angular.module('qldarchApp')
    */
   $scope.playFromExchange = function (exchange) {
     $scope.audioPlayer.pause();
-
     console.log('play from exchange');
-
     jQuery('html, body').animate({
       scrollTop: jQuery('.player').offset().top + 'px'
     }, 500, 'swing', function () {
@@ -597,6 +587,60 @@ angular.module('qldarchApp')
       playing();
       $scope.audioPlayer.play();
     });
+  };
+
+  $scope.getRelationshipSubjectType = function(id) {
+    var type;
+    angular.forEach(relationships, function (relationship) {
+      if (id === relationship.subject) {
+        type = relationship.subjectype;
+      }
+    });
+    return type;
+  };
+
+  $scope.getRelationshipObjectType = function(id) {
+    var type;
+    angular.forEach(relationships, function (relationship) {
+      if (id === relationship.object) {
+        type = relationship.objecttype;
+      }
+    });
+    return type;
+  };
+
+  $scope.getRelationshipType = function(id) {
+    var type;
+    angular.forEach(relationships, function (relationship) {
+      if (id === relationship.object) {
+        type = relationship.objecttype;
+      }
+    });
+    return type;
+  };
+
+  $scope.getRelationshipSubjectArchitect = function(id, subject) {
+    var subjectarchitect;
+    angular.forEach(relationships, function (relationship) {
+      if (id === relationship.relationshipid) {
+        subjectarchitect = relationship.subjectarchitect;
+      } else if (subject === relationship.subject && !subjectarchitect) {
+        subjectarchitect = relationship.subjectarchitect;
+      }
+    });
+    return subjectarchitect;
+  };
+
+  $scope.getRelationshipObjectArchitect = function(id, object) {
+    var objectarchitect;
+    angular.forEach(relationships, function (relationship) {
+      if (id === relationship.relationshipid) {
+        objectarchitect = relationship.objectarchitect;
+      } else if (object === relationship.object && !objectarchitect) {
+        objectarchitect = relationship.objectarchitect;
+      }
+    });
+    return objectarchitect;
   };
 
 });

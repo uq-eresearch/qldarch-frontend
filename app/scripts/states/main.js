@@ -6,7 +6,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
     controller : 'MainCtrl',
     resolve : {
       // Load X number of interviews
-      interviews : [ 'InterviewRepository', 'Expression', 'GraphHelper', 'Uris', 'Architect', '$filter', 'Interview', function(InterviewRepository) {
+      interviews : [ 'InterviewRepository', function(InterviewRepository) {
         return InterviewRepository.getInterviewsForCarousel();
 
       } ],
@@ -16,7 +16,6 @@ angular.module('qldarchApp').config(function($stateProvider) {
           compoundObjects = $filter('filter')(compoundObjects, function(compoundObject) {
             return angular.isDefined(compoundObject.jsonData.type);
           });
-          console.log('compoundObjects', compoundObjects);
           return compoundObjects;
         });
       } ]

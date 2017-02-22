@@ -6,7 +6,8 @@
 <div class="content">
   <div class="page-header">
     <div class="container">
-      <h1>Search Results - "{{ query }}"</h1>
+      <h1>Search Results</h1>
+      <!-- <h1>Search Results - "{{ query }}"</h1> -->
     </div>
   </div>
   <div class="text-center" ng-show="!results">
@@ -17,7 +18,7 @@
       <div ng-repeat="result in results | orderBy:'-score'" class="row" style="margin-bottom: 40px;">
         <img src="" alt="">
         <div class="col-md-1">
-          <img ng-src="{{ result.image }}" alt="" class="img-responsive" ng-show="result.image">
+          <img ng-src="{{Uris.WS_MEDIA+result.id+'?dimension=68x65'}}" alt="" class="img-responsive" ng-show="result.id">
           <div class="square square-icon" ng-class="{'square-interview': result.type=='person', 'square-article': result.type == 'structure'}">
             <div class="square-content">
               <div class="center">
@@ -31,10 +32,14 @@
         <div class="col-md-8">
           <!-- Title -->
           <h3>
-            <a href="#!{{ result.link }}" style="color: #333"> {{ result.label }} </a> <small class="text-muted" style="text-transform: capitalize;"> {{ result.type }} </small>
+            <a ng-if="result.type=='person'" ui-sref="architect.summary({ architectId: result.id })" style="color: #333"> {{ result.preflabel||result.label }} </a> <a
+              ng-if="result.type=='firm'" ui-sref="firm.summary({ firmId: result.id })" style="color: #333"> {{ result.label }} </a> <a
+              ng-if="result.type=='structure'" ui-sref="structure.summary({ structureId: result.id })" style="color: #333"> {{ result.label }} </a> <a
+              ng-if="result.type=='interview'" ui-sref="interview.summary({ interviewId: result.id })" style="color: #333"> {{ result.label }} </a> <small
+              class="text-muted" style="text-transform: capitalize;"> {{ result.type }} </small>
           </h3>
           <!-- /Title -->
-          <p class="text-muted">{{ result.summary }}</p>
+          <p class="text-muted">{{ result.summary | limitTo: 200 }}{{result.summary.length > 200 ? '...' : ''}}</p>
           <h5 class="text-muted">
             <!-- Authors -->
             <span ng-show="result.authors">{{ result.authors }},</span>

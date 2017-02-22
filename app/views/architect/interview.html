@@ -1,10 +1,10 @@
 <div class="interview">
   <div class="alert alert-warning" style="margin: 0;" ng-show="Auth.role === 'editor' || Auth.role === 'root'">
     <div class="container">
-      <button class="btn btn-default btn-xs" ui-sref="upload.interviews({ id: interview.encodedUri })">
+      <button class="btn btn-default btn-xs" ui-sref="upload.interviews({ id: interview.id })">
         <i class="fa fa-pencil"></i> Edit
       </button>
-      <button class="btn btn-default btn-xs" ng-click="delete(interview)" ng-show="Auth.canDelete(interview.uri)">
+      <button class="btn btn-default btn-xs" ng-click="delete(interview)" ng-show="Auth.canDelete(interview.id)">
         <i class="fa fa-trash-o"></i> Delete
       </button>
     </div>
@@ -16,8 +16,8 @@
       <div class="player-video">
         <div class="container">
           <div class="row">
-            <div class="col-sm-4 col-sm-offset-4">
-              <img class="media-object img-full" ng-src="{{ currentSpeaker.picture.file }}" alt="{{ currentSpeaker.name }}">
+            <div ng-repeat="interviewee in interview.interviewee" class="col-sm-4 col-sm-offset-4">
+              <img class="media-object img-full" ng-src="{{Uris.WS_MEDIA+interviewee.media+'?dimension=360x320'}}" alt="{{interviewee.label}}">
             </div>
           </div>
         </div>
@@ -28,7 +28,8 @@
         <div class="container">
           <div class="row">
             <div class="col-md-12 test">
-              <audio data-player-control="audioPlayer" data-playlist="audioPlayerPlaylist" data-player-name="audioPlayer" audio-player id="audio1" controls="controls">
+              <audio data-player-control="audioPlayer" data-playlist="audioPlayerPlaylist" data-player-name="audioPlayer" audio-player id="audio1"
+                controls="controls">
               </audio>
             </div>
           </div>
@@ -41,12 +42,17 @@
   <div class="l-frame l-frame-tight l-frame-highlight">
     <div class="interview-heading">
       <div class="container">
-        <a ng-show="youtubeUrl.length" ng-href="{{ youtubeUrl }}" target="_blank" class="pull-right">Watch on YouTube</a>
-        <h5 ng-click="isShowingInterviewDetails = !isShowingInterviewDetails" class="pull-left" style="margin: 0; padding: 0; position: relative; top: 3px;">
-          <i class="fa fa-fw" ng-class="{'fa-chevron-right': !isShowingInterviewDetails, 'fa-chevron-down': isShowingInterviewDetails}"></i>{{ interview[Uris.DCT_CREATED] | date:'dd MMMM yyyy' }}
+        <div ng-repeat="media in interview.media">
+          <a ng-show="media.type==='Youtube'" ng-href="{{ media.url }}" target="_blank" class="pull-right">Watch on YouTube</a>
+        </div>
+        <h5 ng-click="isShowingInterviewDetails = !isShowingInterviewDetails" class="pull-left"
+          style="margin: 0; padding: 0; position: relative; top: 3px;">
+          <i class="fa fa-fw" ng-class="{'fa-chevron-right': !isShowingInterviewDetails, 'fa-chevron-down': isShowingInterviewDetails}"></i>{{
+          interview.created | date:'dd MMMM yyyy' }}
         </h5>
         <div class="text-center">
-          <span ng-repeat="interviewee in interview.interviewees" style="font-weight: bold;"> <a ng-href="#!/{{ interviewee.type }}/summary?{{ interviewee.type  }}Id={{ interviewee.encodedUri }}"> {{ interviewee.name }} </a>
+          <span ng-repeat="interviewee in interview.interviewee" style="font-weight: bold;"> <a
+            ng-href="#!/architect/summary?architectId={{ interviewee.id }}"> {{ interviewee.label }} </a>
           </span>
         </div>
       </div>
@@ -55,18 +61,21 @@
       <div class="container">
         <div class="row">
           <div class="col-md-6">
-            <h5>Location</h5>
+            <h5 ng-if="interview.location">Location</h5>
             <p>
-              <i class="fa fa-map-marker"></i> <a href="http://maps.google.com/?q={{ interview[Uris.QA_LOCATION] }}" target="_blank">{{ interview[Uris.QA_LOCATION] }}</a>
+              <i ng-if="interview.location" class="fa fa-map-marker"></i> <a href="http://maps.google.com/?q={{ interview.location }}" target="_blank">{{
+                interview.location }}</a>
             </p>
           </div>
           <div class="col-md-6">
             <h5>Interviewers</h5>
             <ul class="media-list">
-              <li class="media" ng-repeat="interviewer in interview.interviewers"><span class="pull-left"> <img class="media-object img-responsive img-circle" ng-if="!interviewer.picture" src="images/icon.png"
-                  style="display: block; width: 20px"> <img class="media-object img-responsive img-circle" ng-if="interviewer.picture" ng-src="{{ interviewer.picture.file }}" alt="{{ interviewer.name }}" style="width: 20px">
+              <li class="media" ng-repeat="interviewer in interview.interviewer"><span class="pull-left"> <img
+                  class="media-object img-responsive img-circle" ng-if="!interviewer.media" src="images/icon.png" style="display: block; width: 20px">
+                  <img class="media-object img-responsive img-circle" ng-if="interviewer.media"
+                  ng-src="{{Uris.WS_MEDIA+interviewer.media+'?dimension=20x20'}}" alt="{{ interviewer.label }}" style="width: 20px">
               </span>
-                <div class="media-body">{{ interviewer.name }}</div></li>
+                <div class="media-body">{{ interviewer.label }}</div></li>
             </ul>
           </div>
         </div>
@@ -80,7 +89,8 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="btn-group pull-left">
-              <button type="button" class="btn btn-default" ng-model="$parent.isSyncing" btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false" tooltip="Sync Transcript">
+              <button type="button" class="btn btn-default" ng-model="$parent.isSyncing" btn-checkbox btn-checkbox-true="true"
+                btn-checkbox-false="false" uibTooltip="Sync Transcript">
                 <i class="fa fa-refresh" ng-class="{ 'fa-spin': isSyncing && audioPlayer.playing }"> </i>
               </button>
             </div>
@@ -89,25 +99,34 @@
                 <i class="fa fa-cloud-download"></i> Download <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" role="menu">
-                <li><a ng-href="{{ download.mp3 }}" target="_blank">Audio</a></li>
-                <li><a ng-href="{{ interview.transcriptFile.file }}" target="_blank">Transcript</a></li>
+                <li ng-hide="!(interview.media|filter:{type:'Audio'}).length"><a
+                  ng-href="{{Uris.WS_DOWNLOAD+(interview.media|filter:{type:'Audio'})[0].id}}" target="_blank">Audio</a></li>
+                <li ng-hide="!(interview.media|filter:{type:'Transcript'}).length"><a
+                  ng-href="{{Uris.WS_DOWNLOAD+(interview.media|filter:{type:'Transcript'})[0].id}}" target="_blank">Transcript</a></li>
               </ul>
             </div>
             <div class="input-group" style="padding: 0 15px;">
-              <span class="input-group-addon"><i class="fa fa-search"></i> </span> <input type="text" class="form-control" placeholder="Search transcript" ng-model="transcriptSearchInput"
-                ng-change="transcriptSearchInputChanged(transcriptSearchInput)" ng-keydown="transcriptSearchKeydown($event)">
+              <span class="input-group-addon"><i class="fa fa-search"></i> </span> <input type="text" class="form-control"
+                placeholder="Search transcript" ng-model="transcriptSearchInput" ng-change="transcriptSearchInputChanged(transcriptSearchInput)"
+                ng-keydown="transcriptSearchKeydown($event)">
             </div>
           </div>
         </div>
         <!-- exchanges -->
         <div infinite-scroll="addMoreExchanges()" class="interview-exchanges" style="margin-top: 24px;">
-          <div ng-repeat="exchange in interview.transcript.exchanges | filter:timeFilter | limitTo:exchangeDisplayCount" class="row exchange" ng-class="{'exchange-searching': isSearching}" id="{{ exchange.startTime }}" style="margin-bottom: 20px">
+          <div ng-repeat="exchange in interview.transcript | filter:timeFilter | limitTo:exchangeDisplayCount" class="row exchange"
+            ng-class="{'exchange-searching': isSearching}" id="{{ exchange.id }}" style="margin-bottom: 20px">
             <!-- transcript -->
             <div class="col-sm-6">
               <div class="media">
                 <div class="pull-left" style="text-align: center">
-                  <img ng-show="exchange.speaker" class="media-object exchange-dp" ng-src="{{ exchange.speaker.picture.thumb }}" alt="" style="width: 32px" /> <img ng-hide="exchange.speaker" class="media-object exchange-dp" src="images/icon.png"
-                    alt="" style="width: 32px" />
+                  <img
+                    ng-if="(interview.interviewer|filter:{id:exchange.speakerid})[0].media||(interview.interviewee|filter:{id:exchange.speakerid})[0].media"
+                    class="media-object exchange-dp"
+                    ng-src="{{Uris.WS_MEDIA+((interview.interviewer|filter:{id:exchange.speakerid})[0].media||(interview.interviewee|filter:{id:exchange.speakerid})[0].media)+'?dimension=32x28'}}"
+                    alt="" style="width: 32px" /> <img
+                    ng-if="!((interview.interviewer|filter:{id:exchange.speakerid})[0].media||(interview.interviewee|filter:{id:exchange.speakerid})[0].media)"
+                    class="media-object exchange-dp" src="images/icon.png" alt="" style="width: 32px" />
                   <!-- play button -->
                   <button class="btn btn-xs btn-default exchange-play" ng-click="playFromExchange(exchange)">
                     <i class="fa fa-play"></i>
@@ -117,7 +136,8 @@
                 </div>
                 <div class="media-body">
                   <div class="media-heading">
-                    <strong> <a ng-href="{{exchange.speaker.$link}}"> {{ exchange.speaker.name }} </a> <span ng-show="!exchange.speaker"> {{ exchange.speakerInitials }} </span>
+                    <strong> <a ui-sref="architect.summary({architectId: exchange.speakerid})"> {{ exchange.speaker }} </a> <span
+                      ng-show="!exchange.speaker"> {{ exchange.speakerInitials }} </span>
                     </strong> <span class="pull-right" ng-show="isSearching">{{ exchange.time }}</span>
                   </div>
                   <p ng-bind-html="exchange.transcript | highlight:transcriptSearchInput" ng-class="{ highlight: startTime == exchange.startTime }"></p>
@@ -134,11 +154,13 @@
                     <button type="button" class="btn btn-default btn-xs" ng-click="showAddRelationship(exchange)">
                       <i class="fa fa-plus fa-fw"></i>
                     </button>
-                    <button type="button" class="btn btn-default btn-xs" ng-click="showEditRelationships(exchange)" ng-show="exchange.relationships.length">
+                    <button type="button" class="btn btn-default btn-xs" ng-click="showEditRelationships(exchange)"
+                      ng-show="exchange.relationships.length">
                       <i class="fa fa-pencil fa-fw"></i>
                     </button>
                   </span>
-                  <button type="button" class="btn btn-primary btn-xs" ng-click="hideEditRelationships(exchange)" ng-show="exchange.isEditingRelationships">
+                  <button type="button" class="btn btn-primary btn-xs" ng-click="hideEditRelationships(exchange)"
+                    ng-show="exchange.isEditingRelationships">
                     <i class="fa fa-check fa-fw"></i>
                   </button>
                   <!-- /Control Buttons -->
@@ -151,26 +173,34 @@
                       ng-if="((exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_EDUCATIONAL_INSTITUTION) || 
                     									(exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_ORGANISATION) || 
                     									(exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_GOVERNMENT_INSTITUTION))">
-                      <label>Name<i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" ng-model="exchange.$entityForm[Uris.FOAF_NAME]" class="form-control" placeholder="Name">
+                      <label>Name<i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text"
+                        ng-model="exchange.$entityForm[Uris.FOAF_NAME]" class="form-control" placeholder="Name">
                     </div>
                     <div class="form-group" ng-if="exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_PUBLICATION_TYPE">
-                      <label>Title<i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" ng-model="exchange.$entityForm[Uris.QA_CITATION]" class="form-control" placeholder="Title">
+                      <label>Title<i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text"
+                        ng-model="exchange.$entityForm[Uris.QA_CITATION]" class="form-control" placeholder="Title">
                     </div>
                     <div class="form-group" ng-if="exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_EVENT_TYPE">
-                      <label>Title<i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" ng-model="exchange.$entityForm[Uris.QA_EVENT_TITLE]" class="form-control" placeholder="Title">
+                      <label>Title<i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text"
+                        ng-model="exchange.$entityForm[Uris.QA_EVENT_TITLE]" class="form-control" placeholder="Title">
                     </div>
                     <div class="form-group" ng-if="exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_AWARD_TYPE">
-                      <label>Title<i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" ng-model="exchange.$entityForm[Uris.QA_AWARD_TITLE]" class="form-control" placeholder="Title">
+                      <label>Title<i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text"
+                        ng-model="exchange.$entityForm[Uris.QA_AWARD_TITLE]" class="form-control" placeholder="Title">
                     </div>
-                    <div class="form-group" ng-if="((exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_PLACE_TYPE) ||
+                    <div class="form-group"
+                      ng-if="((exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_PLACE_TYPE) ||
                     									(exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_STRUCTURE_TYPE))">
-                      <label>Name<i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" ng-model="exchange.$entityForm[Uris.QA_LABEL]" class="form-control" placeholder="Name">
+                      <label>Name<i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text"
+                        ng-model="exchange.$entityForm[Uris.QA_LABEL]" class="form-control" placeholder="Name">
                     </div>
                     <div class="form-group" ng-if="exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_TOPIC_TYPE">
-                      <label>Topic Heading<i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" ng-model="exchange.$entityForm[Uris.QA_TOPIC_HEADING]" class="form-control" placeholder="Topic Heading">
+                      <label>Topic Heading<i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text"
+                        ng-model="exchange.$entityForm[Uris.QA_TOPIC_HEADING]" class="form-control" placeholder="Topic Heading">
                     </div>
                     <div class="form-group" ng-if="exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_FIRM_TYPE">
-                      <label>Name<i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" ng-model="exchange.$entityForm[Uris.QA_FIRM_NAME]" class="form-control" placeholder="Name">
+                      <label>Name<i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text"
+                        ng-model="exchange.$entityForm[Uris.QA_FIRM_NAME]" class="form-control" placeholder="Name">
                     </div>
                     <div class="form-group"
                       ng-if="((exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.FOAF_PERSON_TYPE) || 
@@ -189,11 +219,13 @@
                     </div>
                     <div class="form-group" ng-if="exchange.$entityForm[Uris.RDF_TYPE].uri == Uris.QA_STRUCTURE_TYPE">
                       <label>Building Typology <i class="fa fa-asterisk fa-asterisk-required"></i></label>
-                      <div name="typology" ui-select2="typologySelect" ng-model="exchange.$entityForm[Uris.QA_BUILDING_TYPOLOGY_P]" class="form-control required" ng-required="true"></div>
+                      <div name="typology" ui-select2="typologySelect" ng-model="exchange.$entityForm[Uris.QA_BUILDING_TYPOLOGY_P]"
+                        class="form-control required" ng-required="true"></div>
                     </div>
                     <div class="form-group">
                       <label for="summary">Summary</label>
-                      <textarea ui-tinymce="tinymceOptions" rows="4" id="summary" class="form-control" placeholder="Summary" ng-model="exchange.$entityForm[Uris.QA_SUMMARY]"></textarea>
+                      <textarea ui-tinymce="tinymceOptions" rows="4" id="summary" class="form-control" placeholder="Summary"
+                        ng-model="exchange.$entityForm[Uris.QA_SUMMARY]"></textarea>
                     </div>
                     <button type="submit" class="btn btn-sm btn-primary" ng-click="addEntity(exchange)">Add</button>
                     <button class="btn btn-sm btn-default" ng-click="showAddRelationship(exchange)">Cancel</button>
@@ -204,10 +236,12 @@
                       <label>Subject</label>
                       <div class="row">
                         <div class="col-sm-9">
-                          <div name="subject" ui-select2="subjectSelectOptions" ng-model="exchange.newRelationship.subject" class="form-control" ng-required="true"></div>
+                          <div name="subject" ui-select2="subjectSelectOptions" ng-model="exchange.newRelationship.subject" class="form-control"
+                            ng-required="true"></div>
                         </div>
                         <div class="col-sm-3">
-                          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 109px; padding-top: 4px; padding-bottom: 4px;">
+                          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                            style="width: 109px; padding-top: 4px; padding-bottom: 4px;">
                             Add New&nbsp;&nbsp;&nbsp;<span class="caret"></span>
                           </button>
                           <ul class="dropdown-menu" role="addNew">
@@ -221,16 +255,19 @@
                     </div>
                     <div class="form-group">
                       <label>Relationship</label>
-                      <div name="relationship" ui-select2="relationshipSelectOptions" ng-model="exchange.newRelationship.predicate" class="form-control" ng-required="true"></div>
+                      <div name="relationship" ui-select2="relationshipSelectOptions" ng-model="exchange.newRelationship.predicate"
+                        class="form-control" ng-required="true"></div>
                     </div>
                     <div class="form-group">
                       <label>Object</label>
                       <div class="row">
                         <div class="col-sm-9">
-                          <div name="object" ui-select2="objectSelectOptions" ng-model="exchange.newRelationship.object" class="form-control" ng-required="true"></div>
+                          <div name="object" ui-select2="objectSelectOptions" ng-model="exchange.newRelationship.object" class="form-control"
+                            ng-required="true"></div>
                         </div>
                         <div class="col-sm-3">
-                          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 109px; padding-top: 4px; padding-bottom: 4px;">
+                          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                            style="width: 109px; padding-top: 4px; padding-bottom: 4px;">
                             Add New&nbsp;&nbsp;&nbsp;<span class="caret"></span>
                           </button>
                           <ul class="dropdown-menu" role="addNew">
@@ -246,7 +283,8 @@
                       <label>Dates</label>
                       <div class="row">
                         <div class="col-sm-6">
-                          <input name="startYear" type="number" class="form-control" placeholder="Start Year" ng-model="exchange.newRelationship.startYear" />
+                          <input name="startYear" type="number" class="form-control" placeholder="Start Year"
+                            ng-model="exchange.newRelationship.startYear" />
                         </div>
                         <div class="col-sm-6">
                           <input name="endYear" type="number" class="form-control" placeholder="End Year" ng-model="exchange.newRelationship.endYear" />
@@ -257,20 +295,48 @@
                       <label>Note</label>
                       <textarea name="note" class="form-control" placeholder="Note" cols="30" rows="10" ng-model="exchange.newRelationship.note"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-sm btn-primary" ng-click="addRelationshipToExchange(exchange.newRelationship, exchange)" ng-disabled="exchange.$form.$invalid">Add</button>
+                    <button type="submit" class="btn btn-sm btn-primary" ng-click="addRelationshipToExchange(exchange.newRelationship, exchange)"
+                      ng-disabled="exchange.$form.$invalid">Add</button>
                     <button class="btn btn-sm btn-default" ng-click="hideAddRelationship(exchange)">Cancel</button>
                   </form>
                 </div>
                 <!-- Relationship List -->
                 <ul class="list-group" ng-if="exchange.relationships.length">
                   <li class="list-group-item" ng-repeat="relationship in exchange.relationships">
-
-                    <button class="btn btn-xs btn-danger" ng-show="exchange.isEditingRelationships" style="margin-right: 5px;" ng-click="deleteRelationship(relationship, exchange)">
+                    <button class="btn btn-xs btn-danger" ng-show="exchange.isEditingRelationships" style="margin-right: 5px;"
+                      ng-click="deleteRelationship(relationship, exchange)">
                       <i class="fa fa-trash-o fa-fw"></i>
-                    </button> <a ng-href="{{ $state.href(relationship.subject.$state + '.summary', relationship.subject.$stateParams) }}" ng-bind-html="relationship.subject.name || '' | highlight:transcriptSearchInput"></a> <span
-                    ng-bind-html="relationship.predicate[Uris.QA_LABEL] || relationship.predicate.name || '' | highlight:transcriptSearchInput"> </span> <a
-                    ng-href="{{ $state.href(relationship.object.$state + '.summary', relationship.object.$stateParams) }}" ng-bind-html="relationship.object.name || '' | highlight:transcriptSearchInput"></a> <!-- Date --> {{
-                    relationship[Uris.QA_START_DATE] }} <span ng-show="relationship[Uris.QA_START_DATE] && relationship[Uris.QA_END_DATE]">-</span> {{ relationship[Uris.QA_END_DATE] }}
+                    </button> <a
+                    ng-if="getRelationshipObjectType(relationship.subject)=='person'&&getRelationshipSubjectArchitect(relationship.id,relationship.subject)==true"
+                    ui-sref="architect.summary({ architectId: relationship.subject })"
+                    ng-bind-html="relationship.subjectlabel || '' | highlight:transcriptSearchInput"></a> <a
+                    ng-if="getRelationshipSubjectType(relationship.subject)=='person'&&getRelationshipSubjectArchitect(relationship.id,relationship.subject)==false"
+                    ui-sref="other.summary({ otherId: relationship.subject })"
+                    ng-bind-html="relationship.subjectlabel || '' | highlight:transcriptSearchInput"></a> <a
+                    ng-if="getRelationshipSubjectType(relationship.subject)=='firm'" ui-sref="firm.summary({ firmId: relationship.subject })"
+                    ng-bind-html="relationship.subjectlabel || '' | highlight:transcriptSearchInput"></a> <a
+                    ng-if="getRelationshipSubjectType(relationship.subject)=='structure'"
+                    ui-sref="structure.summary({ structureId: relationship.subject })"
+                    ng-bind-html="relationSubjectship.subjectlabel || '' | highlight:transcriptSearchInput"></a> <span
+                    ng-if="getRelationshipSubjectType(relationship.subject)!= 'person'&&getRelationshipSubjectType(relationship.subject)!='firm'&&getRelationshipSubjectType(relationship.subject)!='structure'"
+                    ng-bind-html="relationship.subjectlabel || '' | highlight:transcriptSearchInput"></span> <span
+                    ng-bind-html="relationship.relationship || '' | highlight:transcriptSearchInput"> </span> <a
+                    ng-if="getRelationshipObjectType(relationship.object)=='person'&&getRelationshipObjectArchitect(relationship.id,relationship.object)==true"
+                    ui-sref="architect.summary({ architectId: relationship.object })"
+                    ng-bind-html="relationship.objectlabel || '' | highlight:transcriptSearchInput"></a> <a
+                    ng-if="getRelationshipObjectType(relationship.object)=='person'&&getRelationshipObjectArchitect(relationship.id,relationship.object)==false"
+                    ui-sref="other.summary({ otherId: relationship.object })"
+                    ng-bind-html="relationship.objectlabel || '' | highlight:transcriptSearchInput"></a> <a
+                    ng-if="getRelationshipObjectType(relationship.object)=='firm'" ui-sref="firm.summary({ firmId: relationship.object })"
+                    ng-bind-html="relationship.objectlabel || '' | highlight:transcriptSearchInput"></a> <a
+                    ng-if="getRelationshipObjectType(relationship.object)=='structure'"
+                    ui-sref="structure.summary({ structureId: relationship.object })"
+                    ng-bind-html="relationObjectship.objectlabel || '' | highlight:transcriptSearchInput"></a> <span
+                    ng-if="getRelationshipObjectType(relationship.object)!= 'person'&&getRelationshipObjectType(relationship.object)!='firm'&&getRelationshipObjectType(relationship.object)!='structure'"
+                    ng-bind-html="relationship.objectlabel || '' | highlight:transcriptSearchInput"></span> <!-- Date --> <span
+                    ng-show="relationship.from">(</span>{{ relationship.from }}<span ng-show="relationship.from && !relationship.until">)</span><span
+                    ng-show="relationship.from && relationship.until"> - </span><span ng-show="!relationship.from && relationship.until">(</span>{{
+                    relationship.until }}<span ng-show="relationship.until">)</span>
                   </li>
                 </ul>
                 <!-- /Relationship List -->
