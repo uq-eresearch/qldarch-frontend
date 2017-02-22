@@ -20,7 +20,7 @@ angular.module('qldarchApp').directive('timeline', function($timeout) {
       element.attr('id', id);
 
       function reset() {
-        console.log('clearing timeline');
+        // console.log('clearing timeline');
         element.removeClass();
         element.html('');
       }
@@ -39,7 +39,7 @@ angular.module('qldarchApp').directive('timeline', function($timeout) {
         };
 
         if (angular.isDefined($scope.asset)) {
-          console.log('asset is', $scope.asset);
+          // console.log('asset is', $scope.asset);
           timelineData.timeline.asset = $scope.asset;
         }
 
