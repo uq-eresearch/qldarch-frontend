@@ -6,30 +6,40 @@ angular.module('qldarchApp').config(
         url : '/projects',
         templateUrl : 'views/firm/structures.html',
         resolve : {
-          structures : [ '$stateParams', 'GraphHelper', 'Uris', 'Structure', 'Relationship',
-              function($stateParams, GraphHelper, Uris, Structure, Relationship) {
-                var firmUri = GraphHelper.decodeUriString($stateParams.firmId);
-                return Relationship.findBySubjectPredicateObject({
-                  predicate : 'qldarch:designedBy',
-                  object : firmUri
-                }).then(function(relationships) {
-                  // Get all the architects
-                  var structureUris = GraphHelper.getAttributeValuesUnique(relationships, Uris.QA_SUBJECT);
-
-                  return Structure.loadList(structureUris, true).then(function(structures) {
-                    var relationshipStructures = GraphHelper.graphValues(structures);
-
-                    // Get the associated firms...this is awful
-                    // should be all relationships or nothing!
-                    return Structure.findByAssociatedFirmUri(firmUri).then(function(firmStructures) {
-                      var structures = angular.extend(relationshipStructures, firmStructures);
-                      return GraphHelper.graphValues(structures);
+          structures : [
+              'firm',
+              '$filter',
+              '$http',
+              'Uris',
+              function(firm, $filter, $http, Uris) {
+                /* globals _:false */
+                var typestructure = $filter('filter')(
+                    firm.relationships,
+                    function(relationship) {
+                      if (relationship.subjectype === 'structure' || relationship.objecttype === 'structure') {
+                        if (relationship.subjectype === 'structure') {
+                          relationship.structurelabel = relationship.subjectlabel;
+                        }
+                        if (relationship.objecttype === 'structure') {
+                          relationship.structurelabel = relationship.objectlabel;
+                        }
+                        return $http.get(
+                            Uris.WS_ROOT + 'archobj/' + ((relationship.subjectype === 'structure') ? relationship.subject : relationship.object))
+                            .then(function(result) {
+                              if (angular.isUndefined(relationship.media)) {
+                                relationship.media = $filter('filter')(result.data.media, function(med) {
+                                  return (med.preferred || (med.type === 'Photograph' || 'Portrait' || 'Image'));
+                                }).id;
+                              }
+                              return relationship;
+                            });
+                      }
                     });
-                  });
-                });
+                return _.uniqBy(typestructure, 'structurelabel');
               } ]
         },
         controller : [ '$scope', 'firm', 'structures', 'LayoutHelper', function($scope, firm, structures, LayoutHelper) {
+          console.log(structures);
           $scope.firm = firm;
           $scope.structureRows = LayoutHelper.group(structures, 6);
         } ]
