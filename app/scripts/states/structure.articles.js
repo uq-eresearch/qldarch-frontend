@@ -6,7 +6,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
     templateUrl : 'views/architect/articles.html',
     resolve : {
       articles : [ 'SearchService', 'structure', function(SearchService, structure) {
-        return SearchService.getArticles(structure.name);
+        return SearchService.getArticles(structure.label);
       } ]
     },
     controller : [ '$scope', 'articles', function($scope, articles) {
