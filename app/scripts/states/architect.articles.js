@@ -7,7 +7,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
     controller : 'ArchitectArticlesCtrl',
     resolve : {
       articles : [ 'SearchService', 'architect', function(SearchService, architect) {
-        return SearchService.getArticles(architect.name);
+        return SearchService.getArticles(architect.label);
       } ]
     }
   });
