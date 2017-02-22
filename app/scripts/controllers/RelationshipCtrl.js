@@ -2,16 +2,12 @@
 
 angular.module('qldarchApp').controller(
     'RelationshipCtrl',
-    function($scope, data, GraphHelper, $filter) {
-      $scope.relationships = data.relationships;
-      $scope.entities = GraphHelper.graphValues(data.entities);
+    function($scope, data, relationships, subject, interviews, GraphHelper, $filter) {
 
-      // Setup the number of times the entity is referenced (inc'd later)
-      angular.forEach($scope.entities, function(entity) {
-        entity.count = 0;
-      });
+      $scope.relationships = relationships;
+      $scope.subject = subject;
 
-      // We need to transform the data for d3
+      // Transform the data for d3
       var links = [];
       angular.forEach($scope.relationships, function(relationship) {
         if (relationship.subject && relationship.object) {
@@ -19,15 +15,39 @@ angular.module('qldarchApp').controller(
           var matchedLinks = $filter('filter')(
               links,
               function(link) {
-                if ((link.source.uri === relationship.subject.uri && link.target.uri === relationship.object.uri) ||
-                    (link.target.uri === relationship.subject.uri && link.source.uri === relationship.object.uri)) {
+                if ((link.source.id === relationship.subject && link.target.id === relationship.object) ||
+                    (link.target.id === relationship.subject && link.source.id === relationship.object)) {
                   return true;
                 }
               });
           if (matchedLinks.length === 0) {
             // get the source and target from our list of entities;
-            var source = data.entities[relationship.subject.uri];
-            var target = data.entities[relationship.object.uri];
+            var source;
+            var target;
+            if (subject.id !== relationship.subject) {
+              source = {
+                id : relationship.subject,
+                label : relationship.subjectlabel,
+                practicedinqueensland : relationship.subjectpracticedinqueensland,
+                type : relationship.subjectype,
+                architect : (relationship.objectarchitect || relationship.subjectarchitect),
+                media : relationship.media
+              };
+            } else {
+              source = subject;
+            }
+            if (subject.id !== relationship.object) {
+              target = {
+                id : relationship.object,
+                label : relationship.objectlabel,
+                practicedinqueensland : relationship.objectpracticedinqueensland,
+                type : relationship.objecttype,
+                architect : (relationship.subjectarchitect || relationship.objectarchitect),
+                media : relationship.media
+              };
+            } else {
+              target = subject;
+            }
             if (!angular.isDefined(source.count)) {
               source.count = 1;
             }
@@ -36,7 +56,7 @@ angular.module('qldarchApp').controller(
             }
             var link = {
               source : source,
-              target : target,
+              target : target
             };
             links.push(link);
           } else {
@@ -46,26 +66,68 @@ angular.module('qldarchApp').controller(
           }
         }
       });
-      console.log(links);
-      console.log($scope.entities);
+      var entities = [];
+      angular.forEach(links, function(link) {
+        var linksource = false;
+        angular.forEach(entities, function(n) {
+          if (n.id === link.source.id) {
+            linksource = true;
+          }
+        });
+        if (!linksource) {
+          entities.push(link.source);
+        }
+        var linktarget = false;
+        angular.forEach(entities, function(n) {
+          if (n.id === link.target.id) {
+            linktarget = true;
+          }
+        });
+        if (!linktarget) {
+          entities.push(link.target);
+        }
+      });
+
       $scope.data = {
-        nodes : $scope.entities,
+        nodes : entities,
         links : links
       };
-
-      // @todo: needs to select a person by default
-
+      // console.log($scope.data);
       $scope.nodeSelected = function(node) {
         $scope.selected = node;
         $scope.selectedRelationships = [];
         if (node) {
-          angular.forEach(data.relationships, function(relationship) {
-            if ((angular.isDefined(relationship.subject) && (relationship.subject.uri === node.uri)) ||
-                (angular.isDefined(relationship.object) && (relationship.object.uri === node.uri))) {
+          angular.forEach(relationships, function(relationship) {
+            if ((angular.isDefined(relationship.subject) && (relationship.subject === node.id)) ||
+                (angular.isDefined(relationship.object) && (relationship.object === node.id))) {
               $scope.selectedRelationships.push(relationship);
             }
           });
         }
-
       };
+
+      $scope.getArchitectIdofInterviews = function(interviewId) {
+        var architectId;
+        angular.forEach(interviews, function(interview) {
+          angular.forEach(interview.interviews, function(ii) {
+            if (ii === interviewId) {
+              architectId = interview.interviewee;
+            }
+          });
+        });
+        return architectId;
+      };
+
+      $scope.isArchitectFromInterview = function(interviewId) {
+        var isarchitect;
+        angular.forEach(interviews, function(interview) {
+          angular.forEach(interview.interviews, function(ii) {
+            if (ii === interviewId) {
+              isarchitect = interview.architect;
+            }
+          });
+        });
+        return isarchitect;
+      };
+
     });

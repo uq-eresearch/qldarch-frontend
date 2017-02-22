@@ -33,19 +33,19 @@ text {
 	stroke-width: 5px;
 }
 
-.node.node-architect circle {
+.node.node-person circle {
 	fill: #0FACA1;
 }
 
-.node.node-architect:hover circle {
+.node.node-person:hover circle {
 	fill: #3CCDC2;
 }
 
-.node.node-architect.node-architect-nonqueensland circle {
+.node.node-person.node-person-nonqueensland circle {
 	fill: #E42962;
 }
 
-.node.node-architect.node-architect-nonqueensland:hover circle {
+.node.node-person.node-person-nonqueensland:hover circle {
 	fill: #E42962;
 }
 
@@ -73,19 +73,31 @@ text {
     </div>
   </div>
   <div class="l-frame l-frame-highlight" ng-show="data.nodes.length" style="position: relative; padding: 0;">
-    <force data="data" selected="nodeSelected(node)"></force>
-    <div class="panel panel-default" style="width: 300px; position: absolute; top: 16px; bottom: 0; right: 16px;; overflow: scroll;" ng-show="selected">
+    <force data="data" selected="nodeSelected(node)" style="text-transform: capitalize;"></force>
+    <div class="panel panel-default" style="width: 300px; position: absolute; top: 16px; bottom: 0; right: 16px;; overflow: scroll;"
+      ng-show="selected">
       <div class="panel-heading" style="padding: 16px 16px;">
         <i class="fa fa-times pull-right" ng-click="selected = null"></i>
         <div class="media" style="margin-top: 0">
           <div class="pull-left">
-            <img class="media-object" ng-src="{{ selected.picture.thumb }}" alt="{{ selected.name }}" style="width: 50px;">
+            <img ng-if="selected.media&&(selected.type=='person'||selected.type=='firm'||selected.type=='structure'||selected.type=='interview')"
+              class="media-object" ng-src="{{Uris.WS_MEDIA+selected.media+'?dimension=50x50'}}" alt="{{}}" style="width: 50px;">
           </div>
           <div class="media-body">
             <h4 class="media-heading">
-              <a ng-href="{{ $state.href(selected.$state + '.relationships', selected.$stateParams) }}"> {{ selected.name }} </a>
+              <a ng-if="selected.type=='person'" ui-sref="architect.summary({ architectId: selected.id })"> {{ selected.label }} </a> <a
+                ng-if="selected.type=='firm'" ui-sref="firm.summary({ firmId: selected.id })"> {{ selected.label }} </a> <a
+                ng-if="selected.type=='structure'" ui-sref="structure.summary({ structureId: selected.id })"> {{ selected.label }} </a> <a
+                ng-if="selected.type=='interview'&&isArchitectFromInterview(selected.id)==true"
+                ng-href="#!/architect/interview/{{selected.id}}?architectId={{getArchitectIdofInterviews(selected.id)}}"> {{ selected.label }} </a> <a
+                ng-if="selected.type=='interview'&&isArchitectFromInterview(selected.id)==false"
+                ng-href="#!/other/interview/{{selected.id}}?otherId={{getArchitectIdofInterviews(selected.id)}}"> {{ selected.label }} </a>
+              <div ng-if="!(selected.type=='person'||selected.type=='firm'||selected.type=='structure'||selected.type=='interview')"
+                style="text-transform: capitalize;">{{ selected.label }}</div>
             </h4>
-            <div style="text-transform: capitalize; color: black;">{{ selected.type }}</div>
+            <div ng-if="selected.type=='person'&&selected.architect==true" style="text-transform: capitalize; color: black;">Architect</div>
+            <div ng-if="selected.type!='person'||selected.architect==false" style="text-transform: capitalize; color: black;">{{ selected.type
+              }}</div>
           </div>
         </div>
       </div>
@@ -98,12 +110,15 @@ text {
                 <div class="square-content">
                   <div class="center">
                     <div class="center-content">
-                      <div ng-switch on="relationship.implicit">
-                        <div ng-switch-when="true">
-                          <i class="fa fa-plus" style="font-size: 16px;"></i>
+                      <div ng-switch on="relationship.source">
+                        <div ng-switch-when="interview">
+                          <i class="fa fa-microphone" style="font-size: 16px;"></i>
+                        </div>
+                        <div ng-switch-when="structure">
+                          <i class="fa fa-building-o" style="font-size: 16px;"></i>
                         </div>
                         <div ng-switch-default>
-                          <i class="fa fa-microphone" style="font-size: 16px;"></i>
+                          <i class="fa fa-plus" style="font-size: 16px;"></i>
                         </div>
                       </div>
                     </div>
@@ -113,21 +128,34 @@ text {
             </a>
             <div class="media-body">
               <h5 style="line-height: 24px; font-weight: normal; margin-bottom: 0;">
-                <div ng-switch on="relationship.implicit">
-                  <div ng-switch-when="true">
-                    <a href="{{relationship.subject.$link}}">{{ relationship.subject.name }}</a> {{ relationship.predicate.name || relationship.predicate[Uris.QA_LABEL] }} <a href="{{relationship.object.$link}}">{{ relationship.object.name }}</a>
-                  </div>
-                  <div ng-switch-default>
-                    <a ui-sref="interview({interviewId: relationship.evidence.encodedDocumentedBy, time: relationship.evidence[Uris.QA_TIME_FROM] })"> {{ relationship.subject.name }} {{ relationship.predicate.name ||
-                      relationship.predicate[Uris.QA_LABEL] }} {{ relationship.object.name }} </a>
-                  </div>
+                <div ng-if="relationship.source=='interview'">
+                  <a ng-if="isArchitectFromInterview(relationship.interview)==true"
+                    ng-href="#!/architect/interview/{{relationship.interview}}?architectId={{getArchitectIdofInterviews(relationship.interview)}}&time={{relationship.utterance}}">
+                    {{ relationship.subjectlabel }} {{ relationship.relationship }} {{ relationship.objectlabel }} </a> <a
+                    ng-if="isArchitectFromInterview(relationship.interview)==false"
+                    ng-href="#!/other/interview/{{relationship.interview}}?otherId={{getArchitectIdofInterviews(relationship.interview)}}&time={{relationship.utterance}}">
+                    {{ relationship.subjectlabel }} {{ relationship.relationship }} {{ relationship.objectlabel }} </a>
+                </div>
+                <div ng-if="relationship.source=='structure'">
+                  <a ui-sref="structure.summary({ structureId: relationship.object })"> {{ relationship.subjectlabel }} {{
+                    relationship.relationship }} {{ relationship.objectlabel }} </a>
+                </div>
+                <div ng-if="!(relationship.source=='structure')&&!(relationship.source=='interview')">
+                  <a ng-if="relationship.subjectype=='person'" ui-sref="architect.summary({ architectId: (relationship.subject) })"> {{
+                    relationship.subjectlabel }} {{ relationship.relationship }} {{ relationship.objectlabel }} </a> <a
+                    ng-if="relationship.subjectype=='firm'" ui-sref="firm.summary({ firmId: relationship.subject })"> {{ relationship.subjectlabel
+                    }} {{ relationship.relationship }} {{ relationship.objectlabel }} </a> <a ng-if="relationship.subjectype=='structure'"
+                    ui-sref="structure.summary({ structureId: relationship.subject })"> {{ relationship.subjectlabel }} {{
+                    relationship.relationship }} {{ relationship.objectlabel }} </a> <a ng-if="relationship.subjectype=='interview'"
+                    ng-href="#!/architect/interview/{{relationship.subject}}?architectId={{relationship.object}}&time={{relationship.utterance}}">
+                    {{ relationship.subjectlabel }} {{ relationship.relationship }} {{ relationship.objectlabel }} </a>
                 </div>
               </h5>
               <!-- Date -->
               <div style="color: black;">
-                {{ relationship[Uris.QA_START_DATE] }} <span ng-show="relationship[Uris.QA_START_DATE] && relationship[Uris.QA_END_DATE]"> - </span> {{ relationship[Uris.QA_END_DATE] }}
+                {{ relationship.fromyear }} <span ng-show="relationship.fromyear && relationship.untilyear"> - </span> {{ relationship.untilyear }}
               </div>
-              <div style="color: black; font-size: 14px;">{{ relationship[Uris.QA_TEXTUAL_NOTE] }}</div>
+              <div style="color: black; font-size: 14px;">{{ relationship.note }}</div>
             </div>
           </div>
         </li>
@@ -136,14 +164,16 @@ text {
     </div>
     <div class="container" style="position: relative;">
       <div></div>
-      <div style="text-align: center; margin-bottom: 16px;" ng-show="selected && selected.uri !== $parent.entity.uri" class="text-muted">Double click circle to center.</div>
+      <div style="text-align: center; margin-bottom: 16px;" ng-show="selected && selected.id !== subject.id" class="text-muted">Double click
+        circle to center.</div>
     </div>
   </div>
   <div class="l-frame l-frame-tight l-frame-divided">
     <div class="container">
       <h3>Legend</h3>
       <ul class="list-unstyled">
-        <li><div style="display: inline-block; height: 20px; width: 20px; background-color: #0FACA1; margin-right: 8px;"></div> Architect (Practiced in Queensland)</li>
+        <li><div style="display: inline-block; height: 20px; width: 20px; background-color: #0FACA1; margin-right: 8px;"></div> Architect
+          (Practiced in Queensland)</li>
         <li><div style="display: inline-block; height: 20px; width: 20px; background-color: #E42962; margin-right: 8px;"></div> Architect (Other)</li>
         <li><div style="display: inline-block; height: 20px; width: 20px; background-color: #2153B7; margin-right: 8px;"></div> Project</li>
         <li><div style="display: inline-block; height: 20px; width: 20px; background-color: #26D813; margin-right: 8px;"></div> Firm</li>
