@@ -32,7 +32,9 @@
         <div class="col-md-8">
           <!-- Title -->
           <h3>
-            <a ng-if="result.type=='person'" ui-sref="architect.summary({ architectId: result.id })" style="color: #333"> {{ result.preflabel||result.label }} </a> <a
+            <a ng-if="result.type=='person'&&result.architect==true" ui-sref="architect.summary({ architectId: result.id })" style="color: #333">
+              {{ result.preflabel||result.label }} </a> <a ng-if="result.type=='person'&&result.architect==false"
+              ui-sref="other.summary({ otherId: result.id })" style="color: #333"> {{ result.preflabel||result.label }} </a> <a
               ng-if="result.type=='firm'" ui-sref="firm.summary({ firmId: result.id })" style="color: #333"> {{ result.label }} </a> <a
               ng-if="result.type=='structure'" ui-sref="structure.summary({ structureId: result.id })" style="color: #333"> {{ result.label }} </a> <a
               ng-if="result.type=='interview'" ui-sref="interview.summary({ interviewId: result.id })" style="color: #333"> {{ result.label }} </a> <small

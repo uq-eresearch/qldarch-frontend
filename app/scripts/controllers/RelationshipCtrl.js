@@ -30,7 +30,7 @@ angular.module('qldarchApp').controller(
                 label : relationship.subjectlabel,
                 practicedinqueensland : relationship.subjectpracticedinqueensland,
                 type : relationship.subjectype,
-                architect : (relationship.objectarchitect || relationship.subjectarchitect),
+                architect : relationship.subjectarchitect,
                 media : relationship.media
               };
             } else {
@@ -42,7 +42,7 @@ angular.module('qldarchApp').controller(
                 label : relationship.objectlabel,
                 practicedinqueensland : relationship.objectpracticedinqueensland,
                 type : relationship.objecttype,
-                architect : (relationship.subjectarchitect || relationship.objectarchitect),
+                architect : relationship.objectarchitect,
                 media : relationship.media
               };
             } else {

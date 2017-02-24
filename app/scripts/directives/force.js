@@ -72,9 +72,12 @@ angular.module('qldarchApp').directive(
               if (d.type) {
                 // console.log('going to', d.type + '.relationships', params);
                 var params = {};
-                if (d.type === 'person') {
+                if (d.type === 'person' && d.architect === true) {
                   params.architectId = d.id;
                   $state.go('architect.relationships', params);
+                } else if (d.type === 'person' && d.architect === false) {
+                  params.otherId = d.id;
+                  $state.go('other.relationships', params);
                 } else if (d.type === 'firm') {
                   params.firmId = d.id;
                   $state.go('firm.relationships', params);

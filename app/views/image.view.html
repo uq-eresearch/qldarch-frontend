@@ -3,11 +3,14 @@
     <h1 style="font-size: 24px; margin-bottom: 32px;">
       <a ng-if="depicts.type === 'structure'" ui-sref="structure.photographs({structureId: depicts.id})" style="color: white;"> {{ image.type }}s
         ({{ images.length }}) </a> <a ng-if="depicts.type === 'firm'" ui-sref="firm.photographs({firmId: depicts.id})" style="color: white;"> {{
-        image.type }}s ({{ images.length }}) </a> <a ng-if="depicts.type === 'person'" ui-sref="architect.photographs({architectId: depicts.id})"
-        style="color: white;"> {{ image.type }}s ({{ images.length }}) </a> <span>-</span> <a ng-if="depicts.type === 'structure'"
-        ui-sref="structure.summary({structureId: depicts.id})" style="color: white;"> {{ depicts.label }} </a> <a ng-if="depicts.type === 'firm'"
-        ui-sref="firm.summary({firmId: depicts.id})" style="color: white;"> {{ depicts.label }} </a> <a ng-if="depicts.type === 'person'"
-        ui-sref="architect.summary({architectId: depicts.id})" style="color: white;"> {{ depicts.label }} </a>
+        image.type }}s ({{ images.length }}) </a> <a ng-if="depicts.type === 'person'&&depicts.architect==true"
+        ui-sref="architect.photographs({architectId: depicts.id})" style="color: white;"> {{ image.type }}s ({{ images.length }}) </a> <a
+        ng-if="depicts.type === 'person'&&depicts.architect==false" style="color: white;"> {{ image.type }}s ({{ images.length }}) </a> <span>-</span>
+      <a ng-if="depicts.type === 'structure'" ui-sref="structure.summary({structureId: depicts.id})" style="color: white;"> {{ depicts.label }} </a> <a
+        ng-if="depicts.type === 'firm'" ui-sref="firm.summary({firmId: depicts.id})" style="color: white;"> {{ depicts.label }} </a> <a
+        ng-if="depicts.type === 'person'&&depicts.architect==true" ui-sref="architect.summary({architectId: depicts.id})" style="color: white;">
+        {{ depicts.label }} </a> <a ng-if="depicts.type === 'person'&&depicts.architect==false" ui-sref="other.summary({otherId: depicts.id})"
+        style="color: white;"> {{ depicts.label }} </a>
     </h1>
     <div class="row carousel carousel-big">
       <div class="col-sm-1" class="hidden-phone">
@@ -69,7 +72,8 @@
         <p>
           <a ng-if="depicts.type === 'structure'" ui-sref="structure.summary({structureId: depicts.id})"> {{ depicts.label }} </a> <a
             ng-if="depicts.type === 'firm'" ui-sref="firm.summary({firmId: depicts.id})"> {{ depicts.label }} </a> <a
-            ng-if="depicts.type === 'person'" ui-sref="architect.summary({architectId: depicts.id})"> {{ depicts.label }} </a>
+            ng-if="depicts.type === 'person'&&depicts.architect==true" ui-sref="architect.summary({architectId: depicts.id})"> {{ depicts.label }}
+          </a> <a ng-if="depicts.type === 'person'&&depicts.architect==false" ui-sref="other.summary({otherId: depicts.id})"> {{ depicts.label }} </a>
         </p>
         <h5>External Location</h5>
         <p>{{ image.externallocation || 'No external location.' }}</p>

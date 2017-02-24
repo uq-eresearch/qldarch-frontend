@@ -120,9 +120,12 @@ angular.module('qldarchApp').run(
           // already a result
           console.log('path is', $item.type);
           var params = {};
-          if ($item.type === 'person') {
+          if ($item.type === 'person' && $item.architect === true) {
             params.architectId = $item.id;
             $state.go('architect.summary', params);
+          } else if ($item.type === 'person' && $item.architect === false) {
+            params.otherId = $item.id;
+            $state.go('other.summary', params);
           } else if ($item.type === 'firm') {
             params.firmId = $item.id;
             $state.go('firm.summary', params);

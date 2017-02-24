@@ -4,13 +4,15 @@ angular.module('qldarchApp').controller('SearchCtrl', function($scope, $location
 
   function activate() {
     $scope.query = $location.search().query;
-    $http.get('/ws/search?q=' + $scope.query + '&p=0&pc=20').then(function(response) {
+    $http.get(Uris.WS_ROOT + 'search?q=' + $scope.query + '&p=0&pc=20').then(function(response) {
       var data = response.data.documents;
       /* globals $:false */
       $.each(data, function(i, item) {
         var path;
-        if (item.type === 'person') {
+        if (item.type === 'person' && item.architect === true) {
           path = '/architect/summary?architectId=';
+        } else if (item.type === 'person' && item.architect === false) {
+          path = '/other/summary?otherId=';
         } else if (item.type === 'firm') {
           path = '/firm/summary?firmId=';
         } else if (item.type === 'structure') {
@@ -20,14 +22,7 @@ angular.module('qldarchApp').controller('SearchCtrl', function($scope, $location
         } else if (item.type === 'interview') {
           path = '/interview/';
         }
-        data[i].link = path + btoa(item.uri);
-        if (item.hasOwnProperty('image')) {
-          if (item.image.indexOf('amuys/amuys') !== -1) {
-            data[i].image = Uris.SESAME_THUMB_ROOT + item.image;
-          } else {
-            data[i].image = Uris.OMEKA_THUMB_ROOT + item.image;
-          }
-        }
+        data[i].link = path + item.id;
       });
       $scope.results = data;
     });
