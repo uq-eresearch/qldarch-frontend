@@ -18,8 +18,11 @@ angular.module('qldarchApp').service('Timeline', function Timeline($http, $filte
     }
     if (obj.subject !== id) {
       label = obj.subjectlabel;
-      if (obj.subjectype === 'person') {
+      if (obj.subjectype === 'person' && obj.subjectarchitect === true) {
         opentag = '<a href="#!/architect/summary?architectId=' + obj.subject + '">';
+        closetag = '</a>';
+      } else if (obj.subjectype === 'person' && obj.subjectarchitect === false) {
+        opentag = '<a href="#!/other/summary?otherId=' + obj.subject + '">';
         closetag = '</a>';
       } else if (obj.subjectype === 'firm') {
         opentag = '<a href="#!/firm/summary?firmId=' + obj.subject + '">';
@@ -30,8 +33,11 @@ angular.module('qldarchApp').service('Timeline', function Timeline($http, $filte
       }
     } else {
       label = obj.objectlabel;
-      if (obj.objecttype === 'person') {
+      if (obj.objecttype === 'person' && obj.objectarchitect === true) {
         opentag = '<a href="#!/architect/summary?architectId=' + obj.object + '">';
+        closetag = '</a>';
+      } else if (obj.objecttype === 'person' && obj.objectarchitect === false) {
+        opentag = '<a href="#!/other/summary?otherId=' + obj.object + '">';
         closetag = '</a>';
       } else if (obj.objecttype === 'firm') {
         opentag = '<a href="#!/firm/summary?firmId=' + obj.object + '">';

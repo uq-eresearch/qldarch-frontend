@@ -2,11 +2,11 @@
 
 angular.module('qldarchApp').config(function($stateProvider) {
   $stateProvider.state('structure', {
-    abstract: true,
-    url: '/project?structureId',
-    templateUrl: 'views/structure/layout.html',
-    resolve: {
-      structure: ['$stateParams', '$http', 'Uris', 'Relationshiplabels', function($stateParams, $http, Uris, Relationshiplabels) {
+    abstract : true,
+    url : '/project?structureId',
+    templateUrl : 'views/structure/layout.html',
+    resolve : {
+      structure : [ '$stateParams', '$http', 'Uris', 'Relationshiplabels', function($stateParams, $http, Uris, Relationshiplabels) {
         if (!$stateParams.structureId) {
           return {};
         } else {
@@ -25,20 +25,11 @@ angular.module('qldarchApp').config(function($stateProvider) {
             return result.data;
           });
         }
-      }],
+      } ],
     },
-    controller: ['$scope', 'structure', 'Entity', '$state',function($scope, structure, Entity, $state) {
+    controller : [ '$scope', 'structure', function($scope, structure) {
       $scope.structure = structure;
       $scope.entity = structure;
-
-      $scope.delete = function(structure) {
-        var r = window.confirm('Delete project ' + structure.name + '?');
-        if (r === true) {
-          Entity.delete(structure.uri).then(function() {
-            $state.go('structures.australian');
-          });
-        }
-      };
-    }]
+    } ]
   });
 });
