@@ -39,9 +39,9 @@ angular.module('qldarchApp').controller('ArchitectsCtrl',
       }
 
       architects = $filter('filter')(architects, function(architect) {
-        $scope.indexes[architect.label.substring(0, 1).toUpperCase()] = true;
+        $scope.indexes[architect.lastname.substring(0, 1).toUpperCase()] = true;
         if ($stateParams.index && $stateParams.index.length === 1) {
-          if (isLetter($stateParams.index) && architect.label.substring(0, 1).toUpperCase() === $stateParams.index) {
+          if (isLetter($stateParams.index) && architect.lastname.substring(0, 1).toUpperCase() === $stateParams.index) {
             return true;
           }
           return false;
@@ -50,7 +50,7 @@ angular.module('qldarchApp').controller('ArchitectsCtrl',
       });
 
       architects = $filter('orderBy')(architects, function(architect) {
-        return (architect.label || '');
+        return (architect.lastname || '');
       });
 
       $scope.architectRows = LayoutHelper.group(GraphHelper.graphValues(architects), 6);
