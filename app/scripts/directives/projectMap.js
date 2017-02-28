@@ -41,10 +41,24 @@ angular.module('qldarchApp').directive('projectMap', function() {
             if (angular.isDefined(structure.lat)) {
               // Lat lon
               var position = new google.maps.LatLng(structure.lat, structure.lon);
+              // Label and id
+              var infowindowlabel;
+              var infowindowid;
+              if (structure.label) {
+                infowindowlabel = structure.label;
+                infowindowid = structure.id;
+              } else if (structure.structurelabel) {
+                infowindowlabel = structure.structurelabel;
+                if (structure.objecttype === 'structure') {
+                  infowindowid = structure.object;
+                } else if (structure.subjectype === 'structure') {
+                  infowindowid = structure.subject;
+                }
+              }
               // Create a marker
               var marker = new google.maps.Marker({
                 position : position,
-                title : structures.name,
+                title : infowindowlabel,
                 animation : google.maps.Animation.DROP
               });
               // Add the marker to the map
@@ -56,7 +70,7 @@ angular.module('qldarchApp').directive('projectMap', function() {
 
               // Create an info window
               var infowindow = new google.maps.InfoWindow({
-                content : '<a href="#!/project/summary?structureId=' + structure.encodedUri + '">' + structure.name + '</a>'
+                content : '<a href="#!/project/summary?structureId=' + infowindowid + '">' + infowindowlabel + '</a>'
               });
 
               google.maps.event.addListener(marker, 'click', function() {

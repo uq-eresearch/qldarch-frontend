@@ -4,30 +4,36 @@ angular.module('qldarchApp').controller('ArchitectStructuresCtrl', function($sco
 
   $scope.structures = structures;
   $scope.structureRows = LayoutHelper.group(GraphHelper.graphValues(structures), 6);
-  $scope.isShowingMap = false;
 
   // Setup the filters and map
   $scope.buildingTypologies = [];
-  angular.forEach(structures, function(structure) {
-    // We have some data to show on the map, so just set it to on
-    if (angular.isDefined(structure.lat)) {
-      // console.log('show the map');
-      $scope.isShowingMap = true;
-    }
-
-    // Extract all the unique building typologies
-    angular.forEach(structure.typologies, function(buildingTypology) {
-      var found = false;
-      angular.forEach($scope.buildingTypologies, function(storedBuildingTypology) {
-        if (buildingTypology === storedBuildingTypology) {
-          found = true;
-        }
-      });
-      if (!found) {
-        $scope.buildingTypologies.push(buildingTypology);
+  $scope.isShowingMap = function() {
+    var hasmap = false;
+    angular.forEach(structures, function(structure) {
+      // We have some data to show on the map, so just set it to on
+      if (angular.isDefined(structure.lat)) {
+        // console.log('show the map');
+        hasmap = true;
       }
     });
-  });
+    return hasmap;
+  };
+  $scope.buildTypologies = function() {
+    angular.forEach(structures, function(structure) {
+      // Extract all the unique building typologies
+      angular.forEach(structure.typologies, function(buildingTypology) {
+        var found = false;
+        angular.forEach($scope.buildingTypologies, function(storedBuildingTypology) {
+          if (buildingTypology === storedBuildingTypology) {
+            found = true;
+          }
+        });
+        if (!found) {
+          $scope.buildingTypologies.push(buildingTypology);
+        }
+      });
+    });
+  };
 
   // Setup the map
   $scope.mapOptions = {
