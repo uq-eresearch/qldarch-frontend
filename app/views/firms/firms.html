@@ -1,8 +1,3 @@
-<div class="page-header has-subnav">
-  <div class="container">
-    <h1>Firms</h1>
-  </div>
-</div>
 <style>
 rect[height='22.991999999999997'] {
 	fill: #11c3b6 !important;
@@ -12,25 +7,6 @@ svg[height='600'] text[text-anchor='middle'] {
 	fill: white !important;
 }
 </style>
-<div class="subnav" style="margin-bottom: 0px;">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <ul class="nav nav-pills">
-          <li ui-sref-active="active"><a href ui-sref="firms.australian">Queensland-based</a></li>
-          <li ui-sref-active="active"><a href href ui-sref="firms.other">Other</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="alert alert-warning" ng-show="Auth.role === 'editor' || Auth.role === 'root'" style="margin: 0;">
-  <div class="container">
-    <button class="btn btn-default btn-xs" ui-sref="firm.summary.edit({firmId:null})" ng-show="Auth.role === 'editor' || Auth.role === 'root'">
-      <i class="fa fa-plus"></i> New Firm
-    </button>
-  </div>
-</div>
 <div class="l-frame l-frame-media l-frame-tighter" ng-hide="$state.includes('firms.other')">
   <div class="container">
     <div class="chart-index" style="margin-bottom: 16px; text-align: center;">

@@ -4,6 +4,6 @@ angular.module('qldarchApp').config(function($stateProvider) {
   $stateProvider.state('firms', {
     abstract : true,
     url : '/firms',
-    template : '<ui-view autoscroll="false"></ui-view>'
+    templateUrl : 'views/firms/layout.html'
   });
 });
