@@ -28,6 +28,7 @@
                 <li role="presentation" ng-repeat="interview in interviews"><a role="menuitem" tabindex="-1" href
                   ui-sref="architect.interview({ interviewId: interview.id })">Interview #{{ $index + 1 }}</a></li>
               </ul></li>
+            <li ui-sref-active="active" ng-show="architect.id"><a href ui-sref="architect.employers({ architectId: architect.id })">Employers</a></li>
             <li ui-sref-active="active" ng-show="architect.id"><a href ui-sref="architect.structures({ architectId: architect.id })">Projects</a></li>
             <li ui-sref-active="active" ng-show="architect.id"><a href ui-sref="architect.articles({ architectId: architect.id })">Articles</a></li>
             <li ui-sref-active="active" ng-show="architect.id"><a href ui-sref="architect.relationships({ architectId: architect.id })">Relationships</a></li>

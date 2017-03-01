@@ -1,0 +1,15 @@
+<div class="l-frame l-frame-tight">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row" ng-repeat="employerRow in employerRows">
+          <div class="col-sm-2" ng-repeat="firm in employerRow">
+            <div ng-include="'views/thumbs/firm.html'"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6"></div>
+    </div>
+    <p ng-show="!employerRows.length">No employers found.</p>
+  </div>
+</div>
