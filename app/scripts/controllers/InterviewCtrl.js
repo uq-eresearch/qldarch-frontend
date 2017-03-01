@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('qldarchApp').controller('InterviewCtrl',
-    function($scope, interview, $state, $http, Uris, Entity, Ontology, interviews, relationships, $stateParams, $location, $anchorScroll, $timeout) {
+    function($scope, interview, $state, $http, Uris, interviews, relationships, $stateParams, $location, $anchorScroll, $timeout) {
       // Setup
 
       $scope.sub = 'interviews';
