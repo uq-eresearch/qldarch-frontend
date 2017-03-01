@@ -4020,7 +4020,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   color: #333;
 }
 .navbar-inverse {
-  background-color: #222222;
+  background-color: #171717;
   border-color: #090909;
 }
 .navbar-inverse .navbar-brand {
@@ -5800,7 +5800,7 @@ header .login a {
   font-size: 13px;
 }
 header .navbar-wrapper {
-  background-color: #222222;
+  background-color: #171717;
 }
 header .navbar-wrapper .navbar {
   margin-bottom: 0;
@@ -6295,7 +6295,7 @@ form .select2-container-active.ng-invalid.ng-dirty .select2-choice {
   padding: 16px 0;
 }
 .l-frame.l-frame-media {
-  background-color: #222222;
+  background-color: #171717;
   color: white;
 }
 /**
@@ -6681,14 +6681,14 @@ form .select2-container-active.ng-invalid.ng-dirty .select2-choice {
   padding-top: 24px;
 }
 .player {
-  background-color: #222222;
+  background-color: #171717;
 }
 .player .player-video {
   padding: 24px;
 }
 .player .player-controls audio {
   width: 100%;
-  background-color: #222222;
+  background-color: #171717;
 }
 .content {
   margin-bottom: 24px;
