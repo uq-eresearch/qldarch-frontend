@@ -1,19 +1,20 @@
-<div class="l-frame l-frame-media l-frame-tighter" ng-hide="$state.includes('firms.other')">
+<style>
+rect[height='22.991999999999997'] {
+	fill: #11c3b6 !important;
+}
+
+svg[height='600'] text[text-anchor='middle'] {
+	fill: white !important;
+}
+</style>
+<div class="l-frame l-frame-media l-frame-tighter">
   <div class="container">
-    <div class="chart-index" style="text-align: center;">
+    <div class="chart-index" style="margin-bottom: 16px; text-align: center;">
       <button class="btn btn-dark" style="margin-right: 1px;" ng-click="goToIndex(null)" ng-class="{'btn-primary': $stateParams.index == null}">All</button>
       <button style="margin-right: 1px;" ng-repeat="(index, exists) in indexes" class="btn"
         ng-class="{'btn-primary': $stateParams.index === index, 'btn-dark': $stateParams.index !== index}" ng-disabled="!exists"
         ng-click="goToIndex(index)">{{ index }}</button>
     </div>
-  </div>
-</div>
-<div class="l-frame">
-  <div class="container" infinite-scroll="addMoreFirmRows()">
-    <div class="row" ng-repeat="firmRow in firmRows | limitTo:firmRowDisplayCount">
-      <div class="col-sm-2" ng-repeat="firm in firmRow">
-        <div ng-include="'views/thumbs/firm.html'"></div>
-      </div>
-    </div>
+    <div id="chart"></div>
   </div>
 </div>
