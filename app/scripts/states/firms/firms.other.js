@@ -3,6 +3,7 @@
 angular.module('qldarchApp').config(function($stateProvider) {
   $stateProvider.state('firms.other', {
     url : '/other?index',
+    reloadOnSearch : false,
     templateUrl : 'views/firms/firms.html',
     resolve : {
       firms : [ '$http', '$filter', 'Uris', function($http, $filter, Uris) {

@@ -8,7 +8,6 @@ angular.module('qldarchApp').config(function($stateProvider) {
     resolve : {
       firms : [ '$http', '$filter', 'Uris', function($http, $filter, Uris) {
         return $http.get(Uris.WS_ROOT + 'firms').then(function(result) {
-          console.log(result.data);
           return $filter('filter')(result.data, function(firm) {
             return firm.australian === true;
           });
