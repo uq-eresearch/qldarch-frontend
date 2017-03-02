@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('qldarchApp').controller('ArchitectsCtrl',
-    function($scope, $http, architects, Uris, GraphHelper, LayoutHelper, $stateParams, $location, $filter, $state) {
+    function($scope, $http, architects, practicedinqueensland, Uris, GraphHelper, LayoutHelper, $stateParams, $location, $filter, $state) {
       var DEFAULT_ARCHITECT_ROW_COUNT = 5;
       $scope.architectRowDisplayCount = DEFAULT_ARCHITECT_ROW_COUNT;
       $scope.$stateParams = $stateParams;
@@ -57,9 +57,15 @@ angular.module('qldarchApp').controller('ArchitectsCtrl',
       $scope.Uris = Uris;
 
       $scope.goToIndex = function(index) {
-        $state.go('architects.queensland', {
-          index : index
-        });
+        if (practicedinqueensland) {
+          $state.go('architects.queensland', {
+            index : index
+          });
+        } else {
+          $state.go('architects.other', {
+            index : index
+          });
+        }
       };
 
       /**

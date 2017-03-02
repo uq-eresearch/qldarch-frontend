@@ -12,7 +12,10 @@ angular.module('qldarchApp').config(function($stateProvider) {
             return architect.practicedinqueensland === true;
           });
         });
-      } ]
+      } ],
+      practicedinqueensland : function() {
+        return true;
+      }
     }
   });
 });
