@@ -32,7 +32,7 @@
     </div>
   </div>
 </div>
-<!-- <div class="alert alert-warning" ng-show="(Auth.role === 'editor' || Auth.role === 'root')" style="margin: 0;">
+<!-- <div class="alert alert-warning" ng-show="(Auth.user.role === 'editor' || Auth.user.role === 'admin')" style="margin: 0;">
   <div class="container">
     <div class="col-sm-offset-1 col-md-5">
       <div> -->
@@ -47,7 +47,7 @@
         <button class="btn btn-default btn-xs" ng-click="$state.go('image.edit', {imageId: image.encodedUri})">
           <i class="fa fa-pencil"></i> Edit image
         </button>
-        <button class="btn btn-default btn-xs" ng-click="delete(image)" ng-if="Auth.canDelete(image.uri)">
+        <button class="btn btn-default btn-xs" ng-click="delete(image)" ng-if="Auth.canDelete()">
           <i class="fa fa-trash-o"></i> Delete image
         </button>
       </div>

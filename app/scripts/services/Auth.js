@@ -4,11 +4,11 @@ angular.module('qldarchApp').service('Auth', function Auth($http, Uris, $q) {
   // AngularJS will instantiate a singleton by calling "new" on this function
   var that = this;
   this.status = function() {
-    return $http.get(Uris.JSON_ROOT + 'login/status').then(function(status) {
-      angular.extend(that, status.data);
-
-      if (status.data.auth) {
-        console.log('Auth is', that.user, status.data.user);
+    return $http.get(Uris.JSON_ROOT + 'user').then(function(status) {
+      if (status.data.id) {
+        that.success = true;
+        that.user = status.data;
+        console.log('Auth is', that.user.username, status.data.username);
         return true;
       } else {
         console.log('rejecting!');
@@ -18,7 +18,7 @@ angular.module('qldarchApp').service('Auth', function Auth($http, Uris, $q) {
   };
 
   this.isUQSLQ = function() {
-    return this.user && ((that.user.indexOf('uq') !== -1 || that.user.indexOf('slq') !== -1) || that.role === 'root');
+    return this.user && ((that.user.username.indexOf('uq') !== -1 || that.user.username.indexOf('slq') !== -1) || that.user.role === 'admin');
   };
 
   /**
@@ -28,12 +28,12 @@ angular.module('qldarchApp').service('Auth', function Auth($http, Uris, $q) {
    *          uri [description]
    * @return {[type]} [description]
    */
-  this.canDelete = function(uri) {
-    return this.role === 'root' || (this.user && uri.indexOf(this.user) !== -1);
+  this.canDelete = function() {
+    return this.user.role === 'admin';
   };
 
   this.isEditor = function() {
-    return this.role === 'editor' || this.role === 'root';
+    return this.user.role === 'editor' || this.user.role === 'admin';
   };
 
   this.clear = function() {

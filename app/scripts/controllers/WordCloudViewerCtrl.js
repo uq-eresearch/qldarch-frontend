@@ -5,8 +5,8 @@ angular.module('qldarchApp').controller('WordCloudViewerCtrl', function ($scope,
   $scope.wordcloud = compoundObject.jsonData.data;
 
 
-  $scope.isEditable = Auth.auth && ($scope.compoundObject.user.user === Auth.user || Auth.role === 'root');
-  $scope.isDeletable = Auth.auth && ($scope.compoundObject.user.user === Auth.user || Auth.role === 'root');
+  $scope.isEditable = Auth.success && ($scope.compoundObject.user.user === Auth.user.username || Auth.user.role === 'admin');
+  $scope.isDeletable = Auth.success && ($scope.compoundObject.user.user === Auth.user.username || Auth.user.role === 'admin');
 
   $scope.delete = function () {
     var r = window.confirm('Delete this word cloud?');

@@ -2,12 +2,12 @@
 
 angular.module('qldarchApp').controller('UserSettingsCtrl', function($scope, Auth, toaster, Uris, $http, $state) {
   $scope.user = {};
-  $scope.user.username = Auth.user;
-  $scope.user.email = Auth.email;
+  $scope.user.username = Auth.user.username;
+  $scope.user.email = Auth.user.email;
 
   $scope.update = function() {
-    $scope.user.username = Auth.user;
-    $scope.user.email = Auth.email;
+    $scope.user.username = Auth.user.username;
+    $scope.user.email = Auth.user.email;
 
     $http.put(Uris.JSON_ROOT + 'user', jQuery.param($scope.user), {
       headers : {

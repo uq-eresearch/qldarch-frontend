@@ -125,7 +125,7 @@
         <input type="text" class="form-control" placeholder="Title: What is your timeline about?" ng-model="compoundObject.title">
       </div>
       <div class="col-sm-2">
-        <button class="btn btn-primary form-control" ng-click="save()" ng-disabled="!compoundObject.title || !timeline.dates.length || !Auth.auth" ng-click="save()">Save timeline</button>
+        <button class="btn btn-primary form-control" ng-click="save()" ng-disabled="!compoundObject.title || !timeline.dates.length || !Auth.success" ng-click="save()">Save timeline</button>
       </div>
     </div>
   </div>

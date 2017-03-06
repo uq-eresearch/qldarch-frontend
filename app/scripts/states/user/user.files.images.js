@@ -14,7 +14,7 @@ angular.module('qldarchApp').config(
               function(Expression, Auth, GraphHelper, Uris, $filter) {
                 return Auth.status().then(
                     function() {
-                      return Expression.findByUser(Auth.user).then(
+                      return Expression.findByUser(Auth.user.username).then(
                           function(expressions) {
                             return $filter('filter')(
                                 expressions,

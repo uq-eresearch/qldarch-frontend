@@ -98,7 +98,7 @@
                     <label>Creator <i class="fa fa-asterisk fa-asterisk-required"></i>
                     </label>
                     <div class="radio">
-                      <label> <input name="creator" type="radio" ng-model="expression.$creator" value="creator" ng-change="expression[Uris.DCT_CREATOR] = Auth.email; expression[Uris.DCT_RIGHTS] = Auth.email; expression.$rights = 'owner'"
+                      <label> <input name="creator" type="radio" ng-model="expression.$creator" value="creator" ng-change="expression[Uris.DCT_CREATOR] = Auth.user.email; expression[Uris.DCT_RIGHTS] = Auth.user.email; expression.$rights = 'owner'"
                         required>I am the creator
                       </label>
                     </div>
@@ -124,7 +124,7 @@
                     <label>Rights <i class="fa fa-asterisk fa-asterisk-required"></i>
                     </label>
                     <div class="radio">
-                      <label> <input name="rights" type="radio" value="owner" ng-model="expression.$rights" ng-change="expression[Uris.DCT_RIGHTS] = Auth.email;" required>I own the rights
+                      <label> <input name="rights" type="radio" value="owner" ng-model="expression.$rights" ng-change="expression[Uris.DCT_RIGHTS] = Auth.user.email;" required>I own the rights
                       </label>
                     </div>
                     <div class="radio">
@@ -132,7 +132,7 @@
                       </label>
                     </div>
                     <input type="text" placeholder="Who owns the rights to this item?" ng-model="expression.$permissionFrom" class="form-control" ng-show="expression.$rights == 'permission'"
-                      ng-change="expression[Uris.DCT_RIGHTS] = Auth.email + ' with permission from ' + expression.$permissionFrom">
+                      ng-change="expression[Uris.DCT_RIGHTS] = Auth.user.email + ' with permission from ' + expression.$permissionFrom">
                     <div class="radio">
                       <label> <input type="radio" value="orphaned" ng-model="expression.$rights" ng-change="expression[Uris.DCT_RIGHTS] = 'Orphaned'">It is orphaned
                       </label>

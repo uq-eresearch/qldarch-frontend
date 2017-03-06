@@ -27,7 +27,11 @@ angular.module('qldarchApp').run(
       };
 
       $http.get(Uris.WS_ROOT + 'user').then(function(status) {
-        angular.extend(Auth, status.data);
+        if (status.data.id) {
+          Auth.success = true;
+          Auth.user = status.data;
+          console.log('Auth is', status.data.username);
+        }
       });
 
       $rootScope.globalSearch = {};

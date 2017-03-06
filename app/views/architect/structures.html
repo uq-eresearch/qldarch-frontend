@@ -1,8 +1,8 @@
 <div>
-  <div class="alert alert-warning" ng-show="Auth.role === 'editor' || Auth.role === 'root'" style="margin: 0;">
+  <div class="alert alert-warning" ng-show="Auth.user.role === 'editor' || Auth.user.role === 'admin'" style="margin: 0;">
     <div class="container">
       <button class="btn btn-default btn-xs" ui-sref="structure.summary.edit({structureId:null})"
-        ng-show="Auth.role === 'editor' || Auth.role === 'root'">
+        ng-show="Auth.user.role === 'editor' || Auth.user.role === 'admin'">
         <i class="fa fa-plus"></i> New Project
       </button>
     </div>

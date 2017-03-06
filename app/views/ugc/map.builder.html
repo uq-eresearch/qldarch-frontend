@@ -231,14 +231,14 @@
     <!-- /Location List -->
   </div>
 </div>
-<div class="l-frame l-frame-tighter l-frame-divided" ng-show="map.locations.length && !map.$import.prospectiveLocations.length && !$state.includes('ugc.map.edit.list') && !$state.includes('ugc.map.edit.add') && Auth.auth">
+<div class="l-frame l-frame-tighter l-frame-divided" ng-show="map.locations.length && !map.$import.prospectiveLocations.length && !$state.includes('ugc.map.edit.list') && !$state.includes('ugc.map.edit.add') && Auth.success">
   <div class="container">
     <div class="row">
       <div class="col-sm-9">
         <input type="text" class="form-control" placeholder="Title: What is your map about?" ng-model="compoundObject.title">
       </div>
       <div class="col-sm-3">
-        <button class="btn btn-primary form-control" ng-click="save()" ng-disabled="!compoundObject.title || !map.locations.length || !Auth.auth" ng-click="save()">Save Map ({{ map.locations.length }} locations)</button>
+        <button class="btn btn-primary form-control" ng-click="save()" ng-disabled="!compoundObject.title || !map.locations.length || !Auth.success" ng-click="save()">Save Map ({{ map.locations.length }} locations)</button>
       </div>
     </div>
   </div>

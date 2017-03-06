@@ -106,7 +106,7 @@
           <input type="text" class="form-control" placeholder="Title: What is your map about?" ng-model="map.title">
         </div>
         <div class="col-sm-2">
-          <button class="btn btn-primary form-control" ng-click="save()" ng-disabled="!map.title || !map.locations.length || !Auth.auth" ng-click="save()">Save Map</button>
+          <button class="btn btn-primary form-control" ng-click="save()" ng-disabled="!map.title || !map.locations.length || !Auth.success" ng-click="save()">Save Map</button>
         </div>
       </div>
     </div>
@@ -118,7 +118,7 @@
         {{ map.title }}<br />
         <!-- /Map title -->
         <!-- Author name -->
-        <small ng-show="Auth.auth">By {{ Auth.email }}</small>
+        <small ng-show="Auth.success">By {{ Auth.user.displayName || Auth.user.username }}</small>
         <!-- /Author name -->
       </h3>
       <div ui-map="myMap" class="map-canvas map" ui-options="mapOptions"></div>

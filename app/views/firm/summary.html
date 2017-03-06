@@ -1,4 +1,4 @@
-<div class="alert alert-warning" ng-show="(Auth.role === 'editor' || Auth.role === 'root') && !$state.includes('firm.summary.edit')"
+<div class="alert alert-warning" ng-show="(Auth.user.role === 'editor' || Auth.user.role === 'admin') && !$state.includes('firm.summary.edit')"
   style="margin: 0;">
   <div class="container">
     <div ng-hide="$state.includes('firm.summary.edit')">
@@ -6,7 +6,7 @@
       <button class="btn btn-default btn-xs" ui-sref="firm.summary.edit({ firmId: firm.encodedUri })">
         <i class="fa fa-pencil"></i> Edit
       </button>
-      <button class="btn btn-default btn-xs" ng-click="$parent.delete(firm)" ng-show="Auth.role === 'root'">
+      <button class="btn btn-default btn-xs" ng-click="$parent.delete(firm)" ng-show="Auth.user.role === 'admin'">
         <i class="fa fa-trash-o"></i> Delete
       </button>
     </div>

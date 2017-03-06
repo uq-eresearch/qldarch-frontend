@@ -1,11 +1,11 @@
-<div class="alert alert-warning" ng-show="(Auth.role === 'editor' || Auth.role === 'root') && !$state.includes('edit')" style="margin: 0;">
+<div class="alert alert-warning" ng-show="(Auth.user.role === 'editor' || Auth.user.role === 'admin') && !$state.includes('edit')" style="margin: 0;">
   <div class="container">
     <div ng-hide="$state.includes('architect.summary.edit')">
       <!-- Editor: &nbsp; &nbsp; -->
       <button class="btn btn-default btn-xs" ng-click="$state.go(photograph.$state + '.edit', photograph.$stateParams)">
         <i class="fa fa-pencil"></i> Edit Photograph
       </button>
-      <button class="btn btn-default btn-xs" ng-click="delete(photograph)" ng-show="Auth.role === 'root'">
+      <button class="btn btn-default btn-xs" ng-click="delete(photograph)" ng-show="Auth.user.role === 'admin'">
         <i class="fa fa-trash-o"></i> Delete Photograph
       </button>
     </div>

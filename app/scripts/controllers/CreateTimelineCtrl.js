@@ -14,8 +14,8 @@ angular.module('qldarchApp').controller(
       $scope.timeline = {
         dates : []
       };
-      if (Auth.auth) {
-        $scope.timeline.subtitle = 'Created by ' + Auth.email;
+      if (Auth.success) {
+        $scope.timeline.subtitle = 'Created by ' + (Auth.user.displayName || Auth.user.username);
       }
       $scope.date = {
         photo : {}

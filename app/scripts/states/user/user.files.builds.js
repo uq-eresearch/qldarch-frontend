@@ -6,7 +6,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
     resolve : {
       compoundObjects : [ 'CompoundObject', 'Auth', function(CompoundObject, Auth) {
         return Auth.status().then(function() {
-          return CompoundObject.loadForUser(Auth.user);
+          return CompoundObject.loadForUser(Auth.user.username);
         });
       } ],
     },

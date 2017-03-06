@@ -198,7 +198,7 @@
           <input type="text" class="form-control" placeholder="Title: What is your word cloud about?" ng-model="compoundObject.title">
         </div>
         <div class="col-sm-2">
-          <button class="btn btn-primary form-control" ng-click="save()" ng-disabled="!compoundObject.title || !wordcloud.documents.length || !Auth.auth" ng-click="save()">Save Word Cloud</button>
+          <button class="btn btn-primary form-control" ng-click="save()" ng-disabled="!compoundObject.title || !wordcloud.documents.length || !Auth.success" ng-click="save()">Save Word Cloud</button>
         </div>
       </div>
     </div>

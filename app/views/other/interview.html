@@ -1,10 +1,10 @@
 <div class="interview">
-  <div class="alert alert-warning" style="margin: 0;" ng-show="Auth.role === 'editor' || Auth.role === 'root'">
+  <div class="alert alert-warning" style="margin: 0;" ng-show="Auth.user.role === 'editor' || Auth.user.role === 'admin'">
     <div class="container">
       <button class="btn btn-default btn-xs" ui-sref="upload.interviews({ id: interview.encodedUri })">
         <i class="fa fa-pencil"></i> Edit
       </button>
-      <button class="btn btn-default btn-xs" ng-click="delete(interview)" ng-show="Auth.canDelete(interview.uri)">
+      <button class="btn btn-default btn-xs" ng-click="delete(interview)" ng-show="Auth.canDelete()">
         <i class="fa fa-trash-o"></i> Delete
       </button>
     </div>
@@ -150,8 +150,8 @@
             <!-- end of transcript -->
             <!-- relationships -->
             <div class="col-sm-6">
-              <div class="panel panel-default" ng-hide="(isSearching || !Auth.auth ) && !exchange.relationships.length">
-                <div class="panel-heading" ng-if="(Auth.role === 'editor' || Auth.role === 'root') && Auth.auth && !isSearching">
+              <div class="panel panel-default" ng-hide="(isSearching || !Auth.success ) && !exchange.relationships.length">
+                <div class="panel-heading" ng-if="(Auth.user.role === 'editor' || Auth.user.role === 'admin') && Auth.success && !isSearching">
                   <!-- Control buttons -->
                   <span ng-hide="exchange.isAddingRelationship || exchange.isEditingRelationships || exchange.isCreatingEntity">
                     <button type="button" class="btn btn-default btn-xs" ng-click="showAddRelationship(exchange)">

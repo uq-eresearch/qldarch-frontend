@@ -115,7 +115,7 @@
           <input type="text" class="form-control" placeholder="Title: What is your word cloud about?" ng-model="wordcloud.title">
         </div>
         <div class="col-sm-2">
-          <button class="btn btn-primary form-control" ng-click="save()" ng-disabled="!wordcloud.title || !wordcloud.documents.length || !Auth.auth" ng-click="save()">Save Word Cloud</button>
+          <button class="btn btn-primary form-control" ng-click="save()" ng-disabled="!wordcloud.title || !wordcloud.documents.length || !Auth.success" ng-click="save()">Save Word Cloud</button>
         </div>
       </div>
     </div>
@@ -127,7 +127,7 @@
         {{ wordcloud.title }}<br />
         <!-- /Map title -->
         <!-- Author name -->
-        <small ng-show="Auth.auth">By {{ Auth.email }}</small>
+        <small ng-show="Auth.success">By {{ Auth.user.displayName || Auth.user.username }}</small>
         <!-- /Author name -->
       </h3>
       <div class="wordcloud"></div>
