@@ -43,17 +43,21 @@ angular.module('qldarchApp').run(
         console.log('changing', event, toState, toParams, fromState, fromParams);
 
         // Catch if we are going to login
-        if (toState.name === 'login' && fromState.name !== '') {
-          tempFromState.fromState = fromState;
-          tempFromState.fromParams = fromParams;
-        }
-        if (fromState.name === 'login' && toState.name !== 'forgot' && tempFromState.fromState.name !== 'forgot') {
-          // Do we have a previous state stored?
-          if (tempFromState.fromState) {
-            event.preventDefault();
-            var nextState = tempFromState;
-            tempFromState = {};
-            $state.go(nextState.fromState.name, nextState.fromParams);
+        if (angular.isDefined(toState) && angular.isDefined(fromState)) {
+          if (toState.name === 'login' && fromState.name !== '') {
+            tempFromState.fromState = fromState;
+            tempFromState.fromParams = fromParams;
+          }
+          if (angular.isDefined(tempFromState.fromState)) {
+            if (fromState.name === 'login' && toState.name !== 'forgot' && tempFromState.fromState.name !== 'forgot') {
+              // Do we have a previous state stored?
+              if (tempFromState.fromState) {
+                event.preventDefault();
+                var nextState = tempFromState;
+                tempFromState = {};
+                $state.go(nextState.fromState.name, nextState.fromParams);
+              }
+            }
           }
         }
         // event.preventDefault();

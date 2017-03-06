@@ -18,7 +18,15 @@ angular.module('qldarchApp').service('Auth', function Auth($http, Uris, $q) {
   };
 
   this.isUQSLQ = function() {
-    return this.user && ((that.user.username.indexOf('uq') !== -1 || that.user.username.indexOf('slq') !== -1) || that.user.role === 'admin');
+    if (angular.isDefined(this.user)) {
+      if (this.user && ((that.user.username.indexOf('uq') !== -1 || that.user.username.indexOf('slq') !== -1) || that.user.role === 'admin')) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   };
 
   /**
@@ -29,11 +37,27 @@ angular.module('qldarchApp').service('Auth', function Auth($http, Uris, $q) {
    * @return {[type]} [description]
    */
   this.canDelete = function() {
-    return this.user.role === 'admin';
+    if (angular.isDefined(this.user)) {
+      if (this.user.role === 'admin') {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   };
 
   this.isEditor = function() {
-    return this.user.role === 'editor' || this.user.role === 'admin';
+    if (angular.isDefined(this.user)) {
+      if (this.user.role === 'editor' || this.user.role === 'admin') {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   };
 
   this.clear = function() {
