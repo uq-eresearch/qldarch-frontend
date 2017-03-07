@@ -4,13 +4,15 @@ angular.module('qldarchApp').controller('RegisterCtrl', function($scope, $http, 
   $scope.user = {};
 
   $scope.createUser = function(user) {
-    $http.post(Uris.JSON_ROOT + 'user', jQuery.param(user), {
+    $http.post(Uris.WS_ROOT + 'signup', jQuery.param(user), {
       headers : {
         'Content-Type' : 'application/x-www-form-urlencoded'
       }
     }).then(function(response) {
       console.log('response', response);
-      $scope.hasRegistered = true;
+      if (response.data.success) {
+        $scope.hasRegistered = true;
+      }
     });
     $scope.user = {};
   };

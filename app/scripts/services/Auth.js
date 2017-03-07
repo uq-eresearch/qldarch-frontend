@@ -4,7 +4,7 @@ angular.module('qldarchApp').service('Auth', function Auth($http, Uris, $q) {
   // AngularJS will instantiate a singleton by calling "new" on this function
   var that = this;
   this.status = function() {
-    return $http.get(Uris.JSON_ROOT + 'user').then(function(status) {
+    return $http.get(Uris.WS_ROOT + 'user').then(function(status) {
       if (status.data.id) {
         that.success = true;
         that.user = status.data;
