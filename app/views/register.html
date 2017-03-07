@@ -14,13 +14,16 @@
   <!-- /info -->
   <div class="l-frame l-frame-tight">
     <div class="container">
-      <div ng-show="hasRegistered">
+      <div ng-if="hasResponse && hasRegistered">
         <div class="alert alert-info">
           Thank you for registering. You will receive a confirmation email shortly.
           <div style="margin-top: 16px;">
             <button ui-sref="main" class="btn btn-primary">Keep Browsing</button>
           </div>
         </div>
+      </div>
+      <div ng-if="hasResponse && !hasRegistered">
+        <div class="alert alert-info">Registration failed: {{ failedReason }}</div>
       </div>
       <div class="row" ng-hide="hasRegistered">
         <div class="col-lg-12">
