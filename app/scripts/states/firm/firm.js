@@ -6,17 +6,15 @@ angular.module('qldarchApp').config(function($stateProvider) {
     url : '/firm?firmId',
     templateUrl : 'views/firm/layout.html',
     resolve : {
-      firm : [ '$stateParams', '$http', 'Uris', 'Relationshiplabels', function($stateParams, $http, Uris, Relationshiplabels) {
+      firm : [ '$stateParams', 'ArchObj', function($stateParams, ArchObj) {
         if (!$stateParams.firmId) {
           return {};
         } else {
-          return $http.get(Uris.WS_ROOT + 'archobj/' + $stateParams.firmId).then(function(result) {
-            angular.forEach(result.data.relationships, function(relationship) {
-              if (Relationshiplabels.hasOwnProperty(relationship.relationship)) {
-                relationship.relationship = Relationshiplabels[relationship.relationship];
-              }
-            });
-            return result.data;
+          return ArchObj.loadWithRelationshipLabels($stateParams.firmId).then(function(data) {
+            return data;
+          }).catch(function() {
+            console.log('unable to load firm ArchObj with relationship labels');
+            return {};
           });
         }
       } ]

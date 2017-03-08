@@ -5,10 +5,9 @@ angular.module('qldarchApp').config(function($stateProvider) {
     url : '/article?articleId',
     templateUrl : 'views/article.html',
     resolve : {
-      article : [ '$stateParams', '$http', 'Uris', function($stateParams, $http, Uris) {
-        return $http.get(Uris.WS_ROOT + 'archobj/' + $stateParams.articleId).then(function(result) {
-          return result.data;
-
+      article : [ '$stateParams', 'ArchObj', function($stateParams, ArchObj) {
+        return ArchObj.load($stateParams.articleId).then(function(data) {
+          return data;
         });
       } ]
     },

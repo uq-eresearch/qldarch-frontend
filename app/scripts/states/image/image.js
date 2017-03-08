@@ -5,9 +5,9 @@ angular.module('qldarchApp').config(function($stateProvider) {
     abstract : true,
     url : '/image/:imageId?archobjId',
     resolve : {
-      depicts : [ '$stateParams', '$http', 'Uris', function($stateParams, $http, Uris) {
-        return $http.get(Uris.WS_ROOT + 'archobj/' + $stateParams.archobjId).then(function(result) {
-          return result.data;
+      depicts : [ '$stateParams', 'ArchObj', function($stateParams, ArchObj) {
+        return ArchObj.load($stateParams.archobjId).then(function(data) {
+          return data;
         });
       } ],
       images : [ 'depicts', '$filter', function(depicts, $filter) {

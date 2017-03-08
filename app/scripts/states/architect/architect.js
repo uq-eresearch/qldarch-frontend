@@ -6,22 +6,23 @@ angular.module('qldarchApp').config(function($stateProvider) {
     url: '/architect?architectId',
     templateUrl: 'views/architect/layout.html',
     resolve: {
-      architect: ['$stateParams', '$http', 'Uris', 'Relationshiplabels', function($stateParams, $http, Uris, Relationshiplabels) {
-        return $http.get(Uris.WS_ROOT+ 'archobj/'+$stateParams.architectId).then(function(result) {
-          angular.forEach(result.data.relationships, function (relationship) {
-            if (Relationshiplabels.hasOwnProperty(relationship.relationship)) {
-              relationship.relationship = Relationshiplabels[relationship.relationship];
-            }
-          });
-          return result.data;
+      architect: ['$stateParams', 'ArchObj', function($stateParams, ArchObj) {
+        return ArchObj.loadWithRelationshipLabels($stateParams.architectId).then(function(data) {
+          return data;
+        }).catch(function() {
+          console.log('unable to load architect ArchObj with relationship labels');
+          return {};
         });
       }],
-      interviews: ['architect', '$http', 'Uris', function(architect, $http, Uris) {
+      interviews: ['architect', 'ArchObj', function(architect, ArchObj) {
         if (architect.interviews) {
           var interviews = [];
           angular.forEach(architect.interviews, function(interview) {
-            $http.get(Uris.WS_ROOT+ 'archobj/'+interview).then(function(result) {
-              interviews.push(result.data);
+            ArchObj.load(interview).then(function(data) {
+              interviews.push(data);
+            }).catch(function() {
+              console.log('unable to load interview ArchObj');
+              return {};
             });
           });
           return interviews;

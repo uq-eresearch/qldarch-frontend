@@ -5,7 +5,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
     url : '/summary',
     templateUrl : 'views/structure/summary.html',
     resolve : {
-      designers : [ 'structure', '$filter', '$http', 'Uris', function(structure, $filter, $http, Uris) {
+      designers : [ 'structure', '$filter', 'ArchObj', function(structure, $filter, ArchObj) {
         /* globals _:false */
         var designers = {
           architects : [],
@@ -13,26 +13,32 @@ angular.module('qldarchApp').config(function($stateProvider) {
         };
         var person = $filter('filter')(structure.relationships, function(relationship) {
           if (relationship.subjectype === 'person') {
-            return $http.get(Uris.WS_ROOT + 'archobj/' + relationship.subject).then(function(result) {
+            return ArchObj.load(relationship.subject).then(function(data) {
               if (angular.isUndefined(relationship.media)) {
-                relationship.media = $filter('filter')(result.data.media, function(med) {
+                relationship.media = $filter('filter')(data.media, function(med) {
                   return (med.preferred || (med.type === 'Photograph' || 'Portrait' || 'Image'));
                 }).id;
               }
               return relationship;
+            }).catch(function() {
+              console.log('unable to load relationship subject ArchObj');
+              return {};
             });
           }
         });
         designers.architects = _.uniqBy(person, 'subjectlabel');
         var firm = $filter('filter')(structure.relationships, function(relationship) {
-          if (relationship.subjectype === 'firm') {
-            return $http.get(Uris.WS_ROOT + 'archobj/' + relationship.subject).then(function(result) {
+          if (relationship.subjectype === 'firm') {            
+            return ArchObj.load(relationship.subject).then(function(data) {
               if (angular.isUndefined(relationship.media)) {
-                relationship.media = $filter('filter')(result.data.media, function(med) {
+                relationship.media = $filter('filter')(data.media, function(med) {
                   return (med.preferred || (med.type === 'Photograph' || 'Portrait' || 'Image'));
                 }).id;
               }
               return relationship;
+            }).catch(function() {
+              console.log('unable to load relationship subject ArchObj');
+              return {};
             });
           }
         });
