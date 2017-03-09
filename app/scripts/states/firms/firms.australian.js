@@ -6,11 +6,14 @@ angular.module('qldarchApp').config(function($stateProvider) {
     reloadOnSearch : false,
     templateUrl : 'views/firms/firms.html',
     resolve : {
-      firms : [ '$http', '$filter', 'Uris', function($http, $filter, Uris) {
-        return $http.get(Uris.WS_ROOT + 'firms').then(function(result) {
-          return $filter('filter')(result.data, function(firm) {
-            return firm.australian === true;
+      firms : [ 'AggArchObjs', '$filter', function(AggArchObjs, $filter) {
+        return AggArchObjs.loadFirms().then(function(data) {
+          return $filter('filter')(data, function(firm) {
+            return firm.australian === true && (firm.label && !(/\s/.test(firm.label.substring(0, 1))));
           });
+        }).catch(function() {
+          console.log('unable to load australian firms');
+          return {};
         });
       } ],
       australian : function() {

@@ -5,12 +5,14 @@ angular.module('qldarchApp').config(function($stateProvider) {
     url : '/timeline?index',
     templateUrl : 'views/firms/timeline.html',
     resolve : {
-      firms : [ '$http', '$filter', 'Uris', function($http, $filter, Uris) {
-        return $http.get(Uris.WS_ROOT + 'firms').then(function(result) {
-          console.log(result.data);
-          return $filter('filter')(result.data, function(firm) {
+      firms : [ 'AggArchObjs', '$filter', function(AggArchObjs, $filter) {
+        return AggArchObjs.loadFirms().then(function(data) {
+          return $filter('filter')(data, function(firm) {
             return firm.australian === true;
           });
+        }).catch(function() {
+          console.log('unable to load australian firms');
+          return {};
         });
       } ],
       australian : function() {

@@ -41,7 +41,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
         }
       } ],
       interviews : [ 'Interviews', function(Interviews) {
-        return Interviews;
+        return Interviews.getInterviews();
       } ]
     }
   });

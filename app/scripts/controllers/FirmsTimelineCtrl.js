@@ -2,7 +2,7 @@
 
 angular.module('qldarchApp').controller(
     'FirmsTimelineCtrl',
-    function($scope, firms, GraphHelper, LayoutHelper, $http, australian, $stateParams, $state, $timeout, $filter, Firm) {
+    function($scope, firms, GraphHelper, $http, australian, $stateParams, $state, $timeout, $filter, Firm) {
 
       var DEFAULT_FIRM_ROW_COUNT = 5, data = null;
       $scope.firmRowDisplayCount = DEFAULT_FIRM_ROW_COUNT;

@@ -2,15 +2,15 @@
 
 /**
  * @ngdoc service
- * @name qldarchApp.InterviewRepository
- * @description # InterviewRepository Factory in the qldarchApp.
+ * @name qldarchApp.InterviewsBrief
+ * @description # InterviewsBrief Factory in the qldarchApp.
  */
-angular.module('qldarchApp').factory('InterviewRepository', function(Uris, $filter, $http) {
+angular.module('qldarchApp').factory('InterviewsBrief', function(AggArchObjs) {
 
   /* globals _:false */
   function getInterviewsForCarousel() {
-    return $http.get(Uris.WS_ROOT + 'interviews/brief').then(function(result) {
-      var interviews = result.data;
+    return AggArchObjs.loadInterviewsBrief().then(function(data) {
+      var interviews = data;
       return _.shuffle(_.uniqBy(interviews, function(interview) {
         return interview.interviewee;
       }).filter(function(interview) {
@@ -18,12 +18,15 @@ angular.module('qldarchApp').factory('InterviewRepository', function(Uris, $filt
         // home page carousel
         return typeof interview.media !== 'undefined';
       }));
+    }).catch(function() {
+      console.log('unable to load interviews brief');
+      return {};
     });
   }
 
-  var InterviewRepository = {
+  var InterviewsBrief = {
     getInterviewsForCarousel : getInterviewsForCarousel
   };
 
-  return InterviewRepository;
+  return InterviewsBrief;
 });

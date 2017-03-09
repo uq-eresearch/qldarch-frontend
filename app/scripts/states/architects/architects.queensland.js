@@ -6,11 +6,15 @@ angular.module('qldarchApp').config(function($stateProvider) {
     templateUrl : 'views/architects/architects.html',
     controller : 'ArchitectsCtrl',
     resolve : {
-      architects : [ '$http', '$filter', 'Uris', function($http, $filter, Uris) {
-        return $http.get(Uris.WS_ROOT + 'architects').then(function(result) {
-          return $filter('filter')(result.data, function(architect) {
-            return architect.practicedinqueensland === true;
+      architects : ['AggArchObjs', 'GraphHelper', '$filter', function(AggArchObjs, GraphHelper, $filter) {        
+        return AggArchObjs.loadArchitects().then(function(data) {
+          var architects = GraphHelper.graphValues(data);
+          return $filter('filter')(architects, function(architect) {
+            return architect.practicedinqueensland === true && (architect.label && !(/\s/.test(architect.label.substring(0, 1))));
           });
+        }).catch(function() {
+          console.log('unable to load qld architects');
+          return {};
         });
       } ],
       practicedinqueensland : function() {

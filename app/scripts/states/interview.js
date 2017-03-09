@@ -5,7 +5,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
     url : '/interview/:interviewId?time',
     resolve : {
       interviews : [ 'Interviews', function(Interviews) {
-        return Interviews;
+        return Interviews.getInterviews();
       } ],
       interview : [ '$state', '$stateParams', 'ngProgress', 'interviews', 'ArchObj', function($state, $stateParams, ngProgress, interviews, ArchObj) {
         ngProgress.reset();

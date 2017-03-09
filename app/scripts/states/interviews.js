@@ -6,7 +6,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
     templateUrl : 'views/interviews.html',
     resolve : {
       interviews : [ 'Interviews', function(Interviews) {
-        return Interviews;
+        return Interviews.getInterviews();
       } ],
     },
     controller : 'InterviewsCtrl'

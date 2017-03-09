@@ -6,8 +6,8 @@ angular.module('qldarchApp').config(function($stateProvider) {
     controller : 'MainCtrl',
     resolve : {
       // Load X number of interviews
-      interviews : [ 'InterviewRepository', function(InterviewRepository) {
-        return InterviewRepository.getInterviewsForCarousel();
+      interviews : [ 'InterviewsBrief', function(InterviewsBrief) {
+        return InterviewsBrief.getInterviewsForCarousel();
 
       } ],
       compoundObjects : [ 'CompoundObject', '$filter', function(CompoundObject, $filter) {

@@ -5,9 +5,12 @@ angular.module('qldarchApp').config(function($stateProvider) {
     url : '/articles',
     templateUrl : 'views/articles.html',
     resolve : {
-      articles : [ '$http', 'Uris', function($http, Uris) {
-        return $http.get(Uris.WS_ROOT + 'articles').then(function(result) {
-          return result.data;
+      articles : [ 'AggArchObjs', function(AggArchObjs) {
+        return AggArchObjs.loadArticles().then(function(data) {
+          return data;
+        }).catch(function() {
+          console.log('unable to load articles');
+          return {};
         });
       } ]
     },

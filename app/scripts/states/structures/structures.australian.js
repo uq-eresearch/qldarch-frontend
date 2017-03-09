@@ -6,10 +6,9 @@ angular.module('qldarchApp').config(function($stateProvider) {
     templateUrl : 'views/structures.html',
     controller : 'StructuresCtrl',
     resolve : {
-      structures : [ '$http', '$filter', 'Uris', function($http, $filter, Uris) {
-        return $http.get(Uris.WS_ROOT + 'projects').then(function(result) {
-          // console.log(result.data);
-          return $filter('filter')(result.data, function(structure) {
+      structures : [ 'AggArchObjs', '$filter', function(AggArchObjs, $filter) {        
+        return AggArchObjs.loadProjects().then(function(data) {
+          return $filter('filter')(data, function(structure) {
             if (structure.australian === true) {
               if (structure.lng) {
                 structure.lon = structure.lng;
@@ -17,6 +16,9 @@ angular.module('qldarchApp').config(function($stateProvider) {
               return structure;
             }
           });
+        }).catch(function() {
+          console.log('unable to load australian projects');
+          return {};
         });
       } ]
     }
