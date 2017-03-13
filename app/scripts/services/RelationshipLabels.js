@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('qldarchApp').service('Relationshiplabels', function Relationshiplabels() {
+angular.module('qldarchApp').service('RelationshipLabels', function RelationshipLabels() {
   return {
     'TaughtBy' : 'taught by',
     'InfluencedBy' : 'influenced by',
