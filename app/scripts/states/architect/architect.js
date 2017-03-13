@@ -29,15 +29,15 @@ angular.module('qldarchApp').config(function($stateProvider) {
         }
       }]
     },
-    controller: ['$scope', 'architect', 'interviews', 'Uris', 'Entity', '$state', function($scope, architect, interviews, Uris, Entity, $state) {
+    controller: ['$scope', 'architect', 'interviews', 'ArchObj', '$state', function($scope, architect, interviews, ArchObj, $state) {
       $scope.architect = architect;
       $scope.interviews = interviews;
       $scope.entity = architect;
 
       $scope.delete = function(architect) {
-        var r = window.confirm('Delete architect ' + architect.name + '?');
+        var r = window.confirm('Delete architect ' + architect.label + '?');
         if (r === true) {
-          Entity.delete(architect.uri).then(function() {
+          ArchObj.delete(architect.id).then(function() {
             $state.go('architects.queensland');
           });
         }

@@ -2,18 +2,18 @@
 
 angular.module('qldarchApp').service('ArchObjTypeLabels', function ArchObjTypeLabels() {
   return {
-    'article' : 'Articles',
-    'award' : 'Awards',
-    'education' : 'Educational Insitutions',
-    'event' : 'Events',
-    'firm' : 'Firms',
-    'government' : 'Government Insitutions',
+    'article' : 'Article',
+    'award' : 'Award',
+    'education' : 'Educational Institution',
+    'event' : 'Event',
+    'firm' : 'Firm',
+    'government' : 'Government Institution',
     'interview' : 'Interview',
-    'organisation' : 'Organisations',
-    'person' : 'People',
-    'place' : 'Places',
-    'publication' : 'Publications',
-    'structure' : 'Structures',
-    'topic' : 'Topics'
+    'organisation' : 'Organisation',
+    'person' : 'Person',
+    'place' : 'Place',
+    'publication' : 'Publication',
+    'structure' : 'Structure',
+    'topic' : 'Topic'
   };
 });

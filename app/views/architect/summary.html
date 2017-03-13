@@ -3,7 +3,7 @@
   <div class="container">
     <div ng-hide="$state.includes('architect.summary.edit')">
       <!-- Editor: &nbsp; &nbsp; -->
-      <button class="btn btn-default btn-xs" ui-sref="architect.summary.edit({ architectId: architect.encodedUri })">
+      <button class="btn btn-default btn-xs" ui-sref="architect.summary.edit({ architectId: architect.id })">
         <i class="fa fa-pencil"></i> Edit
       </button>
       <button class="btn btn-default btn-xs" ng-click="$parent.delete(architect)" ng-show="Auth.user.role === 'admin'">
@@ -28,7 +28,7 @@
           ng-src="{{Uris.WS_MEDIA+architect.media[0].id+'?dimension=460x550'}}" />
       </div>
     </div>
-    <!--    <div class="row" ng-show="$state.includes('architect.summary.edit')">
+    <div class="row" ng-show="$state.includes('architect.summary.edit')">
       <div class="col-md-12">
         <form action="" ng-submit="updateArchitect(architect)">
           <div class="form-group">
@@ -36,27 +36,29 @@
             <div ui-select2="typeSelect" ng-model="architect.$type" class="form-control"></div>
           </div>
           <div class="form-group">
-            <label for="">First Name <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control" placeholder="First Name" ng-model="architect[Uris.FOAF_FIRST_NAME]">
+            <label for="">First Name <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control"
+              placeholder="First Name" ng-model="architect.firstname">
           </div>
           <div class="form-group">
-            <label for="">Last Name <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control" placeholder="Last Name" ng-model="architect[Uris.FOAF_LAST_NAME]">
+            <label for="">Last Name <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control"
+              placeholder="Last Name" ng-model="architect.lastname">
           </div>
           <div class="form-group">
-            <label for="">Also known as <i class="fa fa-info-circle" tooltip="Example: 'William Douglas' may be also known as 'Bill Douglas'"></i></label> <input type="text" class="form-control" placeholder="Also known as"
-              ng-model="architect[Uris.QA_PREF_LABEL]">
+            <label for="">Also known as <i class="fa fa-info-circle" tooltip="Example: 'William Douglas' may be also known as 'Bill Douglas'"></i></label>
+            <input type="text" class="form-control" placeholder="Also known as" ng-model="architect.preflabel">
           </div>
           <div class="form-group">
             <label for="biography">Biography</label>
-            <textarea ui-tinymce="tinymceOptions" rows="10" id="biography" class="form-control" placeholder="Biography" ng-model="architect[Uris.QA_SUMMARY]"></textarea>
+            <textarea ui-tinymce="tinymceOptions" rows="10" id="biography" class="form-control" placeholder="Biography" ng-model="architect.summary"></textarea>
           </div>
           <div class="checkbox">
-            <label> <input type="checkbox" ng-model="architect[Uris.QA_PRACTICED_IN_QUEENSLAND]"> Practiced in Queensland
+            <label> <input type="checkbox" ng-model="architect.practicedinqueensland"> Practiced in Queensland
             </label>
           </div>
           <button type="submit" class="btn btn-primary">Save</button>
           <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
         </form>
       </div>
-    </div> -->
+    </div>
   </div>
 </div>
