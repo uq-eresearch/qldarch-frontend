@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, Uris, RelationshipLabels, toaster) {
-
+  /* globals $:false */
   var path = Uris.WS_ROOT + 'archobj/';
 
   function getStartTime(exchange) {
@@ -39,10 +39,10 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
 
       updateArchitect: function (data) {
         var payload = angular.copy(data);
-        // Remove any extra information
-        if (payload.$type !== null && angular.isDefined(payload.$type)) {
+        if (payload.$type.id !== null && angular.isDefined(payload.$type.id)) {
           payload.type = payload.$type.id;
         }
+        // Remove any extra information
         delete payload.$type;
         delete payload.architect;
         delete payload.associatedMedia;
@@ -66,17 +66,64 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true,
           transformRequest: function(obj) {
-            var str = [];
-            for(var p in obj) {
-              str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
-            }
-            return str.join('&');
+            return $.param(obj);
           },
           data: payload
         }).then(function (response) {
           angular.extend(data, response.data);
           toaster.pop('success', data.label + ' updated.');
-          console.log('updated archobj id:' + data.id);
+          console.log('updated architect id:' + data.id);
+          return data;
+        }, function () {
+          toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+        });
+      },
+
+      updateFirm: function (data) {
+        var payload = angular.copy(data);
+        if (payload.$type.id !== null && angular.isDefined(payload.$type.id)) {
+          payload.type = payload.$type.id;
+        }
+        if (payload.$precededByFirms !== null && angular.isDefined(payload.$precededByFirms)) {
+          payload.precededby = payload.$precededByFirms.id;
+        }
+        if (payload.$succeededByFirms !== null && angular.isDefined(payload.$succeededByFirms)) {
+          payload.succeededby = payload.$succeededByFirms.id;
+        }
+        // Remove any extra information
+        delete payload.$type;
+        delete payload.$precededByFirms;
+        delete payload.$succeededByFirms;
+        delete payload.locked;
+        delete payload.associatedMedia;
+        delete payload.created;
+        delete payload.id;
+        delete payload.interviews;
+        // delete payload.label;
+        delete payload.media;
+        delete payload.owner;
+        // delete payload.australian;
+        delete payload.relationships;
+        delete payload.version;
+        // delete payload.summary;
+        // delete payload.type;
+        // delete payload.start;
+        // delete payload.end;
+        // delete payload.precededby;
+        // delete payload.succeededby;
+        return $http({
+          method: 'POST',
+          url: path + data.id,
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          withCredentials: true,
+          transformRequest: function(obj) {
+            return $.param(obj);
+          },
+          data: payload
+        }).then(function (response) {
+          angular.extend(data, response.data);
+          toaster.pop('success', data.label + ' updated.');
+          console.log('updated firm id:' + data.id);
           return data;
         }, function () {
           toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');

@@ -3,7 +3,7 @@
   <div class="container">
     <div ng-hide="$state.includes('firm.summary.edit')">
       <!-- Editor: &nbsp; &nbsp; -->
-      <button class="btn btn-default btn-xs" ui-sref="firm.summary.edit({ firmId: firm.encodedUri })">
+      <button class="btn btn-default btn-xs" ui-sref="firm.summary.edit({ firmId: firm.id })">
         <i class="fa fa-pencil"></i> Edit
       </button>
       <button class="btn btn-default btn-xs" ng-click="$parent.delete(firm)" ng-show="Auth.user.role === 'admin'">
@@ -43,7 +43,7 @@
           ng-if="firm.media.length==1&&firm.media[0].id" class="img-responsive" ng-src="{{Uris.WS_MEDIA+firm.media[0].id+'?dimension=460x550'}}" />
       </div>
     </div>
-    <!-- <div class="row" ng-show="$state.includes('firm.summary.edit')">
+    <div class="row" ng-show="$state.includes('firm.summary.edit')">
       <div class="col-md-12">
         <form action="" ng-submit="updateFirm(firm)">
           <div class="form-group">
@@ -51,18 +51,18 @@
             <div ui-select2="typeSelect" ng-model="firm.$type" class="form-control"></div>
           </div>
           <div class="form-group">
-            <label>Name <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control"
-              ng-model="firm[Uris.QA_FIRM_NAME]" placeholder="Firm Name">
+            <label>Name <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control" ng-model="firm.label"
+              placeholder="Firm Name">
           </div>
           <div class="form-group">
             <label>Summary</label>
-            <textarea ui-tinymce="tinymceOptions" rows="10" id="summary" class="form-control" placeholder="Summary" ng-model="firm[Uris.QA_SUMMARY]"></textarea>
+            <textarea ui-tinymce="tinymceOptions" rows="10" id="summary" class="form-control" placeholder="Summary" ng-model="firm.summary"></textarea>
           </div>
           <div class="form-group">
-            <label>Start Year</label> <input type="text" class="form-control" ng-model="firm[Uris.QA_START_DATE]" placeholder="Start Year">
+            <label>Start Year</label> <input type="text" class="form-control" ng-model="firm.start" placeholder="Start Year">
           </div>
           <div class="form-group">
-            <label>End Year</label> <input type="text" class="form-control" ng-model="firm[Uris.QA_END_DATE]" placeholder="End Year">
+            <label>End Year</label> <input type="text" class="form-control" ng-model="firm.end" placeholder="End Year">
           </div>
           <div class="form-group">
             <label>Preceded By</label>
@@ -73,13 +73,13 @@
             <div ui-select2="succeededBySelect" ng-model="firm.$succeededByFirms" class="form-control"></div>
           </div>
           <div class="checkbox">
-            <label> <input type="checkbox" ng-model="firm[Uris.QA_AUSTRALIAN]"> Australian Firm
+            <label> <input type="checkbox" ng-model="firm.australian"> Australian Firm
             </label>
           </div>
           <button type="submit" class="btn btn-primary">Save</button>
           <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
         </form>
       </div>
-    </div> -->
+    </div>
   </div>
 </div>
