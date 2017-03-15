@@ -23,9 +23,18 @@ angular.module('qldarchApp').config(function($stateProvider) {
         }
       } ],
     },
-    controller : [ '$scope', 'structure', function($scope, structure) {
+    controller : [ '$scope', 'structure', 'ArchObj', '$state', function($scope, structure, ArchObj, $state) {
       $scope.structure = structure;
       $scope.entity = structure;
+
+      $scope.delete = function(structure) {
+        var r = window.confirm('Delete project ' + structure.name + '?');
+        if (r === true) {
+          ArchObj.delete(structure.id).then(function() {
+            $state.go('structures.australian');
+          });
+        }
+      };
     } ]
   });
 });
