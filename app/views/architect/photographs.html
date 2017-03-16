@@ -1,6 +1,6 @@
 <div class="alert alert-warning" ng-show="Auth.user.role === 'editor' || Auth.user.role === 'admin'" style="margin: 0;">
   <div class="container">
-    <button class="btn btn-default btn-sm btn-xs" ui-sref="upload.images({uri: architect.uri, name: architect.name, type: architect.type })">
+    <button class="btn btn-default btn-sm btn-xs" ui-sref="upload.images({id: architect.id, name: architect.label, type: architect.type })">
       <i class="fa fa-cloud-upload"></i> Upload Image
     </button>
   </div>
