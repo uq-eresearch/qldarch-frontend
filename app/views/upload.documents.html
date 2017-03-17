@@ -11,6 +11,25 @@
     </div>
   </div>
   <!-- /Builder info -->
+  <div class="l-frame l-frame-tight">
+    <div class="container">
+      <label class="control-label">Which architect or firm or project do the articles represent?</label>
+      <div class="row">
+        <div class="col-sm-10">
+          <div ui-select2="archObjSelect" ng-model="selectedObj" class="form-control"></div>
+        </div>
+        <div class="col-sm-2" style="border-left: 1px solid #ccc; padding-left: 16px;">
+          <button class="btn btn-default form-control" ui-sref="structure.summary.edit({})">
+            <i class="fa fa-plus"></i> Create New
+          </button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="" class="control-label"> Title <i class="fa fa-asterisk fa-asterisk-required"></i>
+        </label> <input name="title" type="text" class="form-control" ng-model="selectedTitle" placeholder="What is this document about?" required />
+      </div>
+    </div>
+  </div>
   <div class="l-frame l-frame-highlight">
     <div class="container">
       <form action="">
@@ -21,123 +40,29 @@
           <div ng-file-drop-available="dropSupported=true" ng-show="!dropSupported">HTML5 Drop File is not supported!</div>
           <div class="upload-choose">
             <div class="upload-choose-label">Or select files</div>
-            <input type="file" ng-file-select="onFileSelect($files)" multiple>
+            <input type="file" ng-file-select ng-model="$files" multiple>
           </div>
         </div>
       </form>
     </div>
   </div>
-  <div class="l-frame" id="uploads">
+  <div class="l-frame l-frame-tight">
     <div class="container">
-      <div class="panel panel-default" ng-repeat="expression in expressions">
-        <div class="panel-body">
-          <div class="row">
-            <div class="col-sm-2">
-              <div class="square square-icon square-article" ng-show="expression[Uris.RDF_TYPE]==Uris.QA_ARTICLE_TYPE">
-                <div class="square-content">
-                  <div class="center">
-                    <div class="center-content">
-                      <i class="fa fa-book"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="square square-icon square-interview" ng-show="expression[Uris.RDF_TYPE]==Uris.QA_INTERVIEW_TYPE">
-                <div class="square-content">
-                  <div class="center">
-                    <div class="center-content">
-                      <i class="fa fa-microphone"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-10">
-              <!-- Published finished -->
-              <div ng-show="expression.uri">
-                <p>Published.</p>
-                <pre>{{ expression | json }}</pre>
-                <a ui-sref="article({ articleId: expression.encodedUri })" class="btn btn-default">Go to <strong>{{ expression[Uris.DCT_TITLE] }}</strong></a>
-              </div>
-              <!-- Not finished -->
-              <div ng-show="!expression.uri">
-                <div class="row">
-                  <div class="col-sm-10">
-                    <div class="progress">
-                      <div class="progress-bar" role="progressbar" style="width: {{ expression.$uploadFile.percent }}%;">{{ expression.$uploadFile.percent }}%</div>
-                    </div>
-                  </div>
-                  <div class="col-sm-2">
-                    <span ng-show="expression.$uploadFile.percent == 100"> Uploaded <i class="fa fa-check"></i>
-                    </span> <span ng-show="expression.$uploadFile.percent < 100"> Uploading... <i class="fa fa-spin fa-refresh"></i>
-                    </span>
-                  </div>
-                </div>
-                <form name="expression.$form" novalidate>
-                  <!-- Type (Line drawing, photograph) -->
-                  <div class="form-group">
-                    <label class="control-label" style="display: block;">Type</label> <label class="radio-inline"> <input type="radio" value="{{ Uris.QA_ARTICLE_TYPE }}" ng-model="expression[Uris.RDF_TYPE]">Article
-                    </label>
-                  </div>
-                  <div ng-show="expression[Uris.RDF_TYPE] == Uris.QA_ARTICLE_TYPE">
-                    <!-- Title -->
-                    <div class="form-group">
-                      <label for="" class="control-label"> Title <i class="fa fa-asterisk fa-asterisk-required"></i>
-                      </label> <input name="title" type="text" class="form-control" ng-model="expression[Uris.DCT_TITLE]" placeholder="What is this document about?" required />
-                    </div>
-                    <div class="form-group">
-                      <label>Author(s)</label> <input type="text" class="form-control" placeholder="Authors" ng-model="expression.$article[Uris.QA_AUTHORS]" />
-                    </div>
-                    <div class="form-group">
-                      <label for="">Periodical Title</label> <input type="text" class="form-control" placeholder="Periodical Title" ng-model="expression.$article[Uris.QA_PERIODICAL_TITLE]">
-                    </div>
-                    <div class="form-group">
-                      <label for="">Volume</label> <input type="text" class="form-control" placeholder="Volume" ng-model="expression.$article[Uris.QA_VOLUME]">
-                    </div>
-                    <div class="form-group">
-                      <label for="">Issue</label> <input type="text" class="form-control" placeholder="Issue" ng-model="expression.$article[Uris.QA_ISSUE]">
-                    </div>
-                    <div class="form-group">
-                      <label for="">Publication Date</label>
-                      <div>{{ expression.$article[Uris.QA_DATE_PUBLISHED] | date:'dd-MM-yyyy' }}</div>
-                      <div class="well well-sm">
-                        <datepicker ng-model="expression.$article[Uris.QA_DATE_PUBLISHED]" show-weeks="false"></datepicker>
-                        <div style="margin-top: 10px;" ng-show="expression.$article[Uris.QA_DATE_PUBLISHED]">
-                          <button type="button" class="btn btn-sm btn-primary" ng-click="expression.$article[Uris.QA_DATE_PUBLISHED] = ''">Clear</button>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="">Pages</label> <input type="text" class="form-control" placeholder="Pages" ng-model="expression.$article[Uris.QA_PAGES]">
-                    </div>
-                  </div>
-                  <div ng-show="expression[Uris.RDF_TYPE] == Uris.QA_INTERVIEW_TYPE">
-                    <div class="form-group">
-                      <label for="" class="control-label"> Article <i class="fa fa-asterisk fa-asterisk-required"></i>
-                      </label> <input name="title" type="text" class="form-control" ng-model="expression[Uris.DCT_TITLE]" placeholder="What is this document about?" required />
-                    </div>
-                  </div>
-                  <!-- Description -->
-                  <div class="form-group">
-                    <label>Description</label>
-                    <textarea placeholder="Describe this item" ng-model="expression[Uris.DCT_DESCRIPTION]" class="form-control"></textarea>
-                  </div>
-                  <div ng-hide="expression.uri">
-                    <button class="btn btn-primary" ng-click="publish(expression)" ng-disabled="expression.$form.$invalid">Publish</button>
-
-                    <button class="btn btn-default" ng-click="cancelUpload(expression)">Cancel</button>
-                  </div>
-                  <div ng-show="expression.uri">
-                    <button disabled class="btn btn-primary">
-                      <i class="fa fa-check"></i> Published
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
+      <div ng-repeat="expression in expressions" class="row">
+        <div class="col-sm-10">
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: {{ expression.$uploadFile.percent }}%;">{{ expression.$uploadFile.percent
+              }}%</div>
           </div>
         </div>
+        <div class="col-sm-2">
+          <span ng-show="expression.$uploadFile.percent == 100"> Uploaded <i class="fa fa-check"></i>
+          </span> <span ng-show="expression.$uploadFile.percent < 100"> Uploading... <i class="fa fa-spin fa-refresh"></i>
+          </span>
+        </div>
       </div>
+      <button class="btn btn-primary" ng-click="onFileSelect($files)">Upload</button>
+      <button class="btn btn-default" ng-click="cancelUpload()">Cancel</button>
     </div>
   </div>
 </div>
