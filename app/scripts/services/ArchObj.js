@@ -37,29 +37,67 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
       $cacheFactory.get('$http').removeAll();
     },
 
+    createArchitect : function(data) {
+      var payload = angular.copy(data);
+      payload.label = payload.firstname + ' ' + payload.lastname;
+      payload.architect = true;
+      // Remove any extra information
+      delete payload.associatedMedia;
+      delete payload.created;
+      delete payload.id;
+      delete payload.interviews;
+      delete payload.media;
+      delete payload.owner;
+      delete payload.relationships;
+      delete payload.version;
+      // delete payload.type;
+      // delete payload.label;
+      // delete payload.summary;
+      // delete payload.firstname;
+      // delete payload.lastname;
+      // delete payload.preflabel;
+      // delete payload.practicedinqueensland;
+      // delete payload.architect;
+      return $http({
+        method : 'PUT',
+        url : path,
+        headers : {
+          'Content-Type' : 'application/x-www-form-urlencoded'
+        },
+        withCredentials : true,
+        transformRequest : function(obj) {
+          return $.param(obj);
+        },
+        data : payload
+      }).then(function(response) {
+        angular.extend(data, response.data);
+        toaster.pop('success', data.label + ' created.');
+        console.log('created architect id:' + data.id);
+        return data;
+      }, function() {
+        toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+      });
+    },
+
     updateArchitect : function(data) {
       var payload = angular.copy(data);
-      if (payload.$type.id !== null && angular.isDefined(payload.$type.id)) {
-        payload.type = payload.$type.id;
-      }
       // Remove any extra information
-      delete payload.$type;
       delete payload.architect;
       delete payload.associatedMedia;
       delete payload.created;
-      // delete payload.firstname;
       delete payload.id;
       delete payload.interviews;
       delete payload.label;
-      // delete payload.lastname;
-      // delete payload.preflabel;
       delete payload.media;
       delete payload.owner;
-      // delete payload.practicedinqueensland;
       delete payload.relationships;
       delete payload.version;
-      // delete payload.summary;
       // delete payload.type;
+      // delete payload.firstname;
+      // delete payload.lastname;
+      // delete payload.preflabel;
+      // delete payload.practicedinqueensland;
+      // delete payload.summary;
       return $http({
         method : 'POST',
         url : path + data.id,
@@ -81,10 +119,31 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
       });
     },
 
-    updateFirm : function(data) {
+    createFirm : function(data) {
       var payload = angular.copy(data);
-      if (payload.$type.id !== null && angular.isDefined(payload.$type.id)) {
-        payload.type = payload.$type.id;
+      if (!(payload.start instanceof Date)) {
+        payload.start = new Date(payload.start);
+      }
+      var startdate =  '0' + payload.start.getDate();
+      var startmonth = '0' + (payload.start.getMonth() + 1);
+      var startyear =  payload.start.getFullYear();
+      if (!(isNaN(startdate)||isNaN(startmonth)||isNaN(startyear))) {
+        var fixedStartDate = startyear + '-' + startmonth + '-' + startdate ;
+        payload.start = fixedStartDate;
+      } else {
+        delete payload.start;
+      }
+      if (!(payload.end instanceof Date)) {
+        payload.end = new Date(payload.end);
+      }
+      var enddate =  '0' + payload.end.getDate();
+      var endmonth = '0' + (payload.end.getMonth() + 1);
+      var endyear =  payload.end.getFullYear();
+      if (!(isNaN(enddate)||isNaN(endmonth)||isNaN(endyear))) {
+        var fixedEndDate = endyear + '-' + endmonth + '-' + enddate ;
+        payload.end = fixedEndDate;
+      } else {
+        delete payload.end;
       }
       if (payload.$precededByFirms !== null && angular.isDefined(payload.$precededByFirms)) {
         payload.precededby = payload.$precededByFirms.id;
@@ -93,7 +152,6 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         payload.succeededby = payload.$succeededByFirms.id;
       }
       // Remove any extra information
-      delete payload.$type;
       delete payload.$precededByFirms;
       delete payload.$succeededByFirms;
       delete payload.locked;
@@ -101,14 +159,87 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
       delete payload.created;
       delete payload.id;
       delete payload.interviews;
-      // delete payload.label;
       delete payload.media;
       delete payload.owner;
-      // delete payload.australian;
       delete payload.relationships;
       delete payload.version;
-      // delete payload.summary;
       // delete payload.type;
+      // delete payload.label;
+      // delete payload.summary;
+      // delete payload.australian;
+      // delete payload.start;
+      // delete payload.end;
+      // delete payload.precededby;
+      // delete payload.succeededby;
+      return $http({
+        method : 'PUT',
+        url : path,
+        headers : {
+          'Content-Type' : 'application/x-www-form-urlencoded'
+        },
+        withCredentials : true,
+        transformRequest : function(obj) {
+          return $.param(obj);
+        },
+        data : payload
+      }).then(function(response) {
+        angular.extend(data, response.data);
+        toaster.pop('success', data.label + ' created.');
+        console.log('created firm id:' + data.id);
+        return data;
+      }, function() {
+        toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+      });
+    },
+
+    updateFirm : function(data) {
+      var payload = angular.copy(data);
+      if (!(payload.start instanceof Date)) {
+        payload.start = new Date(payload.start);
+      }
+      var startdate =  '0' + payload.start.getDate();
+      var startmonth = '0' + (payload.start.getMonth() + 1);
+      var startyear =  payload.start.getFullYear();
+      if (!(isNaN(startdate)||isNaN(startmonth)||isNaN(startyear))) {
+        var fixedStartDate = startyear + '-' + startmonth + '-' + startdate ;
+        payload.start = fixedStartDate;
+      } else {
+        delete payload.start;
+      }
+      if (!(payload.end instanceof Date)) {
+        payload.end = new Date(payload.end);
+      }
+      var enddate =  '0' + payload.end.getDate();
+      var endmonth = '0' + (payload.end.getMonth() + 1);
+      var endyear =  payload.end.getFullYear();
+      if (!(isNaN(enddate)||isNaN(endmonth)||isNaN(endyear))) {
+        var fixedEndDate = endyear + '-' + endmonth + '-' + enddate ;
+        payload.end = fixedEndDate;
+      } else {
+        delete payload.end;
+      }
+      if (payload.$precededByFirms !== null && angular.isDefined(payload.$precededByFirms)) {
+        payload.precededby = payload.$precededByFirms.id;
+      }
+      if (payload.$succeededByFirms !== null && angular.isDefined(payload.$succeededByFirms)) {
+        payload.succeededby = payload.$succeededByFirms.id;
+      }
+      // Remove any extra information
+      delete payload.$precededByFirms;
+      delete payload.$succeededByFirms;
+      delete payload.locked;
+      delete payload.associatedMedia;
+      delete payload.created;
+      delete payload.id;
+      delete payload.interviews;
+      delete payload.media;
+      delete payload.owner;
+      delete payload.relationships;
+      delete payload.version;
+      // delete payload.type;
+      // delete payload.label;
+      // delete payload.australian;
+      // delete payload.summary;
       // delete payload.start;
       // delete payload.end;
       // delete payload.precededby;
@@ -134,19 +265,21 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
       });
     },
 
-    updateStructure : function(data) {
+    createStructure : function(data) {
       var payload = angular.copy(data);
-      console.log(payload);
-      if (payload.$type.id !== null && angular.isDefined(payload.$type.id)) {
-        payload.type = payload.$type.id;
+      if (!(payload.completion instanceof Date)) {
+        payload.completion = new Date(payload.completion);
       }
       var date =  '0' + payload.completion.getDate();
       var month = '0' + (payload.completion.getMonth() + 1);
       var year =  payload.completion.getFullYear();
-      var fixedDate = year + '-' + month + '-' + date ;
-      payload.completion = fixedDate;
+      if (!(isNaN(date)||isNaN(month)||isNaN(year))) {
+        var fixedDate = year + '-' + month + '-' + date ;
+        payload.completion = fixedDate;
+      } else {
+        delete payload.completion;
+      }
       // Remove any extra information
-      delete payload.$type;
       delete payload.$associatedFirm;
       delete payload.$associatedArchitects;
       delete payload.$typologies;
@@ -157,14 +290,74 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
       delete payload.created;
       delete payload.id;
       delete payload.interviews;
-      // delete payload.label;
       delete payload.media;
-      delete payload.owner;
-      // delete payload.australian;
+      delete payload.owner;   
       delete payload.relationships;
       delete payload.version;
-      // delete payload.summary;
+      delete payload.typologies;
       // delete payload.type;
+      // delete payload.label;
+      // delete payload.summary;
+      // delete payload.location;
+      // delete payload.completion;
+      // delete payload.latitude;
+      // delete payload.longitude;
+      // delete payload.australian;
+      // delete payload.demolished;
+      return $http({
+        method : 'PUT',
+        url : path,
+        headers : {
+          'Content-Type' : 'application/x-www-form-urlencoded'
+        },
+        withCredentials : true,
+        transformRequest : function(obj) {
+          return $.param(obj);
+        },
+        data : payload
+      }).then(function(response) {
+        angular.extend(data, response.data);
+        toaster.pop('success', data.label + ' updated.');
+        console.log('updated firm id:' + data.id);
+        return data;
+      }, function() {
+        toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+      });
+    },
+
+    updateStructure : function(data) {
+      var payload = angular.copy(data);
+      if (!(payload.completion instanceof Date)) {
+        payload.completion = new Date(payload.completion);
+      }
+      var date =  '0' + payload.completion.getDate();
+      var month = '0' + (payload.completion.getMonth() + 1);
+      var year =  payload.completion.getFullYear();
+      if (!(isNaN(date)||isNaN(month)||isNaN(year))) {
+        var fixedDate = year + '-' + month + '-' + date ;
+        payload.completion = fixedDate;
+      } else {
+        delete payload.completion;
+      }
+      // Remove any extra information
+      delete payload.$associatedFirm;
+      delete payload.$associatedArchitects;
+      delete payload.$typologies;
+      delete payload.lat;
+      delete payload.lon;
+      delete payload.locked;
+      delete payload.associatedMedia;
+      delete payload.created;
+      delete payload.id;
+      delete payload.interviews;
+      delete payload.media;
+      delete payload.owner;
+      delete payload.relationships;
+      delete payload.version;
+      // delete payload.type;
+      // delete payload.label;
+      // delete payload.australian;
+      // delete payload.summary;
       // delete payload.location;
       // delete payload.completion;
       // delete payload.latitude;

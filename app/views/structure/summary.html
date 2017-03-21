@@ -67,10 +67,6 @@
       <div class="col-sm-12">
         <form name="form" action="" ng-submit="updateStructure(structure)">
           <div class="form-group">
-            <label>Type <i class="fa fa-asterisk fa-asterisk-required"></i></label>
-            <div ui-select2="typeSelect" ng-model="structure.$type" class="form-control"></div>
-          </div>
-          <div class="form-group">
             <label>Name <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control" ng-model="structure.label"
               placeholder="Project Name" required>
           </div>
@@ -106,7 +102,6 @@
           </div>
           <div class="form-group">
             <label>Completion Date</label>
-            <div>{{ structure.completion | date:'yyyy-MM-dd' }}</div>
             <div class="well well-sm">
               <div uib-datepicker ng-model="structure.completion" show-weeks="false"></div>
               <div style="margin-top: 10px;" ng-show="structure.completion">

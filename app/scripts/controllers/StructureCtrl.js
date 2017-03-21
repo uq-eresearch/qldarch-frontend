@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('qldarchApp').controller('StructureCtrl',
-    function($scope, structure, designers, ArchObjTypeLabels, ArchObj, firms, architects, $filter, BuildingTypologies, $state) {
+    function($scope, structure, designers, ArchObj, firms, architects, $filter, BuildingTypologies, $state) {
       $scope.structure = structure;
       $scope.designers = designers;
 
@@ -13,35 +13,9 @@ angular.module('qldarchApp').controller('StructureCtrl',
         return architect.label;
       });
 
-      $scope.structure.$type = null;
-      for ( var type in ArchObjTypeLabels) {
-        if (structure.type === type) {
-          $scope.structure.$type = {
-            id : type,
-            text : ArchObjTypeLabels[type]
-          };
-        }
-      }
+      $scope.structure.type = 'structure';
 
-      $scope.typeSelect = {
-        placeholder : 'Select a Type',
-        dropdownAutoWidth : true,
-        multiple : false,
-        query : function(options) {
-          var data = {
-            results : []
-          };
-          for ( var type in ArchObjTypeLabels) {
-            data.results.push({
-              id : type,
-              text : ArchObjTypeLabels[type]
-            });
-          }
-          options.callback(data);
-        }
-      };
-
-      if (angular.isDefined(designers.firms)) {
+      if (angular.isDefined(designers.firms[0])) {
         $scope.structure.$associatedFirm = {
           id : designers.firms[0].subject,
           text : designers.firms[0].subjectlabel
@@ -144,7 +118,16 @@ angular.module('qldarchApp').controller('StructureCtrl',
             });
           });
         } else {
-          console.log('structure', data);
+          ArchObj.createStructure(data).then(function() {
+            $state.go('structure.summary', {
+              structureId : data.id
+            });
+          }).catch(function(error) {
+            console.log('Failed to save', error);
+            $state.go('structure.summary.edit', {
+              structureId : data.id
+            });
+          });
         }
       };
 
