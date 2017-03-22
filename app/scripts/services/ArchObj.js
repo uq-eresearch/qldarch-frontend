@@ -385,6 +385,112 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
       });
     },
 
+    createArticle : function(data) {
+      var payload = angular.copy(data);
+      if (!(payload.published instanceof Date)) {
+        payload.published = new Date(payload.published);
+      }
+      var date =  '0' + payload.published.getDate();
+      var month = '0' + (payload.published.getMonth() + 1);
+      var year =  payload.published.getFullYear();
+      if (!(isNaN(date)||isNaN(month)||isNaN(year))) {
+        var fixedDate = year + '-' + month + '-' + date ;
+        payload.published = fixedDate;
+      } else {
+        delete payload.published;
+      }
+      // Remove any extra information
+      delete payload.locked;
+      delete payload.associatedMedia;
+      delete payload.created;
+      delete payload.id;
+      delete payload.media;
+      delete payload.owner;
+      delete payload.relationships;
+      delete payload.version;
+      // delete payload.type;
+      // delete payload.label;
+      // delete payload.authors;
+      // delete payload.periodical;
+      // delete payload.volume;
+      // delete payload.issue;
+      // delete payload.published;
+      // delete payload.pages;
+      // delete payload.summary;
+      return $http({
+        method : 'PUT',
+        url : path,
+        headers : {
+          'Content-Type' : 'application/x-www-form-urlencoded'
+        },
+        withCredentials : true,
+        transformRequest : function(obj) {
+          return $.param(obj);
+        },
+        data : payload
+      }).then(function(response) {
+        angular.extend(data, response.data);
+        toaster.pop('success', data.label + ' created.');
+        console.log('created article id:' + data.id);
+        return data;
+      }, function() {
+        toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+      });
+    },
+
+    updateArticle : function(data) {
+      var payload = angular.copy(data);
+      if (!(payload.published instanceof Date)) {
+        payload.published = new Date(payload.published);
+      }
+      var date =  '0' + payload.published.getDate();
+      var month = '0' + (payload.published.getMonth() + 1);
+      var year =  payload.published.getFullYear();
+      if (!(isNaN(date)||isNaN(month)||isNaN(year))) {
+        var fixedDate = year + '-' + month + '-' + date ;
+        payload.published = fixedDate;
+      } else {
+        delete payload.published;
+      }
+      // Remove any extra information
+      delete payload.locked;
+      delete payload.associatedMedia;
+      delete payload.created;
+      delete payload.id;
+      delete payload.label;
+      delete payload.media;
+      delete payload.owner;
+      delete payload.relationships;
+      delete payload.version;
+      // delete payload.type;
+      // delete payload.authors;
+      // delete payload.periodical;
+      // delete payload.volume;
+      // delete payload.issue;
+      // delete payload.published;
+      // delete payload.pages;
+      // delete payload.summary;
+      return $http({
+        method : 'POST',
+        url : path + data.id,
+        headers : {
+          'Content-Type' : 'application/x-www-form-urlencoded'
+        },
+        withCredentials : true,
+        transformRequest : function(obj) {
+          return $.param(obj);
+        },
+        data : payload
+      }).then(function(response) {
+        angular.extend(data, response.data);
+        toaster.pop('success', data.label + ' updated.');
+        console.log('updated article id:' + data.id);
+        return data;
+      }, function() {
+        toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+      });
+    },
+
     delete: function (id) {
       return $http.delete(path + id, {
         withCredentials:true

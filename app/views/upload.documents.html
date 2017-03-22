@@ -13,20 +13,38 @@
   <!-- /Builder info -->
   <div class="l-frame l-frame-tight">
     <div class="container">
-      <label class="control-label">Which architect or firm or project do the articles represent?</label>
-      <div class="row">
-        <div class="col-sm-10">
-          <div ui-select2="archObjSelect" ng-model="selectedObj" class="form-control"></div>
-        </div>
-        <div class="col-sm-2" style="border-left: 1px solid #ccc; padding-left: 16px;">
-          <button class="btn btn-default form-control" ui-sref="structure.summary.edit({})">
-            <i class="fa fa-plus"></i> Create New
-          </button>
+      <div class="form-group">
+        <label for="" class="control-label"> Title <i class="fa fa-asterisk fa-asterisk-required"></i>
+        </label> <input name="title" type="text" class="form-control" ng-model="article.label" placeholder="What is this document about?" required>
+      </div>
+      <div class="form-group">
+        <label>Author(s)</label> <input type="text" class="form-control" placeholder="Authors" ng-model="article.authors" />
+      </div>
+      <div class="form-group">
+        <label for="">Periodical Title</label> <input type="text" class="form-control" placeholder="Periodical Title" ng-model="article.periodical">
+      </div>
+      <div class="form-group">
+        <label for="">Volume</label> <input type="text" class="form-control" placeholder="Volume" ng-model="article.volume">
+      </div>
+      <div class="form-group">
+        <label for="">Issue</label> <input type="text" class="form-control" placeholder="Issue" ng-model="article.issue">
+      </div>
+      <div class="form-group">
+        <label for="">Publication Date</label>
+        <div>{{ article.published | date:'dd-MM-yyyy' }}</div>
+        <div class="well well-sm">
+          <datepicker ng-model="article.published" show-weeks="false"></datepicker>
+          <div style="margin-top: 10px;" ng-show="article.published">
+            <button type="button" class="btn btn-sm btn-primary" ng-click="article.published = ''">Clear</button>
+          </div>
         </div>
       </div>
       <div class="form-group">
-        <label for="" class="control-label"> Title <i class="fa fa-asterisk fa-asterisk-required"></i>
-        </label> <input name="title" type="text" class="form-control" ng-model="selectedTitle" placeholder="What is this document about?" required />
+        <label for="">Pages</label> <input type="text" class="form-control" placeholder="Pages" ng-model="article.pages">
+      </div>
+      <div class="form-group">
+        <label>Summary</label>
+        <textarea ui-tinymce="tinymceOptions" id="summary" class="form-control" placeholder="Summary" ng-model="article.summary"></textarea>
       </div>
     </div>
   </div>
@@ -61,7 +79,7 @@
           </span>
         </div>
       </div>
-      <button class="btn btn-primary" ng-click="onFileSelect($files)">Upload</button>
+      <button class="btn btn-primary" ng-click="onFileSelect($files, article)">Upload</button>
       <button class="btn btn-default" ng-click="cancelUpload()">Cancel</button>
     </div>
   </div>

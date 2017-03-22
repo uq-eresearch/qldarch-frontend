@@ -19,7 +19,7 @@
         </ul>
       </div>
     </div>
-    <button class="btn btn-default btn-xs" ui-sref="article.edit({ articleId: article.encodedUri })" ng-show="Auth.isEditor()">
+    <button class="btn btn-default btn-xs" ui-sref="article.edit({ articleId: article.id })" ng-show="Auth.isEditor()">
       <i class="fa fa-pencil"></i> Edit
     </button>
     <!-- Delete button -->
@@ -42,51 +42,52 @@
         <h5>Issue</h5>
         <p>{{ article.issue }}</p>
         <h5>Publication Date</h5>
-        <p class="text-muted" data-ng-hide="article.created.length">No date recorded</p>
-        <p>{{ article.created | date:'dd-MM-yyyy' }}</p>
+        <p class="text-muted" data-ng-hide="article.published.length">No date recorded</p>
+        <p>{{ article.published | date:'dd-MM-yyyy' }}</p>
         <h5>Pages</h5>
         <p>{{ article.pages }}</p>
         <h5>Summary</h5>
         <p>{{ article.summary || "No summary" }}</p>
       </div>
     </div>
-    <!--<div class="row" ng-show="$state.includes('article.edit')">
+    <div class="row" ng-show="$state.includes('article.edit')">
       <div class="col-md-6">
         <form action="" ng-submit="updateArticle(article)">
           <div class="form-group">
-            <label>Author(s)</label> <input type="text" class="form-control" placeholder="Authors" ng-model="article[Uris.QA_AUTHORS]" />
+            <label>Author(s)</label> <input type="text" class="form-control" placeholder="Authors" ng-model="article.authors" />
           </div>
           <div class="form-group">
-            <label for="">Periodical Title</label> <input type="text" class="form-control" placeholder="Periodical Title" ng-model="article[Uris.QA_PERIODICAL_TITLE]">
+            <label for="">Periodical Title</label> <input type="text" class="form-control" placeholder="Periodical Title"
+              ng-model="article.periodical">
           </div>
           <div class="form-group">
-            <label for="">Volume</label> <input type="text" class="form-control" placeholder="Volume" ng-model="article[Uris.QA_VOLUME]">
+            <label for="">Volume</label> <input type="text" class="form-control" placeholder="Volume" ng-model="article.volume">
           </div>
           <div class="form-group">
-            <label for="">Issue</label> <input type="text" class="form-control" placeholder="Issue" ng-model="article[Uris.QA_ISSUE]">
+            <label for="">Issue</label> <input type="text" class="form-control" placeholder="Issue" ng-model="article.issue">
           </div>
           <div class="form-group">
             <label for="">Publication Date</label>
-            <div>{{ expression.$article[Uris.QA_DATE_PUBLISHED] | date:'dd-MM-yyyy' }}</div>
+            <div>{{ article.published | date:'dd-MM-yyyy' }}</div>
             <div class="well well-sm">
-              <datepicker ng-model="article[Uris.QA_DATE_PUBLISHED]" show-weeks="false"></datepicker>
-              <div style="margin-top: 10px;" ng-show="article[Uris.QA_DATE_PUBLISHED]">
-                <button type="button" class="btn btn-sm btn-primary" ng-click="article[Uris.QA_DATE_PUBLISHED] = ''">Clear</button>
+              <datepicker ng-model="article.published" show-weeks="false"></datepicker>
+              <div style="margin-top: 10px;" ng-show="article.published">
+                <button type="button" class="btn btn-sm btn-primary" ng-click="article.published = ''">Clear</button>
               </div>
             </div>
           </div>
           <div class="form-group">
-            <label for="">Pages</label> <input type="text" class="form-control" placeholder="Pages" ng-model="article[Uris.QA_PAGES]">
-          </div> -->
-    <!-- Description -->
-    <!-- <div class="form-group">
+            <label for="">Pages</label> <input type="text" class="form-control" placeholder="Pages" ng-model="article.pages">
+          </div>
+          <!-- Description -->
+          <div class="form-group">
             <label>Summary</label>
-            <textarea placeholder="Summary" ng-model="article[Uris.DCT_DESCRIPTION]" class="form-control"></textarea>
+            <textarea ui-tinymce="tinymceOptions" placeholder="Summary" ng-model="article.summary" class="form-control"></textarea>
           </div>
           <button type="submit" class="btn btn-primary">Save</button>
           <button type="button" class="btn btn-default" ng-click="cancel(article)">Cancel</button>
         </form>
       </div>
-    </div> -->
+    </div>
   </div>
 </div>
