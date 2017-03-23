@@ -35,6 +35,17 @@ angular.module('qldarchApp').controller('FirmCtrl', function($scope, $filter, fi
     }
   };
 
+  var dataFirmSelect = {
+    results : []
+  };
+
+  angular.forEach(firms, function(firm) {
+    dataFirmSelect.results.push({
+      id : firm.id,
+      text : firm.label
+    });
+  });
+
   if (angular.isDefined(firm.precededby)) {
     $scope.firm.$precededByFirms = {
       id : firm.precededby.id,
@@ -48,18 +59,7 @@ angular.module('qldarchApp').controller('FirmCtrl', function($scope, $filter, fi
     placeholder : 'Select a Firm',
     dropdownAutoWidth : true,
     multiple : false,
-    query : function(options) {
-      var data = {
-        results : []
-      };
-      angular.forEach(firms, function(precededby) {
-        data.results.push({
-          id : precededby.id,
-          text : precededby.label
-        });
-      });
-      options.callback(data);
-    }
+    data : dataFirmSelect
   };
 
   if (angular.isDefined(firm.succeededby)) {
@@ -75,18 +75,7 @@ angular.module('qldarchApp').controller('FirmCtrl', function($scope, $filter, fi
     placeholder : 'Select a Firm',
     dropdownAutoWidth : true,
     multiple : false,
-    query : function(options) {
-      var data = {
-        results : []
-      };
-      angular.forEach(firms, function(succeededby) {
-        data.results.push({
-          id : succeededby.id,
-          text : succeededby.label
-        });
-      });
-      options.callback(data);
-    }
+    data : dataFirmSelect
   };
 
   $scope.clearStartYear = function() {

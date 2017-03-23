@@ -24,23 +24,23 @@ angular.module('qldarchApp').controller('StructureCtrl',
         $scope.structure.$associatedFirm = null;
       }
 
+      var dataFirmSelect = {
+        results : []
+      };
+
+      angular.forEach(firms, function(firm) {
+        dataFirmSelect.results.push({
+          id : firm.id,
+          text : firm.label
+        });
+      });
+
       $scope.firmSelect = {
         placeholder : 'Select a Firm',
         dropdownAutoWidth : true,
         multiple : false,
         allowClear : true,
-        query : function(options) {
-          var data = {
-            results : []
-          };
-          angular.forEach(firms, function(firm) {
-            data.results.push({
-              id : firm.id,
-              text : firm.label
-            });
-          });
-          options.callback(data);
-        }
+        data : dataFirmSelect
       };
 
       $scope.structure.$associatedArchitects = null;
@@ -54,22 +54,22 @@ angular.module('qldarchApp').controller('StructureCtrl',
         });
       }
 
+      var dataArchitectSelect = {
+        results : []
+      };
+
+      angular.forEach(architects, function(architect) {
+        dataArchitectSelect.results.push({
+          id : architect.id,
+          text : architect.label
+        });
+      });
+
       $scope.architectSelect = {
         placeholder : 'Select an Architect',
         dropdownAutoWidth : true,
         multiple : true,
-        query : function(options) {
-          var data = {
-            results : []
-          };
-          angular.forEach(architects, function(architect) {
-            data.results.push({
-              id : architect.id,
-              text : architect.label
-            });
-          });
-          options.callback(data);
-        }
+        data : dataArchitectSelect
       };
 
       $scope.structure.$typologies = null;
