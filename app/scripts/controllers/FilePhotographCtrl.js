@@ -14,6 +14,8 @@ angular.module('qldarchApp').controller('FilePhotographCtrl',
         } else if ($stateParams.type === 'structure') {
           params.structureId = $stateParams.id;
           $state.go('structure.photographs', params);
+        } else {
+          $state.go('user.files.images');
         }
       }
 
