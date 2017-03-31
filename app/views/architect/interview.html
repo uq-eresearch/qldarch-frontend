@@ -167,7 +167,7 @@
                     <i class="fa fa-check fa-fw"></i>
                   </button>
                   <!-- /Control Buttons -->
-                  <form name="exchange.$entityForm" ng-show="exchange.isCreatingEntity">
+                  <!-- <form name="exchange.$entityForm" ng-show="exchange.isCreatingEntity">
                     <div class="form-group">
                       <label>Type<i class="fa fa-asterisk fa-asterisk-required"></i></label>
                       <div ui-select2="typeSelect" ng-model="exchange.$entityForm[Uris.RDF_TYPE]" class="form-control"></div>
@@ -232,9 +232,9 @@
                     </div>
                     <button type="submit" class="btn btn-sm btn-primary" ng-click="addEntity(exchange)">Add</button>
                     <button class="btn btn-sm btn-default" ng-click="showAddRelationship(exchange)">Cancel</button>
-                  </form>
+                  </form> -->
                   <!-- New relationship -->
-                  <form name="exchange.$form" ng-hide="!exchange.isAddingRelationship">
+                  <!-- <form name="exchange.$form" ng-hide="!exchange.isAddingRelationship">
                     <div class="form-group">
                       <label>Subject</label>
                       <div class="row">
@@ -301,7 +301,7 @@
                     <button type="submit" class="btn btn-sm btn-primary" ng-click="addRelationshipToExchange(exchange.newRelationship, exchange)"
                       ng-disabled="exchange.$form.$invalid">Add</button>
                     <button class="btn btn-sm btn-default" ng-click="hideAddRelationship(exchange)">Cancel</button>
-                  </form>
+                  </form> -->
                 </div>
                 <!-- Relationship List -->
                 <ul class="list-group" ng-if="exchange.relationships.length">

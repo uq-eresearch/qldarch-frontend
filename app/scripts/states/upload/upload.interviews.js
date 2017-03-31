@@ -2,20 +2,29 @@
 
 angular.module('qldarchApp').config(function($stateProvider) {
   $stateProvider.state('upload.interviews', {
-    url : '/interviews?id',
+    url : '/interviews',
     resolve : {
-      interview : [ 'Uris', '$stateParams', 'GraphHelper', 'Interview', function(Uris, $stateParams, GraphHelper, Interview) {
-        if ($stateParams.id) {
-          var interviewUri = GraphHelper.decodeUriString($stateParams.id);
-          console.log('loading interview');
-          return Interview.load(interviewUri);
+      interview : [ '$stateParams', 'ArchObj', function($stateParams, ArchObj) {
+        if (!$stateParams.id) {
+          return {};
         } else {
-          var interview = {};
-          interview[Uris.RDF_TYPE] = Uris.QA_INTERVIEW_TYPE;
-          interview[Uris.QA_EXTERNAL_LOCATION] = [];
-          interview[Uris.QA_HAS_FILE] = [];
-          return interview;
+          return ArchObj.loadInterviewObj($stateParams.id).then(function(data) {
+            return data;
+          }).catch(function() {
+            console.log('unable to load interview ArchObj with relationship labels');
+            return {};
+          });
         }
+      } ],
+      architects : [ 'AggArchObjs', 'GraphHelper', '$filter', function(AggArchObjs, GraphHelper, $filter) {
+        return AggArchObjs.loadArchitects().then(function(data) {
+          return $filter('filter')(data, function(architect) {
+            return architect.label && !(/\s/.test(architect.label.substring(0, 1)));
+          });
+        }).catch(function() {
+          console.log('unable to load architects');
+          return {};
+        });
       } ]
     },
     templateUrl : 'views/upload.interviews.html',
