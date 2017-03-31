@@ -1,9 +1,5 @@
 'use strict';
 
-angular.module('qldarchApp').controller('UserFilesCtrl', function($scope, expressions, GraphHelper, $filter, Uris, LayoutHelper) {
+angular.module('qldarchApp').controller('UserFilesCtrl', function() {
   console.log('running controller');
-  console.log('expressions', expressions);
-
-  // Filtero ut only photos
-  $scope.photographRows = LayoutHelper.group(expressions, 6);
 });
