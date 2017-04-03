@@ -47,7 +47,7 @@
         <h5>Pages</h5>
         <p>{{ article.pages }}</p>
         <h5>Summary</h5>
-        <p>{{ article.summary || "No summary" }}</p>
+        <p style="white-space: pre-wrap;" ng-bind-html="article.summary||'No summary'"></p>
       </div>
     </div>
     <div class="row" ng-show="$state.includes('article.edit')">
