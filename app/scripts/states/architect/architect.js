@@ -2,23 +2,26 @@
 
 angular.module('qldarchApp').config(function($stateProvider) {
   $stateProvider.state('architect', {
-    abstract: true,
-    url: '/architect?architectId',
-    templateUrl: 'views/architect/layout.html',
-    resolve: {
-      architect: ['$stateParams', 'ArchObj', function($stateParams, ArchObj) {
+    abstract : true,
+    url : '/architect?architectId',
+    templateUrl : 'views/architect/layout.html',
+    resolve : {
+      architect : [ '$stateParams', 'ArchObj', '$filter', function($stateParams, ArchObj, $filter) {
         if (!$stateParams.architectId) {
           return {};
         } else {
           return ArchObj.loadWithRelationshipLabels($stateParams.architectId).then(function(data) {
+            data.media = $filter('orderBy')(data.media, function(media) {
+              return (media.preferred || '');
+            }, true);
             return data;
           }).catch(function() {
             console.log('unable to load architect ArchObj with relationship labels');
             return {};
           });
         }
-      }],
-      interviews: ['architect', 'ArchObj', function(architect, ArchObj) {
+      } ],
+      interviews : [ 'architect', 'ArchObj', function(architect, ArchObj) {
         if (architect.interviews) {
           var interviews = [];
           angular.forEach(architect.interviews, function(interview) {
@@ -31,9 +34,9 @@ angular.module('qldarchApp').config(function($stateProvider) {
           });
           return interviews;
         }
-      }]
+      } ]
     },
-    controller: ['$scope', 'architect', 'interviews', 'ArchObj', '$state', function($scope, architect, interviews, ArchObj, $state) {
+    controller : [ '$scope', 'architect', 'interviews', 'ArchObj', '$state', function($scope, architect, interviews, ArchObj, $state) {
       $scope.architect = architect;
       $scope.interviews = interviews;
       $scope.entity = architect;
@@ -46,7 +49,6 @@ angular.module('qldarchApp').config(function($stateProvider) {
           });
         }
       };
-    }
-    ]
+    } ]
   });
 });

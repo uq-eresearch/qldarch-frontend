@@ -6,11 +6,14 @@ angular.module('qldarchApp').config(function($stateProvider) {
     url : '/firm?firmId',
     templateUrl : 'views/firm/layout.html',
     resolve : {
-      firm : [ '$stateParams', 'ArchObj', function($stateParams, ArchObj) {
+      firm : [ '$stateParams', 'ArchObj', '$filter', function($stateParams, ArchObj, $filter) {
         if (!$stateParams.firmId) {
           return {};
         } else {
           return ArchObj.loadWithRelationshipLabels($stateParams.firmId).then(function(data) {
+            data.media = $filter('orderBy')(data.media, function(media) {
+              return (media.preferred || '');
+            }, true);
             return data;
           }).catch(function() {
             console.log('unable to load firm ArchObj with relationship labels');

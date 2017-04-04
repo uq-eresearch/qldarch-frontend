@@ -1,13 +1,16 @@
 <div class="thumbnail">
   <!-- Image -->
-  <a href ui-sref="image.view({imageId: photograph.id, archobjId: (architect.id||firm.id||structure.id)})" class="thumbnail-image"> <img
-    class="img-responsive" ng-src="{{Uris.WS_MEDIA+photograph.id+'?dimension=163x165'}}" alt="" />
+  <a href
+    ui-sref="image.view({imageId: photograph.id, archobjId: (architect.id||firm.id||structure.id), archobjType: (architect.type||firm.type||structure.type)})"
+    class="thumbnail-image"> <img class="img-responsive" ng-src="{{Uris.WS_MEDIA+photograph.id+'?dimension=163x165'}}" alt="" />
   </a>
   <!-- /Image -->
   <!-- Caption -->
   <div class="caption">
     <h4>
-      <a href ui-sref="image.view({imageId: photograph.id, archobjId: (architect.id||firm.id||structure.id)})"> {{ photograph.label }} </a>
+      <a href
+        ui-sref="image.view({imageId: photograph.id, archobjId: (architect.id||firm.id||structure.id), archobjType: (architect.type||firm.type||structure.type)})">
+        {{ photograph.label }} </a>
     </h4>
   </div>
   <!-- /Caption -->

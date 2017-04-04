@@ -3,55 +3,56 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-10 col-sm-offset-1">
-          <img class="img-responsive" ng-src="{{ image.file.file }}" alt="" style="margin: 0 auto;" />
+          <img class="img-responsive" ng-src="{{Uris.WS_MEDIA+image.id+'?dimension=256x256'}}" alt="" style="margin: 0 auto;" />
         </div>
       </div>
     </div>
   </div>
   <div class="l-frame">
     <div class="container">
-      <form name="image.$form" novalidate>
+      <form name="form" ng-submit="updateImage(image)">
         <!-- Type (Line drawing, photograph) -->
         <div class="form-group">
-          <label class="control-label" style="display: block;">Type <i class="fa fa-asterisk fa-asterisk-required"></i></label> <label class="radio-inline"> <input type="radio" value="{{ Uris.QA_PHOTOGRAPH_TYPE }}"
-            ng-model="image[Uris.RDF_TYPE]">Photograph
-          </label> <label class="radio-inline"> <input type="radio" id="inlineCheckbox2" value="{{ Uris.QA_LINEDRAWING_TYPE }}" ng-model="image[Uris.RDF_TYPE]">Line Drawing
-          </label>
+          <label>Image Type <i class="fa fa-asterisk fa-asterisk-required"></i></label>
+          <div ui-select2="typeSelect" ng-model="image.$type" class="form-control"></div>
         </div>
         <!-- Title -->
         <div class="form-group">
-          <label for="" class="control-label">Title of Detail <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input name="title" type="text" class="form-control" ng-model="image[Uris.DCT_TITLE]"
-            placeholder="What is this a photograph of?" required />
+          <label>Title of Detail <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control"
+            ng-model="image.label" placeholder="What is this a photograph of?" required />
         </div>
         <!-- Description -->
         <div class="form-group">
           <label>Description</label>
-          <textarea placeholder="Describe this item" ng-model="image[Uris.DCT_DESCRIPTION]" class="form-control"></textarea>
+          <textarea placeholder="Describe this item" ng-model="image.description" class="form-control"></textarea>
         </div>
         <!-- Creator -->
         <div class="form-group" class="form-group">
-          <label>Creator <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control" ng-model="image[Uris.DCT_CREATOR]" placeholder="Who is the creator?" />
+          <label>Creator <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control" ng-model="image.creator"
+            placeholder="Who is the creator?" />
         </div>
         <!-- Created Date -->
         <div class="form-group">
           <label>Created Date</label>
           <div class="well well-sm">
-            <datepicker ng-model="image[Uris.DCT_CREATED]" show-weeks="false"></datepicker>
-            <div style="margin-top: 10px;" ng-show="image[Uris.DCT_CREATED]">
-              <button type="button" class="btn btn-sm btn-primary" ng-click="image[Uris.DCT_CREATED] = ''">Clear</button>
+            <datepicker ng-model="image.created" show-weeks="false"></datepicker>
+            <div style="margin-top: 10px;" ng-show="image.created">
+              <button type="button" class="btn btn-sm btn-primary" ng-click="image.created = ''">Clear</button>
             </div>
           </div>
         </div>
         <!-- Rights -->
         <div class="form-group">
-          <label>Rights <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control" ng-model="image[Uris.DCT_RIGHTS]" placeholder="Who owns the rights to this item?" />
+          <label>Rights <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control" ng-model="image.rights"
+            placeholder="Who owns the rights to this item?" />
         </div>
         <!-- External Identifier -->
         <div class="form-group">
-          <label>External Identifier</label> <input type="text" placeholder="Does this item have an external identifier?" ng-model="image[Uris.DCT_IDENTIFIER]" class="form-control">
+          <label>External Identifier</label> <input type="text" placeholder="Does this item have an external identifier?" ng-model="image.identifier"
+            class="form-control">
         </div>
-        <button class="btn btn-primary" ng-click="save(image)" ng-disabled="image.$form.$invalid">Save</button>
-        <a class="btn btn-default" ng-href="{{ image.$linkTo('view') }}">Cancel</a>
+        <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid">Save</button>
+        <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
       </form>
     </div>
   </div>

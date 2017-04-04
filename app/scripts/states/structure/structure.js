@@ -6,15 +6,18 @@ angular.module('qldarchApp').config(function($stateProvider) {
     url : '/project?structureId',
     templateUrl : 'views/structure/layout.html',
     resolve : {
-      structure : [ '$stateParams', 'ArchObj', function($stateParams, ArchObj) {
+      structure : [ '$stateParams', 'ArchObj', '$filter', function($stateParams, ArchObj, $filter) {
         if (!$stateParams.structureId) {
           return {};
-        } else {      
+        } else {
           return ArchObj.loadWithRelationshipLabels($stateParams.structureId).then(function(data) {
             if (angular.isDefined(data.latitude) && angular.isDefined(data.longitude)) {
               data.lat = data.latitude;
               data.lon = data.longitude;
             }
+            data.media = $filter('orderBy')(data.media, function(media) {
+              return (media.preferred || '');
+            }, true);
             return data;
           }).catch(function() {
             console.log('unable to load structure ArchObj with relationship labels');

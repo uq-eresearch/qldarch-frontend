@@ -3,7 +3,7 @@
 angular.module('qldarchApp').config(function($stateProvider) {
   $stateProvider.state('image', {
     abstract : true,
-    url : '/image/:imageId?archobjId',
+    url : '/image?imageId&archobjId&archobjType',
     resolve : {
       depicts : [ '$stateParams', 'ArchObj', function($stateParams, ArchObj) {
         return ArchObj.load($stateParams.archobjId).then(function(data) {

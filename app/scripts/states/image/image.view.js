@@ -2,7 +2,7 @@
 
 angular.module('qldarchApp').config(function($stateProvider) {
   $stateProvider.state('image.view', {
-    url : '',
+    url : '/view',
     templateUrl : 'views/image.view.html'
   });
 });
