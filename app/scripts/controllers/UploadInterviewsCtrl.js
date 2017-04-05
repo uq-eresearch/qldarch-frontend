@@ -6,8 +6,6 @@ angular.module('qldarchApp').controller(
         ArchObj) {
 
       $scope.interview = interview;
-      interview.$audioFiles = [];
-      interview.$transcriptFiles = [];
 
       architects = $filter('orderBy')(architects, function(architect) {
         return architect.label;
@@ -63,96 +61,121 @@ angular.module('qldarchApp').controller(
       }
 
       function uploadAudio(data, file) {
-        var expAudio = {};
-        expAudio.$uploadFile = file;
+        $scope.expAudio = {};
+        $scope.expAudio.$uploadFile = file;
         $scope.myModelObj = {
           depicts : data.id,
           label : data.label,
           type : 'Audio'
         };
-        expAudio.id = $stateParams.id;
-        expAudio.$upload = File.upload($scope.myModelObj, file).progress(function(evt) {
-          expAudio.$uploadFile.percent = parseInt(100.0 * evt.loaded / evt.total);
-          expAudio.$uploadFile.isComplete = expAudio.$uploadFile.percent === 100;
-        }).success(function() {
+        $scope.expAudio.id = $stateParams.id;
+        return File.upload($scope.myModelObj, file).progress(function(evt) {
+          $scope.expAudio.$uploadFile.percent = parseInt(100.0 * evt.loaded / evt.total);
+          $scope.expAudio.$uploadFile.isComplete = $scope.expAudio.$uploadFile.percent === 100;
+        }).success(function(res) {
           console.log('Audio File upload succeeded');
-        }).error(function() {
+          return res;
+        }).error(function(err) {
           // Something went wrong uploading the file
           console.log('Audio File upload failed');
+          return err;
         });
       }
 
       function uploadTranscript(data, file) {
-        var expTranscript = {};
-        expTranscript.$uploadFile = file;
+        $scope.expTranscript = {};
+        $scope.expTranscript.$uploadFile = file;
         $scope.myModelObj = {
           depicts : data.id,
           label : data.label,
           type : 'Transcript'
         };
-        expTranscript.id = $stateParams.id;
-        expTranscript.$upload = File.upload($scope.myModelObj, file).progress(function(evt) {
-          expTranscript.$uploadFile.percent = parseInt(100.0 * evt.loaded / evt.total);
-          expTranscript.$uploadFile.isComplete = expTranscript.$uploadFile.percent === 100;
-        }).success(function() {
+        $scope.expTranscript.id = $stateParams.id;
+        return File.upload($scope.myModelObj, file).progress(function(evt) {
+          $scope.expTranscript.$uploadFile.percent = parseInt(100.0 * evt.loaded / evt.total);
+          $scope.expTranscript.$uploadFile.isComplete = $scope.expTranscript.$uploadFile.percent === 100;
+        }).success(function(res) {
           console.log('Transcript File upload succeeded');
-        }).error(function() {
+          return res;
+        }).error(function(err) {
           // Something went wrong uploading the file
           console.log('Transcript File upload failed');
+          return err;
         });
       }
 
+      function goToInterview(id) {
+        $state.go('interview', {
+          interviewId : id
+        });
+      }
+
+      $scope.isDisabled = false;
+
+      function disableButton() {
+        $scope.isDisabled = true;
+      }
+
       $scope.updateInterview = function(data, $audiofile, $transcriptfile) {
+        disableButton();
         if (data.id) {
-          ArchObj.updateInterview(data).then(function(response) {
+          ArchObj.updateInterview(data).then(function() {
             if ($audiofile) {
-              uploadAudio(response, $audiofile).then(function(response) {
+              uploadAudio(data, $audiofile).then(function() {
                 if ($transcriptfile) {
-                  uploadTranscript(response, $transcriptfile);
+                  uploadTranscript(data, $transcriptfile).then(function() {
+                    goToInterview(data.id);
+                  });
+                } else {
+                  goToInterview(data.id);
                 }
               });
+            } else {
+              goToInterview(data.id);
             }
-            $state.go('interview', {
-              interviewId : data.id
-            });
           }).catch(function(error) {
             console.log('Failed to save', error);
-            $state.go('upload.interview', {
-              id : data.id
-            });
+            goToInterview(data.id);
           });
         } else {
           ArchObj.createInterview(data).then(function(response) {
             if ($audiofile) {
-              uploadAudio(response, $audiofile).then(function(response) {
+              uploadAudio(response, $audiofile).then(function() {
                 if ($transcriptfile) {
-                  uploadTranscript(response, $transcriptfile);
+                  uploadTranscript(response, $transcriptfile).then(function() {
+                    goToInterview(response.id);
+                  });
+                } else {
+                  goToInterview(response.id);
                 }
               });
+            } else {
+              goToInterview(response.id);
             }
-            $state.go('interview', {
-              interviewId : response.id
-            });
           }).catch(function(error) {
             console.log('Failed to save', error);
-            $state.go('interviews');
+            $state.go('user.files.interviews');
           });
         }
       };
 
-      $scope.removeAudioFile = function() {
-        console.log('removeAudioFile');
-      };
-
-      $scope.removeTranscript = function() {
-        console.log('removeTranscript');
+      $scope.delete = function(data) {
+        var r = window.confirm('Delete media:' + data.label + '?');
+        if (r === true) {
+          File.delete(data.id).then(function() {
+            console.log('Media id: ' + data.id + ' deleted');
+            for (var i = 0; i < $scope.interview.media.length; i++) {
+              if ($scope.interview.media[i].id === data.id) {
+                $scope.interview.media.splice(i, 1);
+              }
+            }
+          });
+        }
       };
 
       $scope.cancel = function() {
         if (interview.id) {
-          $state.go('interview', {
-            interviewId : interview.id
-          });
+          goToInterview(interview.id);
         } else {
           $state.go('user.files.interviews');
         }
