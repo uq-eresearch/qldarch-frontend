@@ -16,8 +16,7 @@
         <td><strong>{{ user.email }}</strong> ({{ user.username }})</td>
         <td><select ng-model="user.role" ng-hide="user.role == 'admin'" ng-change="user.$isChanged = true">
             <option value="editor">Editor - Build, Add, Upload</option>
-            <option value="authorized">Registered - Build</option>
-            <option value="disabled">Disabled</option>
+            <option value="reader">Reader</option>
         </select> <span ng-show="user.role == 'admin'">Admin - Build, Add, Upload, Delete</span></td>
         <td><input type="checkbox" ng-model="user.contact" ng-change="user.$isChanged = true"></td>
         <td><span>

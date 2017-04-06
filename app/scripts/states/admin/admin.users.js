@@ -6,7 +6,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
     resolve : {
       users : [ 'Uris', '$http', 'GraphHelper', function(Uris, $http, GraphHelper) {
         // Gets all users in the system and their roles
-        return $http.get(Uris.JSON_ROOT + 'user').then(function(response) {
+        return $http.get(Uris.WS_ROOT + 'accounts/all').then(function(response) {
           return GraphHelper.graphValues(response.data);
         });
       } ]

@@ -6,8 +6,7 @@ angular.module('qldarchApp').controller('AdminUsersCtrl', function($scope, users
   $scope.saveUser = function(user) {
     user.$isSaving = true;
     console.log('user is', user);
-    $http.put(Uris.JSON_ROOT + 'user/update', jQuery.param({
-      username : user.username,
+    $http.post(Uris.WS_ROOT + 'account/update/' + user.id, jQuery.param({
       role : user.role,
       contact : user.contact
     }), {
