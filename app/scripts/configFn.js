@@ -1,8 +1,11 @@
 'use strict';
 
-angular.module('qldarchApp').config(function($urlRouterProvider, $httpProvider, $qProvider) {
+angular.module('qldarchApp').config(function($urlRouterProvider, $httpProvider, $qProvider, $locationProvider) {
 
   console.log('does this work?');
+
+  $locationProvider.hashPrefix('');
+
   $qProvider.errorOnUnhandledRejections(false);
 
   $httpProvider.defaults.withCredentials = true;

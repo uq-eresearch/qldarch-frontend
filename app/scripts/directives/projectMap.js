@@ -70,7 +70,7 @@ angular.module('qldarchApp').directive('projectMap', function() {
 
               // Create an info window
               var infowindow = new google.maps.InfoWindow({
-                content : '<a href="#!/project/summary?structureId=' + infowindowid + '">' + infowindowlabel + '</a>'
+                content : '<a href="#/project/summary?structureId=' + infowindowid + '">' + infowindowlabel + '</a>'
               });
 
               google.maps.event.addListener(marker, 'click', function() {

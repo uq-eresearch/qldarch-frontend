@@ -81,7 +81,7 @@ angular.module('qldarchApp').controller('MapViewerCtrl', function ($scope, compo
     var infowindow;
     if (location.type === 'structure') {
       infowindow = new google.maps.InfoWindow({
-        content: '<a href="#!/project/summary?structureId=' + btoa(location.uri) + '">' + location.name + '</a>'
+        content: '<a href="#/project/summary?structureId=' + btoa(location.uri) + '">' + location.name + '</a>'
       });
     } else {
       infowindow = new google.maps.InfoWindow({

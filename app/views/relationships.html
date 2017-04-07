@@ -90,9 +90,9 @@ text {
                 {{ selected.label }} </a> <a ng-if="selected.type=='firm'" ui-sref="firm.summary({ firmId: selected.id })"> {{ selected.label }} </a> <a
                 ng-if="selected.type=='structure'" ui-sref="structure.summary({ structureId: selected.id })"> {{ selected.label }} </a> <a
                 ng-if="selected.type=='interview'&&isArchitectFromInterview(selected.id)==true"
-                ng-href="#!/architect/interview/{{selected.id}}?architectId={{getArchitectIdofInterviews(selected.id)}}"> {{ selected.label }} </a> <a
+                ng-href="#/architect/interview/{{selected.id}}?architectId={{getArchitectIdofInterviews(selected.id)}}"> {{ selected.label }} </a> <a
                 ng-if="selected.type=='interview'&&isArchitectFromInterview(selected.id)==false"
-                ng-href="#!/other/interview/{{selected.id}}?otherId={{getArchitectIdofInterviews(selected.id)}}"> {{ selected.label }} </a>
+                ng-href="#/other/interview/{{selected.id}}?otherId={{getArchitectIdofInterviews(selected.id)}}"> {{ selected.label }} </a>
               <div ng-if="!(selected.type=='person'||selected.type=='firm'||selected.type=='structure'||selected.type=='interview')"
                 style="text-transform: capitalize;">{{ selected.label }}</div>
             </h4>
@@ -131,10 +131,10 @@ text {
               <h5 style="line-height: 24px; font-weight: normal; margin-bottom: 0;">
                 <div ng-if="relationship.source=='interview'">
                   <a ng-if="isArchitectFromInterview(relationship.interview)==true"
-                    ng-href="#!/architect/interview/{{relationship.interview}}?architectId={{getArchitectIdofInterviews(relationship.interview)}}&time={{relationship.utterance}}">
+                    ng-href="#/architect/interview/{{relationship.interview}}?architectId={{getArchitectIdofInterviews(relationship.interview)}}&time={{relationship.utterance}}">
                     {{ relationship.subjectlabel }} {{ relationship.relationship }} {{ relationship.objectlabel }} </a> <a
                     ng-if="isArchitectFromInterview(relationship.interview)==false"
-                    ng-href="#!/other/interview/{{relationship.interview}}?otherId={{getArchitectIdofInterviews(relationship.interview)}}&time={{relationship.utterance}}">
+                    ng-href="#/other/interview/{{relationship.interview}}?otherId={{getArchitectIdofInterviews(relationship.interview)}}&time={{relationship.utterance}}">
                     {{ relationship.subjectlabel }} {{ relationship.relationship }} {{ relationship.objectlabel }} </a>
                 </div>
                 <div ng-if="relationship.source=='structure'">
@@ -152,7 +152,7 @@ text {
                     relationship.objectlabel }} </a> <a ng-if="relationship.subjectype=='structure'"
                     ui-sref="structure.summary({ structureId: relationship.subject })"> {{ relationship.subjectlabel }} {{
                     relationship.relationship }} {{ relationship.objectlabel }} </a> <a ng-if="relationship.subjectype=='interview'"
-                    ng-href="#!/architect/interview/{{relationship.subject}}?architectId={{relationship.object}}&time={{relationship.utterance}}">
+                    ng-href="#/architect/interview/{{relationship.subject}}?architectId={{relationship.object}}&time={{relationship.utterance}}">
                     {{ relationship.subjectlabel }} {{ relationship.relationship }} {{ relationship.objectlabel }} </a>
                 </div>
               </h5>

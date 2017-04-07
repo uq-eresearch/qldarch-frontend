@@ -22,7 +22,7 @@
             <li ui-sref-active="active" ng-if="interviews.length == 1" ng-show="other.interviews"><a href href
               ui-sref="other.interview({ interviewId: interviews[0].id })">Interview</a></li>
             <li class="dropdown" ng-show="interviews.length > 1" ng-class="{'active': $state.includes('other.interview')}"><a
-              class="dropdown-toggle" data-toggle="dropdown" href="#!"> Interviews <span class="caret"></span></a>
+              class="dropdown-toggle" data-toggle="dropdown" href="#"> Interviews <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li role="presentation" ng-repeat="interview in interviews"><a role="menuitem" tabindex="-1" href
                   ui-sref="other.interview({ interviewId: interview.id })">Interview #{{ $index + 1 }}</a></li>
