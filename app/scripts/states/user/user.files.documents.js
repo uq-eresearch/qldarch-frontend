@@ -3,7 +3,13 @@
 angular.module('qldarchApp').config(function($stateProvider) {
   $stateProvider.state('user.files.documents', {
     url : '/documents',
-    resolve : {},
+    resolve : {
+      mediadocuments : [ 'mediaowned', '$filter', function(mediaowned, $filter) {
+        return $filter('filter')(mediaowned, function(med) {
+          return med.type === ('Article' || 'Text' || 'Spreadsheet');
+        });
+      } ]
+    },
     controller : 'UserFilesDocumentsCtrl',
     templateUrl : 'views/user.files.documents.html'
   });

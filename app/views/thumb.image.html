@@ -1,7 +1,7 @@
 <div class="thumbnail">
   <!-- Image -->
   <a href
-    ui-sref="image.view({imageId: photograph.id, archobjId: (architect.id||firm.id||structure.id), archobjType: (architect.type||firm.type||structure.type)})"
+    ui-sref="image.view({imageId: photograph.id, archobjId: (architect.id||firm.id||structure.id||photograph.depicts.id), archobjType: (architect.type||firm.type||structure.type||photograph.depicts.type)})"
     class="thumbnail-image"> <img class="img-responsive" ng-src="{{Uris.WS_MEDIA+photograph.id+'?dimension=163x165'}}" alt="" />
   </a>
   <!-- /Image -->
@@ -9,7 +9,7 @@
   <div class="caption">
     <h4>
       <a href
-        ui-sref="image.view({imageId: photograph.id, archobjId: (architect.id||firm.id||structure.id), archobjType: (architect.type||firm.type||structure.type)})">
+        ui-sref="image.view({imageId: photograph.id, archobjId: (architect.id||firm.id||structure.id||photograph.depicts.id), archobjType: (architect.type||firm.type||structure.type||photograph.depicts.type)})">
         {{ photograph.label }} </a>
     </h4>
   </div>

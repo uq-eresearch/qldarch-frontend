@@ -8,8 +8,8 @@
   </div>
   <div class="l-frame">
     <div class="container">
-      <div ng-repeat="photographRow in photographRows" class="row">
-        <div class="col-md-2" ng-repeat="photograph in photographRow">
+      <div ng-repeat="mediaimageRow in mediaimageRows" class="row">
+        <div class="col-md-2" ng-repeat="photograph in mediaimageRow">
           <div ng-include="'views/thumb.image.html'" ng-init="image = photograph"></div>
         </div>
       </div>

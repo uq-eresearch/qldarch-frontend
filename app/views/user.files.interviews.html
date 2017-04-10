@@ -9,7 +9,8 @@
   <div class="l-frame">
     <div class="container">
       <ul>
-        <li ng-repeat="expression in expressions"><a ng-href="{{ expression.$link }}">{{ expression[Uris.DCT_TITLE ]}}</a></li>
+        <li ng-repeat="mediainterview in mediainterviews"><a href="#/interview/{{ mediainterview.depicts.id }}">{{ mediainterview.label }}
+            ({{ mediainterview.type }})</a></li>
       </ul>
     </div>
   </div>
