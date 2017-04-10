@@ -16,7 +16,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
             return ArchObj.load(relationship.subject).then(function(data) {
               if (angular.isUndefined(relationship.media)) {
                 relationship.media = $filter('filter')(data.media, function(med) {
-                  return (med.preferred || (med.type === 'Photograph' || 'Portrait' || 'Image'));
+                  return (med.preferred || (med.type === ('Photograph' || 'Portrait' || 'Image')));
                 }).id;
               }
               return relationship;
@@ -32,7 +32,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
             return ArchObj.load(relationship.subject).then(function(data) {
               if (angular.isUndefined(relationship.media)) {
                 relationship.media = $filter('filter')(data.media, function(med) {
-                  return (med.preferred || (med.type === 'Photograph' || 'Portrait' || 'Image'));
+                  return (med.preferred || (med.type === ('Photograph' || 'Portrait' || 'Image')));
                 }).id;
               }
               return relationship;

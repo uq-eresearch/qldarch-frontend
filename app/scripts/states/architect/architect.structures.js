@@ -24,7 +24,7 @@ angular.module('qldarchApp').config(
               var promise = ArchObj.load(((structure.subjectype === 'structure') ? structure.subject : structure.object)).then(function(data) {
                 if (angular.isUndefined(structure.media)) {
                   structure.media = $filter('filter')(data.media, function(med) {
-                    return (med.preferred || (med.type === 'Photograph' || 'Portrait' || 'Image'));
+                    return (med.preferred || (med.type === ('Photograph' || 'Portrait' || 'Image')));
                   }).id;
                 }
                 structure.typologies = data.typologies;

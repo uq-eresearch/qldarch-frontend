@@ -12,7 +12,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
       } ],
       images : [ 'depicts', '$filter', function(depicts, $filter) {
         return $filter('filter')(depicts.media, function(media) {
-          return media.type === 'Photograph' || 'Portrait' || 'Image';
+          return media.type === ('Photograph' || 'Portrait' || 'Image' || 'LineDrawing');
         });
       } ],
       image : [ 'images', '$stateParams', function(images, $stateParams) {

@@ -26,7 +26,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
           });
           if (m.length === 0) {
             m = $filter('filter')(data.media, function(media) {
-              return media.type === 'Photograph' || 'Portrait' || 'Image';
+              return media.type === ('Photograph' || 'Portrait' || 'Image' || 'LineDrawing');
             });
           }
           if (m.length > 0) {
