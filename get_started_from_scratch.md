@@ -4,6 +4,7 @@ From project directory run the following
 * $ `sudo apt-get install npm`
 * $ `sudo npm update -g npm` *optional
 * $ `sudo npm install -g yo bower grunt-cli`
+* $ `sudo npm install -g generator-karma`
 * $ `sudo npm install -g generator-angular`
 * $ `npm init` *this will create `package.json` file
 * add entries as input below
