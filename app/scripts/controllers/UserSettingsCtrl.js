@@ -9,7 +9,7 @@ angular.module('qldarchApp').controller('UserSettingsCtrl', function($scope, Aut
     $scope.user.username = Auth.user.username;
     $scope.user.email = Auth.user.email;
 
-    $http.put(Uris.JSON_ROOT + 'user', jQuery.param($scope.user), {
+    $http.put(Uris.WS_ROOT + 'account/password', jQuery.param($scope.user), {
       headers : {
         'Content-Type' : 'application/x-www-form-urlencoded'
       }
