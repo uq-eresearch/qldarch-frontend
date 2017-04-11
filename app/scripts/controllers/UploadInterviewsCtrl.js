@@ -2,13 +2,14 @@
 
 angular.module('qldarchApp').controller(
     'UploadInterviewsCtrl',
-    function($scope, interview, architects, $filter, GraphHelper, Entity, Uris, $cacheFactory, File, Expression, toaster, $state, $stateParams,
-        ArchObj) {
+    function($scope, interview, architects, personnotarchitect, $filter, GraphHelper, Entity, Uris, $cacheFactory, File, Expression, toaster, $state,
+        $stateParams, ArchObj) {
 
       $scope.interview = interview;
 
-      architects = $filter('orderBy')(architects, function(architect) {
-        return architect.label;
+      var person = architects.concat(personnotarchitect);
+      person = $filter('orderBy')(person, function(p) {
+        return p.label;
       });
 
       $scope.interview.$interviewees = null;
@@ -37,10 +38,10 @@ angular.module('qldarchApp').controller(
         results : []
       };
 
-      angular.forEach(architects, function(architect) {
+      angular.forEach(person, function(p) {
         dataPersonSelect.results.push({
-          id : architect.id,
-          text : architect.label
+          id : p.id,
+          text : p.label
         });
       });
 

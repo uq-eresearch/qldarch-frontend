@@ -25,6 +25,14 @@ angular.module('qldarchApp').config(function($stateProvider) {
           console.log('unable to load architects');
           return {};
         });
+      } ],
+      personnotarchitect : [ 'AggArchObjs', function(AggArchObjs) {
+        return AggArchObjs.loadPersonNotArchitect().then(function(data) {
+          return data;
+        }).catch(function() {
+          console.log('unable to load person non-architect');
+          return {};
+        });
       } ]
     },
     templateUrl : 'views/upload.interviews.html',
