@@ -7,12 +7,16 @@ angular.module('qldarchApp').config(function($stateProvider) {
     templateUrl : 'views/other/layout.html',
     resolve : {
       other : [ '$stateParams', 'ArchObj', function($stateParams, ArchObj) {
-        return ArchObj.loadWithRelationshipLabels($stateParams.otherId).then(function(data) {
-          return data;
-        }).catch(function() {
-          console.log('unable to load other ArchObj with relationship labels');
+        if (!$stateParams.otherId) {
           return {};
-        });
+        } else {
+          return ArchObj.loadWithRelationshipLabels($stateParams.otherId).then(function(data) {
+            return data;
+          }).catch(function() {
+            console.log('unable to load other ArchObj with relationship labels');
+            return {};
+          });
+        }
       } ],
       interviews : [ 'other', 'ArchObj', function(other, ArchObj) {
         if (other.interviews) {

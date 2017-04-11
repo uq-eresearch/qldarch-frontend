@@ -631,6 +631,89 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
       });
     },
 
+    createOther : function(data) {
+      var payload = angular.copy(data);
+      if (payload.$type !== null && angular.isDefined(payload.$type)) {
+        payload.type = payload.$type.id;
+      }
+      delete payload.$type;
+      // Remove any extra information
+      delete payload.locked;
+      delete payload.associatedMedia;
+      delete payload.created;
+      delete payload.id;
+      delete payload.interviews;
+      delete payload.media;
+      delete payload.owner;
+      delete payload.relationships;
+      delete payload.version;
+      // delete payload.type;
+      // delete payload.label;
+      // delete payload.summary;
+      console.log(payload);
+      return $http({
+        method : 'PUT',
+        url : path,
+        headers : {
+          'Content-Type' : 'application/x-www-form-urlencoded'
+        },
+        withCredentials : true,
+        transformRequest : function(obj) {
+          return $.param(obj);
+        },
+        data : payload
+      }).then(function(response) {
+        angular.extend(data, response.data);
+        toaster.pop('success', data.label + ' created.');
+        console.log('created other id:' + data.id);
+        return data;
+      }, function() {
+        toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+      });
+    },
+
+    updateOther : function(data) {
+      var payload = angular.copy(data);
+      console.log(data);
+      if (payload.$type !== null && angular.isDefined(payload.$type)) {
+        payload.type = payload.$type.id;
+      }
+      delete payload.$type;
+      // Remove any extra information
+      delete payload.locked;
+      delete payload.associatedMedia;
+      delete payload.created;
+      delete payload.id;
+      delete payload.interviews;
+      delete payload.media;
+      delete payload.owner;
+      delete payload.relationships;
+      delete payload.version;
+      // delete payload.type;
+      // delete payload.label;
+      // delete payload.summary;
+      console.log(payload);
+      return $http({
+        method : 'POST',
+        url : path + data.id,
+        headers : {
+          'Content-Type' : 'application/x-www-form-urlencoded'
+        },
+        withCredentials : true,
+        transformRequest : function(obj) {
+          return $.param(obj);
+        },
+        data : payload
+      }).then(function(response) {
+        angular.extend(data, response.data);
+        toaster.pop('success', data.label + ' updated.');
+        console.log('updated other id:' + data.id);
+        return data;
+      }, function() {
+        toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+      });
+    },
+
     delete : function(id) {
       return $http.delete(path + id, {
         withCredentials : true

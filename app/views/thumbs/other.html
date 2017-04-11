@@ -1,9 +1,11 @@
 <div class="thumbnail thumbnail-fix">
-  <a ui-sref="other.summary({otherId: other.encodedUri})" class="thumbnail-image"> <img ng-src="{{ other.picture.thumb }}" alt="{{ other.name }}">
+  <a ui-sref="other.summary({otherId: other.id})" class="thumbnail-image"> <img ng-if="other.media"
+    ng-src="{{Uris.WS_MEDIA+other.media+'?dimension=163x165'}}" alt="{{ other.label }}"> <img ng-if="!other.media" ng-src="images/icon.png"
+    alt="{{ other.label }}">
   </a>
   <div class="caption">
     <h4>
-      <a ui-sref="other.summary({otherId: other.encodedUri})"> {{ other.name }} </a>
+      <a ui-sref="other.summary({otherId: other.id})"> {{ other.label }} </a>
     </h4>
   </div>
 </div>

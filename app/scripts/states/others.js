@@ -1,30 +1,30 @@
 'use strict';
 
-angular.module('qldarchApp').config(
-    function($stateProvider) {
-      $stateProvider.state('others', {
-        url : '/others',
-        templateUrl : 'views/other/others.html',
-        resolve : {
-          others : [
-              'Entity',
-              'Uris',
-              'GraphHelper',
-              function(Entity, Uris, GraphHelper) {
-                return Entity.loadAllIncSubclass('qldarch:NonDigitalThing', true).then(
-                    function(entities) {
-                      var results = [];
-                      angular.forEach(entities, function(entity) {
-                        var types = GraphHelper.asArray(entity[Uris.RDF_TYPE]);
-                        if (types.indexOf(Uris.QA_ARCHITECT_TYPE) === -1 && types.indexOf(Uris.QA_FIRM_TYPE) === -1 &&
-                            types.indexOf(Uris.QA_STRUCTURE_TYPE) === -1 && types.indexOf(Uris.QA_BUILDING_TYPOLOGY) === -1) {
-                          results.push(entity);
-                        }
-                      });
-                      return results;
-                    });
-              } ]
-        },
-        controller : 'OthersCtrl'
-      });
-    });
+angular.module('qldarchApp').config(function($stateProvider) {
+  $stateProvider.state('others', {
+    url : '/others',
+    templateUrl : 'views/other/others.html',
+    resolve : {
+      personnotarchitect : [ 'AggArchObjs', function(AggArchObjs) {
+        return AggArchObjs.loadPersonNotArchitect().then(function(data) {
+          return data;
+        }).catch(function() {
+          console.log('unable to load person non-architect');
+          return {};
+        });
+      } ],
+      othersnotperson : [ 'AggArchObjs', function(AggArchObjs) {
+        return AggArchObjs.loadOthersNotPerson().then(function(data) {
+          return data;
+        }).catch(function() {
+          console.log('unable to load others non-person');
+          return {};
+        });
+      } ],
+      others : [ 'personnotarchitect', 'othersnotperson', function(personnotarchitect, othersnotperson) {
+        return personnotarchitect.concat(othersnotperson);
+      } ]
+    },
+    controller : 'OthersCtrl'
+  });
+});

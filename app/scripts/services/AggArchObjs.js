@@ -48,6 +48,20 @@ angular.module('qldarchApp').factory('AggArchObjs', function($http, $cacheFactor
         console.log('load articles');
         return result.data;
       });
+    },
+
+    loadPersonNotArchitect : function() {
+      return $http.get(Uris.WS_ROOT + 'others/person/notarchitect').then(function(result) {
+        console.log('load person non-architect');
+        return result.data;
+      });
+    },
+
+    loadOthersNotPerson : function() {
+      return $http.get(Uris.WS_ROOT + 'others/notperson').then(function(result) {
+        console.log('load others non-person');
+        return result.data;
+      });
     }
   };
 

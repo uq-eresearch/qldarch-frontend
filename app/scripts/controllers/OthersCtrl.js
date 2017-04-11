@@ -1,10 +1,8 @@
 'use strict';
 
-angular.module('qldarchApp').controller('OthersCtrl', function($scope, others, LayoutHelper, GraphHelper, $filter) {
-
-  others = $filter('orderBy')(GraphHelper.graphValues(others), function(other) {
-    return other.name;
+angular.module('qldarchApp').controller('OthersCtrl', function($scope, $filter, others, LayoutHelper, GraphHelper) {
+  $scope.otherRows = $filter('orderBy')(others, function(other) {
+    return other.label;
   });
-
-  $scope.otherRows = LayoutHelper.group(GraphHelper.graphValues(others), 6);
+  $scope.otherRows = LayoutHelper.group(GraphHelper.graphValues($scope.otherRows), 6);
 });
