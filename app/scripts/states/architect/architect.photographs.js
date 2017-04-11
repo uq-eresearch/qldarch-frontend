@@ -7,7 +7,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
     resolve : {
       photographs : [ 'architect', '$filter', function(architect, $filter) {
         return $filter('filter')(architect.media, function(media) {
-          return media.type === ('Photograph' || 'Portrait' || 'Image');
+          return (media.type === 'Photograph' || media.type === 'Portrait' || media.type === 'Image');
         });
       } ]
     },

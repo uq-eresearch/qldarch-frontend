@@ -6,7 +6,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
     resolve : {
       mediaimages : [ 'mediaowned', '$filter', function(mediaowned, $filter) {
         return $filter('filter')(mediaowned, function(med) {
-          return med.type === ('Photograph' || 'Portrait' || 'Image' || 'LineDrawing');
+          return (med.type === 'Photograph' || med.type === 'Portrait' || med.type === 'Image' || med.type === 'LineDrawing');
         });
       } ]
     },

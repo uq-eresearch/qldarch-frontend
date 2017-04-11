@@ -7,7 +7,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
     resolve : {
       lineDrawings : [ 'structure', '$filter', function(structure, $filter) {
         return $filter('filter')(structure.media, function(media) {
-          return media.type === 'LineDrawing';
+          return (media.type === 'LineDrawing');
         });
       } ]
     },

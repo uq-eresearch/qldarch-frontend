@@ -6,7 +6,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
     resolve : {
       mediadocuments : [ 'mediaowned', '$filter', function(mediaowned, $filter) {
         return $filter('filter')(mediaowned, function(med) {
-          return med.type === ('Article' || 'Text' || 'Spreadsheet');
+          return (med.type === 'Article' || med.type === 'Text' || med.type === 'Spreadsheet');
         });
       } ]
     },

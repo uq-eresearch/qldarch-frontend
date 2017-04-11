@@ -72,7 +72,7 @@ angular.module('qldarchApp').controller(
             };
             // Only show architects and structures (projects)
             entities = $filter('filter')(GraphHelper.graphValues(entities), function(entity) {
-              return entity.type === 'architect' || entity.type === 'structure';
+              return (entity.type === 'architect' || entity.type === 'structure');
             });
             angular.forEach(entities, function(entity) {
               if (entity.type === 'architect' || entity.type === 'structure') {
@@ -229,7 +229,7 @@ angular.module('qldarchApp').controller(
        * =====================================================
        */
       $scope.orderByStart = function(date) {
-        return date.startDate || '0';
+        return (date.startDate || '0');
       };
 
       /*

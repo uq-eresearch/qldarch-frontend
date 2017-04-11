@@ -14,11 +14,11 @@ angular.module('qldarchApp').config(function($stateProvider) {
             }
             if (relationship.objecttype === 'firm') {
               relationship.firmlabel = relationship.objectlabel;
-            }         
+            }
             return ArchObj.load(relationship.subject).then(function(data) {
               if (angular.isUndefined(relationship.media)) {
                 relationship.media = $filter('filter')(data.media, function(med) {
-                  return (med.preferred || (med.type === ('Photograph' || 'Portrait' || 'Image')));
+                  return (med.preferred || (med.type === 'Photograph' || med.type === 'Portrait' || med.type === 'Image'));
                 }).id;
               }
               return relationship;

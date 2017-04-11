@@ -6,7 +6,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
     resolve : {
       mediainterviews : [ 'mediaowned', '$filter', function(mediaowned, $filter) {
         return $filter('filter')(mediaowned, function(med) {
-          return med.type === ('Audio' || 'Transcript' || 'Youtube');
+          return (med.type === 'Audio' || med.type === 'Transcript' || med.type === 'Youtube');
         });
       } ]
     },

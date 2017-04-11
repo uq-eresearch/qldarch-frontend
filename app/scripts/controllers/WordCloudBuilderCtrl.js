@@ -27,7 +27,7 @@ angular.module('qldarchApp').controller('WordCloudBuilderCtrl',
             return document.$selected;
           });
           selected = $filter('filter')(selected, function(document) {
-            return !$scope.wordcloud.$import.type || document.type === $scope.wordcloud.$import.type;
+            return (!$scope.wordcloud.$import.type || document.type === $scope.wordcloud.$import.type);
           });
           $scope.wordcloud.$import.numberToImport = selected.length;
         }
@@ -100,7 +100,7 @@ angular.module('qldarchApp').controller('WordCloudBuilderCtrl',
           return document.$selected;
         });
         documents = $filter('filter')(documents, function(document) {
-          return !$scope.wordcloud.$import.type || document.type === $scope.wordcloud.$import.type;
+          return (!$scope.wordcloud.$import.type || document.type === $scope.wordcloud.$import.type);
         });
 
         $scope.wordcloud.documents = documents.concat($scope.wordcloud.documents);
