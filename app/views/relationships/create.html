@@ -1,0 +1,41 @@
+<div class="l-frame l-frame-tight">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <form name="form" ng-submit="createRelationship(relationship)">
+          <div class="form-group">
+            <label for="">Type <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control"
+              placeholder="Relationship Type" ng-model="relationship.type" required>
+          </div>
+          <div class="form-group">
+            <label for="">Source <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control"
+              placeholder="Relationship Source" ng-model="relationship.source" required>
+          </div>
+          <div class="form-group">
+            <label for="">Subject <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control"
+              placeholder="Relationship Subject" ng-model="relationship.subject" required>
+          </div>
+          <div class="form-group">
+            <label for="">Object <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control"
+              placeholder="Relationship Object" ng-model="relationship.object" required>
+          </div>
+          <div class="form-group">
+            <label for="">From <i class=""></i></label> <input type="text" class="form-control" placeholder="Relationship From"
+              ng-model="relationship.from">
+          </div>
+          <div class="form-group">
+            <label for="">Until <i class=""></i></label> <input type="text" class="form-control" placeholder="Relationship Until"
+              ng-model="relationship.until">
+          </div>
+          <div class="form-group">
+            <label for="">Note <i class=""></i></label>
+            <textarea ui-tinymce="tinymceOptions" rows="5" id="biography" class="form-control" placeholder="Relationship Note"
+              ng-model="relationship.note"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid">Save</button>
+          <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
