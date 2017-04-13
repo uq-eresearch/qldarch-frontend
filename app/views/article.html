@@ -52,7 +52,7 @@
     </div>
     <div class="row" ng-show="$state.includes('article.edit')">
       <div class="col-md-6">
-        <form action="" ng-submit="updateArticle(article)">
+        <form ng-submit="updateArticle(article)">
           <div class="form-group">
             <label>Author(s)</label> <input type="text" class="form-control" placeholder="Authors" ng-model="article.authors" />
           </div>
