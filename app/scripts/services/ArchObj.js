@@ -734,30 +734,34 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
     loadWithRelationshipLabels : function(id) {
       return $http.get(path + id).then(function(result) {
         console.log('loadWithRelationshipLabels archobj id:' + id);
-        angular.forEach(result.data.relationships, function(relationship) {
-          if (RelationshipLabels.hasOwnProperty(relationship.relationship)) {
-            relationship.relationship = RelationshipLabels[relationship.relationship];
-          }
+        return RelationshipLabels.load().then(function(response){
+          angular.forEach(result.data.relationships, function(relationship) {
+            if (response.hasOwnProperty(relationship.relationship)) {
+              relationship.relationship = response[relationship.relationship];
+            }
+          });
+          return result.data;
         });
-        return result.data;
       });
     },
 
     loadInterviewObj : function(interviewId) {
       return $http.get(path + interviewId).then(function(result) {
         console.log('loadInterviewObj id:' + interviewId);
-        angular.forEach(result.data.transcript, function(exchange) {
-          exchange.startTime = getStartTime(exchange);
-          exchange.endTime = getEndTime(exchange, result.data.transcript);
-          if (exchange.hasOwnProperty('relationships')) {
-            angular.forEach(exchange.relationships, function(relationship) {
-              if (RelationshipLabels.hasOwnProperty(relationship.relationship)) {
-                relationship.relationship = RelationshipLabels[relationship.relationship];
-              }
-            });
-          }
+        return RelationshipLabels.load().then(function(response){
+          angular.forEach(result.data.transcript, function(exchange) {
+            exchange.startTime = getStartTime(exchange);
+            exchange.endTime = getEndTime(exchange, result.data.transcript);
+            if (exchange.hasOwnProperty('relationships')) {
+              angular.forEach(exchange.relationships, function(relationship) {
+                if (response.hasOwnProperty(relationship.relationship)) {
+                  relationship.relationship = response[relationship.relationship];
+                }
+              });
+            }
+          });
+          return result.data;
         });
-        return result.data;
       });
     }
   };

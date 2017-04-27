@@ -1,34 +1,16 @@
 'use strict';
 
-angular.module('qldarchApp').service('RelationshipLabels', function RelationshipLabels() {
+angular.module('qldarchApp').service('RelationshipLabels', function RelationshipLabels($http, Uris) {
   return {
-    'TaughtBy' : 'taught by',
-    'InfluencedBy' : 'influenced by',
-    'Founded' : 'founded',
-    'Became' : 'became',
-    'StudiedWith' : 'studied with',
-    'StudiedAt' : 'studied at',
-    'WasInfluenceBy' : 'was influenced by',
-    'WroteFor' : 'wrote for',
-    'Awarded' : 'awarded',
-    'KnewProfessionally' : 'knew professionally',
-    'Authored' : 'authored',
-    'WorkedWith' : 'worked with',
-    'Read' : 'reads',
-    'TravelledTo' : 'travelled to',
-    'KnewOf' : 'knew of',
-    'Employment' : 'employed by',
-    'TaughtAt' : 'taught at',
-    'KnewSocially' : 'knew socially',
-    'RelatedTo' : 'related to',
-    'ClientOf' : 'client of',
-    'DesignedBy' : 'designed by',
-    'Reference' : 'references',
-    'Attended' : 'attended',
-    'MergedWith' : 'merged with',
-    'PartnerOf' : 'partner of',
-    'CollaboratedWith' : 'collaborated with',
-    'WorkedOn' : 'worked on',
-    'MentoredBy' : 'mentored by'
+    load : function() {
+      return $http({
+        method : 'GET',
+        url : Uris.WS_ROOT + 'relationship/labels',
+        cache : true
+      }).then(function(result) {
+        console.log('load relationship labels');
+        return result.data;
+      });
+    }
   };
 });
