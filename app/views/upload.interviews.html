@@ -66,7 +66,7 @@
           <label for="">Date of Interview</label>
           <div>{{ interview.created | date:'dd-MM-yyyy' }}</div>
           <div class="well well-sm">
-            <datepicker ng-model="interview.created" show-weeks="false"></datepicker>
+            <div uib-datepicker ng-model="interview.created" show-weeks="false"></div>
             <div style="margin-top: 10px;" ng-show="interview.created">
               <button type="button" class="btn btn-sm btn-primary" ng-click="interview.created = ''">Clear</button>
             </div>

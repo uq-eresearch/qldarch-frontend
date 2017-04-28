@@ -35,7 +35,7 @@
         <div class="form-group">
           <label>Created Date</label>
           <div class="well well-sm">
-            <datepicker ng-model="image.created" show-weeks="false"></datepicker>
+            <div uib-datepicker ng-model="image.created" show-weeks="false"></div>
             <div style="margin-top: 10px;" ng-show="image.created">
               <button type="button" class="btn btn-sm btn-primary" ng-click="image.created = ''">Clear</button>
             </div>

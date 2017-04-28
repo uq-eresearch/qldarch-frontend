@@ -70,7 +70,7 @@
             <label for="">Publication Date</label>
             <div>{{ article.published | date:'dd-MM-yyyy' }}</div>
             <div class="well well-sm">
-              <datepicker ng-model="article.published" show-weeks="false"></datepicker>
+              <div uib-datepicker ng-model="article.published" show-weeks="false"></div>
               <div style="margin-top: 10px;" ng-show="article.published">
                 <button type="button" class="btn btn-sm btn-primary" ng-click="article.published = ''">Clear</button>
               </div>
