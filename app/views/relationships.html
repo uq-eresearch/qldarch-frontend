@@ -67,6 +67,12 @@ text {
 </style>
 <!-- visualisation -->
 <div>
+  <div class="alert alert-warning" ng-show="Auth.user.role === 'editor' || Auth.user.role === 'admin'" style="margin: 0;">
+    <div class="container">
+      <a type="button" class="btn btn-default btn-xs" href="#/relationships/create"> <i class="fa fa-plus"></i> New Relationship
+      </a>
+    </div>
+  </div>
   <div class="l-frame l-frame-tight" ng-hide="data.nodes.length">
     <div class="container">
       <p class="text-muted">No relationships.</p>
