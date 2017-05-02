@@ -1,33 +1,14 @@
 'use strict';
 
 angular.module('qldarchApp').config(function($stateProvider) {
-  $stateProvider.state('realtionships.create', {
-    url : '/create',
-    templateUrl : 'views/relationships/create.html',
+  $stateProvider.state('relationships.create', {
+    url : '/create?archobjId&archobjType',
+    templateUrl : 'views/relationships/relationships.create.html',
     resolve : {
       types : [ 'RelationshipLabels', function(RelationshipLabels) {
         return RelationshipLabels.load().then(function(response) {
           return response;
         });
-      } ],
-      personnotarchitect : [ 'AggArchObjs', function(AggArchObjs) {
-        return AggArchObjs.loadPersonNotArchitect().then(function(data) {
-          return data;
-        }).catch(function() {
-          console.log('unable to load person non-architect');
-          return {};
-        });
-      } ],
-      othersnotperson : [ 'AggArchObjs', function(AggArchObjs) {
-        return AggArchObjs.loadOthersNotPerson().then(function(data) {
-          return data;
-        }).catch(function() {
-          console.log('unable to load others non-person');
-          return {};
-        });
-      } ],
-      others : [ 'personnotarchitect', 'othersnotperson', function(personnotarchitect, othersnotperson) {
-        return personnotarchitect.concat(othersnotperson);
       } ],
       architects : [ 'AggArchObjs', function(AggArchObjs) {
         return AggArchObjs.loadArchitects().then(function(data) {
@@ -62,12 +43,10 @@ angular.module('qldarchApp').config(function($stateProvider) {
           return {};
         });
       } ],
-      entities : [ 'architects', 'firms', 'structures', 'others', function(architects, firms, structures, others) {
+      architectsFirms : [ 'architects', 'firms', function(architects, firms) {
         var entities = [];
         Array.prototype.push.apply(entities, architects);
         Array.prototype.push.apply(entities, firms);
-        Array.prototype.push.apply(entities, structures);
-        Array.prototype.push.apply(entities, others);
         return entities;
       } ]
     },

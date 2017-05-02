@@ -2,8 +2,10 @@
 
 angular.module('qldarchApp').controller(
     'RelationshipCtrl',
-    function($scope, data, relationships, subject, interviews, GraphHelper, $filter) {
+    function($scope, data, relationships, subject, interviews, GraphHelper, $filter, $http, Uris, toaster) {
 
+      $scope.archobjId = data.id;
+      $scope.archobjType = data.type;
       $scope.relationships = relationships;
       $scope.subject = subject;
 
@@ -128,6 +130,22 @@ angular.module('qldarchApp').controller(
           });
         });
         return isarchitect;
+      };
+
+      var deleteRelationship = function(relationship) {
+        return $http.delete(Uris.WS_ROOT + 'relationship/' + relationship.relationshipid, {
+          withCredentials : true
+        }).then(function(response) {
+          var index = $scope.selectedRelationships.indexOf(relationship);
+          $scope.selectedRelationships.splice(index, 1);
+          console.log('deleted relationship id:' + relationship.relationshipid);
+          toaster.pop('success', 'relationship id: ' + relationship.relationshipid + ' deleted.');
+          return response.data;
+        });
+      };
+
+      $scope.deleteRelationship = function(id) {
+        deleteRelationship(id);
       };
 
     });

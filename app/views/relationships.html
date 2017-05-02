@@ -69,7 +69,8 @@ text {
 <div>
   <div class="alert alert-warning" ng-show="Auth.user.role === 'editor' || Auth.user.role === 'admin'" style="margin: 0;">
     <div class="container">
-      <a type="button" class="btn btn-default btn-xs" href="#/relationships/create"> <i class="fa fa-plus"></i> New Relationship
+      <a type="button" class="btn btn-default btn-xs" href="#/relationships/create?archobjId={{archobjId}}&archobjType={{archobjType}}"> <i
+        class="fa fa-plus"></i> New Relationship
       </a>
     </div>
   </div>
@@ -132,6 +133,11 @@ text {
                   </div>
                 </div>
               </div>
+            </div>
+            <div class="pull-right" ng-show="Auth.user.role === 'editor' || Auth.user.role === 'admin'">
+              <button type="button" class="btn btn-xs btn-danger" ng-click="deleteRelationship(relationship)">
+                <i class="fa fa-trash-o fa-fw"></i>
+              </button>
             </div>
             <div class="media-body">
               <h5 style="line-height: 24px; font-weight: normal; margin-bottom: 0;">
