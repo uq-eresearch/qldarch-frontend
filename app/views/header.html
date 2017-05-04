@@ -39,9 +39,9 @@
                 </ul></li>
               <li ng-class="{'active': $state.includes('contribute') }"><a ui-sref="contribute">Contribute</a></li>
               <li class="" ng-hide="Auth.success"><a>&nbsp;</a></li>
-              <li class="" ng-hide="Auth.success" uibTooltip="Create an account" tooltip-placement="bottom"
+              <li class="" ng-hide="Auth.success" uib-tooltip="Create an account" tooltip-placement="bottom"
                 ng-class="{'active': $state.includes('register') }"><a ui-sref="register">Sign Up</a></li>
-              <li class="" ng-hide="Auth.success" uibTooltip="Log in with an existing account" tooltip-placement="bottom"
+              <li class="" ng-hide="Auth.success" uib-tooltip="Log in with an existing account" tooltip-placement="bottom"
                 ng-class="{'active': $state.includes('login') }"><a href ui-sref="login">Log in</a></li>
             </ul>
             <!-- Logged in user -->

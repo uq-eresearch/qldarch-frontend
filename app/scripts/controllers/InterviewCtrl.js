@@ -1,9 +1,10 @@
 'use strict';
 
-angular.module('qldarchApp').controller('InterviewCtrl',
-    function($scope, interview, $state, $http, Uris, interviews, relationships, $stateParams, $location, $anchorScroll, $timeout) {
-      // Setup
-
+angular.module('qldarchApp').controller(
+    'InterviewCtrl',
+    function($scope, interview, $state, $http, Uris, interviews, relationships, $stateParams, $location, $anchorScroll, $timeout, toaster, types,
+        $filter, entities) {
+      /* globals $:false */
       $scope.sub = 'interviews';
       $scope.interviews = interviews;
       $scope.interview = interview;
@@ -37,7 +38,6 @@ angular.module('qldarchApp').controller('InterviewCtrl',
           }
         }
       });
-      // console.log('playlist is', $scope.audioPlayerPlaylist);
 
       $scope.currentSpeaker = {};
       $scope.isSyncing = true;
@@ -136,6 +136,22 @@ angular.module('qldarchApp').controller('InterviewCtrl',
       };
 
       /**
+       * Shows the add relationship box.
+       * 
+       * Shows the controls and pauses the audio.
+       * 
+       * @param {Object}
+       *          exchange The exchange to add the relationship
+       */
+      $scope.showAddRelationship = function(exchange) {
+        angular.forEach($scope.interview.transcript, function(exchange) {
+          $scope.hideAddRelationship(exchange);
+        });
+        $scope.audioPlayer.pause();
+        exchange.isAddingRelationship = true;
+      };
+
+      /**
        * Removes the add relationship box for an exchange.
        * 
        * @param {Object}
@@ -143,8 +159,11 @@ angular.module('qldarchApp').controller('InterviewCtrl',
        */
       $scope.hideAddRelationship = function(exchange) {
         exchange.isAddingRelationship = false;
-        exchange.isCreatingEntity = false;
-        exchange.newRelationship = {};
+        $scope.relationship = {};
+        $scope.relationship.subject = {
+          id : interview.interviewee[0].id,
+          text : interview.interviewee[0].label
+        };
       };
 
       $scope.showEditRelationships = function(exchange) {
@@ -166,8 +185,6 @@ angular.module('qldarchApp').controller('InterviewCtrl',
        * @returns {boolean}
        */
       $scope.timeFilter = function(exchange) {
-        // console.log('audioPlayer currenttime: ' +
-        // $scope.audioPlayer.currentTime);
         if ($scope.isSyncing && !$scope.isSearching) {
           if ($scope.audioPlayer.currentTime === 0) {
             return true;
@@ -179,8 +196,6 @@ angular.module('qldarchApp').controller('InterviewCtrl',
         }
       };
 
-      // console.log('audioPlayer currenttime' +
-      // $scope.audioPlayer.currentTime);
       var nextMatch = 0;
 
       /**
@@ -242,8 +257,6 @@ angular.module('qldarchApp').controller('InterviewCtrl',
             type = relationship.objecttype;
           }
         });
-        // console.log('subject: '+subject);
-        // console.log('subjectype: '+type);
         return type;
       };
 
@@ -258,8 +271,6 @@ angular.module('qldarchApp').controller('InterviewCtrl',
             type = relationship.subjectype;
           }
         });
-        // console.log('object: '+object);
-        // console.log('objecttype: '+type);
         return type;
       };
 
@@ -274,8 +285,6 @@ angular.module('qldarchApp').controller('InterviewCtrl',
             subjectarchitect = relationship.objectarchitect;
           }
         });
-        // console.log('subject: '+subject);
-        // console.log('subjectarchitect: '+subjectarchitect);
         return subjectarchitect;
       };
 
@@ -290,8 +299,139 @@ angular.module('qldarchApp').controller('InterviewCtrl',
             objectarchitect = relationship.subjectarchitect;
           }
         });
-        // console.log('objectarchitect: '+objectarchitect);
         return objectarchitect;
+      };
+
+      $scope.relationship = {};
+      $scope.relationship.subject = {
+        id : interview.interviewee[0].id,
+        text : interview.interviewee[0].label
+      };
+
+      var relationshiptypes = {
+        results : []
+      };
+
+      for ( var type in types) {
+        relationshiptypes.results.push({
+          id : type,
+          text : types[type]
+        });
+      }
+
+      $scope.relationshiptypeSelect = {
+        placeholder : 'Select a Relationship Type',
+        dropdownAutoWidth : false,
+        multiple : false,
+        data : relationshiptypes
+      };
+
+      entities = $filter('orderBy')(entities, function(entity) {
+        return entity.label;
+      });
+
+      var dataEntitySelect = {
+        results : []
+      };
+
+      angular.forEach(entities, function(e) {
+        if (e.label && !(/\s/.test(e.label.substring(0, 1)))) {
+          var entitytype = 'unknown';
+          if (e.hasOwnProperty('type')) {
+            entitytype = e.type.charAt(0).toUpperCase() + e.type.slice(1);
+          } else if (e.hasOwnProperty('firstname') || e.hasOwnProperty('lastname')) {
+            entitytype = 'Person';
+          } else if (e.hasOwnProperty('lat') || e.hasOwnProperty('lng')) {
+            entitytype = 'Structure';
+          }
+          dataEntitySelect.results.push({
+            id : e.id,
+            text : e.label + ' (' + entitytype + ')'
+          });
+        }
+      });
+
+      $scope.subjObjSelect = {
+        placeholder : 'Select an Entity',
+        dropdownAutoWidth : false,
+        multiple : false,
+        data : dataEntitySelect
+      };
+
+      var createRelationship = function(data, exchange, interviewid) {
+        var payload = angular.copy(data);
+        payload.interview = interviewid;
+        payload.utterance = exchange.id;
+        payload.source = 'interview';
+        delete payload.subject;
+        delete payload.type;
+        delete payload.object;
+        delete payload.from;
+        delete payload.until;
+        if (angular.isDefined(data.subject.id)) {
+          payload.subject = data.subject.id;
+        }
+        if (angular.isDefined(data.type.id)) {
+          payload.type = data.type.id;
+        }
+        if (angular.isDefined(data.object.id)) {
+          payload.object = data.object.id;
+        }
+        if (data.from !== null && angular.isDefined(data.from) && data.from !== '') {
+          payload.from = data.from.getFullYear();
+        }
+        if (data.until !== null && angular.isDefined(data.until) && data.until !== '') {
+          payload.until = data.until.getFullYear();
+        }
+        return $http({
+          method : 'PUT',
+          url : Uris.WS_ROOT + 'interviewrelationship',
+          headers : {
+            'Content-Type' : 'application/x-www-form-urlencoded'
+          },
+          withCredentials : true,
+          transformRequest : function(obj) {
+            return $.param(obj);
+          },
+          data : payload
+        }).then(function(response) {
+          if (!angular.isDefined(exchange.relationships)) {
+            exchange.relationships = [];
+          }
+          response.data.subjectlabel = data.subject.text;
+          response.data.relationship = data.type.text;
+          response.data.objectlabel = data.object.text;
+          exchange.relationships.push(response.data);
+          toaster.pop('success', response.data.id + ' interview  relationship created.');
+          console.log('created relationship id:' + response.data.id);
+          $scope.relationship = {};
+          $scope.relationship.subject = {
+            id : interview.interviewee[0].id,
+            text : interview.interviewee[0].label
+          };
+          return response.data;
+        }, function() {
+          toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+        });
+      };
+
+      $scope.addRelationshipToExchange = function(relationship, exchange, interviewid) {
+        if (angular.isDefined(relationship)) {
+          createRelationship(relationship, exchange, interviewid);
+        }
+        $scope.hideAddRelationship(exchange);
+      };
+
+      $scope.deleteRelationship = function(relationship, exchange) {
+        return $http.delete(Uris.WS_ROOT + 'relationship/' + relationship.id, {
+          withCredentials : true
+        }).then(function(response) {
+          var index = exchange.relationships.indexOf(relationship);
+          exchange.relationships.splice(index, 1);
+          console.log('deleted relationship id:' + relationship.id);
+          toaster.pop('success', 'relationship id: ' + relationship.id + ' deleted.');
+          return response.data;
+        });
       };
 
     });
