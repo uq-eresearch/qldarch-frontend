@@ -44,9 +44,9 @@ angular.module('qldarchApp').controller('RelationshipsCreateCtrl',
           if (e.hasOwnProperty('type')) {
             entitytype = e.type.charAt(0).toUpperCase() + e.type.slice(1);
           } else if (e.hasOwnProperty('firstname') || e.hasOwnProperty('lastname')) {
-            entitytype = 'Person';
+            entitytype = 'Architect';
           } else if (e.hasOwnProperty('lat') || e.hasOwnProperty('lng')) {
-            entitytype = 'Structure';
+            entitytype = 'Project';
           }
           architectsFirmsSelect.results.push({
             id : e.id,
@@ -76,9 +76,9 @@ angular.module('qldarchApp').controller('RelationshipsCreateCtrl',
           if (e.hasOwnProperty('type')) {
             entitytype = e.type.charAt(0).toUpperCase() + e.type.slice(1);
           } else if (e.hasOwnProperty('firstname') || e.hasOwnProperty('lastname')) {
-            entitytype = 'Person';
+            entitytype = 'Architect';
           } else if (e.hasOwnProperty('lat') || e.hasOwnProperty('lng')) {
-            entitytype = 'Structure';
+            entitytype = 'Project';
           }
           structuresSelect.results.push({
             id : e.id,
@@ -88,7 +88,7 @@ angular.module('qldarchApp').controller('RelationshipsCreateCtrl',
       });
 
       $scope.objSelect = {
-        placeholder : 'Select a Structure',
+        placeholder : 'Select a Project',
         dropdownAutoWidth : true,
         multiple : false,
         data : structuresSelect

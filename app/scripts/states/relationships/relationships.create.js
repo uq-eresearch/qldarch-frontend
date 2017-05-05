@@ -13,7 +13,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
       architects : [ 'AggArchObjs', function(AggArchObjs) {
         return AggArchObjs.loadArchitects().then(function(data) {
           angular.forEach(data, function(d) {
-            d.type = 'person';
+            d.type = 'architect';
           });
           return data;
         }).catch(function() {
@@ -35,7 +35,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
       structures : [ 'AggArchObjs', function(AggArchObjs) {
         return AggArchObjs.loadProjects().then(function(data) {
           angular.forEach(data, function(d) {
-            d.type = 'structure';
+            d.type = 'project';
           });
           return data;
         }).catch(function() {
