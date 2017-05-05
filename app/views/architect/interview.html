@@ -168,10 +168,29 @@
                     <i class="fa fa-check fa-fw"></i>
                   </button>
                   <!-- New relationship -->
-                  <form name="exchange.$form" ng-hide="!exchange.isAddingRelationship">
+                  <form name="form" ng-submit="addRelationshipToExchange(relationship, exchange, interview.id)"
+                    ng-hide="!exchange.isAddingRelationship">
                     <div class="form-group">
                       <label>Subject <i class="fa fa-asterisk fa-asterisk-required"></i></label>
-                      <div ui-select2="subjObjSelect" ng-model="relationship.subject" class="form-control" required></div>
+                      <div class="row">
+                        <div class="col-sm-9">
+                          <div ui-select2="subjObjSelect" ng-model="relationship.subject" class="form-control" required></div>
+                        </div>
+                        <div class="col-sm-3" style="border-left: 1px solid #ccc; padding-left: 16px;">
+                          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                            style="width: 109px; padding-top: 4px; padding-bottom: 4px;">
+                            Add New&nbsp;&nbsp;&nbsp;<span class="caret"></span>
+                          </button>
+                          <ul class="dropdown-menu" role="addNew">
+                            <!-- To do: fixed angular.js:14525 TypeError: Cannot read property '$$phase' of null for Architect and Other -->
+                            <!-- See posible related issue: https://github.com/angular-ui/ui-select2/issues/153 -->
+                            <li><a ui-sref="architect.summary.edit({})" ui-sref-opts="{inherit:false}">Architect</a></li>
+                            <li><a ui-sref="firm.summary.edit({})">Firm</a></li>
+                            <li><a ui-sref="structure.summary.edit({})">Project</a></li>
+                            <li><a ui-sref="other.summary.edit({})">Other</a></li>
+                          </ul>
+                        </div>
+                      </div>
                     </div>
                     <div class="form-group">
                       <label>Relationship <i class="fa fa-asterisk fa-asterisk-required"></i></label>
@@ -179,7 +198,25 @@
                     </div>
                     <div class="form-group">
                       <label>Object <i class="fa fa-asterisk fa-asterisk-required"></i></label>
-                      <div ui-select2="subjObjSelect" ng-model="relationship.object" class="form-control" required></div>
+                      <div class="row">
+                        <div class="col-sm-9">
+                          <div ui-select2="subjObjSelect" ng-model="relationship.object" class="form-control" required></div>
+                        </div>
+                        <div class="col-sm-3" style="border-left: 1px solid #ccc; padding-left: 16px;">
+                          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                            style="width: 109px; padding-top: 4px; padding-bottom: 4px;">
+                            Add New&nbsp;&nbsp;&nbsp;<span class="caret"></span>
+                          </button>
+                          <ul class="dropdown-menu" role="addNew">
+                            <!-- To do: fixed angular.js:14525 TypeError: Cannot read property '$$phase' of null for Architect and Other -->
+                            <!-- See posible related issue: https://github.com/angular-ui/ui-select2/issues/153 -->
+                            <li><a ui-sref="architect.summary.edit({})" ui-sref-opts="{inherit:false}">Architect</a></li>
+                            <li><a ui-sref="firm.summary.edit({})">Firm</a></li>
+                            <li><a ui-sref="structure.summary.edit({})">Project</a></li>
+                            <li><a ui-sref="other.summary.edit({})">Other</a></li>
+                          </ul>
+                        </div>
+                      </div>
                     </div>
                     <div class="form-group">
                       <label>From</label>
@@ -203,8 +240,7 @@
                       <label>Note</label>
                       <textarea rows="1" id="biography" class="form-control" placeholder="Relationship Note" ng-model="relationship.note"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-sm btn-primary" ng-disabled="form.$invalid"
-                      ng-click="addRelationshipToExchange(relationship, exchange, interview.id)">Add</button>
+                    <button type="submit" class="btn btn-sm btn-primary" ng-disabled="form.$invalid">Add</button>
                     <button class="btn btn-sm btn-default" ng-click="hideAddRelationship(exchange)">Cancel</button>
                   </form>
                 </div>
