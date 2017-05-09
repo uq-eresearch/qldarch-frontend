@@ -66,7 +66,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         },
         withCredentials : true,
         transformRequest : function(obj) {
-          return $.param(obj);
+          return $.param(obj, true);
         },
         data : payload
       }).then(function(response) {
@@ -106,7 +106,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         },
         withCredentials : true,
         transformRequest : function(obj) {
-          return $.param(obj);
+          return $.param(obj, true);
         },
         data : payload
       }).then(function(response) {
@@ -179,7 +179,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         },
         withCredentials : true,
         transformRequest : function(obj) {
-          return $.param(obj);
+          return $.param(obj, true);
         },
         data : payload
       }).then(function(response) {
@@ -252,7 +252,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         },
         withCredentials : true,
         transformRequest : function(obj) {
-          return $.param(obj);
+          return $.param(obj, true);
         },
         data : payload
       }).then(function(response) {
@@ -312,7 +312,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         },
         withCredentials : true,
         transformRequest : function(obj) {
-          return $.param(obj);
+          return $.param(obj, true);
         },
         data : payload
       }).then(function(response) {
@@ -372,7 +372,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         },
         withCredentials : true,
         transformRequest : function(obj) {
-          return $.param(obj);
+          return $.param(obj, true);
         },
         data : payload
       }).then(function(response) {
@@ -425,7 +425,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         },
         withCredentials : true,
         transformRequest : function(obj) {
-          return $.param(obj);
+          return $.param(obj, true);
         },
         data : payload
       }).then(function(response) {
@@ -478,7 +478,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         },
         withCredentials : true,
         transformRequest : function(obj) {
-          return $.param(obj);
+          return $.param(obj, true);
         },
         data : payload
       }).then(function(response) {
@@ -510,17 +510,13 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
       if (payload.$interviewees !== null && angular.isDefined(payload.$interviewees)) {
         payload.interviewee = [];
         angular.forEach(payload.$interviewees, function(interviewee) {
-          payload.interviewee.push({
-            id : interviewee.id
-          });
+          payload.interviewee.push(interviewee.id);
         });
       }
       if (payload.$interviewers !== null && angular.isDefined(payload.$interviewers)) {
         payload.interviewer = [];
         angular.forEach(payload.$interviewers, function(interviewer) {
-          payload.interviewer.push({
-            id : interviewer.id
-          });
+          payload.interviewer.push(interviewer.id);
         });
       }
       // Remove any extra information
@@ -549,7 +545,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         },
         withCredentials : true,
         transformRequest : function(obj) {
-          return $.param(obj);
+          return $.param(obj, true);
         },
         data : payload
       }).then(function(response) {
@@ -579,17 +575,13 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
       if (payload.$interviewees !== null && angular.isDefined(payload.$interviewees)) {
         payload.interviewee = [];
         angular.forEach(payload.$interviewees, function(interviewee) {
-          payload.interviewee.push({
-            id : interviewee.id
-          });
+          payload.interviewee.push(interviewee.id);
         });
       }
       if (payload.$interviewers !== null && angular.isDefined(payload.$interviewers)) {
         payload.interviewer = [];
         angular.forEach(payload.$interviewers, function(interviewer) {
-          payload.interviewer.push({
-            id : interviewer.id
-          });
+          payload.interviewer.push(interviewer.id);
         });
       }
       // Remove any extra information
@@ -618,7 +610,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         },
         withCredentials : true,
         transformRequest : function(obj) {
-          return $.param(obj);
+          return $.param(obj, true);
         },
         data : payload
       }).then(function(response) {
@@ -659,7 +651,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         },
         withCredentials : true,
         transformRequest : function(obj) {
-          return $.param(obj);
+          return $.param(obj, true);
         },
         data : payload
       }).then(function(response) {
@@ -701,7 +693,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         },
         withCredentials : true,
         transformRequest : function(obj) {
-          return $.param(obj);
+          return $.param(obj, true);
         },
         data : payload
       }).then(function(response) {
