@@ -302,6 +302,19 @@ angular.module('qldarchApp').controller(
         return objectarchitect;
       };
 
+      $scope.getSpeakerArchitect = function(id) {
+        var architect;
+        var interviewee = angular.copy(interview.interviewee);
+        var interviewer = angular.copy(interview.interviewer);
+        var speakers = interviewee.concat(interviewer);
+        angular.forEach(speakers, function(speaker) {
+          if (id === speaker.id) {
+            architect = speaker.architect;
+          }
+        });
+        return architect;
+      };
+
       $scope.relationship = {};
       $scope.relationship.subject = {
         id : interview.interviewee[0].id,

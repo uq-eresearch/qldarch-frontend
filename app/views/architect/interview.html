@@ -17,7 +17,8 @@
         <div class="container">
           <div class="row">
             <div ng-repeat="interviewee in interview.interviewee" class="col-sm-4 col-sm-offset-4">
-              <img class="media-object img-full" ng-src="{{Uris.WS_MEDIA+interviewee.media+'?dimension=360x320'}}" alt="{{interviewee.label}}">
+              <img ng-if="(interviewee.id == $stateParams.architectId)" class="media-object img-full"
+                ng-src="{{Uris.WS_MEDIA+interviewee.media+'?dimension=360x320'}}" alt="{{interviewee.label}}">
             </div>
           </div>
         </div>
@@ -51,9 +52,9 @@
           interview.created | date:'dd MMMM yyyy' }}
         </h5>
         <div class="text-center">
-          <!-- To do: fixed non-architect interviewee -->
-          <span ng-repeat="interviewee in interview.interviewee" style="font-weight: bold;"> <a
-            ng-href="#/architect/summary?architectId={{ interviewee.id }}"> {{ interviewee.label }} </a>
+          <span ng-repeat="interviewee in interview.interviewee" style="font-weight: bold;"> <a ng-if="interviewee.architect"
+            ng-href="#/architect/summary?architectId={{ interviewee.id }}"> {{ interviewee.label }} </a> <a ng-if="!interviewee.architect"
+            ng-href="#/other/summary?otherId={{ interviewee.id }}"> {{ interviewee.label }} </a>
           </span>
         </div>
       </div>
@@ -137,11 +138,11 @@
                 </div>
                 <div class="media-body">
                   <div class="media-heading">
-                    <strong> <a ng-if="getRelationshipSubjectArchitect('',exchange.speakerid)==true"
+                    <strong> <a ng-if="getSpeakerArchitect(exchange.speakerid)==true"
                       ui-sref="architect.summary({architectId: exchange.speakerid})"> {{ exchange.speaker }} </a> <a
-                      ng-if="getRelationshipSubjectArchitect('',exchange.speakerid)==false" ui-sref="other.summary({otherId: exchange.speakerid})">
-                        {{ exchange.speaker }} </a> <span ng-if="getRelationshipSubjectArchitect('',exchange.speakerid)==undefined"> {{
-                        exchange.speaker }} </span> <span ng-show="!exchange.speaker"> {{ exchange.speakerInitials }} </span>
+                      ng-if="getSpeakerArchitect(exchange.speakerid)==false" ui-sref="other.summary({otherId: exchange.speakerid})"> {{
+                        exchange.speaker }} </a> <span ng-if="getSpeakerArchitect(exchange.speakerid)==undefined"> {{ exchange.speaker }} </span> <span
+                      ng-show="!exchange.speaker"> {{ exchange.speakerInitials }} </span>
                     </strong> <span class="pull-right" ng-show="isSearching">{{ exchange.time }}</span>
                   </div>
                   <p ng-bind-html="exchange.transcript | highlight:transcriptSearchInput" ng-class="{ highlight: startTime == exchange.startTime }"></p>
@@ -182,7 +183,7 @@
                             Add New&nbsp;&nbsp;&nbsp;<span class="caret"></span>
                           </button>
                           <ul class="dropdown-menu" role="addNew">
-                            <!-- To do: fixed angular.js:14525 TypeError: Cannot read property '$$phase' of null for Architect and Other -->
+                            <!-- To do: fix angular.js:14525 TypeError: Cannot read property '$$phase' of null for Architect and Other -->
                             <!-- See posible related issue: https://github.com/angular-ui/ui-select2/issues/153 -->
                             <li><a ui-sref="architect.summary.edit({})" ui-sref-opts="{inherit:false}">Architect</a></li>
                             <li><a ui-sref="firm.summary.edit({})">Firm</a></li>
@@ -208,7 +209,7 @@
                             Add New&nbsp;&nbsp;&nbsp;<span class="caret"></span>
                           </button>
                           <ul class="dropdown-menu" role="addNew">
-                            <!-- To do: fixed angular.js:14525 TypeError: Cannot read property '$$phase' of null for Architect and Other -->
+                            <!-- To do: fix angular.js:14525 TypeError: Cannot read property '$$phase' of null for Architect and Other -->
                             <!-- See posible related issue: https://github.com/angular-ui/ui-select2/issues/153 -->
                             <li><a ui-sref="architect.summary.edit({})" ui-sref-opts="{inherit:false}">Architect</a></li>
                             <li><a ui-sref="firm.summary.edit({})">Firm</a></li>
