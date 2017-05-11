@@ -123,8 +123,10 @@ angular.module('qldarchApp').controller(
           ArchObj.updateInterview(data).then(function() {
             if ($audiofile) {
               uploadAudio(data, $audiofile).then(function() {
+                console.log('updateInterview: uploaded audio');
                 if ($transcriptfile) {
                   uploadTranscript(data, $transcriptfile).then(function() {
+                    console.log('updateInterview: uploaded transcript');
                     goToInterview(data.id);
                   });
                 } else {
@@ -132,7 +134,14 @@ angular.module('qldarchApp').controller(
                 }
               });
             } else {
-              goToInterview(data.id);
+              if ($transcriptfile) {
+                uploadTranscript(data, $transcriptfile).then(function() {
+                  console.log('updateInterview: uploaded transcript');
+                  goToInterview(data.id);
+                });
+              } else {
+                goToInterview(data.id);
+              }
             }
           }).catch(function(error) {
             console.log('Failed to save', error);
@@ -142,8 +151,10 @@ angular.module('qldarchApp').controller(
           ArchObj.createInterview(data).then(function(response) {
             if ($audiofile) {
               uploadAudio(response, $audiofile).then(function() {
+                console.log('createInterview: uploaded audio');
                 if ($transcriptfile) {
                   uploadTranscript(response, $transcriptfile).then(function() {
+                    console.log('createInterview: uploaded transcript');
                     goToInterview(response.id);
                   });
                 } else {

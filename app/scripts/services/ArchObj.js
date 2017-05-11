@@ -91,7 +91,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
       delete payload.media;
       delete payload.owner;
       delete payload.relationships;
-      delete payload.version;
+      // delete payload.version;
       // delete payload.type;
       // delete payload.firstname;
       // delete payload.lastname;
@@ -235,7 +235,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
       delete payload.media;
       delete payload.owner;
       delete payload.relationships;
-      delete payload.version;
+      // delete payload.version;
       // delete payload.type;
       // delete payload.label;
       // delete payload.australian;
@@ -353,7 +353,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
       delete payload.media;
       delete payload.owner;
       delete payload.relationships;
-      delete payload.version;
+      // delete payload.version;
       // delete payload.type;
       // delete payload.label;
       // delete payload.australian;
@@ -461,7 +461,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
       delete payload.media;
       delete payload.owner;
       delete payload.relationships;
-      delete payload.version;
+      // delete payload.version;
       // delete payload.type;
       // delete payload.authors;
       // delete payload.periodical;
@@ -596,8 +596,8 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
       delete payload.relationships;
       delete payload.associatedMedia;
       delete payload.transcript;
-      delete payload.version;
-      delete payload.type;
+      // delete payload.version;
+      // delete payload.type;
       // delete payload.interviewee;
       // delete payload.interviewer;
       // delete payload.location;
@@ -680,7 +680,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
       delete payload.media;
       delete payload.owner;
       delete payload.relationships;
-      delete payload.version;
+      // delete payload.version;
       // delete payload.type;
       // delete payload.label;
       // delete payload.summary;
