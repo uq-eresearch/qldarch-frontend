@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('qldarchApp').controller('StructureMapCtrl', function($scope) {
+angular.module('qldarchApp').controller('StructureMapCtrl', function($scope, lat, lon) {
   // Structure lat lon
-  var position = new google.maps.LatLng($scope.structure.lat, $scope.structure.lon);
+  var position = new google.maps.LatLng(lat, lon);
   $scope.myMarkers = [];
 
   $scope.mapOptions = {
