@@ -1,76 +1,11 @@
 'use strict';
 
 angular.module('qldarchApp').controller('StructureCtrl',
-    function($scope, structure, designers, ArchObj, firms, architects, $filter, BuildingTypologies, $state) {
+    function($scope, structure, designers, ArchObj, $filter, BuildingTypologies, $state) {
       $scope.structure = structure;
       $scope.designers = designers;
 
-      firms = $filter('orderBy')(firms, function(firm) {
-        return firm.label;
-      });
-
-      architects = $filter('orderBy')(architects, function(architect) {
-        return architect.label;
-      });
-
       $scope.structure.type = 'structure';
-
-      if (angular.isDefined(designers.firms[0])) {
-        $scope.structure.$associatedFirm = {
-          id : designers.firms[0].subject,
-          text : designers.firms[0].subjectlabel
-        };
-      } else {
-        $scope.structure.$associatedFirm = null;
-      }
-
-      var dataFirmSelect = {
-        results : []
-      };
-
-      angular.forEach(firms, function(firm) {
-        dataFirmSelect.results.push({
-          id : firm.id,
-          text : firm.label
-        });
-      });
-
-      $scope.firmSelect = {
-        placeholder : 'Select a Firm',
-        dropdownAutoWidth : true,
-        multiple : false,
-        allowClear : true,
-        data : dataFirmSelect
-      };
-
-      $scope.structure.$associatedArchitects = null;
-      if (angular.isDefined(designers.architects)) {
-        $scope.structure.$associatedArchitects = [];
-        angular.forEach(designers.architects, function(architect) {
-          $scope.structure.$associatedArchitects.push({
-            id : architect.subject,
-            text : architect.subjectlabel
-          });
-        });
-      }
-
-      var dataArchitectSelect = {
-        results : []
-      };
-
-      angular.forEach(architects, function(architect) {
-        dataArchitectSelect.results.push({
-          id : architect.id,
-          text : architect.label
-        });
-      });
-
-      $scope.architectSelect = {
-        placeholder : 'Select an Architect',
-        dropdownAutoWidth : true,
-        multiple : true,
-        data : dataArchitectSelect
-      };
 
       $scope.structure.$typologies = null;
       if (angular.isDefined(structure.typologies)) {
