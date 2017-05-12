@@ -267,6 +267,12 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
 
     createStructure : function(data) {
       var payload = angular.copy(data);
+      if (payload.$typologies !== null && angular.isDefined(payload.$typologies)) {
+        payload.typologies = [];
+        angular.forEach(payload.$typologies, function(typology) {
+          payload.typologies.push(typology.text);
+        });
+      }
       if (!(payload.completion instanceof Date)) {
         payload.completion = new Date(payload.completion);
       }
@@ -294,7 +300,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
       delete payload.owner;
       delete payload.relationships;
       delete payload.version;
-      delete payload.typologies;
+      // delete payload.typologies;
       // delete payload.type;
       // delete payload.label;
       // delete payload.summary;
@@ -327,6 +333,12 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
 
     updateStructure : function(data) {
       var payload = angular.copy(data);
+      if (payload.$typologies !== null && angular.isDefined(payload.$typologies)) {
+        payload.typologies = [];
+        angular.forEach(payload.$typologies, function(typology) {
+          payload.typologies.push(typology.text);
+        });
+      }
       if (!(payload.completion instanceof Date)) {
         payload.completion = new Date(payload.completion);
       }
@@ -726,7 +738,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
     loadWithRelationshipLabels : function(id) {
       return $http.get(path + id).then(function(result) {
         console.log('loadWithRelationshipLabels archobj id:' + id);
-        return RelationshipLabels.load().then(function(response){
+        return RelationshipLabels.load().then(function(response) {
           angular.forEach(result.data.relationships, function(relationship) {
             if (response.hasOwnProperty(relationship.relationship)) {
               relationship.relationship = response[relationship.relationship];
@@ -740,7 +752,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
     loadInterviewObj : function(interviewId) {
       return $http.get(path + interviewId).then(function(result) {
         console.log('loadInterviewObj id:' + interviewId);
-        return RelationshipLabels.load().then(function(response){
+        return RelationshipLabels.load().then(function(response) {
           angular.forEach(result.data.transcript, function(exchange) {
             exchange.startTime = getStartTime(exchange);
             exchange.endTime = getEndTime(exchange, result.data.transcript);
