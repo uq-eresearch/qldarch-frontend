@@ -2,7 +2,7 @@
 
 angular.module('qldarchApp').controller(
     'RelationshipCtrl',
-    function($scope, data, relationships, subject, interviews, GraphHelper, $filter, $http, Uris, toaster) {
+    function($scope, data, relationships, subject, interviews, GraphHelper, $filter, $http, Uris, toaster, $state) {
 
       $scope.archobjId = data.id;
       $scope.archobjType = data.type;
@@ -145,7 +145,9 @@ angular.module('qldarchApp').controller(
       };
 
       $scope.deleteRelationship = function(id) {
-        deleteRelationship(id);
+        deleteRelationship(id).then(function() {
+          $state.reload();
+        });
       };
 
     });

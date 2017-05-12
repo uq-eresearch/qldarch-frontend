@@ -179,8 +179,9 @@ angular.module('qldarchApp').controller('RelationshipsCreateCtrl',
       }
 
       $scope.createRelationship = function(relationship) {
-        createRelationship(relationship);
-        goToRelationships($stateParams.archobjId, $stateParams.archobjType);
+        createRelationship(relationship).then(function() {
+          goToRelationships($stateParams.archobjId, $stateParams.archobjType);
+        });
       };
 
       $scope.cancel = function() {
