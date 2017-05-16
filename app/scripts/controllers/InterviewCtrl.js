@@ -336,6 +336,7 @@ angular.module('qldarchApp').controller(
         placeholder : 'Select a Relationship Type',
         dropdownAutoWidth : false,
         multiple : false,
+        initSelection : true,// https://github.com/angular-ui/ui-select2/issues/153
         data : relationshiptypes
       };
 
@@ -368,6 +369,7 @@ angular.module('qldarchApp').controller(
         placeholder : 'Select an Entity',
         dropdownAutoWidth : false,
         multiple : false,
+        initSelection : true,// https://github.com/angular-ui/ui-select2/issues/153
         data : dataEntitySelect
       };
 
