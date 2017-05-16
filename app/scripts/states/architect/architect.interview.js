@@ -7,7 +7,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
     controller : 'InterviewCtrl',
     resolve : {
       relationships : [ 'architect', function(architect) {
-        return angular.copy(architect.relationships);
+        return architect.relationships;
       } ],
       interview : [ '$stateParams', 'ArchObj', function($stateParams, ArchObj) {
         return ArchObj.loadInterviewObj($stateParams.interviewId).then(function(data) {

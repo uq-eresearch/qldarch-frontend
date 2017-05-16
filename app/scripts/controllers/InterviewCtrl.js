@@ -2,11 +2,9 @@
 
 angular.module('qldarchApp').controller(
     'InterviewCtrl',
-    function($scope, interview, $state, $http, Uris, interviews, relationships, $stateParams, $location, $anchorScroll, $timeout, toaster, types,
-        $filter, entities) {
+    function($scope, interview, $state, $http, Uris, relationships, $stateParams, $location, $anchorScroll, $timeout, toaster, types, $filter,
+        entities) {
       /* globals $:false */
-      $scope.sub = 'interviews';
-      $scope.interviews = interviews;
       $scope.interview = interview;
       if (interview.transcript) {
         $scope.title = interview.label;
@@ -416,6 +414,7 @@ angular.module('qldarchApp').controller(
           response.data.subjectlabel = data.subject.text;
           response.data.relationship = data.type.text;
           response.data.objectlabel = data.object.text;
+          response.data.relationshipid = response.data.id;
           exchange.relationships.push(response.data);
           toaster.pop('success', response.data.id + ' interview  relationship created.');
           console.log('created relationship id:' + response.data.id);
@@ -432,21 +431,29 @@ angular.module('qldarchApp').controller(
 
       $scope.addRelationshipToExchange = function(relationship, exchange, interviewid) {
         if (angular.isDefined(relationship)) {
-          createRelationship(relationship, exchange, interviewid);
+          createRelationship(relationship, exchange, interviewid).then(function(data) {
+            relationships.push(data);
+          });
         }
         $scope.hideAddRelationship(exchange);
       };
 
-      $scope.deleteRelationship = function(relationship, exchange) {
+      var deleteRelationship = function(relationship, exchange) {
         return $http.delete(Uris.WS_ROOT + 'relationship/' + relationship.id, {
           withCredentials : true
-        }).then(function(response) {
+        }).then(function() {
           var index = exchange.relationships.indexOf(relationship);
           exchange.relationships.splice(index, 1);
           console.log('deleted relationship id:' + relationship.id);
           toaster.pop('success', 'relationship id: ' + relationship.id + ' deleted.');
-          return response.data;
+          return relationship;
         });
       };
 
+      $scope.deleteRelationship = function(relationship, exchange) {
+        deleteRelationship(relationship, exchange).then(function(data) {
+          var index = relationships.indexOf(data);
+          relationships.splice(index, 1);
+        });
+      };
     });
