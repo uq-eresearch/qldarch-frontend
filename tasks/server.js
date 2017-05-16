@@ -43,7 +43,8 @@ module.exports = function(grunt) {
       livereload : 35729,
       middleware : function(connect, options, middlewares) {
         // inject a custom middleware into the array of default middlewares
-        middlewares.unshift(prx('/ws', 'http://vm-203-101-226-13.qld.nectar.org.au'), prx('/files'), prx('/omeka'), prx('/static'));
+        // middlewares.unshift(prx('/ws', 'http://vm-203-101-226-13.qld.nectar.org.au'), prx('/files'), prx('/omeka'), prx('/static'));
+        middlewares.unshift(prx('/ws', 'http://localhost:8080/qldarch'));
         return middlewares;
       }
     },
