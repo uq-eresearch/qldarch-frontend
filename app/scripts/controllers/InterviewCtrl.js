@@ -415,6 +415,8 @@ angular.module('qldarchApp').controller(
           response.data.relationship = data.type.text;
           response.data.objectlabel = data.object.text;
           response.data.relationshipid = response.data.id;
+          response.data.fromyear = response.data.from;
+          response.data.untilyear = response.data.until;
           exchange.relationships.push(response.data);
           toaster.pop('success', response.data.id + ' interview  relationship created.');
           console.log('created relationship id:' + response.data.id);
