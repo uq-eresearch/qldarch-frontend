@@ -6,8 +6,8 @@ angular.module('qldarchApp').controller('TimelineCtrl', function($scope, $filter
   var relationships = $filter('filter')(data.relationships, function(relationship) {
     return (relationship.fromyear && relationship.untilyear);
   });
-  var entity = data;
-  $scope.entity = entity;
+
+  $scope.entity = data;
 
   /**
    * Opens this timeline in the timeline creator
@@ -17,13 +17,13 @@ angular.module('qldarchApp').controller('TimelineCtrl', function($scope, $filter
   $scope.openInTimelineBuilder = function() {
     // console.log('opening in timeline creator');
     $state.go('create.timeline', {
-      id : angular.toJson([ entity.id ])
+      id : angular.toJson([ data.id ])
     });
   };
 
   if (relationships.length) {
     $scope.isShowingTimeline = true;
-    $scope.dates = Timeline.relationshipsToEvents(relationships, entity.id);
+    $scope.dates = Timeline.relationshipsToEvents(relationships, data.id);
     // console.log($scope.dates);
   }
 });

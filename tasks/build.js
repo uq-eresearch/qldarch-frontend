@@ -5,8 +5,8 @@ module.exports = function(grunt) {
   grunt.config('copy', {
     // workaround: copy a fixed timeline.js into the bower_components directory
     timeline : {
-      dest : 'app/bower_components/timelinejs/build/js/timeline.min.js',
-      src : 'timeline.min.js'
+      dest : 'app/bower_components/timelinejs/build/js/timeline.js',
+      src : 'timeline.js'
     },
     dist : {
       files : [ {
