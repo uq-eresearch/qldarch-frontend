@@ -84,6 +84,13 @@
       </div>
     </div>
   </div>
+  <div class="alert alert-warning" style="margin: 0;" ng-show="Auth.canDelete() && isShowingTranscript">
+    <div class="container">
+      <button class="btn btn-default btn-xs" ng-click="deleteTranscript(interview)">
+        <i class="fa fa-trash-o"></i> Delete Transcript
+      </button>
+    </div>
+  </div>
   <div class="l-frame l-frame-tight">
     <!-- Interview transcript -->
     <div class="interview-transcript" ng-show="isShowingTranscript" id="transcript">

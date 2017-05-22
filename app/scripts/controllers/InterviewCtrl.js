@@ -6,7 +6,7 @@ angular.module('qldarchApp').controller(
         entities) {
       /* globals $:false */
       $scope.interview = interview;
-      if (interview.transcript) {
+      if (interview.transcript[0]) {
         $scope.title = interview.label;
         $scope.isShowingTranscript = true;
       } else {
@@ -457,5 +457,24 @@ angular.module('qldarchApp').controller(
           var index = relationships.indexOf(data);
           relationships.splice(index, 1);
         });
+      };
+
+      var deleteTranscript = function(interview) {
+        var r = window.confirm('Delete ' + interview.label + ' transcript and it\'s file?');
+        if (r === true) {
+          return $http.delete(Uris.WS_ROOT + 'interview/transcript/' + interview.id, {
+            withCredentials : true
+          }).then(function() {
+            delete interview.transcript;
+            console.log('deleted interview transcript:' + interview.id);
+            toaster.pop('success', 'interview transcript: ' + interview.id + ' deleted.');
+          }, function(response) {
+            toaster.pop('error', 'error occured,', response.data.reason);
+          });
+        }
+      };
+
+      $scope.deleteTranscript = function(interview) {
+        deleteTranscript(interview);
       };
     });
