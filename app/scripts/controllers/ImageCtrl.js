@@ -81,31 +81,26 @@ angular.module('qldarchApp').controller('ImageCtrl', function($stateParams, $sco
 
   $scope.setPreferred = function(data) {
     File.preferred(data.id).then(function() {
-      console.log('Image id: ' + data.id + ' preferred');
       goToPhotographs();
     });
   };
 
   $scope.delete = function(data) {
-    var r = window.confirm('Delete Image ' + data.label + '?');
+    var r = window.confirm('Delete image ' + data.filename + '?');
     if (r === true) {
       File.delete(data.id).then(function() {
-        console.log('Image id: ' + data.id + ' deleted');
         goToPhotographs();
       });
     }
   };
 
   $scope.updateImage = function(data) {
-    console.log('saving: ' + data);
     if (data.id) {
       File.update(data).then(function() {
-        console.log('Image id: ' + data.id + ' updated');
         $state.go('image.view', {
           imageId : data.id
         });
-      }).catch(function(error) {
-        console.log('Failed to save', error);
+      }).catch(function() {
         $state.go('user.files.images');
       });
     }

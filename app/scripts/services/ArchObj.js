@@ -71,11 +71,12 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         data : payload
       }).then(function(response) {
         angular.extend(data, response.data);
-        toaster.pop('success', data.label + ' created.');
-        console.log('created architect id:' + data.id);
+        toaster.pop('success', data.label + ' created');
+        console.log('created architect id: ' + data.id);
         return data;
-      }, function() {
-        toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+      }, function(response) {
+        toaster.pop('error', 'Error occured', response.data.msg);
+        console.log('error message: ' + response.data.msg);
       });
     },
 
@@ -111,11 +112,12 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         data : payload
       }).then(function(response) {
         angular.extend(data, response.data);
-        toaster.pop('success', data.label + ' updated.');
-        console.log('updated architect id:' + data.id);
+        toaster.pop('success', data.label + ' updated');
+        console.log('updated architect id: ' + data.id);
         return data;
-      }, function() {
-        toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+      }, function(response) {
+        toaster.pop('error', 'Error occured', response.data.msg);
+        console.log('error message: ' + response.data.msg);
       });
     },
 
@@ -184,11 +186,12 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         data : payload
       }).then(function(response) {
         angular.extend(data, response.data);
-        toaster.pop('success', data.label + ' created.');
-        console.log('created firm id:' + data.id);
+        toaster.pop('success', data.label + ' created');
+        console.log('created firm id: ' + data.id);
         return data;
-      }, function() {
-        toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+      }, function(response) {
+        toaster.pop('error', 'Error occured', response.data.msg);
+        console.log('error message: ' + response.data.msg);
       });
     },
 
@@ -257,11 +260,12 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         data : payload
       }).then(function(response) {
         angular.extend(data, response.data);
-        toaster.pop('success', data.label + ' updated.');
-        console.log('updated firm id:' + data.id);
+        toaster.pop('success', data.label + ' updated');
+        console.log('updated firm id: ' + data.id);
         return data;
-      }, function() {
-        toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+      }, function(response) {
+        toaster.pop('error', 'Error occured', response.data.msg);
+        console.log('error message: ' + response.data.msg);
       });
     },
 
@@ -323,11 +327,12 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         data : payload
       }).then(function(response) {
         angular.extend(data, response.data);
-        toaster.pop('success', data.label + ' updated.');
-        console.log('updated firm id:' + data.id);
+        toaster.pop('success', data.label + ' created');
+        console.log('created structure id: ' + data.id);
         return data;
-      }, function() {
-        toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+      }, function(response) {
+        toaster.pop('error', 'Error occured', response.data.msg);
+        console.log('error message: ' + response.data.msg);
       });
     },
 
@@ -389,11 +394,12 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         data : payload
       }).then(function(response) {
         angular.extend(data, response.data);
-        toaster.pop('success', data.label + ' updated.');
-        console.log('updated firm id:' + data.id);
+        toaster.pop('success', data.label + ' updated');
+        console.log('updated structure id: ' + data.id);
         return data;
-      }, function() {
-        toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+      }, function(response) {
+        toaster.pop('error', 'Error occured', response.data.msg);
+        console.log('error message: ' + response.data.msg);
       });
     },
 
@@ -442,11 +448,12 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         data : payload
       }).then(function(response) {
         angular.extend(data, response.data);
-        toaster.pop('success', data.label + ' created.');
-        console.log('created article id:' + data.id);
+        toaster.pop('success', data.label + ' created');
+        console.log('created article id: ' + data.id);
         return data;
-      }, function() {
-        toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+      }, function(response) {
+        toaster.pop('error', 'Error occured', response.data.msg);
+        console.log('error message: ' + response.data.msg);
       });
     },
 
@@ -495,11 +502,12 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         data : payload
       }).then(function(response) {
         angular.extend(data, response.data);
-        toaster.pop('success', data.label + ' updated.');
-        console.log('updated article id:' + data.id);
+        toaster.pop('success', data.label + ' updated');
+        console.log('updated article id: ' + data.id);
         return data;
-      }, function() {
-        toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+      }, function(response) {
+        toaster.pop('error', 'Error occured', response.data.msg);
+        console.log('error message: ' + response.data.msg);
       });
     },
 
@@ -562,11 +570,12 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         data : payload
       }).then(function(response) {
         angular.extend(data, response.data);
-        toaster.pop('success', data.label + ' created.');
-        console.log('created interview id:' + data.id);
+        toaster.pop('success', data.label + ' created');
+        console.log('created interview id: ' + data.id);
         return data;
-      }, function() {
-        toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+      }, function(response) {
+        toaster.pop('error', 'Error occured', response.data.msg);
+        console.log('error message: ' + response.data.msg);
       });
     },
 
@@ -627,11 +636,12 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         data : payload
       }).then(function(response) {
         angular.extend(data, response.data);
-        toaster.pop('success', data.label + ' updated.');
-        console.log('updated interview id:' + data.id);
+        toaster.pop('success', data.label + ' updated');
+        console.log('updated interview id: ' + data.id);
         return data;
-      }, function() {
-        toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+      }, function(response) {
+        toaster.pop('error', 'Error occured', response.data.msg);
+        console.log('error message: ' + response.data.msg);
       });
     },
 
@@ -668,11 +678,12 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         data : payload
       }).then(function(response) {
         angular.extend(data, response.data);
-        toaster.pop('success', data.label + ' created.');
-        console.log('created other id:' + data.id);
+        toaster.pop('success', data.label + ' created');
+        console.log('created other id: ' + data.id);
         return data;
-      }, function() {
-        toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+      }, function(response) {
+        toaster.pop('error', 'Error occured', response.data.msg);
+        console.log('error message: ' + response.data.msg);
       });
     },
 
@@ -710,11 +721,12 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         data : payload
       }).then(function(response) {
         angular.extend(data, response.data);
-        toaster.pop('success', data.label + ' updated.');
-        console.log('updated other id:' + data.id);
+        toaster.pop('success', data.label + ' updated');
+        console.log('updated other id: ' + data.id);
         return data;
-      }, function() {
-        toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+      }, function(response) {
+        toaster.pop('error', 'Error occured', response.data.msg);
+        console.log('error message: ' + response.data.msg);
       });
     },
 
@@ -722,22 +734,28 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
       return $http.delete(path + id, {
         withCredentials : true
       }).then(function(response) {
-        toaster.pop('success', 'archobj id: ' + id + ' deleted.');
-        console.log('deleted archobj id:' + id);
+        toaster.pop('success', response.data.label + ' deleted');
+        console.log('deleted archive object id: ' + response.data.id);
         return response.data;
+      }, function(response) {
+        toaster.pop('error', 'Error occured', response.data.msg);
+        console.log('error message: ' + response.data.msg);
       });
     },
 
     load : function(id) {
       return $http.get(path + id).then(function(result) {
-        console.log('load archobj id:' + id);
+        console.log('load archive object id: ' + id);
         return result.data;
+      }, function(response) {
+        toaster.pop('error', 'Error occured', response.data.msg);
+        console.log('error message: ' + response.data.msg);
       });
     },
 
     loadWithRelationshipLabels : function(id) {
       return $http.get(path + id).then(function(result) {
-        console.log('loadWithRelationshipLabels archobj id:' + id);
+        console.log('load with relationship labels for archive object id: ' + id);
         return RelationshipLabels.load().then(function(response) {
           angular.forEach(result.data.relationships, function(relationship) {
             if (response.hasOwnProperty(relationship.relationship)) {
@@ -746,12 +764,15 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
           });
           return result.data;
         });
+      }, function(response) {
+        toaster.pop('error', 'Error occured', response.data.msg);
+        console.log('error message: ' + response.data.msg);
       });
     },
 
     loadInterviewObj : function(interviewId) {
       return $http.get(path + interviewId).then(function(result) {
-        console.log('loadInterviewObj id:' + interviewId);
+        console.log('load interview object id: ' + interviewId);
         return RelationshipLabels.load().then(function(response) {
           angular.forEach(result.data.transcript, function(exchange) {
             exchange.startTime = getStartTime(exchange);
@@ -766,6 +787,9 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
           });
           return result.data;
         });
+      }, function(response) {
+        toaster.pop('error', 'Error occured', response.data.msg);
+        console.log('error message: ' + response.data.msg);
       });
     }
   };

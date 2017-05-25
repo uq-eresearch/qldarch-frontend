@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('qldarchApp').controller('UploadDocumentsCtrl', function($scope, $filter, $upload, File, $state, $stateParams, ArchObj) {
+angular.module('qldarchApp').controller('UploadDocumentsCtrl', function($scope, $filter, $upload, File, $state, $stateParams, ArchObj, toaster) {
 
   $scope.article = {
     type : 'article',
@@ -29,7 +29,6 @@ angular.module('qldarchApp').controller('UploadDocumentsCtrl', function($scope, 
     // $files: an array of files selected, each file has name, size, and
     // type.
     angular.forEach($files, function(file) {
-      console.log('file', file);
       ArchObj.createArticle(article).then(function(response) {
         // Create an expression for each file
         var expression = {};
@@ -43,17 +42,17 @@ angular.module('qldarchApp').controller('UploadDocumentsCtrl', function($scope, 
         expression.id = $stateParams.id;
         expression.$upload = File.upload($scope.myModelObj, file).progress(function(evt) {
           expression.$uploadFile.percent = parseInt(100.0 * evt.loaded / evt.total);
-          expression.$uploadFile.isComplete = expression.$uploadFile.percent === 100;
         }).success(function() {
+          expression.$uploadFile.isComplete = expression.$uploadFile.percent === 100;
+          console.log('article file upload succeeded');
           goToArticles();
-        }).error(function() {
-          // Something went wrong uploading the file
-          console.log('File upload failed');
+        }).error(function(err) {
+          toaster.pop('error', 'Error occured', err.data.msg);
+          console.log('article file upload failed: ' + err.data.msg);
           var index = $scope.expressions.indexOf(expression);
           $scope.expressions.splice(index, 1);
         });
-      }).catch(function(error) {
-        console.log('Failed to save', error);
+      }).catch(function() {
         goToArticles();
       });
     });
@@ -62,5 +61,4 @@ angular.module('qldarchApp').controller('UploadDocumentsCtrl', function($scope, 
   $scope.cancelUpload = function() {
     goToArticles();
   };
-
 });

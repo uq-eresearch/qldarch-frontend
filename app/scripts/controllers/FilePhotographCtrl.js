@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('qldarchApp').controller('FilePhotographCtrl',
-    function($scope, $filter, $upload, File, $state, $stateParams, firms, architects, structures, ImageTypes) {
+    function($scope, $filter, $upload, File, $state, $stateParams, firms, architects, structures, ImageTypes, toaster) {
 
       function goToPhotographs() {
         var params = {};
@@ -58,7 +58,6 @@ angular.module('qldarchApp').controller('FilePhotographCtrl',
         // $files: an array of files selected, each file has name, size, and
         // type.
         angular.forEach($files, function(file) {
-          console.log('file', file);
           // Create an expression for each file
           var expression = {};
           expression.$uploadFile = file;
@@ -72,12 +71,14 @@ angular.module('qldarchApp').controller('FilePhotographCtrl',
           expression.id = $stateParams.id;
           expression.$upload = File.upload($scope.myModelObj, file).progress(function(evt) {
             expression.$uploadFile.percent = parseInt(100.0 * evt.loaded / evt.total);
-            expression.$uploadFile.isComplete = expression.$uploadFile.percent === 100;
           }).success(function() {
+            expression.$uploadFile.isComplete = expression.$uploadFile.percent === 100;
+            console.log('image file upload succeeded');
             goToPhotographs();
-          }).error(function() {
+          }).error(function(err) {
             // Something went wrong uploading the file
-            console.log('File upload failed');
+            toaster.pop('error', 'Error occured', err.data.msg);
+            console.log('image file upload failed');
             var index = $scope.expressions.indexOf(expression);
             $scope.expressions.splice(index, 1);
           });

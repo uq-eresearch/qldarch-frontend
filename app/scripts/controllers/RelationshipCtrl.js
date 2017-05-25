@@ -133,15 +133,21 @@ angular.module('qldarchApp').controller(
       };
 
       var deleteRelationship = function(relationship) {
-        return $http.delete(Uris.WS_ROOT + 'relationship/' + relationship.relationshipid, {
-          withCredentials : true
-        }).then(function(response) {
-          var index = $scope.selectedRelationships.indexOf(relationship);
-          $scope.selectedRelationships.splice(index, 1);
-          console.log('deleted relationship id:' + relationship.relationshipid);
-          toaster.pop('success', 'relationship id: ' + relationship.relationshipid + ' deleted.');
-          return response.data;
-        });
+        var r = window.confirm('Delete this relationship?');
+        if (r === true) {
+          return $http.delete(Uris.WS_ROOT + 'relationship/' + relationship.relationshipid, {
+            withCredentials : true
+          }).then(function(response) {
+            var index = $scope.selectedRelationships.indexOf(relationship);
+            $scope.selectedRelationships.splice(index, 1);
+            toaster.pop('success', 'Relationship deleted');
+            console.log('deleted relationship id: ' + response.data.id);
+            return response.data;
+          }, function(response) {
+            toaster.pop('error', 'Error occured', response.data.msg);
+            console.log('error message: ' + response.data.msg);
+          });
+        }
       };
 
       $scope.deleteRelationship = function(id) {
@@ -149,5 +155,4 @@ angular.module('qldarchApp').controller(
           $state.reload();
         });
       };
-
     });

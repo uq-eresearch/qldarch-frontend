@@ -153,11 +153,12 @@ angular.module('qldarchApp').controller('RelationshipsCreateCtrl',
           data : payload
         }).then(function(response) {
           angular.extend(data, response.data);
-          toaster.pop('success', data.id + ' relationship created.');
-          console.log('created relationship id:' + data.id);
+          toaster.pop('success', 'Relationship created');
+          console.log('created relationship id: ' + data.id);
           return data;
-        }, function() {
-          toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+        }, function(response) {
+          toaster.pop('error', 'Error occured', response.data.msg);
+          console.log('error message: ' + response.data.msg);
         });
       };
 
@@ -187,5 +188,4 @@ angular.module('qldarchApp').controller('RelationshipsCreateCtrl',
       $scope.cancel = function() {
         goToRelationships($stateParams.archobjId, $stateParams.archobjType);
       };
-
     });

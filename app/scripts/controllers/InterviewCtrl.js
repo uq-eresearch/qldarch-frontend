@@ -418,16 +418,17 @@ angular.module('qldarchApp').controller(
           response.data.fromyear = response.data.from;
           response.data.untilyear = response.data.until;
           exchange.relationships.push(response.data);
-          toaster.pop('success', response.data.id + ' interview  relationship created.');
-          console.log('created relationship id:' + response.data.id);
           $scope.relationship = {};
           $scope.relationship.subject = {
             id : interview.interviewee[0].id,
             text : interview.interviewee[0].label
           };
+          toaster.pop('success', 'Interview relationship created');
+          console.log('created interview relationship id: ' + response.data.id);
           return response.data;
-        }, function() {
-          toaster.pop('error', 'Error occured.', 'Sorry, we save at this time');
+        }, function(response) {
+          toaster.pop('error', 'Error occured', response.data.msg);
+          console.log('error message: ' + response.data.msg);
         });
       };
 
@@ -441,15 +442,21 @@ angular.module('qldarchApp').controller(
       };
 
       var deleteRelationship = function(relationship, exchange) {
-        return $http.delete(Uris.WS_ROOT + 'relationship/' + relationship.id, {
-          withCredentials : true
-        }).then(function() {
-          var index = exchange.relationships.indexOf(relationship);
-          exchange.relationships.splice(index, 1);
-          console.log('deleted relationship id:' + relationship.id);
-          toaster.pop('success', 'relationship id: ' + relationship.id + ' deleted.');
-          return relationship;
-        });
+        var r = window.confirm('Delete this interview relationship?');
+        if (r === true) {
+          return $http.delete(Uris.WS_ROOT + 'relationship/' + relationship.id, {
+            withCredentials : true
+          }).then(function(response) {
+            var index = exchange.relationships.indexOf(response.data);
+            exchange.relationships.splice(index, 1);
+            toaster.pop('success', 'Interview relationship deleted');
+            console.log('deleted interview relationship id: ' + response.data.id);
+            return response.data;
+          }, function(response) {
+            toaster.pop('error', 'Error occured', response.data.msg);
+            console.log('error message: ' + response.data.msg);
+          });
+        }
       };
 
       $scope.deleteRelationship = function(relationship, exchange) {
@@ -460,16 +467,18 @@ angular.module('qldarchApp').controller(
       };
 
       var deleteTranscript = function(interview) {
-        var r = window.confirm('Delete ' + interview.label + ' transcript and it\'s file?');
+        var r = window.confirm('Delete ' + interview.label + ' transcript and transcript file?');
         if (r === true) {
           return $http.delete(Uris.WS_ROOT + 'interview/transcript/' + interview.id, {
             withCredentials : true
-          }).then(function() {
+          }).then(function(response) {
             delete interview.transcript;
-            console.log('deleted interview transcript:' + interview.id);
-            toaster.pop('success', 'interview transcript: ' + interview.id + ' deleted.');
+            toaster.pop('success', 'Transcript deleted', response.data.label + ' transcript deleted');
+            console.log('deleted transcript for interview id: ' + response.data.id);
+            return response.data;
           }, function(response) {
-            toaster.pop('error', 'error occured,', response.data.reason);
+            toaster.pop('error', 'Error occured', response.data.msg);
+            console.log('error message: ' + response.data.msg);
           });
         }
       };

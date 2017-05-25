@@ -72,13 +72,13 @@ angular.module('qldarchApp').controller(
         $scope.expAudio.id = $stateParams.id;
         return File.upload($scope.myModelObj, file).progress(function(evt) {
           $scope.expAudio.$uploadFile.percent = parseInt(100.0 * evt.loaded / evt.total);
-          $scope.expAudio.$uploadFile.isComplete = $scope.expAudio.$uploadFile.percent === 100;
         }).success(function(res) {
-          console.log('Audio File upload succeeded');
+          $scope.expAudio.$uploadFile.isComplete = $scope.expAudio.$uploadFile.percent === 100;
+          console.log('audio file upload succeeded');
           return res;
         }).error(function(err) {
-          // Something went wrong uploading the file
-          console.log('Audio File upload failed');
+          toaster.pop('error', 'Error occured', err.data.msg);
+          console.log('audio file upload failed: ' + err.data.msg);
           return err;
         });
       }
@@ -94,13 +94,13 @@ angular.module('qldarchApp').controller(
         $scope.expTranscript.id = $stateParams.id;
         return File.upload($scope.myModelObj, file).progress(function(evt) {
           $scope.expTranscript.$uploadFile.percent = parseInt(100.0 * evt.loaded / evt.total);
-          $scope.expTranscript.$uploadFile.isComplete = $scope.expTranscript.$uploadFile.percent === 100;
         }).success(function(res) {
-          console.log('Transcript File upload succeeded');
+          $scope.expTranscript.$uploadFile.isComplete = $scope.expTranscript.$uploadFile.percent === 100;
+          console.log('transcript file upload succeeded');
           return res;
         }).error(function(err) {
-          // Something went wrong uploading the file
-          console.log('Transcript File upload failed');
+          toaster.pop('error', 'Error occured', err.data.msg);
+          console.log('transcript file upload failed: ' + err.data.msg);
           return err;
         });
       }
@@ -123,10 +123,8 @@ angular.module('qldarchApp').controller(
           ArchObj.updateInterview(data).then(function() {
             if ($audiofile) {
               uploadAudio(data, $audiofile).then(function() {
-                console.log('updateInterview: uploaded audio');
                 if ($transcriptfile) {
                   uploadTranscript(data, $transcriptfile).then(function() {
-                    console.log('updateInterview: uploaded transcript');
                     goToInterview(data.id);
                   });
                 } else {
@@ -136,25 +134,21 @@ angular.module('qldarchApp').controller(
             } else {
               if ($transcriptfile) {
                 uploadTranscript(data, $transcriptfile).then(function() {
-                  console.log('updateInterview: uploaded transcript');
                   goToInterview(data.id);
                 });
               } else {
                 goToInterview(data.id);
               }
             }
-          }).catch(function(error) {
-            console.log('Failed to save', error);
+          }).catch(function() {
             goToInterview(data.id);
           });
         } else {
           ArchObj.createInterview(data).then(function(response) {
             if ($audiofile) {
               uploadAudio(response, $audiofile).then(function() {
-                console.log('createInterview: uploaded audio');
                 if ($transcriptfile) {
                   uploadTranscript(response, $transcriptfile).then(function() {
-                    console.log('createInterview: uploaded transcript');
                     goToInterview(response.id);
                   });
                 } else {
@@ -164,18 +158,16 @@ angular.module('qldarchApp').controller(
             } else {
               goToInterview(response.id);
             }
-          }).catch(function(error) {
-            console.log('Failed to save', error);
+          }).catch(function() {
             $state.go('user.files.interviews');
           });
         }
       };
 
       $scope.delete = function(data) {
-        var r = window.confirm('Delete media:' + data.label + '?');
+        var r = window.confirm('Delete file ' + data.filename + '?');
         if (r === true) {
           File.delete(data.id).then(function() {
-            console.log('Media id: ' + data.id + ' deleted');
             for (var i = 0; i < $scope.interview.media.length; i++) {
               if ($scope.interview.media[i].id === data.id) {
                 $scope.interview.media.splice(i, 1);
@@ -192,5 +184,4 @@ angular.module('qldarchApp').controller(
           $state.go('user.files.interviews');
         }
       };
-
     });
