@@ -4,7 +4,7 @@ angular.module('qldarchApp').controller('TimelineCtrl', function($scope, $filter
 
   $scope.isShowingTimeline = false;
   var relationships = $filter('filter')(data.relationships, function(relationship) {
-    return (relationship.fromyear || relationship.untilyear);
+    return (relationship.fromyear || relationship.untilyear || relationship.objectcompletion);
   });
 
   $scope.entity = data;

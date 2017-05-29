@@ -28,7 +28,7 @@ angular.module('qldarchApp').service('Timeline', function Timeline($http, $filte
         opentag = '<a href="#/firm/summary?firmId=' + obj.subject + '">';
         closetag = '</a>';
       } else if (obj.subjectype === 'structure') {
-        opentag = '<a href="#/structure/summary?structureId=' + obj.subject + '">';
+        opentag = '<a href="#/project/summary?structureId=' + obj.subject + '">';
         closetag = '</a>';
       }
     } else {
@@ -43,14 +43,14 @@ angular.module('qldarchApp').service('Timeline', function Timeline($http, $filte
         opentag = '<a href="#/firm/summary?firmId=' + obj.object + '">';
         closetag = '</a>';
       } else if (obj.objecttype === 'structure') {
-        opentag = '<a href="#/structure/summary?structureId=' + obj.object + '">';
+        opentag = '<a href="#/project/summary?structureId=' + obj.object + '">';
         closetag = '</a>';
       }
     }
     tld.asset = {
       'media' : media,
-      thumbnail : thumb,
-      'caption' : '<h3 style="text-align:center;text-transform: capitalize">' + opentag + label + closetag + '</h3>'
+      'thumbnail' : thumb,
+      'caption' : '<h4 style="text-align:center;text-transform: capitalize">' + opentag + label + closetag + '</h4>'
     };
     return tld;
   }
@@ -61,9 +61,21 @@ angular.module('qldarchApp').service('Timeline', function Timeline($http, $filte
     var dates = [];
     angular.forEach(relationships, function(relationship) {
       var timelineDate = {};
-      timelineDate.startDate = JSON.stringify(relationship.fromyear);
-      if (angular.isDefined(relationship.untilyear)) {
-        timelineDate.endDate = JSON.stringify(relationship.untilyear);
+      if (angular.isDefined(relationship.fromyear)) {
+        timelineDate.startDate = JSON.stringify(relationship.fromyear);
+        if (angular.isDefined(relationship.untilyear)) {
+          timelineDate.endDate = JSON.stringify(relationship.untilyear);
+        }
+      } else {
+        if (angular.isDefined(relationship.untilyear)) {
+          timelineDate.startDate = JSON.stringify(relationship.untilyear);
+          timelineDate.endDate = JSON.stringify(relationship.untilyear);
+        } else {
+          if (angular.isDefined(relationship.objectcompletion)) {
+            timelineDate.startDate = JSON.stringify(relationship.objectcompletion).substring(1, 5);
+            timelineDate.endDate = JSON.stringify(relationship.objectcompletion).substring(1, 5);
+          }
+        }
       }
       timelineDate.headline = relationship.subjectlabel + ' ' + relationship.relationship + ' ' + relationship.objectlabel;
       if (angular.isDefined(relationship.note)) {
