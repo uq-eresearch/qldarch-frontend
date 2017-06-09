@@ -2,7 +2,7 @@
 
 angular.module('config', []).constant('ENV', {
   'name' : 'development',
-  'apiEndpoint' : 'http://your-development.api.endpoint:3000'
+  'apiEndpoint' : 'https://your-development.api.endpoint:3000'
 });
 
 angular.module('qldarchApp', [ 'config', 'ngCookies', 'ngResource', 'ngSanitize', 'ngAnimate', 'ngRoute', 'ngProgress', 'ui.bootstrap', 'ui.select2',

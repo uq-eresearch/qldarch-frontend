@@ -44,12 +44,12 @@ angular.module('qldarchApp').service('Uris', function(ENV) {
   this.DEV_URL = 'http://localhost:8080/qldarch/';
 
   this.QA_NS = 'http://qldarch.net/ns/rdf/2012-06/terms#';
-  this.OWL_NS = 'http://www.w3.org/2002/07/owl#';
-  this.RDF_NS = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
-  this.RDFS_NS = 'http://www.w3.org/2000/01/rdf-schema#';
-  this.FOAF_NS = 'http://xmlns.com/foaf/0.1/';
-  this.DCT_NS = 'http://purl.org/dc/terms/';
-  this.GEO_NS = 'http://www.w3.org/2003/01/geo/wgs84_pos#';
+  this.OWL_NS = 'https://www.w3.org/2002/07/owl#';
+  this.RDF_NS = 'https://www.w3.org/1999/02/22-rdf-syntax-ns#';
+  this.RDFS_NS = 'https://www.w3.org/2000/01/rdf-schema#';
+  this.FOAF_NS = 'https://xmlns.com/foaf/0.1/';
+  this.DCT_NS = 'https://purl.org/dc/terms/';
+  this.GEO_NS = 'https://www.w3.org/2003/01/geo/wgs84_pos#';
 
   this.QA_DISPLAY = this.QA_NS + 'display';
   this.QA_TOPLEVEL = this.QA_NS + 'toplevel';
