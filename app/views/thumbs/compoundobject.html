@@ -1,6 +1,6 @@
-<div class="thumbnail" ng-switch on="compoundObject.jsonData.type">
+<div class="thumbnail" ng-switch on="compoundObject.type">
   <div ng-switch-when="timeline">
-    <a class="square square-timeline square-svg" ui-sref="ugc.timeline({id: compoundObject.encodedUri })">
+    <a class="square square-timeline square-svg" ui-sref="ugc.timeline({id: compoundObject.id })">
       <div class="square-content">
         <div class="center">
           <div class="center-content">
@@ -11,13 +11,13 @@
     </a>
     <div class="caption">
       <h4>
-        <a ui-sref="ugc.timeline({id: compoundObject.encodedUri })"> {{ compoundObject.jsonData.title }} </a>
+        <a ui-sref="ugc.timeline({id: compoundObject.id })"> {{ compoundObject.title }} </a>
       </h4>
-      <p class="text-muted" style="text-align: center;">By {{ compoundObject.jsonData.user.name }}</p>
+      <p class="text-muted" style="text-align: center;">By {{ compoundObject.user }}</p>
     </div>
   </div>
   <div ng-switch-when="map">
-    <a class="square square-map square-svg" ui-sref="ugc.map({id: compoundObject.encodedUri })">
+    <a class="square square-map square-svg" ui-sref="ugc.map({id: compoundObject.id })">
       <div class="square-content">
         <div class="center">
           <div class="center-content">
@@ -28,13 +28,13 @@
     </a>
     <div class="caption">
       <h4>
-        <a ui-sref="ugc.map({id: compoundObject.encodedUri })"> {{ compoundObject.jsonData.title }} </a>
+        <a ui-sref="ugc.map({id: compoundObject.id })"> {{ compoundObject.title }} </a>
       </h4>
-      <p class="text-muted" style="text-align: center;">By {{ compoundObject.jsonData.user.name }}</p>
+      <p class="text-muted" style="text-align: center;">By {{ compoundObject.user }}</p>
     </div>
   </div>
   <div ng-switch-when="wordcloud">
-    <a class="square square-wordcloud square-svg" ui-sref="ugc.wordcloud({id: compoundObject.encodedUri })">
+    <a class="square square-wordcloud square-svg" ui-sref="ugc.wordcloud({id: compoundObject.id })">
       <div class="square-content">
         <div class="center">
           <div class="center-content">
@@ -45,9 +45,9 @@
     </a>
     <div class="caption">
       <h4>
-        <a ui-sref="ugc.wordcloud({id: compoundObject.encodedUri })"> {{ compoundObject.jsonData.title }} </a>
+        <a ui-sref="ugc.wordcloud({id: compoundObject.id })"> {{ compoundObject.title }} </a>
       </h4>
-      <p class="text-muted" style="text-align: center;">By {{ compoundObject.jsonData.user.name }}</p>
+      <p class="text-muted" style="text-align: center;">By {{ compoundObject.user }}</p>
     </div>
   </div>
 </div>

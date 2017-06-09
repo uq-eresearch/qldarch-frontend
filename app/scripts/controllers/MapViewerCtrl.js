@@ -1,18 +1,18 @@
 'use strict';
 
-angular.module('qldarchApp').controller('MapViewerCtrl', function ($scope, compoundObject, CompoundObject, $state, Auth) {
-  $scope.compoundObject = compoundObject.jsonData;
-  $scope.map = compoundObject.jsonData.data;
+angular.module('qldarchApp').controller('MapViewerCtrl', function($scope, compobj, CompObj, $state, Auth) {
+
+  $scope.compoundObject = compobj;
+  $scope.map = {};
+  $scope.map.locations = compobj.structure;
   $scope.map.$import = {};
 
-  $scope.isEditable = Auth.success && ($scope.compoundObject.user.user === Auth.user.username || Auth.user.role === 'admin');
-  $scope.isDeletable = Auth.success && ($scope.compoundObject.user.user === Auth.user.username || Auth.user.role === 'admin');
+  $scope.isDeletable = Auth.success && ($scope.compoundObject.user.id === Auth.user.id || Auth.user.role === 'admin');
 
-  $scope.delete = function () {
+  $scope.delete = function() {
     var r = window.confirm('Delete this map?');
     if (r === true) {
-      CompoundObject.delete(compoundObject.uri).then(function (data) {
-        console.log('data is', data);
+      CompObj.delete(compobj.id).then(function() {
         $state.go('main');
       });
     }
@@ -20,16 +20,14 @@ angular.module('qldarchApp').controller('MapViewerCtrl', function ($scope, compo
 
   // Setup the map
   $scope.mapOptions = {
-      zoom: 15,
-      maxZoom: 16,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      scrollwheel: true
+      zoom : 15,
+      maxZoom : 16,
+      mapTypeId : google.maps.MapTypeId.ROADMAP,
+      scrollwheel : true
   };
 
-  $scope.$watch('myMap', function (myMap) {
-    console.log('is showing map', $scope.isShowingMap);
+  $scope.$watch('myMap', function(myMap) {
     if (myMap) {
-      console.log('we have a map', myMap);
       var bounds = new google.maps.LatLngBounds();
       var latlng = new google.maps.LatLng(18.547324589827422, -72.388916015625);
       bounds.extend(latlng);
@@ -48,10 +46,9 @@ angular.module('qldarchApp').controller('MapViewerCtrl', function ($scope, compo
    */
   function addMarkerToMapFromLocationWithType(location, type) {
     // Create marker position
-    var position = new google.maps.LatLng(location.lat, location.lon);
+    var position = new google.maps.LatLng(location.latitude, location.longitude);
 
-    var animation = null,
-    pinColor = 'CCCCCC';
+    var animation = null, pinColor = 'CCCCCC';
 
     if (type === 'added') {
       pinColor = '11c3b6';
@@ -62,15 +59,13 @@ angular.module('qldarchApp').controller('MapViewerCtrl', function ($scope, compo
 
     // Use color to make marker image
     var pinImage = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|' + pinColor,
-        new google.maps.Size(21, 34),
-        new google.maps.Point(0, 0),
-        new google.maps.Point(10, 34));
+        new google.maps.Size(21, 34), new google.maps.Point(0, 0), new google.maps.Point(10, 34));
 
     // Create a marker
     var marker = new google.maps.Marker({
-      position: position,
-      title: location.name,
-      icon: pinImage,
+      position : position,
+      title : location.label,
+      icon : pinImage,
     });
 
     // Add the marker to the map
@@ -81,15 +76,15 @@ angular.module('qldarchApp').controller('MapViewerCtrl', function ($scope, compo
     var infowindow;
     if (location.type === 'structure') {
       infowindow = new google.maps.InfoWindow({
-        content: '<a href="#/project/summary?structureId=' + btoa(location.uri) + '">' + location.name + '</a>'
+        content : '<a href="#/project/summary?structureId=' + location.id + '">' + location.label + '</a>'
       });
     } else {
       infowindow = new google.maps.InfoWindow({
-        content: '<span style="color:black">' + location.name + '</span>'
+        content : '<span style="color:black">' + location.label + '</span>'
       });
     }
 
-    google.maps.event.addListener(marker, 'click', function () {
+    google.maps.event.addListener(marker, 'click', function() {
       infowindow.open($scope.myMap, marker);
     });
   }
@@ -98,27 +93,27 @@ angular.module('qldarchApp').controller('MapViewerCtrl', function ($scope, compo
     if (!angular.isDefined($scope.map.$markers)) {
       $scope.map.$markers = [];
     }
-    setTimeout(function () {
+    setTimeout(function() {
       google.maps.event.trigger($scope.myMap, 'resize');
 
-      setTimeout(function () {
+      setTimeout(function() {
         // Kill all existing markers
-        angular.forEach($scope.map.$markers, function (marker) {
+        angular.forEach($scope.map.$markers, function(marker) {
           marker.setMap(null);
         });
         $scope.map.$markers = [];
 
         // Add in new markers
-        angular.forEach(prospectiveLocations, function (prospectiveLocation) {
+        angular.forEach(prospectiveLocations, function(prospectiveLocation) {
           addMarkerToMapFromLocationWithType(prospectiveLocation, 'prospective');
         });
-        angular.forEach(addedLocations, function (addedLocation) {
+        angular.forEach(addedLocations, function(addedLocation) {
           addMarkerToMapFromLocationWithType(addedLocation, 'added');
         });
 
         // Expand the map to fit the marker
         var bounds = new google.maps.LatLngBounds();
-        angular.forEach($scope.map.$markers, function (marker) {
+        angular.forEach($scope.map.$markers, function(marker) {
           bounds.extend(marker.position);
         });
         $scope.myMap.fitBounds(bounds);
@@ -126,43 +121,42 @@ angular.module('qldarchApp').controller('MapViewerCtrl', function ($scope, compo
     }, 0);
   }
 
-  $scope.$watchCollection('map.$import.prospectiveLocations', function (prospectiveLocations) {
+  $scope.$watchCollection('map.$import.prospectiveLocations', function(prospectiveLocations) {
     renderLocations($scope.map.locations, prospectiveLocations);
   });
 
-  $scope.$watchCollection('map.locations', function (locations) {
+  $scope.$watchCollection('map.locations', function(locations) {
     renderLocations(locations, $scope.map.$import.prospectiveLocations);
   });
 
-  $scope.$watch('zoom', function (zoom) {
+  $scope.$watch('zoom', function(zoom) {
     if (zoom) {
       var bounds;
       if (zoom === 'prospective') {
         console.log('zoom prospective');
         bounds = new google.maps.LatLngBounds();
-        angular.forEach($scope.map.$import.prospectiveLocations, function (prospectiveLocation) {
-          bounds.extend(new google.maps.LatLng(prospectiveLocation.lat, prospectiveLocation.lon));
+        angular.forEach($scope.map.$import.prospectiveLocations, function(prospectiveLocation) {
+          bounds.extend(new google.maps.LatLng(prospectiveLocation.latitude, prospectiveLocation.longitude));
         });
         $scope.myMap.fitBounds(bounds);
       } else if (zoom === 'all') {
         console.log('zoom all');
         bounds = new google.maps.LatLngBounds();
-        angular.forEach($scope.map.$import.prospectiveLocations, function (prospectiveLocation) {
-          bounds.extend(new google.maps.LatLng(prospectiveLocation.lat, prospectiveLocation.lon));
+        angular.forEach($scope.map.$import.prospectiveLocations, function(prospectiveLocation) {
+          bounds.extend(new google.maps.LatLng(prospectiveLocation.latitude, prospectiveLocation.longitude));
         });
-        angular.forEach($scope.map.locations, function (location) {
-          bounds.extend(new google.maps.LatLng(location.lat, location.lon));
+        angular.forEach($scope.map.locations, function(location) {
+          bounds.extend(new google.maps.LatLng(location.latitude, location.longitude));
         });
         $scope.myMap.fitBounds(bounds);
       } else if (zoom === 'added') {
         console.log('zoom added');
         bounds = new google.maps.LatLngBounds();
-        angular.forEach($scope.map.locations, function (location) {
-          bounds.extend(new google.maps.LatLng(location.lat, location.lon));
+        angular.forEach($scope.map.locations, function(location) {
+          bounds.extend(new google.maps.LatLng(location.latitude, location.longitude));
         });
         $scope.myMap.fitBounds(bounds);
       }
     }
-
   });
 });

@@ -8,13 +8,14 @@ angular.module('qldarchApp').config(function($stateProvider) {
       // Load X number of interviews
       interviews : [ 'InterviewsBrief', function(InterviewsBrief) {
         return InterviewsBrief.getInterviewsForCarousel();
-
       } ],
-      compoundObjects : [ 'CompoundObject', '$filter', function(CompoundObject, $filter) {
-        return CompoundObject.loadAll().then(function(compoundObjects) {
-          compoundObjects = $filter('orderBy')(compoundObjects, '-jsonData.modified');
+      compoundObjects : [ 'CompObj', '$filter', function(CompObj, $filter) {
+        return CompObj.loadAll().then(function(compoundObjects) {
+          compoundObjects = $filter('orderBy')(compoundObjects, function(compoundObject) {
+            return compoundObject.modified;
+          });
           compoundObjects = $filter('filter')(compoundObjects, function(compoundObject) {
-            return angular.isDefined(compoundObject.jsonData.type);
+            return angular.isDefined(compoundObject.type);
           });
           return compoundObjects;
         });

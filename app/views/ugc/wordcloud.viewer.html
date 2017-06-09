@@ -1,12 +1,7 @@
-<div class="alert alert-warning" ng-show="!$state.includes('ugc.wordcloud.edit') && (isEditable || isDeletable)" style="margin: 0;">
+<div class="alert alert-warning" ng-show="isDeletable" style="margin: 0;">
   <div class="container">
-    <!-- Edit -->
-    <button class="btn btn-default" ui-sref="ugc.wordcloud.edit" ng-show="isEditable">
-      <i class="fa fa-pencil"></i> Edit
-    </button>
-    <!-- /Edit -->
     <!-- Delete -->
-    <button class="btn btn-default" ng-click="delete()" ng-show="isDeletable">
+    <button class="btn btn-default btn-xs" ng-click="delete()" ng-show="isDeletable">
       <i class="fa fa-trash-o"></i> Delete
     </button>
     <!-- /Delete -->
@@ -14,17 +9,12 @@
 </div>
 <div class="l-frame l-frame-media" ng-show="wordcloud.documents.length">
   <div class="container">
-    <!-- Edit -->
-    <button class="btn btn-default pull-right" ui-sref="ugc.wordcloud.edit" ng-hide="$state.includes('ugc.wordcloud.edit')">
-      <i class="fa fa-pencil"></i> Edit
-    </button>
-    <!-- /Edit -->
     <h3 style="text-align: center; margin-bottom: 24px" ng-show="compoundObject.title.length">
       <!-- Object title -->
       {{ compoundObject.title }}<br>
       <!-- /Object title -->
       <!-- Author name -->
-      <small ng-show="compoundObject.user.user.length">By {{ compoundObject.user.name }}</small>
+      <small ng-show="compoundObject.user.displayName.length">By {{ compoundObject.user.displayName }}</small>
       <!-- /Author name -->
     </h3>
     <div class="wordcloud"></div>

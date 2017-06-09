@@ -5,16 +5,16 @@ angular.module('qldarchApp').config(function($stateProvider) {
     abstract : true,
     url : '/ugc?id',
     resolve : {
-      compoundObject : [ '$stateParams', 'GraphHelper', 'CompoundObject', function($stateParams, GraphHelper, CompoundObject) {
+      compobj : [ '$stateParams', 'GraphHelper', 'CompObj', function($stateParams, GraphHelper, CompObj) {
         if ($stateParams.id) {
-          var mapUri = GraphHelper.decodeUriString($stateParams.id);
-          return CompoundObject.load(mapUri);
+          return CompObj.load($stateParams.id).then(function(data) {
+            return data;
+          }).catch(function() {
+            console.log('unable to load CompObj');
+            return {};
+          });
         } else {
-          return {
-            jsonData : {
-              data : {}
-            }
-          };
+          return {};
         }
       } ]
     },

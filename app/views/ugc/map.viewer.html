@@ -1,10 +1,5 @@
-<div class="alert alert-warning" ng-show="!$state.includes('ugc.map.edit') && (isEditable || isDeletable)" style="margin: 0;">
+<div class="alert alert-warning" ng-show="isDeletable" style="margin: 0;">
   <div class="container">
-    <!-- Edit -->
-    <button class="btn btn-default btn-xs" ui-sref="ugc.map.edit" ng-show="isEditable">
-      <i class="fa fa-pencil"></i> Edit
-    </button>
-    <!-- /Edit -->
     <!-- Delete -->
     <button class="btn btn-default btn-xs" ng-click="delete()" ng-show="isDeletable">
       <i class="fa fa-trash-o"></i> Delete
@@ -12,19 +7,23 @@
     <!-- /Delete -->
   </div>
 </div>
-<div class="l-frame l-frame-tighter l-frame-divided" ng-show="$state.includes('ugc.map.edit.add') && (map.locations.length || map.$import.prospectiveLocations.length)">
+<div class="l-frame l-frame-tighter l-frame-divided"
+  ng-show="$state.includes('ugc.map.edit.add') && (map.locations.length || map.$import.prospectiveLocations.length)">
   <div class="container" style="text-align: center;">
     <strong style="margin-right: 8px;">Zoom</strong>
     <div class="btn-group">
-      <button type="button" class="btn btn-default btn-xs" ng-model="zoom" btn-radio="'all'">All</button>
-      <button type="button" class="btn btn-default btn-xs" ng-model="zoom" btn-radio="'prospective'">
-        <img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF" alt="" style="height: 16px; margin-right: 4px;"> New ({{ map.$import.prospectiveLocations.length || 0 }})
+      <button type="button" class="btn btn-default btn-xs" ng-model="zoom" uib-btn-radio="'all'">All</button>
+      <button type="button" class="btn btn-default btn-xs" ng-model="zoom" uib-btn-radio="'prospective'">
+        <img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF" alt="" style="height: 16px; margin-right: 4px;">
+        New ({{ map.$import.prospectiveLocations.length || 0 }})
       </button>
-      <button type="button" class="btn btn-default btn-xs" ng-model="zoom" btn-radio="'added'">
-        <img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|11c3b6" alt="" style="height: 16px; margin-right: 4px;"> Added ({{ map.locations.length || 0 }})
+      <button type="button" class="btn btn-default btn-xs" ng-model="zoom" uib-btn-radio="'added'">
+        <img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|11c3b6" alt="" style="height: 16px; margin-right: 4px;">
+        Added ({{ map.locations.length || 0 }})
       </button>
     </div>
-    <span style="margin-right: 24px;" class="text-muted" ng-mouseenter="zoomProspective()" ng-mouseleave="zoomAll()"> </span> <span class="text-muted" ng-mouseenter="zoomAdded()" ng-mouseleave="zoomAll()"> </span>
+    <span style="margin-right: 24px;" class="text-muted" ng-mouseenter="zoomProspective()" ng-mouseleave="zoomAll()"> </span> <span class="text-muted"
+      ng-mouseenter="zoomAdded()" ng-mouseleave="zoomAll()"> </span>
   </div>
 </div>
 <div class="l-frame l-frame-media" ng-show="map.locations.length || map.$import.prospectiveLocations.length">
@@ -34,7 +33,7 @@
       {{ compoundObject.title }}<br />
       <!-- /Map title -->
       <!-- Author name -->
-      <small ng-show="compoundObject.user.user.length">By {{ compoundObject.user.name }}</small>
+      <small ng-show="compoundObject.user.displayName.length">By {{ compoundObject.user.displayName }}</small>
       <!-- /Author name -->
     </h3>
     <div ui-map="myMap" class="map-canvas map" ui-options="mapOptions"></div>

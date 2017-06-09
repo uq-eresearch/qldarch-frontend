@@ -25,7 +25,7 @@ angular.module('qldarchApp').controller('MainCtrl', function($scope, $sce, inter
 
   var compoundObjectsRows = LayoutHelper.group(compoundObjects, compoundObjectsPerRow);
 
-  $scope.compoundObjectRows = compoundObjectsRows.slice(0, Math.min(4, compoundObjectsRows.length));
+  $scope.compoundObjectRows = compoundObjectsRows.slice(0, Math.max((compoundObjects.length / compoundObjectsPerRow), compoundObjectsRows.length));
 
   $scope.nextCompoundObjects = function() {
     $scope.compoundObjectsStart++;
