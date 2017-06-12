@@ -26,7 +26,6 @@ angular.module('qldarchApp').controller('TimelineViewerCtrl', function($scope, c
     } else {
       if (angular.isDefined(date.endDate)) {
         date.startDate = JSON.stringify(date.endDate);
-        date.endDate = JSON.stringify(date.endDate);
       }
     }
     if (angular.isDefined(date.text)) {

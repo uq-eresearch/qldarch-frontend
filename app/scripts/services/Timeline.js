@@ -69,11 +69,9 @@ angular.module('qldarchApp').service('Timeline', function Timeline($http, $filte
       } else {
         if (angular.isDefined(relationship.untilyear)) {
           timelineDate.startDate = JSON.stringify(relationship.untilyear);
-          timelineDate.endDate = JSON.stringify(relationship.untilyear);
         } else {
           if (angular.isDefined(relationship.objectcompletion)) {
             timelineDate.startDate = JSON.stringify(relationship.objectcompletion).substring(1, 5);
-            timelineDate.endDate = JSON.stringify(relationship.objectcompletion).substring(1, 5);
           }
         }
       }
