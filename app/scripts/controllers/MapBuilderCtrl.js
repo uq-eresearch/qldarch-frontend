@@ -4,133 +4,109 @@ angular
     .module('qldarchApp')
     .controller(
         'MapBuilderCtrl',
-        function($scope, compoundObject, typologies, Entity, Uris, Relationship, GraphHelper, Structure, $filter, $state, Auth, CompoundObject, Firm,
-            Architect) {
-          /*
-           * ===================================================== Setup
-           * =====================================================
-           */
-          $scope.compoundObject = compoundObject.jsonData; // alias for
-          // convenience
-          $scope.map = compoundObject.jsonData.data; // alias for convenience
+        function($scope, compobj, entities, CompObj, ArchObj, Uris, GraphHelper, $filter, $state, Auth, $q) {
+          /* globals _:false */
+          $scope.compoundObject = compobj;
+          $scope.map = compobj;
           $scope.map.$import = {};
-          $scope.typologies = typologies;
 
-          if (!compoundObject.uri) {
+          if (!compobj.id) {
             $scope.map.locations = [];
-            $scope.compoundObject.user = Auth;
+            $scope.compoundObject.user = Auth.user;
             $scope.compoundObject.type = 'map';
           }
 
-          /*
-           * ===================================================== Select2 Boxes
-           * =====================================================
-           */
-          // Setup the entity select boxes
-          $scope.architectStructureFirmTypologySelect = {
-            placeholder : 'Architect, Project, Firm or Typology',
-            dropdownAutoWidth : true,
-            multiple : false,
-            // minimumInputLength: 2,
-            query : function(options) {
-              Entity.findByName(options.term, false).then(
-                  function(entities) {
-                    var data = {
-                      results : []
-                    };
+          entities = $filter('orderBy')(entities, function(entity) {
+            return entity.label;
+          });
 
-                    angular.forEach(entities, function(entity) {
-                      if (entity.type === 'architect' || entity.type === 'buildingtypology' || entity.type === 'firm' ||
-                          (entity.type === 'structure' && angular.isDefined(entity[Uris.GEO_LAT]))) {
+          var dataEntitySelectMap = {
+            results : []
+          };
 
-                        var label = entity.name + ' (' + entity.type.charAt(0).toUpperCase() + entity.type.slice(1) + ')';
-                        if (entity.type === 'buildingtypology') {
-                          label = entity.name + ' (Building typology)';
-                        }
-                        if (entity.type === 'structure') {
-                          label = entity.name + ' (Project)';
-                        }
-                        data.results.push({
-                          id : entity.uri,
-                          uri : entity.uri,
-                          text : label,
-                          type : entity.type,
-                          name : entity.name,
-                          encodedUri : entity.encodedUri
-                        });
-                      }
-
-                    });
-                    options.callback(data);
-                  });
+          angular.forEach(entities, function(e) {
+            if (e.label && !(/\s/.test(e.label.substring(0, 1)))) {
+              var entitytype = 'unknown';
+              if (e.hasOwnProperty('type')) {
+                entitytype = e.type.charAt(0).toUpperCase() + e.type.slice(1);
+              } else if (e.hasOwnProperty('firstname') || e.hasOwnProperty('lastname')) {
+                entitytype = 'Person';
+              } else if (e.hasOwnProperty('lat') || e.hasOwnProperty('lng')) {
+                entitytype = 'Structure';
+              }
+              dataEntitySelectMap.results.push({
+                id : e.id,
+                text : e.label + ' (' + entitytype + ')',
+                type : entitytype
+              });
             }
+          });
+
+          // Setup the entity select boxes
+          $scope.architectStructureFirmSelectMap = {
+            placeholder : 'Architect, Project or Firm',
+            dropdownAutoWidth : false,
+            multiple : false,
+            initSelection : true,
+            data : dataEntitySelectMap
           };
 
           function generateProspectiveLocations() {
-            var filteredLocations = $filter('filter')($scope.map.$import.locations, $scope.importFilter);
-            filteredLocations = $filter('filter')(filteredLocations, function(location) {
-              return !location.$added;
-            });
-            $scope.map.$import.prospectiveLocations = filteredLocations;
+            if (angular.isDefined($scope.map.$import) && $scope.map.$import !== null) {
+              var filteredLocations = $filter('filter')($scope.map.$import.locations, $scope.importFilter);
+              filteredLocations = $filter('filter')(filteredLocations, function(location) {
+                return !location.$added;
+              });
+              $scope.map.$import.prospectiveLocations = filteredLocations;
+            }
           }
 
-          /*
-           * ===================================================== Import Places
-           * =====================================================
-           */
+          // Import Places
           function addStructuresAsLocations(structures) {
             $scope.map.$import.locations = [];
             $scope.map.$import.filter = {
               australian : 'all'
             };
-
             $scope.map.$import.architects = [];
             $scope.map.$import.firms = [];
-            var firmUris = [];
             $scope.map.$import.typologies = [];
-
             angular.forEach(structures, function(structure) {
-              // Filter out buildings that dont have a location
+              // Filter out buildings that don't have a location
               // We cant display them, so we don't show them
               if (structure.lat) {
                 var location = angular.copy(structure);
                 angular.extend(location, {
-                  name : structure.name,
+                  name : structure.label,
                   lat : structure.lat,
                   lon : structure.lon,
-                  uri : structure.uri,
+                  id : structure.id,
                   type : 'structure',
                   asset : {
                     media : 'images/icon.png',
-                    thumbnail : 'images/icon.png',
+                    thumbnail : 'images/icon.png'
                   }
                 });
                 // Add in a picture if there is one
-                if (structure.picture) {
+                if (structure.media.length) {
                   location.asset = {
-                    media : structure.picture.file,
-                    thumbnail : structure.picture.thumb,
+                    media : Uris.WS_MEDIA + structure.media[0].id + '?dimension=320x307',
+                    thumbnail : Uris.WS_MEDIA + structure.media[0].id + '?dimension=65x65'
                   };
                 }
-
                 // Check if we already have added it
-                console.log('checking', location.name, location.uri);
                 angular.forEach($scope.map.locations, function(addedLocation) {
-                  console.log('- ', addedLocation.uri);
-                  if (addedLocation.uri === location.uri) {
+                  if (addedLocation.id === location.id) {
                     location.$added = true;
                   }
                 });
-
                 // Add it to the list of locations to display
                 $scope.map.$import.locations.push(location);
-
                 // Add its building typologies to the list for the filter
-                if (structure.buildingTypologies) {
-                  angular.forEach(structure.buildingTypologies, function(structureBuildingTypology) {
+                if (structure.typologies) {
+                  angular.forEach(structure.typologies, function(structureBuildingTypology) {
                     var found = false;
                     angular.forEach($scope.map.$import.typologies, function(filterBuildingTypology) {
-                      if (structureBuildingTypology.uri === filterBuildingTypology.uri) {
+                      if (structureBuildingTypology === filterBuildingTypology) {
                         found = true;
                       }
                     });
@@ -139,53 +115,56 @@ angular
                     }
                   });
                 }
-
-                // Store the firms
-                if (structure[Uris.QA_ASSOCIATED_FIRM]) {
-                  firmUris.push(structure[Uris.QA_ASSOCIATED_FIRM]);
-                }
-
                 // Find the people that built it
-                Relationship.findBySubjectPredicateObject({
-                  predicate : 'qldarch:designedBy',
-                  subject : structure.uri
-                }).then(function(designedByRelationships) {
-                  var designedByArchitectUris = GraphHelper.getAttributeValuesUnique(designedByRelationships, Uris.QA_OBJECT);
-
-                  Relationship.findBySubjectPredicateObject({
-                    predicate : 'qldarch:workedOn',
-                    object : structure.uri
-                  }).then(function(workedOnRelationships) {
-                    var workedOnArchitectUris = GraphHelper.getAttributeValuesUnique(workedOnRelationships, Uris.QA_SUBJECT);
-
-                    // Merge
-                    var architectUris = designedByArchitectUris.concat(workedOnArchitectUris);
-                    Architect.loadList(architectUris, true).then(function(architects) {
-                      location.architects = architects;
-                      // Add it to list to filter by (if its not already there)
-                      angular.forEach(architects, function(structureArchitect) {
-                        var found = false;
-                        // In case we get any firms in there
-                        if (structureArchitect.type === 'architect') {
-                          angular.forEach($scope.map.$import.architects, function(importArchitect) {
-                            if (structureArchitect.uri === importArchitect.uri) {
-                              // already added
-                              found = true;
-                            }
-                          });
-                          if (!found) {
-                            $scope.map.$import.architects.push(structureArchitect);
-                          }
-                        }
-                      });
+                var structureArchitects = $filter('filter')(
+                    structure.relationships,
+                    function(relationship) {
+                      return (relationship.relationship === 'WorkedOn' || relationship.relationship === 'DesignedBy') &&
+                          (relationship.subjectarchitect || relationship.objectarchitect);
                     });
-                  });
+                angular.forEach(structureArchitects, function(structureArchitect) {
+                  if (structureArchitect.subjectarchitect) {
+                    var subject = {
+                      id : structureArchitect.subject,
+                      name : structureArchitect.subjectlabel
+                    };
+                    if (JSON.stringify($scope.map.$import.architects).indexOf(JSON.stringify(subject)) === -1) {
+                      $scope.map.$import.architects.push(subject);
+                    }
+                  } else if (structureArchitect.objectarchitect) {
+                    var object = {
+                      id : structureArchitect.object,
+                      name : structureArchitect.objectlabel
+                    };
+                    if (JSON.stringify($scope.map.$import.architects).indexOf(JSON.stringify(object)) === -1) {
+                      $scope.map.$import.architects.push(object);
+                    }
+                  }
+                });
+                // Store the firms
+                var structureFirms = $filter('filter')(structure.relationships, function(relationship) {
+                  return (relationship.relationship === 'WorkedOn' && (relationship.subjectype === 'firm' || relationship.objecttype === 'firm'));
+                });
+                angular.forEach(structureFirms, function(structureFirm) {
+                  if (structureFirm.subjectype === 'firm') {
+                    var subject = {
+                      id : structureFirm.subject,
+                      name : structureFirm.subjectlabel
+                    };
+                    if (JSON.stringify($scope.map.$import.firms).indexOf(JSON.stringify(subject)) === -1) {
+                      $scope.map.$import.firms.push(subject);
+                    }
+                  } else if (structureFirm.objecttype === 'firm') {
+                    var object = {
+                      id : structureFirm.object,
+                      name : structureFirm.objectlabel
+                    };
+                    if (JSON.stringify($scope.map.$import.firms).indexOf(JSON.stringify(object)) === -1) {
+                      $scope.map.$import.firms.push(object);
+                    }
+                  }
                 });
               }
-            });
-
-            Firm.loadList(firmUris).then(function(firms) {
-              $scope.map.$import.firms = firms;
             });
             generateProspectiveLocations();
           }
@@ -202,71 +181,48 @@ angular
             if (!entity) {
               return;
             }
-
             // Clear the current locations
             $scope.map.$import.locations = null;
 
-            // Find locations
-            if (entity.type === 'architect') {
-              Relationship.findBySubjectPredicateObject({
-                predicate : 'qldarch:designedBy',
-                object : entity.uri
-              }).then(function(designedByRelationships) {
-                var designedByStructureUris = GraphHelper.getAttributeValuesUnique(designedByRelationships, Uris.QA_SUBJECT);
-
-                Relationship.findBySubjectPredicateObject({
-                  predicate : 'qldarch:workedOn',
-                  subject : entity.uri
-                }).then(function(workedOnRelationships) {
-                  var workedOnStructureUris = GraphHelper.getAttributeValuesUnique(workedOnRelationships, Uris.QA_OBJECT);
-
-                  // Merge
-                  var structureUris = designedByStructureUris.concat(workedOnStructureUris);
-                  console.log(workedOnStructureUris);
-                  Structure.loadList(structureUris, true).then(function(structures) {
-                    // Convert structures to locations
-                    addStructuresAsLocations(structures);
-                  });
+            if (entity.type === 'Structure') {
+              ArchObj.load(entity.id).then(function(data) {
+                data.lat = data.latitude;
+                data.lon = data.longitude;
+                addStructuresAsLocations([ data ]);
+              });
+            } else {
+              ArchObj.loadWithRelationshipLabels(entity.id).then(function(data) {
+                data.relationships = $filter('filter')(data.relationships, function(relationship) {
+                  if (relationship.subjectype === 'structure' || relationship.objecttype === 'structure') {
+                    return relationship;
+                  }
                 });
-              });
-
-              // Look for a firm
-            } else if (entity.type === 'firm') {
-              var firmUri = entity.uri;
-              Relationship.findBySubjectPredicateObject({
-                predicate : 'qldarch:designedBy',
-                object : firmUri
-              }).then(function(relationships) {
-                // Get all the architects
-                var structureUris = GraphHelper.getAttributeValuesUnique(relationships, Uris.QA_SUBJECT);
-
-                Structure.loadList(structureUris, true).then(function(structures) {
-                  var relationshipStructures = GraphHelper.graphValues(structures);
-
-                  // Get the associated firms...this is awful
-                  // should be all relationships or nothing!
-                  Structure.findByAssociatedFirmUri(firmUri).then(function(firmStructures) {
-                    var structures = angular.extend(relationshipStructures, firmStructures);
-                    structures = GraphHelper.graphValues(structures);
-                    addStructuresAsLocations(structures);
+                var promises = [];
+                angular.forEach(data.relationships, function(structure) {
+                  var promise = ArchObj.load(((structure.subjectype === 'structure') ? structure.subject : structure.object)).then(function(data) {
+                    if (angular.isDefined(data.media)) {
+                      data.media = $filter('filter')(data.media, function(med) {
+                        return (med.preferred || (med.type === 'Photograph' || med.type === 'Portrait' || med.type === 'Image'));
+                      });
+                    }
+                    if (angular.isDefined(data.latitude) && angular.isDefined(data.longitude)) {
+                      data.lat = data.latitude;
+                      data.lon = data.longitude;
+                      return data;
+                    }
+                  }).catch(function() {
+                    console.log('unable to load structure ArchObj');
                   });
+                  promises.push(promise);
                 });
-              });
-
-              // Looking for astructure
-            } else if (entity.type === 'structure') {
-              Structure.load(entity.uri, true).then(function(structure) {
-                addStructuresAsLocations([ structure ]);
-              });
-
-            } else if (entity.type === 'buildingtypology') {
-
-              Structure.findByBuildingTypologyUri(entity.uri).then(function(structures) {
-                structures = GraphHelper.graphValues(structures);
-                addStructuresAsLocations(structures);
+                $q.all(promises).then(function(data) {
+                  data = $filter('filter')(data, function(d) {
+                    return angular.isDefined(d);
+                  });
+                  addStructuresAsLocations(_.uniqBy(data, 'label'));
+                });
               });
             }
-
           });
 
           function addLocationsToMap(locations) {
@@ -283,11 +239,7 @@ angular
             generateProspectiveLocations();
           }
 
-          /*
-           * ===================================================== Selecting
-           * Items from Import
-           * =====================================================
-           */
+          // Selecting Items from Import
           $scope.addAll = function() {
             var filteredLocations = $filter('filter')($scope.map.$import.locations, $scope.importFilter);
             addLocationsToMap(filteredLocations);
@@ -310,7 +262,7 @@ angular
           function removeLocationFromMap(location) {
             // Go through ones in the import list
             angular.forEach($scope.map.$import.locations, function(importLocation) {
-              if (location.uri === importLocation.uri) {
+              if (location.id === importLocation.id) {
                 importLocation.$added = false;
               }
             });
@@ -319,24 +271,34 @@ angular
             generateProspectiveLocations();
           }
 
+          $scope.removeAll = function() {
+            angular.forEach($scope.map.$import.locations, function(importLocation) {
+              importLocation.$added = false;
+            });
+            $scope.map.locations = [];
+            generateProspectiveLocations();
+          };
+
           $scope.importFilter = function(location) {
             var result = true;
             var found;
             if (angular.isDefined($scope.map.$import.filter)) {
-              if (angular.isDefined($scope.map.$import.filter.typologyUri) && $scope.map.$import.filter.typologyUri.length) {
+              if (angular.isDefined($scope.map.$import.filter.typology) && $scope.map.$import.filter.typology.length) {
                 found = false;
-                angular.forEach(GraphHelper.asArray(location[Uris.QA_BUILDING_TYPOLOGY_P]), function(typologyUri) {
-                  if (typologyUri === $scope.map.$import.filter.typologyUri) {
+                angular.forEach(GraphHelper.asArray(location.typologies), function(typology) {
+                  if (typology === $scope.map.$import.filter.typology) {
                     found = true;
                   }
                 });
                 result = result && found;
               }
-              if (angular.isDefined($scope.map.$import.filter.startYear) && $scope.map.$import.filter.startYear.length) {
-                result = result && parseInt(location[Uris.QA_COMPLETION_DATE]) >= parseInt($scope.map.$import.filter.startYear);
+              if (angular.isDefined($scope.map.$import.filter.startYear) && $scope.map.$import.filter.startYear.length &&
+                  angular.isDefined(location.completion && location.completion.length)) {
+                result = result && parseInt(location.completion) >= parseInt($scope.map.$import.filter.startYear);
               }
-              if (angular.isDefined($scope.map.$import.filter.endYear) && $scope.map.$import.filter.endYear.length) {
-                result = result && parseInt(location[Uris.QA_COMPLETION_DATE]) <= parseInt($scope.map.$import.filter.endYear);
+              if (angular.isDefined($scope.map.$import.filter.endYear) && $scope.map.$import.filter.endYear.length &&
+                  angular.isDefined(location.completion) && location.completion.length) {
+                result = result && parseInt(location.completion) <= parseInt($scope.map.$import.filter.endYear);
               }
               // Name filter
               if ($scope.map.$import.filter.filter) {
@@ -345,16 +307,23 @@ angular
               // Location filter
               if ($scope.map.$import.filter.location) {
                 found = false;
-                angular.forEach(location.locations, function(locationName) {
-                  if (locationName.toLowerCase().indexOf($scope.map.$import.filter.location.toLowerCase()) !== -1) {
-                    found = true;
-                  }
-                });
+                if (location.location.toLowerCase().indexOf($scope.map.$import.filter.location.toLowerCase()) !== -1) {
+                  found = true;
+                }
                 result = result && found;
               }
               // Firm filter
-              if ($scope.map.$import.filter.firmUri) {
-                result = result && location[Uris.QA_ASSOCIATED_FIRM] === $scope.map.$import.filter.firmUri;
+              if ($scope.map.$import.filter.firmId) {
+                found = false;
+                angular.forEach(location.relationships, function(relationship) {
+                  if (relationship.relationship === 'WorkedOn') {
+                    if (JSON.stringify(relationship.subject) === $scope.map.$import.filter.firmId ||
+                        JSON.stringify(relationship.object) === $scope.map.$import.filter.firmId) {
+                      found = true;
+                    }
+                  }
+                });
+                result = result && found;
               }
               // Australian filter
               if ($scope.map.$import.filter.australian) {
@@ -366,12 +335,20 @@ angular
                       ((parseFloat(location.lat) > -10) || (parseFloat(location.lat) < -45) || (parseFloat(location.lon) < 109) || (parseFloat(location.lat) > 155));
                 }
               }
-              // architect filter
-              if ($scope.map.$import.filter.architectUri) {
+              // Architect filter
+              if ($scope.map.$import.filter.architectId) {
                 found = false;
-                angular.forEach(location.architects, function(architect) {
-                  if (architect.uri === $scope.map.$import.filter.architectUri) {
-                    found = true;
+                angular.forEach(location.relationships, function(relationship) {
+                  if (relationship.relationship === 'WorkedOn' || relationship.relationship === 'DesignedBy') {
+                    if (relationship.subjectarchitect) {
+                      if (JSON.stringify(relationship.subject) === $scope.map.$import.filter.architectId) {
+                        found = true;
+                      }
+                    } else if (relationship.objectarchitect) {
+                      if (JSON.stringify(relationship.object) === $scope.map.$import.filter.architectId) {
+                        found = true;
+                      }
+                    }
                   }
                 });
                 result = result && found;
@@ -379,6 +356,7 @@ angular
             }
             return result;
           };
+
           $scope.clearImportFilters = function() {
             $scope.map.$import.filter = {};
           };
@@ -387,73 +365,17 @@ angular
             generateProspectiveLocations();
           }, true);
 
-          /*
-           * ===================================================== New Place
-           * =====================================================
-           */
-          $scope.addLocation = function(location) {
-            // Store the location
-            location.asset = {
-              media : 'images/icon.png',
-              thumbnail : 'images/icon.png',
-            };
-            $scope.map.locations.unshift(location);
-            // Clear the entry
-            $scope.map.$tempLocation = {};
-            $state.go('ugc.map.edit');
-          };
-
-          /*
-           * ===================================================== Delete
-           * Locations =====================================================
-           */
+          // Delete
           $scope.remove = function(location) {
             removeLocationFromMap(location);
           };
 
-          /*
-           * ===================================================== Save Map
-           * =====================================================
-           */
+          // Save Map
           $scope.save = function() {
-            if (!compoundObject.uri) {
-              CompoundObject.store($scope.compoundObject).then(function(data) {
-                $state.go('ugc.map', {
-                  id : data.encodedUri
-                });
+            CompObj.create($scope.compoundObject).then(function(data) {
+              $state.go('ugc.map', {
+                id : data.id
               });
-            } else {
-              CompoundObject.update(compoundObject.uri, $scope.compoundObject).then(function(data) {
-                $state.go('ugc.map', {
-                  id : data.encodedUri
-                });
-              });
-            }
-          };
-
-          // Setup the select boxes
-          $scope.locationSelectOptions = {
-            placeholder : 'Who or what is this about?',
-            dropdownAutoWidth : true,
-            minimumInputLength : 2,
-            query : function(options) {
-              Entity.findByName(options.term, false).then(function(entities) {
-                var data = {
-                  results : []
-                };
-                angular.forEach(entities, function(entity) {
-                  data.results.push({
-                    id : entity.uri,
-                    uri : entity.uri,
-                    text : entity.name,
-                    type : entity.type,
-                    name : entity.name,
-                    encodedUri : entity.encodedUri,
-                    picture : entity.picture
-                  });
-                });
-                options.callback(data);
-              });
-            }
+            });
           };
         });

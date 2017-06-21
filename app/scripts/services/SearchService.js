@@ -2,20 +2,21 @@
   'use strict';
 
   /* @ngInject */
-  function SearchService($http) {
-    function getArticles(name) {
-      return $http.get('/ws/search?q=' + name + ' type:article&p=0&pc=20').then(function(response) {
+  function SearchService($http, Uris) {
+    function getArticles(query) {
+      return $http.get(Uris.WS_ROOT + 'search?q=' + query + '* AND type:article&p=0&pc=20').then(function(response) {
         /* globals _:false */
         return _.map(response.data.documents, function(article) {
           return _.assign({}, article, {
-            encodedUri : btoa(article.uri)
+            id : article.id
           });
         });
       });
     }
 
     function getArticlesInterviews(query) {
-      return $http.get('/ws/search?q=' + query + '&p=0&pc=20').then(function(response) {
+      var syntax = '* AND (type:article OR type:interview)';
+      return $http.get(Uris.WS_ROOT + 'search?q=' + query + syntax + '&p=0&pc=20').then(function(response) {
         var data = response.data.documents;
         var documents = [];
         /* globals $:false */
@@ -27,7 +28,7 @@
             } else if (item.type === 'interview') {
               path = '/interview/';
             }
-            data[i].$link = path + btoa(item.uri);
+            data[i].$link = path + item.id;
             documents.push(data[i]);
           }
         });

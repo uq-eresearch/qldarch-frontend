@@ -2,7 +2,6 @@
 
 angular.module('qldarchApp').config(function($stateProvider) {
   $stateProvider.state('ugc.map', {
-    // abstract: true,
     url : '/map',
     views : {
       header : {

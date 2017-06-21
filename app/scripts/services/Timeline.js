@@ -10,7 +10,7 @@ angular.module('qldarchApp').service('Timeline', function Timeline($http, $filte
     var closetag = '';
     var label = '';
     if (angular.isDefined(obj.media)) {
-      thumb = Uris.WS_MEDIA + obj.media + '?dimension=24x24';
+      thumb = Uris.WS_MEDIA + obj.media + '?dimension=65x65';
       media = '<img src=' + Uris.WS_MEDIA + obj.media + '?dimension=320x307' + '>';
     } else {
       media = icon;

@@ -3,10 +3,11 @@
 angular.module('qldarchApp').controller('TimelineViewerCtrl', function($scope, compobj, CompObj, $state, Auth, Uris, $filter) {
 
   $scope.compoundObject = compobj;
-  $scope.timeline = {};
-  $scope.timeline.dates = compobj.timelineevent;
+  $scope.timeline = compobj;
 
-  $scope.isDeletable = Auth.success && ($scope.compoundObject.user.id === Auth.user.id || Auth.user.role === 'admin');
+  if (angular.isDefined(Auth.user) && angular.isDefined($scope.compoundObject.user)) {
+    $scope.isDeletable = Auth.success && ($scope.compoundObject.user.displayName === Auth.user.displayName || Auth.user.role === 'admin');
+  }
 
   $scope.delete = function() {
     var r = window.confirm('Delete this timeline?');
@@ -51,7 +52,7 @@ angular.module('qldarchApp').controller('TimelineViewerCtrl', function($scope, c
         } else {
           mediaId = med[0].id;
         }
-        thumb = Uris.WS_MEDIA + mediaId + '?dimension=24x24';
+        thumb = Uris.WS_MEDIA + mediaId + '?dimension=65x65';
         media = '<img src=' + Uris.WS_MEDIA + mediaId + '?dimension=320x307' + '>';
       } else {
         media = icon;

@@ -1,35 +1,32 @@
 'use strict';
 
 angular.module('qldarchApp').controller('WordCloudBuilderCtrl',
-    function($scope, compoundObject, Auth, $filter, Uris, SearchService, $state, Entity, CompoundObject) {
+    function($scope, compobj, entities, Auth, $filter, Uris, SearchService, $state, CompObj, ArchObj, WordCloudService, $q) {
 
-      /*
-       * ===================================================== Setup
-       * =====================================================
-       */
-      $scope.compoundObject = compoundObject.jsonData; // alias for convenience
-      $scope.wordcloud = compoundObject.jsonData.data; // alias for convenience
-      if (!compoundObject.uri) {
+      $scope.compoundObject = compobj;
+      $scope.wordcloud = compobj;
+      $scope.wordcloud.$import = null;
+      if (!compobj.id) {
         $scope.wordcloud.documents = [];
-        $scope.compoundObject.user = Auth;
+        $scope.compoundObject.user = Auth.user;
         $scope.compoundObject.type = 'wordcloud';
         $scope.wordcloud.stopWords = [];
       }
 
-      /*
-       * ===================================================== Import Places
-       * =====================================================
-       */
+      $scope.isWaiting = false;
 
+      // Import Places
       function calculateNumberToImport() {
-        if ($scope.wordcloud.$import.documents) {
-          var selected = $filter('filter')($scope.wordcloud.$import.documents, function(document) {
-            return document.$selected;
-          });
-          selected = $filter('filter')(selected, function(document) {
-            return (!$scope.wordcloud.$import.type || document.type === $scope.wordcloud.$import.type);
-          });
-          $scope.wordcloud.$import.numberToImport = selected.length;
+        if (angular.isDefined($scope.wordcloud.$import) && $scope.wordcloud.$import !== null) {
+          if (angular.isDefined($scope.wordcloud.$import.documents)) {
+            var selected = $filter('filter')($scope.wordcloud.$import.documents, function(document) {
+              return document.$selected;
+            });
+            selected = $filter('filter')(selected, function(document) {
+              return (!$scope.wordcloud.$import.type || document.type === $scope.wordcloud.$import.type);
+            });
+            $scope.wordcloud.$import.numberToImport = selected.length;
+          }
         }
       }
       $scope.importSelectionChanged = function() {
@@ -51,18 +48,19 @@ angular.module('qldarchApp').controller('WordCloudBuilderCtrl',
         if (!entity) {
           return;
         }
+        $scope.wordcloud.$import.isSearching = true;
         // Clear the current locations
         $scope.wordcloud.$import.documents = null;
 
         // Do a search for documents
-        SearchService.getArticlesInterviews(entity.name).then(function(documents) {
+        SearchService.getArticlesInterviews(entity.label).then(function(documents) {
+          $scope.wordcloud.$import.isSearching = false;
           // Got the documents
           $scope.wordcloud.$import.documents = documents;
           angular.forEach(documents, function(document) {
             document.$selected = true;
           });
           $scope.importSelectionChanged();
-          console.log('documents', documents);
         });
       });
 
@@ -84,9 +82,27 @@ angular.module('qldarchApp').controller('WordCloudBuilderCtrl',
             document.$selected = true;
           });
           $scope.importSelectionChanged();
-          console.log('documents', documents);
         });
       };
+
+      function joinText(text) {
+        var maxLength = 30;
+        var words = '';
+        text.split(WordCloudService.wordSeparators).forEach(function(word) {
+          word.replace(/ /g, '');
+          if (WordCloudService.discard.test(word)) {
+            return;
+          }
+          word = word.replace(WordCloudService.replace, '');
+          if (WordCloudService.stopWords.test(word.toLowerCase())) {
+            return;
+          }
+          if (word.length >= 1) {
+            words += word.substr(0, maxLength) + ' ';
+          }
+        });
+        return words;
+      }
 
       /**
        * Adds a list of documents (if selected) to the word cloud visualisation
@@ -96,131 +112,133 @@ angular.module('qldarchApp').controller('WordCloudBuilderCtrl',
        * @return {[type]} [description]
        */
       $scope.import = function(documents) {
+        $scope.isWaiting = true;
         documents = $filter('filter')(documents, function(document) {
           return document.$selected;
         });
         documents = $filter('filter')(documents, function(document) {
           return (!$scope.wordcloud.$import.type || document.type === $scope.wordcloud.$import.type);
         });
-
-        $scope.wordcloud.documents = documents.concat($scope.wordcloud.documents);
-        $scope.wordcloud.$import = {
-          entity : null,
-          documents : []
-        };
-        $state.go('ugc.wordcloud.edit');
+        var promises = [];
+        angular.forEach(documents, function(document) {
+          if (document.type === 'interview') {
+            var promise = ArchObj.load(document.id).then(function(data) {
+              return data;
+            }).catch(function() {
+              console.log('unable to load ArchObj');
+            });
+            promises.push(promise);
+          }
+          if (document.type === 'article') {
+            // todo: backend service to extract string from text files
+          }
+        });
+        $q.all(promises).then(function(data) {
+          var i = 0;
+          angular.forEach(data, function(d) {
+            documents[i].text = '';
+            if (documents[i].type === 'interview') {
+              documents[i].title = documents[i].label;
+              angular.forEach(d.transcript, function(t) {
+                documents[i].text += joinText(t.transcript);
+              });
+            }
+            if (documents[i].type === 'article') {
+              // todo: backend service to extract string from text files
+            }
+            i++;
+          });
+          $scope.wordcloud.documents = documents.concat($scope.wordcloud.documents);
+          $scope.wordcloud.$import = {
+            entity : null,
+            documents : []
+          };
+          $scope.isWaiting = false;
+          $state.go('ugc.wordcloud.edit');
+        });
       };
 
-      /*
-       * ===================================================== New Place
-       * =====================================================
-       */
+      // New
       $scope.addDocument = function(document) {
-        // Store the location
+        $scope.isWaiting = true;
+        // Store
         $scope.wordcloud.documents.unshift(document);
-        console.log('document is ', document);
         // Clear the entry
         $scope.wordcloud.$tempDocument = {
           type : 'new'
         };
+        $scope.isWaiting = false;
         $state.go('ugc.wordcloud.edit');
       };
 
-      /*
-       * ===================================================== Delete Locations
-       * =====================================================
-       */
+      // Delete
       $scope.remove = function(document) {
+        $scope.isWaiting = true;
         var index = $scope.wordcloud.documents.indexOf(document);
         $scope.wordcloud.documents.splice(index, 1);
+        $scope.isWaiting = false;
       };
 
-      /*
-       * ===================================================== Add stop word
-       * =====================================================
-       */
+      $scope.removeAll = function() {
+        $scope.wordcloud.documents = [];
+      };
+
+      // Add stop word
       $scope.addStopWord = function(word) {
-        console.log('adding sotp worod');
         $scope.wordcloud.stopWords = $scope.wordcloud.stopWords || [];
         $scope.wordcloud.stopWords.push(word.toLowerCase());
         $scope.wordcloud.$stopWord = '';
-        console.log($scope.wordcloud.stopWords);
       };
       $scope.removeStopWord = function(word) {
         var index = $scope.wordcloud.stopWords.indexOf(word);
         $scope.wordcloud.stopWords.splice(index, 1);
       };
-      /*
-       * ===================================================== Save Map
-       * =====================================================
-       */
+
+      // Save Word Cloud
       $scope.save = function() {
-        if (!compoundObject.uri) {
-          CompoundObject.store($scope.compoundObject).then(function(data) {
-            $state.go('ugc.wordcloud', {
-              id : data.encodedUri
-            });
+        $scope.isWaiting = true;
+        CompObj.create($scope.compoundObject).then(function(data) {
+          $scope.isWaiting = false;
+          $state.go('ugc.wordcloud', {
+            id : data.id
           });
-        } else {
-          CompoundObject.update(compoundObject.uri, $scope.compoundObject).then(function(data) {
-            $state.go('ugc.wordcloud', {
-              id : data.encodedUri
-            });
-          });
-        }
+        });
       };
 
-      /*
-       * ===================================================== Select2 Boxes
-       * =====================================================
-       */
-      function format(entity) {
-        var imgSrc = 'images/icon.png';
-        if (entity.picture) {
-          imgSrc = Uris.THUMB_ROOT + entity.picture.thumb;
-        }
+      // Select2 Boxes
+      entities = $filter('orderBy')(entities, function(entity) {
+        return entity.label;
+      });
 
-        return '<img class="select2-thumb" src="' + imgSrc + '" />' + entity.text;
-      }
-      // Setup the entity select boxes
-      $scope.architectStructureFirmTypologySelect = {
-        placeholder : 'Architect, Project or Firm',
-        dropdownAutoWidth : true,
-        multiple : false,
-        formatResult : format,
-        formatSelection : format,
-        escapeMarkup : function(m) {
-          return m;
-        },
-        // minimumInputLength: 2,
-        query : function(options) {
-          Entity.findByName(options.term, false).then(function(entities) {
-            var data = {
-              results : []
-            };
+      var dataEntitySelectWordCloud = {
+        results : []
+      };
 
-            angular.forEach(entities, function(entity) {
-              if (entity.type === 'architect' || entity.type === 'firm' || entity.type === 'structure') {
-
-                var label = entity.name + ' (' + entity.type.charAt(0).toUpperCase() + entity.type.slice(1) + ')';
-                if (entity.type === 'structure') {
-                  label = entity.name + ' (Project)';
-                }
-
-                data.results.push({
-                  id : entity.uri,
-                  uri : entity.uri,
-                  text : label,
-                  type : entity.type,
-                  name : entity.name,
-                  encodedUri : entity.encodedUri,
-                  picture : entity.picture
-                });
-              }
-
-            });
-            options.callback(data);
+      angular.forEach(entities, function(e) {
+        if (e.label && !(/\s/.test(e.label.substring(0, 1)))) {
+          var entitytype = 'unknown';
+          if (e.hasOwnProperty('type')) {
+            entitytype = e.type.charAt(0).toUpperCase() + e.type.slice(1);
+          } else if (e.hasOwnProperty('firstname') || e.hasOwnProperty('lastname')) {
+            entitytype = 'Person';
+          } else if (e.hasOwnProperty('lat') || e.hasOwnProperty('lng')) {
+            entitytype = 'Structure';
+          }
+          dataEntitySelectWordCloud.results.push({
+            id : e.id,
+            text : e.label + ' (' + entitytype + ')',
+            label : e.label,
+            type : entitytype
           });
         }
+      });
+
+      // Setup the entity select boxes
+      $scope.architectStructureFirmSelectWordCloud = {
+        placeholder : 'Architect, Project or Firm',
+        dropdownAutoWidth : false,
+        multiple : false,
+        initSelection : true,
+        data : dataEntitySelectWordCloud
       };
     });

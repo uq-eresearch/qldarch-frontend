@@ -10,7 +10,8 @@
     <div class="container">
       <!-- Control buttons -->
       <div ng-hide="$state.includes('ugc.wordcloud.edit.add')">
-        <button class="btn" ui-sref="ugc.wordcloud.edit.add.document" ng-class="{'btn-primary': !wordcloud.documents.length, 'btn-default': wordcloud.documents.length}">
+        <button class="btn" ui-sref="ugc.wordcloud.edit.add.import"
+          ng-class="{'btn-primary': !wordcloud.documents.length, 'btn-default': wordcloud.documents.length}">
           <i class="fa fa-plus"></i> Add Document
         </button>
       </div>
@@ -18,36 +19,32 @@
       <!-- Adder panel -->
       <div class="panel panel-default" ng-if="$state.includes('ugc.wordcloud.edit.add')">
         <div class="panel-body">
-          <!-- Close X -->
-          <button class="btn-link pull-right">
-            <!-- <i class="fa fa-times" ui-sref="create.textAnalysis"></i>  -->
-          </button>
-          <!-- /Close X -->
-          <tabset> <!-- Import --> <tab heading="From Architect, Project or Firm" select="$state.go('ugc.wordcloud.edit.add.import'); wordcloud.$import.documents = null">
+          <uib-tabset> <!-- Import --> <uib-tab heading="From Architect, Project or Firm"
+            select="$state.go('ugc.wordcloud.edit.add.import'); wordcloud.$import.documents = null">
           <div style="padding: 8px; margin-top: 8px">
             <p class="text-muted">Search for Architects, Firms or Projects.</p>
-            <div ui-select2="architectStructureFirmTypologySelect" ng-model="wordcloud.$import.entity" class="form-control"></div>
+            <div ui-select2="architectStructureFirmSelectWordCloud" ng-model="wordcloud.$import.entity" class="form-control"></div>
             <div style="margin-top: 16px">
-              <div ng-show="wordcloud.$import.entity && wordcloud.$import.documents == null" style="text-align: center">
+              <div ng-show="wordcloud.$import.isSearching && wordcloud.$import.documents == null" style="text-align: center">
                 <i class="fa fa-spin fa-refresh"></i>
               </div>
               <div ng-show="wordcloud.$import.documents && !wordcloud.$import.documents.length">No documents found.</div>
               <div ng-show="wordcloud.$import.documents.length">
                 <div class="btn-group btn-group-justified">
                   <div class="btn-group">
-                    <button type="button" class="btn btn-default" ng-model="wordcloud.$import.type" btn-radio="undefined">All</button>
+                    <button type="button" class="btn btn-default" ng-model="wordcloud.$import.type" uib-btn-radio="undefined">All</button>
                   </div>
                   <div class="btn-group">
-                    <button type="button" class="btn btn-default" ng-model="wordcloud.$import.type" btn-radio="'article'">Article</button>
+                    <button type="button" class="btn btn-default" ng-model="wordcloud.$import.type" uib-btn-radio="'article'">Article</button>
                   </div>
                   <div class="btn-group">
-                    <button type="button" class="btn btn-default" ng-model="wordcloud.$import.type" btn-radio="'interview'">Interview</button>
+                    <button type="button" class="btn btn-default" ng-model="wordcloud.$import.type" uib-btn-radio="'interview'">Interview</button>
                   </div>
                 </div>
               </div>
-              <div ng-repeat="document in wordcloud.$import.documents | filter:{type: wordcloud.$import.type}" class="row" style="margin-top: 16px">
+              <div ng-repeat="document in wordcloud.$import.documents | filter:{type: wordcloud.$import.type}" class="row" style="margin-top: 8px;">
                 <div>
-                  <div class="col-sm-1">
+                  <div class="col-sm-1" style="text-align: right;">
                     <input type="checkbox" ng-model="document.$selected" ng-change="importSelectionChanged()">
                   </div>
                   <div class="col-sm-1">
@@ -70,11 +67,13 @@
                 </div>
               </div>
             </div>
-            <div style="margin-top: 24px" ng-show="wordcloud.$import.documents.length">
-              <button class="btn btn-primary" ng-click="import(wordcloud.$import.documents)">Add to Word Cloud ({{ wordcloud.$import.numberToImport }})</button>
+            <div style="margin-top: 10px" ng-show="wordcloud.$import.documents.length">
+              <button class="btn btn-primary" ng-click="import(wordcloud.$import.documents)">Add to Word Cloud ({{
+                wordcloud.$import.numberToImport }})</button>
             </div>
           </div>
-          </tab> <!-- /Import --> <!-- Search --> <tab heading="Search" select="$state.go('ugc.wordcloud.edit.add.search'); wordcloud.$import.documents = null">
+          </uib-tab> <!-- /Import --> <!-- Search --> <uib-tab heading="Search"
+            select="$state.go('ugc.wordcloud.edit.add.search'); wordcloud.$import.documents = null">
           <div style="padding: 8px; margin-top: 8px">
             <form>
               <div class="row">
@@ -96,19 +95,19 @@
               <div ng-show="wordcloud.$import.documents.length">
                 <div class="btn-group btn-group-justified">
                   <div class="btn-group">
-                    <button type="button" class="btn btn-default" ng-model="wordcloud.$import.type" btn-radio="undefined">All</button>
+                    <button type="button" class="btn btn-default" ng-model="wordcloud.$import.type" uib-btn-radio="undefined">All</button>
                   </div>
                   <div class="btn-group">
-                    <button type="button" class="btn btn-default" ng-model="wordcloud.$import.type" btn-radio="'article'">Article</button>
+                    <button type="button" class="btn btn-default" ng-model="wordcloud.$import.type" uib-btn-radio="'article'">Article</button>
                   </div>
                   <div class="btn-group">
-                    <button type="button" class="btn btn-default" ng-model="wordcloud.$import.type" btn-radio="'interview'">Interview</button>
+                    <button type="button" class="btn btn-default" ng-model="wordcloud.$import.type" uib-btn-radio="'interview'">Interview</button>
                   </div>
                 </div>
               </div>
-              <div ng-repeat="document in wordcloud.$import.documents | filter:{type: wordcloud.$import.type}" class="row" style="margin-top: 16px">
+              <div ng-repeat="document in wordcloud.$import.documents | filter:{type: wordcloud.$import.type}" class="row" style="margin-top: 8px">
                 <div>
-                  <div class="col-sm-1">
+                  <div class="col-sm-1" style="text-align: right">
                     <input type="checkbox" ng-model="document.$selected" ng-change="importSelectionChanged()">
                   </div>
                   <div class="col-sm-1">
@@ -131,27 +130,12 @@
                 </div>
               </div>
             </div>
-            <div style="margin-top: 24px" ng-show="wordcloud.$import.documents.length">
-              <button class="btn btn-primary" ng-click="import(wordcloud.$import.documents)">Add to Word Cloud ({{ wordcloud.$import.numberToImport }})</button>
+            <div style="margin-top: 10px" ng-show="wordcloud.$import.documents.length">
+              <button class="btn btn-primary" ng-click="import(wordcloud.$import.documents)">Add to Word Cloud ({{
+                wordcloud.$import.numberToImport }})</button>
             </div>
           </div>
-          </tab> <!-- New --> <tab heading="New" select="$state.go('ugc.wordcloud.edit.add.document')">
-          <form style="padding: 8px; margin-top: 8px">
-            <p class="text-muted">Create a new document to add to the word cloud.</p>
-            <div class="form-group">
-              <label class="control-label" for="dateHeadline"> Name <i class="fa fa-asterisk fa-asterisk-required"></i>
-              </label> <input ng-model="wordcloud.$tempDocument.title" name="dateHeadline" type="text" class="form-control" id="dateHeadline" placeholder="What is the name of your text?" required="">
-            </div>
-            <div class="form-group">
-              <label> Text <i class="fa fa-asterisk fa-asterisk-required"></i>
-              </label>
-              <textarea rows="10" class="form-control" ng-model="wordcloud.$tempDocument.text"></textarea>
-            </div>
-            <div style="margin-top: 24px">
-              <button type="submit" class="btn btn-primary" ng-click="addDocument(wordcloud.$tempDocument)" ng-disabled="!wordcloud.$tempDocument.title || !wordcloud.$tempDocument.text">Add to Word Cloud</button>
-            </div>
-          </form>
-          </tab> <!-- /New --> </tabset>
+          </uib-tab> </uib-tabset>
         </div>
       </div>
       <!-- /Adder panel -->
@@ -165,25 +149,26 @@
                 <i class="fa fa-trash-o"></i> Remove
               </button>
               <p>
-                <i class="fa" ng-class="{'fa-book': document.type === 'article', 'fa-microphone': document.type === 'interview'}" style="margin-right: 8px"></i> <strong>{{ document.label }}</strong>
+                <i class="fa" ng-class="{'fa-book': document.type === 'article', 'fa-microphone': document.type === 'interview'}"
+                  style="margin-right: 8px"></i> <strong>{{ document.label }}</strong>
               </p>
             </div>
           </div>
         </div>
       </div>
       <!-- /Text List -->
+      <div ng-show="isWaiting" style="text-align: center;">
+        <i class="fa fa-spin fa-refresh"></i>
+      </div>
       <!-- Stop words -->
       <div style="margin-top: 24px" ng-show="wordcloud.documents.length">
         <h5>Stop Words</h5>
         <ul>
-          <li ng-repeat="word in wordcloud.stopWords track by $index" class="media-body">
-            <button class="btn btn-default pull-right btn-xs" ng-click="removeStopWord(word)">
-              <i class="fa fa-trash-o"></i> Remove
-            </button> {{ word }}
-          </li>
+          <li ng-repeat="word in wordcloud.stopWords track by $index" class="media-body">{{ word }}</li>
         </ul>
         <div class="input-group">
-          <input type="text" class="form-control" ng-model="wordcloud.$stopWord" placeholder="What word do you want to remove from the wordcloud?"> <span class="input-group-btn">
+          <input type="text" class="form-control" ng-model="wordcloud.$stopWord" placeholder="What word do you want to remove from the wordcloud?">
+          <span class="input-group-btn">
             <button class="btn btn-default" ng-click="addStopWord(wordcloud.$stopWord)">Add Stop Word</button>
           </span>
         </div>
@@ -194,11 +179,15 @@
   <div class="l-frame l-frame-tighter" ng-show="wordcloud.documents.length">
     <div class="container">
       <div class="row">
-        <div class="col-sm-10">
+        <div class="col-sm-9">
           <input type="text" class="form-control" placeholder="Title: What is your word cloud about?" ng-model="compoundObject.title">
         </div>
         <div class="col-sm-2">
-          <button class="btn btn-primary form-control" ng-click="save()" ng-disabled="!compoundObject.title || !wordcloud.documents.length || !Auth.success" ng-click="save()">Save Word Cloud</button>
+          <button class="btn btn-primary form-control" ng-click="save()"
+            ng-disabled="!compoundObject.title || !wordcloud.documents.length || !Auth.success" ng-click="save()">Save Word Cloud</button>
+        </div>
+        <div class="col-sm-1">
+          <button class="btn btn-default" ng-click="removeAll()">Cancel</button>
         </div>
       </div>
     </div>

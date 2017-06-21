@@ -1,114 +1,68 @@
 'use strict';
 
-angular.module('qldarchApp').controller(
-    'TimelineBuilderCtrl',
-    function($scope, compoundObject, Entity, Uris, Relationship, GraphHelper, Structure, $filter, $state, Auth, CompoundObject, Timeline, Expression,
-        LayoutHelper) {
-      $scope.compoundObject = compoundObject.jsonData;
-      $scope.timeline = compoundObject.jsonData.data;
-      if (!compoundObject.uri) {
+angular.module('qldarchApp').controller('TimelineBuilderCtrl',
+    function($scope, compobj, CompObj, entities, ArchObj, Uris, $filter, $state, Auth, Timeline) {
+
+      $scope.compoundObject = compobj;
+      $scope.timeline = compobj;
+      if (!compobj.id) {
         $scope.timeline.dates = [];
-        $scope.compoundObject.user = Auth;
+        $scope.compoundObject.user = Auth.user;
         $scope.compoundObject.type = 'timeline';
         $scope.timeline.$tempDate = {};
       }
 
-      /*
-       * ===================================================== Select2 Boxes
-       * =====================================================
-       */
+      // Select2 Boxes
+      entities = $filter('orderBy')(entities, function(entity) {
+        return entity.label;
+      });
+
+      var dataEntitySelectTimeLine = {
+        results : []
+      };
+
+      angular.forEach(entities, function(e) {
+        if (e.label && !(/\s/.test(e.label.substring(0, 1)))) {
+          var entitytype = 'unknown';
+          if (e.hasOwnProperty('type')) {
+            entitytype = e.type.charAt(0).toUpperCase() + e.type.slice(1);
+          } else if (e.hasOwnProperty('firstname') || e.hasOwnProperty('lastname')) {
+            entitytype = 'Person';
+          } else if (e.hasOwnProperty('lat') || e.hasOwnProperty('lng')) {
+            entitytype = 'Structure';
+          }
+          dataEntitySelectTimeLine.results.push({
+            id : e.id,
+            text : e.label + ' (' + entitytype + ')'
+          });
+        }
+      });
+
       // Setup the entity select boxes
-      $scope.architectStructureFirmSelect = {
+      $scope.architectStructureFirmSelectTimeLine = {
         placeholder : 'Architect, Project or Firm',
-        dropdownAutoWidth : true,
+        dropdownAutoWidth : false,
         multiple : false,
-        // minimumInputLength: 2,
-        query : function(options) {
-          Entity.findByName(options.term, false).then(function(entities) {
-            var data = {
-              results : []
-            };
-
-            angular.forEach(entities, function(entity) {
-              if (entity.type === 'architect' || entity.type === 'firm' || entity.type === 'structure') {
-
-                var label = entity.name + ' (' + entity.type.charAt(0).toUpperCase() + entity.type.slice(1) + ')';
-                if (entity.type === 'structure') {
-                  label = entity.name + ' (Project)';
-                }
-
-                data.results.push({
-                  id : entity.uri,
-                  uri : entity.uri,
-                  text : label,
-                  type : entity.type,
-                  name : entity.name,
-                  encodedUri : entity.encodedUri,
-                  picture : entity.picture
-                });
-              }
-            });
-            options.callback(data);
-          });
-        }
-      };
-      // Setup the entity select boxes
-      $scope.architectStructureSelect = {
-        placeholder : 'Architect, or Project',
-        dropdownAutoWidth : true,
-        multiple : false,
-        // minimumInputLength: 2,
-        query : function(options) {
-          Entity.findByName(options.term, false).then(function(entities) {
-            var data = {
-              results : []
-            };
-            // Only show architects and structures (projects)
-            entities = $filter('filter')(GraphHelper.graphValues(entities), function(entity) {
-              return (entity.type === 'architect' || entity.type === 'structure');
-            });
-            angular.forEach(entities, function(entity) {
-              if (entity.type === 'architect' || entity.type === 'structure') {
-
-                var label = entity.name + ' (' + entity.type.charAt(0).toUpperCase() + entity.type.slice(1) + ')';
-                if (entity.type === 'structure') {
-                  label = entity.name + ' (Project)';
-                }
-                data.results.push({
-                  id : entity.uri,
-                  uri : entity.uri,
-                  text : label,
-                  type : entity.type,
-                  name : entity.name,
-                  encodedUri : entity.encodedUri,
-                  picture : entity.picture
-                });
-              }
-            });
-            options.callback(data);
-          });
-        }
+        initSelection : true,
+        data : dataEntitySelectTimeLine
       };
 
-      /*
-       * ===================================================== Import Dates
-       * =====================================================
-       */
+      // Import Dates
       $scope.$watch('timeline.$import.entity', function(entity) {
         if (!entity) {
           return;
         }
         $scope.timeline.$import.numberToImport = 0;
 
-        Relationship.findByEntityUri(entity.uri).then(function(relationships) {
-          var relationshipsWithDates = $filter('filter')(relationships, function(relationship) {
-            return angular.isDefined(relationship[Uris.QA_START_DATE]);
+        ArchObj.loadWithRelationshipLabels(entity.id).then(function(data) {
+          var relationships = $filter('filter')(data.relationships, function(relationship) {
+            return (relationship.fromyear || relationship.untilyear || relationship.objectcompletion);
           });
-          return Relationship.getData(relationshipsWithDates);
-        }).then(function(data) {
-          var relationships = data.relationships;
           // Convert the relationships to dates
-          var importDates = Timeline.relationshipsToEvents(relationships, entity);
+          var importDates = Timeline.relationshipsToEvents(relationships, entity.id);
+          importDates = $filter('orderBy')(importDates, function(importDate) {
+            return importDate.startDate;
+          });
           angular.forEach(importDates, function(importDate) {
             importDate.$selected = true;
           });
@@ -116,12 +70,14 @@ angular.module('qldarchApp').controller(
           $scope.timeline.$import.dates = importDates;
         });
       });
+
       $scope.importSelectionChanged = function() {
         var selectedDates = $filter('filter')($scope.import.dates, function(date) {
           return date.$selected;
         });
         $scope.timeline.$import.numberToImport = selectedDates.length;
       };
+
       $scope.import = function(dates) {
         dates = $filter('filter')(dates, function(date) {
           return date.$selected;
@@ -131,96 +87,22 @@ angular.module('qldarchApp').controller(
         $state.go('ugc.timeline.edit');
       };
 
-      /*
-       * ===================================================== New Date
-       * =====================================================
-       */
-      /**
-       * Loads expressions to match entity for date
-       * 
-       * @param {[type]}
-       *          entity [description]
-       * @return {[type]} [description]
-       */
-      $scope.$watch('timeline.$tempDate.$photo.entity', function(entity) {
-        if (angular.isDefined($scope.timeline.$tempDate)) {
-          console.log('temp date', $scope.timeline.tempDate);
-          if (angular.isDefined($scope.timeline.$tempDate.$photo)) {
-            $scope.timeline.$tempDate.$photo.expressions = null;
-          }
-
-          if (entity) {
-            if (entity.type === 'structure') {
-              Expression.findByBuildingUris([ entity.uri ], 'qldarch:Photograph').then(function(expressions) {
-                $scope.timeline.$tempDate.$photo.expressionRows = LayoutHelper.group(GraphHelper.graphValues(expressions), 6);
-                $scope.timeline.$tempDate.$photo.expressions = expressions;
-              });
-            } else if (entity.type === 'architect') {
-              Expression.findByArchitectUris([ entity.uri ], 'qldarch:Photograph').then(function(expressions) {
-                $scope.timeline.$tempDate.$photo.expressionRows = LayoutHelper.group(GraphHelper.graphValues(expressions), 6);
-                $scope.timeline.$tempDate.$photo.expressions = expressions;
-              });
-            }
-          }
-        } else {
-          console.log('no temp date definede');
-        }
-
-      });
-      /**
-       * Sets an expression to be the selected asset shown for a date
-       * 
-       * @param {[type]}
-       *          expression [description]
-       * @param {[type]}
-       *          date [description]
-       */
-      $scope.addExpressionToDate = function(expression, date) {
-        angular.forEach(date.$photo.expressions, function(expression) {
-          expression.selected = false;
-        });
-        expression.selected = true;
-        date.asset = {
-          media : expression.file.file,
-          thumbnail : expression.file.thumb,
-        };
-      };
-      $scope.addDate = function(date) {
-        $scope.timeline.dates.push(date);
-        $scope.timeline.$tempDate = {};
-        console.log('temp date is defined', $scope.timeline.$tempDate);
-
-        // Leave this state
-        $state.go('ugc.timeline.edit');
-      };
-
-      /*
-       * ===================================================== Delete Locations
-       * =====================================================
-       */
+      // Delete date
       $scope.remove = function(date) {
-        console.log('removing date', date);
         var index = $scope.timeline.dates.indexOf(date);
         $scope.timeline.dates.splice(index, 1);
       };
 
-      /*
-       * ===================================================== Save Map
-       * =====================================================
-       */
+      $scope.removeAll = function() {
+        $scope.timeline.dates = [];
+      };
+
+      // Create timeline
       $scope.save = function() {
-        if (!compoundObject.uri) {
-          CompoundObject.store($scope.compoundObject).then(function(data) {
-            $state.go('ugc.timeline', {
-              id : data.encodedUri
-            });
+        CompObj.create($scope.compoundObject).then(function(data) {
+          $state.go('ugc.timeline', {
+            id : data.id
           });
-        } else {
-          CompoundObject.update(compoundObject.uri, $scope.compoundObject).then(function(data) {
-            $state.go('ugc.timeline', {
-              id : data.encodedUri
-            });
-          });
-        }
+        });
       };
     });

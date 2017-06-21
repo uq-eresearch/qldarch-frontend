@@ -1,4 +1,4 @@
-<div class="alert alert-warning" ng-show="isDeletable" style="margin: 0;">
+<div class="alert alert-warning" ng-show="!$state.includes('ugc.timeline.edit') && isDeletable" style="margin: 0;">
   <div class="container">
     <!-- Delete -->
     <button class="btn btn-default btn-xs" ng-click="delete()" ng-show="isDeletable">

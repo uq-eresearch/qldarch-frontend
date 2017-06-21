@@ -6,8 +6,50 @@ angular.module('qldarchApp').factory('CompObj', function($http, $cacheFactory, U
 
   // Public API here
   var compobj = {
-    create : function(data) {
-      var payload = angular.copy(data);
+    create : function(payload) {
+      if (payload.type === 'timeline' && angular.isDefined(payload.dates) && payload.dates.length > 0) {
+        payload.timelineevent = [];
+        angular.forEach(payload.dates, function(date) {
+          var startindex = date.asset.caption.indexOf('Id=') + 3;
+          if (startindex > 71) {// Min string length to reach 'Id='
+            var endindex = date.asset.caption.indexOf('">', startindex);
+            date.archobj = date.asset.caption.substring(startindex, endindex);
+          }
+          delete date.asset;
+          delete date.$selected;
+          delete date.$$hashKey;
+          payload.timelineevent.push(JSON.stringify(date));
+        });
+        delete payload.$tempDate;
+        delete payload.dates;
+      }
+      if (payload.type === 'map' && angular.isDefined(payload.locations) && payload.locations.length > 0) {
+        payload.structure = [];
+        angular.forEach(payload.locations, function(location) {
+          payload.structure.push(location.id);
+        });
+        delete payload.$markers;
+        delete payload.locations;
+      }
+      if (payload.type === 'wordcloud' && angular.isDefined(payload.documents) && payload.documents.length > 0) {
+        payload.wordcloud = [];
+        angular.forEach(payload.documents, function(document) {
+          delete document.created;
+          delete document.location;
+          delete document.label;
+          delete document.id;
+          delete document.category;
+          delete document.type;
+          delete document.$link;
+          delete document.$selected;
+          delete document.$$hashKey;
+          payload.wordcloud.push(JSON.stringify(document));
+        });
+        delete payload.$stopWord;
+        delete payload.documents;
+      }
+      delete payload.$import;
+      delete payload.user;
       return $http({
         method : 'PUT',
         url : path,
@@ -20,10 +62,9 @@ angular.module('qldarchApp').factory('CompObj', function($http, $cacheFactory, U
         },
         data : payload
       }).then(function(response) {
-        angular.extend(data, response.data);
-        toaster.pop('success', data.label + ' created');
-        console.log('created compound object id: ' + data.id);
-        return data;
+        toaster.pop('success', response.data.title + ' created');
+        console.log('created compound object id: ' + response.data.id);
+        return response.data;
       }, function(response) {
         toaster.pop('error', 'Error occured', response.data.msg);
         console.log('error message: ' + response.data.msg);
