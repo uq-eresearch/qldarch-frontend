@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('qldarchApp').controller('WordCloudBuilderCtrl',
-    function($scope, compobj, entities, Auth, $filter, Uris, SearchService, $state, CompObj, ArchObj, WordCloudService, $q) {
+    function($scope, compobj, entities, Auth, $filter, SearchService, $state, CompObj, ArchObj, WordCloudService, $q) {
 
       $scope.compoundObject = compobj;
       $scope.wordcloud = compobj;

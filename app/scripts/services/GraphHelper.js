@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('qldarchApp').service('GraphHelper', function(Uris, $state) {
+angular.module('qldarchApp').service('GraphHelper', function() {
   var that = this;
 
   this.asArray = function(value) {
@@ -63,67 +63,6 @@ angular.module('qldarchApp').service('GraphHelper', function(Uris, $state) {
         return i;
       }
     }
-  };
-
-  /**
-   * Adds in a type (structure, architect etc) to an array of items
-   * 
-   * @param array
-   */
-  this.setupTypes = function(array) {
-    // Setup the types
-    angular.forEach(array, function(item) {
-
-      // Set a default
-      item.type = 'other';
-
-      // Now overwrite it if we can
-
-      // List of types we are matching
-      // Just entity types at the moment + the photograph type
-      var typeUris = [
-                      Uris.QA_ARCHITECT_TYPE,
-                      Uris.QA_FIRM_TYPE,
-                      Uris.QA_STRUCTURE_TYPE,
-                      Uris.QA_PHOTOGRAPH_TYPE,
-                      Uris.QA_BUILDING_TYPOLOGY
-                      ];
-
-      angular.forEach(typeUris, function(typeUri) {
-        var currentItemType = item[Uris.RDF_TYPE];
-        if (!angular.isArray(currentItemType)) {
-          currentItemType = [currentItemType];
-        }
-
-        if (currentItemType.indexOf(typeUri) !== -1) {
-          item.type = typeUri.substring(Uris.QA_NS.length).toLowerCase();
-        }
-      });
-
-      item.$state = item.type;
-      var params = {};
-      params[item.type + 'Id'] = item.encodedUri;
-      item.$stateParams = params;
-
-      // Links
-      item.$link = $state.href(item.type + '.summary', params);
-      item.$linkTo = function(sub) {
-        return $state.href(item.type + '.' + sub, params);
-      };
-    });
-  };
-
-  this.filterTypes = function(array, type) {
-    // Setup types
-    this.setupTypes(array);
-
-    var results = [];
-    angular.forEach(array, function(item) {
-      if (item.type === type) {
-        results.push(item);
-      }
-    });
-    return results;
   };
 
   /**

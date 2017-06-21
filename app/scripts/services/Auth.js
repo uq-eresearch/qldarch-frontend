@@ -29,13 +29,7 @@ angular.module('qldarchApp').service('Auth', function Auth($http, Uris, $q) {
     }
   };
 
-  /**
-   * Checks if the current user can delete something
-   * 
-   * @param {[type]}
-   *          uri [description]
-   * @return {[type]} [description]
-   */
+  // Checks if the current user can delete something
   this.canDelete = function() {
     if (angular.isDefined(this.user)) {
       if (this.user.role === 'admin') {

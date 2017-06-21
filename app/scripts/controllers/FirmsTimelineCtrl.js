@@ -2,7 +2,7 @@
 
 angular.module('qldarchApp').controller(
     'FirmsTimelineCtrl',
-    function($scope, firms, GraphHelper, $http, australian, $stateParams, $state, $timeout, $filter, Firm) {
+    function($scope, firms, GraphHelper, $http, australian, $stateParams, $state, $timeout, $filter) {
 
       var DEFAULT_FIRM_ROW_COUNT = 5, data = null;
       $scope.firmRowDisplayCount = DEFAULT_FIRM_ROW_COUNT;
@@ -135,22 +135,6 @@ angular.module('qldarchApp').controller(
         };
         if (hasData) {
           chart.draw(dataTable, options);
-          $timeout(function() {
-            // Wait for the chart to be drawing
-            $container.find('text').click(function() {
-              var name = this.innerHTML;
-              Firm.findByName(name).then(function(firms) {
-                // console.log('got firms', firms);
-                firms = GraphHelper.graphValues(firms);
-                if (firms.length) {
-                  var firm = firms[0];
-                  $state.go('firm.summary', {
-                    firmId : firm.id
-                  });
-                }
-              });
-            });
-          }, 0);
         }
       }
 

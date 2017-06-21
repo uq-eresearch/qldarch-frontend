@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('qldarchApp').controller('StructuresCtrl',
-    function($scope, structures, Uris, LayoutHelper, GraphHelper, $stateParams, $location, $filter, $state) {
+    function($scope, structures, LayoutHelper, GraphHelper, $stateParams, $location, $filter, $state) {
       var DEFAULT_STRUCTURE_ROW_COUNT = 5;
       $scope.structureRowDisplayCount = DEFAULT_STRUCTURE_ROW_COUNT;
 

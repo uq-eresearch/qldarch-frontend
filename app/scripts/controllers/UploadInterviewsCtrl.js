@@ -2,7 +2,7 @@
 
 angular.module('qldarchApp').controller(
     'UploadInterviewsCtrl',
-    function($scope, interview, architects, personnotarchitect, $filter, GraphHelper, Entity, Uris, $cacheFactory, File, Expression, toaster, $state,
+    function($scope, interview, architects, personnotarchitect, $filter, $cacheFactory, File, toaster, $state,
         $stateParams, ArchObj) {
 
       $scope.interview = interview;

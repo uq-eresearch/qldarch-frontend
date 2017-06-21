@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('qldarchApp').controller('TimelineBuilderCtrl',
-    function($scope, compobj, CompObj, entities, ArchObj, Uris, $filter, $state, Auth, Timeline) {
+    function($scope, compobj, CompObj, entities, ArchObj, $filter, $state, Auth, Timeline) {
 
       $scope.compoundObject = compobj;
       $scope.timeline = compobj;
