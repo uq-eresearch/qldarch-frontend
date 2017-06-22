@@ -7,7 +7,7 @@
   <!-- info -->
   <div class="alert alert-info" style="margin-bottom: 8px">
     <div class="container">
-      <i class="fa fa-info-circle"></i> Retrieve a forgotten password.
+      <i class="fa fa-info-circle"></i> Reset a forgotten password.
     </div>
   </div>
   <!-- /info -->
@@ -15,14 +15,17 @@
     <div class="container">
       <div class="row">
         <div class="col-md-7">
-          <form role="form" ng-submit="forgot(credentials)" style="border-right: 1px solid #ccc; padding-right: 30px;" ng-show="!isResetting && !isReset">
+          <form role="form" ng-submit="forgot(credentials)" style="border-right: 1px solid #ccc; padding-right: 30px;" ng-show="!isReset">
             <div class="form-group">
-              <label for="email">Email Address</label> <input name="email" type="text" class="form-control" id="email" placeholder="Email address" ng-model="credentials.username">
+              <label for="email">Email Address</label> <input name="email" type="text" class="form-control" id="email" placeholder="Email address"
+                ng-model="credentials.email">
             </div>
-            <button type="submit" class="btn btn-primary" ng-click="reset(credentials)">Get Password</button>
+            <button ng-disabled="!credentials.email" type="submit" class="btn btn-primary" ng-click="reset(credentials)">Reset Password</button>
+            <i class="fa fa-spin fa-refresh" style="margin-left: 20px" ng-show="isResetting"></i></i>
           </form>
-          <i class="fa fa-spin fa-refresh" ng-show="isResetting && !isReset"></i>
-          <p ng-show="isReset">Check your email for instructions on how to reset your password.</p>
+          <div>
+            <p style="margin-top: 10px">{{resetResponse}}</p>
+          </div>
         </div>
         <div class="col-md-4">
           <div>
