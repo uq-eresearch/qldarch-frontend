@@ -72,7 +72,7 @@ angular.module('qldarchApp').controller('TimelineBuilderCtrl',
       });
 
       $scope.importSelectionChanged = function() {
-        var selectedDates = $filter('filter')($scope.import.dates, function(date) {
+        var selectedDates = $filter('filter')($scope.timeline.$import.dates, function(date) {
           return date.$selected;
         });
         $scope.timeline.$import.numberToImport = selectedDates.length;

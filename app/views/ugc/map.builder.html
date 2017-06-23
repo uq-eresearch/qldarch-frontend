@@ -12,7 +12,6 @@
       <button ng-show="map.locations.length" class="btn btn-link pull-right" ui-sref="ugc.map.edit.list">
         <i class="fa fa-pencil"></i> Edit Locations
       </button>
-      <div class="text-muted" ng-hide="map.locations.length" style="margin-top: 16px;">No locations added. Try adding some locations.</div>
     </div>
     <div ng-show="$state.includes('ugc.map.edit.list')" class="panel panel-default">
       <div class="panel-heading">
@@ -188,32 +187,9 @@
         </uib-tab> <!-- /Import location --> </uib-tabset>
       </div>
     </div>
-    <!-- Location list -->
-    <div style="display: none;">
-      <h4>Added Locations TEST</h4>
+    <div style="margin-top: 24px;">
       <div class="text-muted" ng-hide="map.locations.length">No locations added. Try adding some locations.</div>
-      <!--  | slice:currentPage:currentPage+10 -->
-      <div ng-repeat="location in map.locations" style="margin-top: 8px;">
-        <div class="row">
-          <div class="col-sm-1">
-            <img ng-src="{{ location.asset.thumbnail }}" alt="thumbnail" class="img-responsive">
-          </div>
-          <div class="col-sm-11">
-            <button class="btn btn-default btn-xs pull-right" ng-click="remove(location)">
-              <i class="fa fa-trash-o"></i>
-            </button>
-            <p>
-              <strong>{{ location.name }}</strong> <span ng-show="location.completion">({{ location.completion }})</span>
-            </p>
-            <p>{{ location.location }}</p>
-            <p ng-repeat="typology in location.typologies">
-              <span>{{ typology }}</span>
-            </p>
-          </div>
-        </div>
-      </div>
     </div>
-    <!-- /Location List -->
   </div>
 </div>
 <div class="l-frame l-frame-tighter l-frame-divided"
