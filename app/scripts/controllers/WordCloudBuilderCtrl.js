@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('qldarchApp').controller('WordCloudBuilderCtrl',
-    function($scope, compobj, entities, Auth, $filter, SearchService, $state, CompObj, ArchObj, WordCloudService, $q) {
+    function($scope, compobj, entities, Auth, $filter, SearchService, $state, CompObj, ArchObj, WordCloudService, $q, $http, Uris) {
 
       $scope.compoundObject = compobj;
       $scope.wordcloud = compobj;
@@ -121,30 +121,36 @@ angular.module('qldarchApp').controller('WordCloudBuilderCtrl',
         });
         var promises = [];
         angular.forEach(documents, function(document) {
+          var promise;
           if (document.type === 'interview') {
-            var promise = ArchObj.load(document.id).then(function(data) {
+            promise = ArchObj.load(document.id).then(function(data) {
               return data;
             }).catch(function() {
-              console.log('unable to load ArchObj');
+              console.log('unable to load interview ArchObj');
             });
             promises.push(promise);
           }
           if (document.type === 'article') {
-            // todo: backend service to extract string from text files
+            promise = $http.get(Uris.WS_ROOT + 'media/text/' + document.id).then(function(result) {
+              return result.data;
+            }, function(response) {
+              console.log('error message: ' + response.data.msg);
+            });
+            promises.push(promise);
           }
         });
         $q.all(promises).then(function(data) {
           var i = 0;
           angular.forEach(data, function(d) {
             documents[i].text = '';
+            documents[i].title = documents[i].label;
             if (documents[i].type === 'interview') {
-              documents[i].title = documents[i].label;
               angular.forEach(d.transcript, function(t) {
                 documents[i].text += joinText(t.transcript);
               });
             }
             if (documents[i].type === 'article') {
-              // todo: backend service to extract string from text files
+              documents[i].text += joinText(d.text);
             }
             i++;
           });
