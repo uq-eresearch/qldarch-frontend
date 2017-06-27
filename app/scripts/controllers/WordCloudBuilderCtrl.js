@@ -125,8 +125,9 @@ angular.module('qldarchApp').controller('WordCloudBuilderCtrl',
           if (document.type === 'interview') {
             promise = ArchObj.load(document.id).then(function(data) {
               return data;
-            }).catch(function() {
+            }).catch(function(response) {
               console.log('unable to load interview ArchObj');
+              return response;
             });
             promises.push(promise);
           }
@@ -135,6 +136,7 @@ angular.module('qldarchApp').controller('WordCloudBuilderCtrl',
               return result.data;
             }, function(response) {
               console.log('error message: ' + response.data.msg);
+              return response.data;
             });
             promises.push(promise);
           }
@@ -143,14 +145,19 @@ angular.module('qldarchApp').controller('WordCloudBuilderCtrl',
           var i = 0;
           angular.forEach(data, function(d) {
             documents[i].text = '';
-            documents[i].title = documents[i].label;
             if (documents[i].type === 'interview') {
-              angular.forEach(d.transcript, function(t) {
-                documents[i].text += joinText(t.transcript);
-              });
+              if (angular.isDefined(d.transcript)) {
+                documents[i].title = documents[i].label;
+                angular.forEach(d.transcript, function(t) {
+                  documents[i].text += joinText(t.transcript);
+                });
+              }
             }
             if (documents[i].type === 'article') {
-              documents[i].text += joinText(d.text);
+              if (angular.isDefined(d.text)) {
+                documents[i].title = documents[i].label;
+                documents[i].text += joinText(d.text);
+              }
             }
             i++;
           });
