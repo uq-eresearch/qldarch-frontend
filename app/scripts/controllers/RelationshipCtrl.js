@@ -108,30 +108,6 @@ angular.module('qldarchApp').controller(
         }
       };
 
-      $scope.getArchitectIdofInterviews = function(interviewId) {
-        var architectId;
-        angular.forEach(interviews, function(interview) {
-          angular.forEach(interview.interviews, function(ii) {
-            if (ii === interviewId) {
-              architectId = interview.interviewee;
-            }
-          });
-        });
-        return architectId;
-      };
-
-      $scope.isArchitectFromInterview = function(interviewId) {
-        var isarchitect;
-        angular.forEach(interviews, function(interview) {
-          angular.forEach(interview.interviews, function(ii) {
-            if (ii === interviewId) {
-              isarchitect = interview.architect;
-            }
-          });
-        });
-        return isarchitect;
-      };
-
       var deleteRelationship = function(relationship) {
         var r = window.confirm('Delete this relationship?');
         if (r === true) {
