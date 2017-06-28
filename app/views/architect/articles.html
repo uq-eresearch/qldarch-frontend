@@ -13,13 +13,14 @@
       <div class="col-md-1">
         <!-- Icon Square -->
         <div class="square square-icon"
-          ng-class="{'square-interview': article.type=='interview', 'square-article': article.type == 'Article'||article.type == 'firm'||article.type == 'person'}">
+          ng-class="{'square-interview': article.type=='interview', 'square-article': article.type == 'Article'||article.type == 'article'||article.type == 'firm'||article.type == 'person'}">
           <div class="square-content">
             <div class="center">
               <div class="center-content">
                 <!-- Icon -->
-                <i class="fa fa-book" ng-show="article.type == 'Article'"></i> <i class="fa fa-microphone" ng-show="article.type == 'interview'"></i>
-                <i class="fa fa-briefcase" ng-show="article.type == 'firm'"></i> <i class="fa fa-user" ng-show="article.type == 'person'"></i>
+                <i class="fa fa-book" ng-show="article.type == 'Article' || article.type == 'article'"></i> <i class="fa fa-microphone"
+                  ng-show="article.type == 'interview'"></i> <i class="fa fa-briefcase" ng-show="article.type == 'firm'"></i> <i class="fa fa-user"
+                  ng-show="article.type == 'person'"></i>
                 <!-- /Icon -->
               </div>
             </div>
@@ -31,7 +32,9 @@
         <!-- Article Details -->
         <h4>
           <!-- /Title -->
-          <a ui-sref="article({ articleId: article.id })"> {{ article.label }} </a>
+          <a ng-show="article.category == 'archobj'" ui-sref="article({ articleId: article.id })"> {{ article.label }} </a> <a
+            ng-show="article.category == 'media'" ng-href="{{Uris.WS_DOWNLOAD+article.id}}" alt="" target="_blank"> {{
+            article.label||article.filename }} </a>
           <!-- Title -->
         </h4>
         <h5 class="text-muted">
