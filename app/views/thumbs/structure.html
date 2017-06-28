@@ -1,5 +1,5 @@
 <div class="thumbnail">
-  <div ng-if="!(structure.subjectype=='structure'||structure.objecttype=='structure')">
+  <div ng-if="!(structure.subjecttype=='structure'||structure.objecttype=='structure')">
     <a ui-sref="structure.summary({structureId: structure.id})" class="thumbnail-image"> <img ng-if="structure.media"
       ng-src="{{Uris.WS_MEDIA+structure.media+'?dimension=163x165'}}" alt="{{structure.label}}"> <img ng-if="!structure.media"
       ng-src="images/icon.png" alt="{{structure.label}}"></a>
@@ -9,7 +9,7 @@
       </h4>
     </div>
   </div>
-  <div ng-if="structure.subjectype=='structure'">
+  <div ng-if="structure.subjecttype=='structure'">
     <a ui-sref="structure.summary({structureId: structure.subject})" class="thumbnail-image"> <img ng-if="structure.media"
       ng-src="{{Uris.WS_MEDIA+structure.media+'?dimension=163x165'}}" alt="{{structure.subjectlabel}}"> <img ng-if="!structure.media"
       ng-src="images/icon.png" alt="{{structure.subjectlabel}}"></a>

@@ -154,16 +154,16 @@ text {
                     relationship.relationship }} {{ relationship.objectlabel }} </a>
                 </div>
                 <div ng-if="!(relationship.source=='structure')&&!(relationship.source=='interview')">
-                  <a ng-if="relationship.subjectype=='person'&&relationship.subjectarchitect==true"
+                  <a ng-if="relationship.subjecttype=='person'&&relationship.subjectarchitect==true"
                     ui-sref="architect.summary({ architectId: (relationship.subject) })"> {{ relationship.subjectlabel }} {{
                     relationship.relationship }} {{ relationship.objectlabel }} </a> <a
-                    ng-if="relationship.subjectype=='person'&&relationship.subjectarchitect==false"
+                    ng-if="relationship.subjecttype=='person'&&relationship.subjectarchitect==false"
                     ui-sref="other.summary({ otherId: (relationship.subject) })"> {{ relationship.subjectlabel }} {{ relationship.relationship }}
-                    {{ relationship.objectlabel }} </a> <a ng-if="relationship.subjectype=='firm'"
+                    {{ relationship.objectlabel }} </a> <a ng-if="relationship.subjecttype=='firm'"
                     ui-sref="firm.summary({ firmId: relationship.subject })"> {{ relationship.subjectlabel }} {{ relationship.relationship }} {{
-                    relationship.objectlabel }} </a> <a ng-if="relationship.subjectype=='structure'"
+                    relationship.objectlabel }} </a> <a ng-if="relationship.subjecttype=='structure'"
                     ui-sref="structure.summary({ structureId: relationship.subject })"> {{ relationship.subjectlabel }} {{
-                    relationship.relationship }} {{ relationship.objectlabel }} </a> <a ng-if="relationship.subjectype=='interview'"
+                    relationship.relationship }} {{ relationship.objectlabel }} </a> <a ng-if="relationship.subjecttype=='interview'"
                     ng-href="#/architect/interview/{{relationship.subject}}?architectId={{relationship.object}}&time={{relationship.utterance}}">
                     {{ relationship.subjectlabel }} {{ relationship.relationship }} {{ relationship.objectlabel }} </a>
                 </div>

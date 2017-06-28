@@ -51,7 +51,7 @@ angular.module('qldarchApp').directive('projectMap', function() {
                 infowindowlabel = structure.structurelabel;
                 if (structure.objecttype === 'structure') {
                   infowindowid = structure.object;
-                } else if (structure.subjectype === 'structure') {
+                } else if (structure.subjecttype === 'structure') {
                   infowindowid = structure.subject;
                 }
               }

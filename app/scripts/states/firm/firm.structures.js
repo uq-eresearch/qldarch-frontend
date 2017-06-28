@@ -9,8 +9,8 @@ angular.module('qldarchApp').config(
           structures : ['firm','$filter','$q','ArchObj',function(firm, $filter, $q, ArchObj) {
             /* globals _:false */
             var filteredrelationships = $filter('filter')(firm.relationships, function(relationship) {
-              if (relationship.subjectype === 'structure' || relationship.objecttype === 'structure') {
-                if (relationship.subjectype === 'structure') {
+              if (relationship.subjecttype === 'structure' || relationship.objecttype === 'structure') {
+                if (relationship.subjecttype === 'structure') {
                   relationship.structurelabel = relationship.subjectlabel;
                 }
                 if (relationship.objecttype === 'structure') {
@@ -21,7 +21,7 @@ angular.module('qldarchApp').config(
             });
             var promises = [];
             angular.forEach(filteredrelationships, function(structure) {            
-              var promise = ArchObj.load(((structure.subjectype === 'structure') ? structure.subject : structure.object)).then(function(data) {
+              var promise = ArchObj.load(((structure.subjecttype === 'structure') ? structure.subject : structure.object)).then(function(data) {
                 if (angular.isUndefined(structure.media)) {
                   structure.media = $filter('filter')(data.media, function(med) {
                     return (med.preferred || (med.type === 'Photograph' || med.type === 'Portrait' || med.type === 'Image'));

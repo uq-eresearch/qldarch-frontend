@@ -1,5 +1,5 @@
 <div class="thumbnail thumbnail-fix">
-  <div ng-if="!(architect.subjectype=='person'||architect.objecttype=='person')">
+  <div ng-if="!(architect.subjecttype=='person'||architect.objecttype=='person')">
     <a ui-sref="architect.summary({architectId: architect.id})" class="thumbnail-image"> <img ng-if="architect.media"
       ng-src="{{Uris.WS_MEDIA+architect.media+'?dimension=163x165'}}" alt="{{ architect.label }}"> <img ng-if="!architect.media"
       ng-src="images/icon.png" alt="{{ architect.label }}">
@@ -10,7 +10,7 @@
       </h4>
     </div>
   </div>
-  <div ng-if="architect.subjectype=='person'">
+  <div ng-if="architect.subjecttype=='person'">
     <a ui-sref="architect.summary({architectId: architect.subject})" class="thumbnail-image"> <img ng-if="architect.media"
       ng-src="{{Uris.WS_MEDIA+architect.media+'?dimension=163x165'}}" alt="{{ architect.subjectlabel }}"> <img ng-if="!architect.media"
       ng-src="images/icon.png" alt="{{ architect.subjectlabel }}">

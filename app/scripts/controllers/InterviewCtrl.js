@@ -244,62 +244,6 @@ angular.module('qldarchApp').controller(
         });
       };
 
-      $scope.getRelationshipSubjectType = function(id, subject) {
-        var type;
-        angular.forEach(relationships, function(relationship) {
-          if (id === relationship.relationshipid) {
-            type = relationship.subjectype;
-          } else if (subject === relationship.subject && !type) {
-            type = relationship.subjectype;
-          } else if (subject === relationship.object && !type) {
-            type = relationship.objecttype;
-          }
-        });
-        return type;
-      };
-
-      $scope.getRelationshipObjectType = function(id, object) {
-        var type;
-        angular.forEach(relationships, function(relationship) {
-          if (id === relationship.relationshipid) {
-            type = relationship.objecttype;
-          } else if (object === relationship.object && !type) {
-            type = relationship.objecttype;
-          } else if (object === relationship.subject && !type) {
-            type = relationship.subjectype;
-          }
-        });
-        return type;
-      };
-
-      $scope.getRelationshipSubjectArchitect = function(id, subject) {
-        var subjectarchitect;
-        angular.forEach(relationships, function(relationship) {
-          if (id === relationship.relationshipid) {
-            subjectarchitect = relationship.subjectarchitect;
-          } else if (subject === relationship.subject && !subjectarchitect) {
-            subjectarchitect = relationship.subjectarchitect;
-          } else if (subject === relationship.object && !subjectarchitect) {
-            subjectarchitect = relationship.objectarchitect;
-          }
-        });
-        return subjectarchitect;
-      };
-
-      $scope.getRelationshipObjectArchitect = function(id, object) {
-        var objectarchitect;
-        angular.forEach(relationships, function(relationship) {
-          if (id === relationship.relationshipid) {
-            objectarchitect = relationship.objectarchitect;
-          } else if (object === relationship.object && !objectarchitect) {
-            objectarchitect = relationship.objectarchitect;
-          } else if (object === relationship.subject && !objectarchitect) {
-            objectarchitect = relationship.subjectarchitect;
-          }
-        });
-        return objectarchitect;
-      };
-
       $scope.getSpeakerArchitect = function(id) {
         var architect;
         var interviewee = angular.copy(interview.interviewee);

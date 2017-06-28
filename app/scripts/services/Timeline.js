@@ -18,16 +18,16 @@ angular.module('qldarchApp').service('Timeline', function Timeline($http, $filte
     }
     if (obj.subject !== id) {
       label = obj.subjectlabel;
-      if (obj.subjectype === 'person' && obj.subjectarchitect === true) {
+      if (obj.subjecttype === 'person' && obj.subjectarchitect === true) {
         opentag = '<a href="#/architect/summary?architectId=' + obj.subject + '">';
         closetag = '</a>';
-      } else if (obj.subjectype === 'person' && obj.subjectarchitect === false) {
+      } else if (obj.subjecttype === 'person' && obj.subjectarchitect === false) {
         opentag = '<a href="#/other/summary?otherId=' + obj.subject + '">';
         closetag = '</a>';
-      } else if (obj.subjectype === 'firm') {
+      } else if (obj.subjecttype === 'firm') {
         opentag = '<a href="#/firm/summary?firmId=' + obj.subject + '">';
         closetag = '</a>';
-      } else if (obj.subjectype === 'structure') {
+      } else if (obj.subjecttype === 'structure') {
         opentag = '<a href="#/project/summary?structureId=' + obj.subject + '">';
         closetag = '</a>';
       }

@@ -143,10 +143,10 @@ angular
                 });
                 // Store the firms
                 var structureFirms = $filter('filter')(structure.relationships, function(relationship) {
-                  return (relationship.relationship === 'WorkedOn' && (relationship.subjectype === 'firm' || relationship.objecttype === 'firm'));
+                  return (relationship.relationship === 'WorkedOn' && (relationship.subjecttype === 'firm' || relationship.objecttype === 'firm'));
                 });
                 angular.forEach(structureFirms, function(structureFirm) {
-                  if (structureFirm.subjectype === 'firm') {
+                  if (structureFirm.subjecttype === 'firm') {
                     var subject = {
                       id : structureFirm.subject,
                       name : structureFirm.subjectlabel
@@ -193,13 +193,13 @@ angular
             } else {
               ArchObj.loadWithRelationshipLabels(entity.id).then(function(data) {
                 data.relationships = $filter('filter')(data.relationships, function(relationship) {
-                  if (relationship.subjectype === 'structure' || relationship.objecttype === 'structure') {
+                  if (relationship.subjecttype === 'structure' || relationship.objecttype === 'structure') {
                     return relationship;
                   }
                 });
                 var promises = [];
                 angular.forEach(data.relationships, function(structure) {
-                  var promise = ArchObj.load(((structure.subjectype === 'structure') ? structure.subject : structure.object)).then(function(data) {
+                  var promise = ArchObj.load(((structure.subjecttype === 'structure') ? structure.subject : structure.object)).then(function(data) {
                     if (angular.isDefined(data.media)) {
                       data.media = $filter('filter')(data.media, function(med) {
                         return (med.preferred || (med.type === 'Photograph' || med.type === 'Portrait' || med.type === 'Image'));

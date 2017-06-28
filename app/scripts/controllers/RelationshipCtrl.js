@@ -31,7 +31,7 @@ angular.module('qldarchApp').controller(
                 id : relationship.subject,
                 label : relationship.subjectlabel,
                 practicedinqueensland : relationship.subjectpracticedinqueensland,
-                type : relationship.subjectype,
+                type : relationship.subjecttype,
                 architect : relationship.subjectarchitect,
                 media : relationship.media
               };

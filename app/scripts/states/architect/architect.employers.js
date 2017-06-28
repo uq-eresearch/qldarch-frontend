@@ -8,8 +8,8 @@ angular.module('qldarchApp').config(function($stateProvider) {
       employers : [ 'architect', '$filter', 'ArchObj', function(architect, $filter, ArchObj) {
         /* globals _:false */
         var employedby = $filter('filter')(architect.relationships, function(relationship) {
-          if (relationship.relationship === 'employed by' && (relationship.subjectype === 'firm' || relationship.objecttype === 'firm')) {
-            if (relationship.subjectype === 'firm') {
+          if (relationship.relationship === 'employed by' && (relationship.subjecttype === 'firm' || relationship.objecttype === 'firm')) {
+            if (relationship.subjecttype === 'firm') {
               relationship.firmlabel = relationship.subjectlabel;
             }
             if (relationship.objecttype === 'firm') {

@@ -1,5 +1,5 @@
 <div class="thumbnail thumbnail-fix">
-  <div ng-if="!(firm.subjectype=='firm'||firm.objecttype=='firm')">
+  <div ng-if="!(firm.subjecttype=='firm'||firm.objecttype=='firm')">
     <a ui-sref="firm.summary({firmId:firm.id})" class="thumbnail-image"> <img ng-if="firm.media"
       ng-src="{{Uris.WS_MEDIA+firm.media+'?dimension=163x165'}}" alt="{{firm.label}}"> <img ng-if="!firm.media" ng-src="images/icon.png"
       alt="{{firm.label}}"></a>
@@ -9,7 +9,7 @@
       </h4>
     </div>
   </div>
-  <div ng-if="firm.subjectype=='firm'">
+  <div ng-if="firm.subjecttype=='firm'">
     <a ui-sref="firm.summary({firmId:firm.id})" class="thumbnail-image"> <img ng-if="firm.media"
       ng-src="{{Uris.WS_MEDIA+firm.media+'?dimension=163x165'}}" alt="{{ firm.subjectlabel }}"> <img ng-if="!firm.media"
       ng-src="images/icon.png" alt="{{ firm.subjectlabel }}">

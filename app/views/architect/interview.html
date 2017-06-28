@@ -65,8 +65,8 @@
           <div class="col-md-6">
             <h5 ng-if="interview.location">Location</h5>
             <p>
-              <i ng-if="interview.location" class="fa fa-map-marker"></i> <a href="https://maps.google.com/?q={{ interview.location }}" target="_blank">{{
-                interview.location }}</a>
+              <i ng-if="interview.location" class="fa fa-map-marker"></i> <a href="https://maps.google.com/?q={{ interview.location }}"
+                target="_blank">{{ interview.location }}</a>
             </p>
           </div>
           <div class="col-md-6">
@@ -254,39 +254,40 @@
                     <button class="btn btn-xs btn-danger" ng-show="exchange.isEditingRelationships" style="margin-right: 5px;"
                       ng-click="deleteRelationship(relationship, exchange)">
                       <i class="fa fa-trash-o fa-fw"></i>
-                    </button> <a
-                    ng-if="getRelationshipSubjectType(relationship.id,relationship.subject)=='person'&&getRelationshipSubjectArchitect(relationship.id,relationship.subject)==true"
+                    </button> <a ng-if="relationship.subjecttype=='person'&&relationship.subjectarchitect==true"
                     ui-sref="architect.summary({ architectId: relationship.subject })"
                     ng-bind-html="relationship.subjectlabel || '' | highlight:transcriptSearchInput"></a> <a
-                    ng-if="getRelationshipSubjectType(relationship.id,relationship.subject)=='person'&&getRelationshipSubjectArchitect(relationship.id,relationship.subject)==false"
+                    ng-if="relationship.subjecttype=='person'&&relationship.subjectarchitect==false"
                     ui-sref="other.summary({ otherId: relationship.subject })"
                     ng-bind-html="relationship.subjectlabel || '' | highlight:transcriptSearchInput"></a> <span
-                    ng-if="getRelationshipSubjectType(relationship.id,relationship.subject)=='person'&&getRelationshipSubjectArchitect(relationship.id,relationship.subject)==undefined"
+                    ng-if="relationship.subjecttype=='person'&&relationship.subjectarchitect==undefined"
                     ng-bind-html="relationship.subjectlabel || '' | highlight:transcriptSearchInput"></span> <a
-                    ng-if="getRelationshipSubjectType(relationship.id,relationship.subject)=='firm'"
-                    ui-sref="firm.summary({ firmId: relationship.subject })"
+                    ng-if="relationship.subjecttype=='firm'" ui-sref="firm.summary({ firmId: relationship.subject })"
                     ng-bind-html="relationship.subjectlabel || '' | highlight:transcriptSearchInput"></a> <a
-                    ng-if="getRelationshipSubjectType(relationship.id,relationship.subject)=='structure'"
-                    ui-sref="structure.summary({ structureId: relationship.subject })"
+                    ng-if="relationship.subjecttype=='structure'" ui-sref="structure.summary({ structureId: relationship.subject })"
+                    ng-bind-html="relationship.subjectlabel || '' | highlight:transcriptSearchInput"></a> <a
+                    ng-if="relationship.subjecttype!= 'person'&&relationship.subjecttype!='firm'&&relationship.subjecttype!='structure'&&relationship.subjecttype!=undefined"
+                    ui-sref="other.summary({ otherId: relationship.subject })"
                     ng-bind-html="relationship.subjectlabel || '' | highlight:transcriptSearchInput"></a> <span
-                    ng-if="getRelationshipSubjectType(relationship.id,relationship.subject)!= 'person'&&getRelationshipSubjectType(relationship.id,relationship.subject)!='firm'&&getRelationshipSubjectType(relationship.id,relationship.subject)!='structure'"
+                    ng-if="relationship.subjecttype!= 'person'&&relationship.subjecttype!='firm'&&relationship.subjecttype!='structure'&&relationship.subjecttype==undefined"
                     ng-bind-html="relationship.subjectlabel || '' | highlight:transcriptSearchInput"></span> <span
                     ng-bind-html="relationship.relationship || '' | highlight:transcriptSearchInput"> </span> <a
-                    ng-if="getRelationshipObjectType(relationship.id,relationship.object)=='person'&&getRelationshipObjectArchitect(relationship.id,relationship.object)==true"
+                    ng-if="relationship.objecttype=='person'&&relationship.objectarchitect==true"
                     ui-sref="architect.summary({ architectId: relationship.object })"
                     ng-bind-html="relationship.objectlabel || '' | highlight:transcriptSearchInput"></a> <a
-                    ng-if="getRelationshipObjectType(relationship.id,relationship.object)=='person'&&getRelationshipObjectArchitect(relationship.id,relationship.object)==false"
+                    ng-if="relationship.objecttype=='person'&&relationship.objectarchitect==false"
                     ui-sref="other.summary({ otherId: relationship.object })"
                     ng-bind-html="relationship.objectlabel || '' | highlight:transcriptSearchInput"></a> <span
-                    ng-if="getRelationshipObjectType(relationship.id,relationship.object)=='person'&&getRelationshipObjectArchitect(relationship.id,relationship.object)==undefined"
-                    ng-bind-html="relationship.objectlabel || '' | highlight:transcriptSearchInput"></span> <a
-                    ng-if="getRelationshipObjectType(relationship.id,relationship.object)=='firm'"
+                    ng-if="relationship.objecttype=='person'&&relationship.objectarchitect==undefined"
+                    ng-bind-html="relationship.objectlabel || '' | highlight:transcriptSearchInput"></span> <a ng-if="relationship.objecttype=='firm'"
                     ui-sref="firm.summary({ firmId: relationship.object })"
                     ng-bind-html="relationship.objectlabel || '' | highlight:transcriptSearchInput"></a> <a
-                    ng-if="getRelationshipObjectType(relationship.id,relationship.object)=='structure'"
-                    ui-sref="structure.summary({ structureId: relationship.object })"
+                    ng-if="relationship.objecttype=='structure'" ui-sref="structure.summary({ structureId: relationship.object })"
+                    ng-bind-html="relationship.objectlabel || '' | highlight:transcriptSearchInput"></a> <a
+                    ng-if="relationship.objecttype!= 'person'&&relationship.objecttype!='firm'&&relationship.objecttype!='structure'&&relationship.objecttype!=undefined"
+                    ui-sref="other.summary({ otherId: relationship.object })"
                     ng-bind-html="relationship.objectlabel || '' | highlight:transcriptSearchInput"></a> <span
-                    ng-if="getRelationshipObjectType(relationship.id,relationship.object)!= 'person'&&getRelationshipObjectType(relationship.id,relationship.object)!='firm'&&getRelationshipObjectType(relationship.id,relationship.object)!='structure'"
+                    ng-if="relationship.objecttype!= 'person'&&relationship.objecttype!='firm'&&relationship.objecttype!='structure'&&relationship.objecttype==undefined"
                     ng-bind-html="relationship.objectlabel || '' | highlight:transcriptSearchInput"></span> <!-- Date --> <span
                     ng-show="relationship.from">(</span>{{ relationship.from }}<span ng-show="relationship.from && !relationship.until">)</span><span
                     ng-show="relationship.from && relationship.until"> - </span><span ng-show="!relationship.from && relationship.until">(</span>{{
