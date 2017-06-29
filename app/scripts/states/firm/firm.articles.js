@@ -9,8 +9,6 @@ angular.module('qldarchApp').config(function($stateProvider) {
         return SearchService.getArticles(firm.label);
       } ]
     },
-    controller : [ '$scope', 'articles', function($scope, articles) {
-      $scope.articles = articles;
-    } ]
+    controller : 'ArchObjArticlesCtrl'
   });
 });
