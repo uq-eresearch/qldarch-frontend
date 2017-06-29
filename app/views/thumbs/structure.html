@@ -9,23 +9,13 @@
       </h4>
     </div>
   </div>
-  <div ng-if="structure.subjecttype=='structure'">
-    <a ui-sref="structure.summary({structureId: structure.subject})" class="thumbnail-image"> <img ng-if="structure.media"
-      ng-src="{{Uris.WS_MEDIA+structure.media+'?dimension=163x165'}}" alt="{{structure.subjectlabel}}"> <img ng-if="!structure.media"
-      ng-src="images/icon.png" alt="{{structure.subjectlabel}}"></a>
+  <div ng-if="structure.subjecttype=='structure'||structure.objecttype=='structure'">
+    <a ui-sref="structure.summary({structureId: structure.structureId})" class="thumbnail-image"> <img ng-if="structure.media"
+      ng-src="{{Uris.WS_MEDIA+structure.media+'?dimension=163x165'}}" alt="{{structure.structurelabel}}"> <img ng-if="!structure.media"
+      ng-src="images/icon.png" alt="{{structure.structurelabel}}"></a>
     <div class="caption">
       <h4>
-        <a ui-sref="structure.summary({structureId: structure.subject})"> {{structure.subjectlabel}} </a>
-      </h4>
-    </div>
-  </div>
-  <div ng-if="structure.objecttype=='structure'">
-    <a ui-sref="structure.summary({structureId: structure.object})" class="thumbnail-image"> <img ng-if="structure.media"
-      ng-src="{{Uris.WS_MEDIA+structure.media+'?dimension=163x165'}}" alt="{{structure.objectlabel}}"> <img ng-if="!structure.media"
-      ng-src="images/icon.png" alt="{{structure.objectlabel}}"></a>
-    <div class="caption">
-      <h4>
-        <a ui-sref="structure.summary({structureId: structure.object})"> {{structure.objectlabel}} </a>
+        <a ui-sref="structure.summary({structureId: structure.structureId})"> {{structure.structurelabel}} </a>
       </h4>
     </div>
   </div>

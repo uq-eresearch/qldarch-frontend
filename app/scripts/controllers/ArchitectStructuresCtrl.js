@@ -6,7 +6,6 @@ angular.module('qldarchApp').controller('ArchitectStructuresCtrl', function($sco
   $scope.structureRows = LayoutHelper.group(GraphHelper.graphValues(structures), 6);
 
   // Setup the filters and map
-  $scope.buildingTypologies = [];
   $scope.isShowingMap = function() {
     var hasmap = false;
     angular.forEach(structures, function(structure) {
@@ -17,22 +16,6 @@ angular.module('qldarchApp').controller('ArchitectStructuresCtrl', function($sco
       }
     });
     return hasmap;
-  };
-  $scope.buildTypologies = function() {
-    angular.forEach(structures, function(structure) {
-      // Extract all the unique building typologies
-      angular.forEach(structure.typologies, function(buildingTypology) {
-        var found = false;
-        angular.forEach($scope.buildingTypologies, function(storedBuildingTypology) {
-          if (buildingTypology === storedBuildingTypology) {
-            found = true;
-          }
-        });
-        if (!found) {
-          $scope.buildingTypologies.push(buildingTypology);
-        }
-      });
-    });
   };
 
   // Setup the map

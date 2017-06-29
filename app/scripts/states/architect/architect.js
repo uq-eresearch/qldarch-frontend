@@ -34,6 +34,14 @@ angular.module('qldarchApp').config(function($stateProvider) {
           });
           return interviews;
         }
+      } ],
+      allstructures : [ 'AggArchObjs', function(AggArchObjs) {
+        return AggArchObjs.loadProjects().then(function(data) {
+          return data;
+        }).catch(function() {
+          console.log('unable to load projects');
+          return {};
+        });
       } ]
     },
     controller : [ '$scope', 'architect', 'interviews', 'ArchObj', '$state', function($scope, architect, interviews, ArchObj, $state) {
