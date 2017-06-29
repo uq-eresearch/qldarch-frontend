@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('qldarchApp').controller('WordCloudBuilderCtrl',
-    function($scope, compobj, entities, Auth, $filter, SearchService, $state, CompObj, ArchObj, WordCloudService, $q, $http, Uris) {
+    function($scope, compobj, entities, Auth, $filter, SearchService, $state, CompObj, ArchObj, WordService, $q, $http, Uris) {
 
       $scope.compoundObject = compobj;
       $scope.wordcloud = compobj;
@@ -88,13 +88,13 @@ angular.module('qldarchApp').controller('WordCloudBuilderCtrl',
       function joinText(text) {
         var maxLength = 30;
         var words = '';
-        text.split(WordCloudService.wordSeparators).forEach(function(word) {
+        text.split(WordService.wordSeparators).forEach(function(word) {
           word.replace(/ /g, '');
-          if (WordCloudService.discard.test(word)) {
+          if (WordService.discard.test(word)) {
             return;
           }
-          word = word.replace(WordCloudService.replace, '');
-          if (WordCloudService.stopWords.test(word.toLowerCase())) {
+          word = word.replace(WordService.specialChars, '');
+          if (WordService.stopWords.test(word.toLowerCase())) {
             return;
           }
           if (word.length >= 1) {

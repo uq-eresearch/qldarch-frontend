@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('qldarchApp').run(function($rootScope, $route, $location, ngProgress, Uris, $http, GraphHelper, $state, $stateParams, Auth, $filter) {
+angular.module('qldarchApp').run(function($rootScope, $route, $location, ngProgress, Uris, $http, GraphHelper, $state, $stateParams, Auth, $filter, WordService) {
 
   // Fix bug with scrolling to top with ui-router changing
   $rootScope.$on('$viewContentLoaded', function() {
@@ -81,7 +81,7 @@ angular.module('qldarchApp').run(function($rootScope, $route, $location, ngProgr
    */
   $rootScope.globalSearch = function(val) {
     var syntax = '* AND (type:person OR type:firm OR type:structure)';
-    return $http.get(Uris.WS_ROOT + 'search?q=' + val + syntax + '&p=0&pc=20').then(function(output) {
+    return $http.get(Uris.WS_ROOT + 'search?q=' + val.replace(WordService.spclCharsLucene, '') + syntax + '&p=0&pc=20').then(function(output) {
       var results = GraphHelper.graphValues(output.data.documents);
       results = $filter('filter')(results, function(result) {
         return (result.type === 'person' || result.type === 'firm' || result.type === 'structure');
@@ -103,7 +103,7 @@ angular.module('qldarchApp').run(function($rootScope, $route, $location, ngProgr
       var search = {
         name : ' <i class="fa fa-search"></i> Search for \'' + val + '\'',
         type : 'search',
-        query : val + syntax
+        query : val
       };
       results.push(search);
       return results;

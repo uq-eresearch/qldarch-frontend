@@ -2,7 +2,7 @@
 
 angular.module('qldarchApp').controller(
     'WordCloudViewerCtrl',
-    function($scope, compobj, CompObj, $state, Auth, WordCloudService) {
+    function($scope, compobj, CompObj, $state, Auth, WordService) {
 
       $scope.compoundObject = compobj;
       $scope.wordcloud = compobj;
@@ -28,9 +28,9 @@ angular.module('qldarchApp').controller(
 
         var tags, fontSize, maxLength = 30;
 
-        var stopWords = WordCloudService.stopWords;
-        var wordSeparators = WordCloudService.wordSeparators;
-        var discard = WordCloudService.discard;
+        var stopWords = WordService.stopWords;
+        var wordSeparators = WordService.wordSeparators;
+        var discard = WordService.discard;
 
         function draw(words) {
           d3.select('.l-frame-media .container .wordcloud').append('svg').attr('width', WIDTH).attr('height', HEIGHT).append('g').attr('transform',
@@ -66,7 +66,7 @@ angular.module('qldarchApp').controller(
             if (discard.test(word)) {
               return;
             }
-            word = word.replace(WordCloudService.replace, '');
+            word = word.replace(WordService.specialChars, '');
             if (stopWords.test(word.toLowerCase())) {
               return;
             }

@@ -41,11 +41,11 @@
         <p>{{ article.volume }}</p>
         <h5>Issue</h5>
         <p>{{ article.issue }}</p>
+        <h5>Pages</h5>
+        <p>{{ article.pages }}</p>
         <h5>Publication Date</h5>
         <p class="text-muted" data-ng-hide="article.published.length">No date recorded</p>
         <p>{{ article.published | date:'dd-MM-yyyy' }}</p>
-        <h5>Pages</h5>
-        <p>{{ article.pages }}</p>
         <h5>Summary</h5>
         <p style="white-space: pre-wrap;" ng-bind-html="article.summary||'No summary'"></p>
       </div>
@@ -67,6 +67,9 @@
             <label for="">Issue</label> <input type="text" class="form-control" placeholder="Issue" ng-model="article.issue">
           </div>
           <div class="form-group">
+            <label for="">Pages</label> <input type="text" class="form-control" placeholder="Pages" ng-model="article.pages">
+          </div>
+          <div class="form-group">
             <label for="">Publication Date</label>
             <div>{{ article.published | date:'dd-MM-yyyy' }}</div>
             <div class="well well-sm">
@@ -75,9 +78,6 @@
                 <button type="button" class="btn btn-sm btn-primary" ng-click="article.published = ''">Clear</button>
               </div>
             </div>
-          </div>
-          <div class="form-group">
-            <label for="">Pages</label> <input type="text" class="form-control" placeholder="Pages" ng-model="article.pages">
           </div>
           <!-- Description -->
           <div class="form-group">

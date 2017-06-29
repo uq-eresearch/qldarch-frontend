@@ -2,9 +2,10 @@
   'use strict';
 
   /* @ngInject */
-  function SearchService($http, Uris) {
+  function SearchService($http, Uris, WordService) {
     function getArticles(query) {
-      return $http.get(Uris.WS_ROOT + 'search?q=' + query + '* AND type:article&p=0&pc=20').then(function(response) {
+      var syntax = '* AND type:article AND category:archobj';
+      return $http.get(Uris.WS_ROOT + 'search?q=' + query.replace(WordService.spclCharsLucene, '') + syntax + '&p=0&pc=20').then(function(response) {
         /* globals _:false */
         return _.map(response.data.documents, function(article) {
           return _.assign({}, article, {
@@ -15,8 +16,8 @@
     }
 
     function getArticlesInterviews(query) {
-      var syntax = '* AND (type:article OR type:interview)';
-      return $http.get(Uris.WS_ROOT + 'search?q=' + query + syntax + '&p=0&pc=20').then(function(response) {
+      var syntax = '* AND (type:article OR type:interview) AND category:archobj';
+      return $http.get(Uris.WS_ROOT + 'search?q=' + query.replace(WordService.spclCharsLucene, '') + syntax + '&p=0&pc=20').then(function(response) {
         var data = response.data.documents;
         var documents = [];
         /* globals $:false */
