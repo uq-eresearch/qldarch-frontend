@@ -18,12 +18,12 @@
       <div class="col-sm-7">
         <h5>Summary</h5>
         <p style="white-space: pre-wrap;" ng-bind-html="firm.summary"></p>
-        <p ng-hide="firm.summary" class="text-muted">No summary.</p>
+        <p ng-hide="firm.summary" class="text-muted">No summary</p>
         <h5>Operating Years</h5>
         <p>
           {{ firm.start | date:'dd-MM-yyyy' }} <span ng-show="firm.end">- {{ firm.end | date:'dd-MM-yyyy' }}</span>
         </p>
-        <p ng-hide="firm.start" class="text-muted">No operating years recorded.</p>
+        <p ng-hide="firm.start" class="text-muted">No operating years recorded</p>
         <h5 style="margin-top: 24px;" ng-show="firm.precededby">Preceded By</h5>
         <ul class="media-list">
           <div class="media-body">

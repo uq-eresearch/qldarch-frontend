@@ -5,24 +5,37 @@ angular.module('qldarchApp').config(function($stateProvider) {
     url : '/employees',
     templateUrl : 'views/firm/employees.html',
     resolve : {
-      employees : [ 'firm', '$filter', 'ArchObj', function(firm, $filter, ArchObj) {
+      employees : [ 'firm', '$filter', 'architects', function(firm, $filter, architects) {
         /* globals _:false */
         var employedby = $filter('filter')(firm.relationships, function(relationship) {
-          if (relationship.relationship === 'employed by') {        
-            return ArchObj.load(relationship.subject).then(function(data) {
-              if (angular.isUndefined(relationship.media)) {
-                relationship.media = $filter('filter')(data.media, function(med) {
-                  return (med.preferred || (med.type === 'Photograph' || med.type === 'Portrait' || med.type === 'Image'));
-                }).id;
-              }
-              return relationship;
-            }).catch(function() {
-              console.log('unable to load relationship subject ArchObj');
-              return {};
-            });
+          if (relationship.relationship === 'employed by' && (relationship.subjecttype === 'person' || relationship.objecttype === 'person')) {
+            if (relationship.subjecttype === 'person') {
+              relationship.personlabel = relationship.subjectlabel;
+            }
+            if (relationship.objecttype === 'person') {
+              relationship.personlabel = relationship.objectlabel;
+            }
+            return relationship;
           }
         });
-        return _.uniqBy(employedby, 'subjectlabel');
+        angular.forEach(employedby, function(employee) {
+          angular.forEach(architects, function(architect) {
+            if (employee.subjecttype === 'person') {
+              employee.personId = employee.subject;
+            } else {
+              employee.personId = employee.object;
+            }
+            if (employee.personId === architect.id) {
+              if (angular.isDefined(architect.media)) {
+                employee.media = architect.media;
+              }
+            }
+          });
+        });
+        employedby = $filter('orderBy')(employedby, function(employee) {
+          return (employee.personlabel || '');
+        });
+        return _.uniqBy(employedby, 'personId');
       } ]
     },
     controller : [ '$scope', 'firm', 'employees', 'LayoutHelper', function($scope, firm, employees, LayoutHelper) {

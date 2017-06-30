@@ -5,7 +5,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
     url : '/employers',
     templateUrl : 'views/architect/employers.html',
     resolve : {
-      employers : [ 'architect', '$filter', 'ArchObj', function(architect, $filter, ArchObj) {
+      employers : [ 'architect', '$filter', 'firms', function(architect, $filter, firms) {
         /* globals _:false */
         var employedby = $filter('filter')(architect.relationships, function(relationship) {
           if (relationship.relationship === 'employed by' && (relationship.subjecttype === 'firm' || relationship.objecttype === 'firm')) {
@@ -15,20 +15,27 @@ angular.module('qldarchApp').config(function($stateProvider) {
             if (relationship.objecttype === 'firm') {
               relationship.firmlabel = relationship.objectlabel;
             }
-            return ArchObj.load(relationship.subject).then(function(data) {
-              if (angular.isUndefined(relationship.media)) {
-                relationship.media = $filter('filter')(data.media, function(med) {
-                  return (med.preferred || (med.type === 'Photograph' || med.type === 'Portrait' || med.type === 'Image'));
-                }).id;
-              }
-              return relationship;
-            }).catch(function() {
-              console.log('unable to load relationship subject ArchObj');
-              return {};
-            });
+            return relationship;
           }
         });
-        return _.uniqBy(employedby, 'firmlabel');
+        angular.forEach(employedby, function(employer) {
+          angular.forEach(firms, function(firm) {
+            if (employer.subjecttype === 'firm') {
+              employer.firmId = employer.subject;
+            } else {
+              employer.firmId = employer.object;
+            }
+            if (employer.firmId === firm.id) {
+              if (angular.isDefined(firm.media)) {
+                employer.media = firm.media;
+              }
+            }
+          });
+        });
+        employedby = $filter('orderBy')(employedby, function(employer) {
+          return (employer.firmlabel || '');
+        });
+        return _.uniqBy(employedby, 'firmId');
       } ]
     },
     controller : [ '$scope', 'employers', 'LayoutHelper', function($scope, employers, LayoutHelper) {

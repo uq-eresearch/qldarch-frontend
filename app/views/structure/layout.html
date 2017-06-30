@@ -24,10 +24,10 @@
               href ui-sref="structure.lineDrawings({ structureId: structure.id })">Line Drawings</a></li>
             <li ng-class="{active: $state.includes('structure.map'), disabled: !structure.lat}" ng-show="structure.id"><a href
               ui-sref="structure.map({ structureId: structure.id })" ng-show="structure.lat">Map</a> <a href ng-show="!structure.lat"
-              uib-tooltip="No location stored.">Map</a></li>
+              uib-tooltip="No location stored">Map</a></li>
             <li ui-sref-active="active" ng-show="structure.id"><a href ui-sref="structure.articles({ structureId: structure.id })">Articles</a></li>
-            <li ui-sref-active="active" ng-show="structure.id"><a href ui-sref="structure.timeline({ structureId: structure.id })">Timeline</a></li>
             <li ui-sref-active="active" ng-show="structure.id"><a href ui-sref="structure.relationships({ structureId: structure.id })">Relationships</a></li>
+            <li ui-sref-active="active" ng-show="structure.id"><a href ui-sref="structure.timeline({ structureId: structure.id })">Timeline</a></li>
           </ul>
         </div>
       </div>

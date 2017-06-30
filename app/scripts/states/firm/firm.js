@@ -21,13 +21,24 @@ angular.module('qldarchApp').config(function($stateProvider) {
           });
         }
       } ],
+      architects : [ 'AggArchObjs', 'GraphHelper', '$filter', function(AggArchObjs, GraphHelper, $filter) {
+        return AggArchObjs.loadArchitects().then(function(data) {
+          var architects = GraphHelper.graphValues(data);
+          return $filter('filter')(architects, function(architect) {
+            return architect.label && !(/\s/.test(architect.label.substring(0, 1)));
+          });
+        }).catch(function() {
+          console.log('unable to load all architects');
+          return {};
+        });
+      } ],
       firms : [ 'AggArchObjs', '$filter', function(AggArchObjs, $filter) {
         return AggArchObjs.loadFirms().then(function(data) {
           return $filter('filter')(data, function(firm) {
             return firm.label && !(/\s/.test(firm.label.substring(0, 1)));
           });
         }).catch(function() {
-          console.log('unable to load firms');
+          console.log('unable to load all firms');
           return {};
         });
       } ],
@@ -35,7 +46,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
         return AggArchObjs.loadProjects().then(function(data) {
           return data;
         }).catch(function() {
-          console.log('unable to load projects');
+          console.log('unable to load all projects');
           return {};
         });
       } ]

@@ -80,7 +80,7 @@ angular.module('qldarchApp').run(function($rootScope, $route, $location, ngProgr
    * @returns {Promise|*}
    */
   $rootScope.globalSearch = function(val) {
-    var syntax = '* AND (type:person OR type:firm OR type:structure)';
+    var syntax = '* AND (type:person OR type:firm OR type:structure) AND category:archobj';
     return $http.get(Uris.WS_ROOT + 'search?q=' + val.replace(WordService.spclCharsLucene, '') + syntax + '&p=0&pc=20').then(function(output) {
       var results = GraphHelper.graphValues(output.data.documents);
       results = $filter('filter')(results, function(result) {
@@ -105,7 +105,7 @@ angular.module('qldarchApp').run(function($rootScope, $route, $location, ngProgr
         type : 'search',
         query : val
       };
-      results.push(search);
+      results.unshift(search);
       return results;
     });
   };

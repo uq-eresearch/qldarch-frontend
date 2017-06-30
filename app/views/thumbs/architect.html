@@ -10,25 +10,14 @@
       </h4>
     </div>
   </div>
-  <div ng-if="architect.subjecttype=='person'">
-    <a ui-sref="architect.summary({architectId: architect.subject})" class="thumbnail-image"> <img ng-if="architect.media"
-      ng-src="{{Uris.WS_MEDIA+architect.media+'?dimension=163x165'}}" alt="{{ architect.subjectlabel }}"> <img ng-if="!architect.media"
-      ng-src="images/icon.png" alt="{{ architect.subjectlabel }}">
+  <div ng-if="architect.subjecttype=='person'||architect.objecttype=='person'">
+    <a ui-sref="architect.summary({architectId: architect.personId})" class="thumbnail-image"> <img ng-if="architect.media"
+      ng-src="{{Uris.WS_MEDIA+architect.media+'?dimension=163x165'}}" alt="{{ architect.personlabel }}"> <img ng-if="!architect.media"
+      ng-src="images/icon.png" alt="{{ architect.personlabel }}">
     </a>
     <div class="caption">
       <h4>
-        <a ui-sref="architect.summary({architectId: architect.subject})"> {{ architect.subjectlabel }} </a>
-      </h4>
-    </div>
-  </div>
-  <div ng-if="architect.objecttype=='person'">
-    <a ui-sref="architect.summary({architectId: architect.object})" class="thumbnail-image"> <img ng-if="architect.media"
-      ng-src="{{Uris.WS_MEDIA+architect.media+'?dimension=163x165'}}" alt="{{ architect.objectlabel }}"> <img ng-if="!architect.media"
-      ng-src="images/icon.png" alt="{{ architect.objectlabel }}">
-    </a>
-    <div class="caption">
-      <h4>
-        <a ui-sref="architect.summary({architectId: architect.object})"> {{ architect.objectlabel }} </a>
+        <a ui-sref="architect.summary({architectId: architect.personId})"> {{ architect.personlabel }} </a>
       </h4>
     </div>
   </div>

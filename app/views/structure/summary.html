@@ -18,9 +18,9 @@
       <div class="col-sm-7">
         <h5>Summary</h5>
         <p style="white-space: pre-wrap;" ng-bind-html="structure.summary"></p>
-        <p ng-show="!structure.summary.length">No summary.</p>
+        <p class="text-muted" ng-show="!structure.summary.length">No summary</p>
         <h5 style="margin-top: 24px;">Associated Firm</h5>
-        <p ng-show="!designers.firms.length">No associated firm.</p>
+        <p class="text-muted" ng-show="!designers.firms.length">No associated firm</p>
         <ul class="media-list">
           <li class="media" style="margin-bottom: 10px;" ng-repeat="designer in designers.firms"><a class="pull-left"
             ui-sref="firm.summary({ firmId: designer.subject })"> <img ng-if="designer.media" class="media-object img-responsive img-circle"
@@ -31,7 +31,7 @@
             </div></li>
         </ul>
         <h5 style="margin-top: 24px;">Associated Architects</h5>
-        <div ng-show="!designers.architects.length">No associated architects.</div>
+        <div class="text-muted" ng-show="!designers.architects.length">No associated architects</div>
         <ul class="media-list">
           <li class="media" ng-repeat="designer in designers.architects"><a class="pull-left"
             ui-sref="architect.summary({ architectId: designer.subject })"> <img ng-if="designer.media"
@@ -44,7 +44,7 @@
         </ul>
         <h5 style="margin-top: 24px;">Location</h5>
         <p ng-show="structure.location.length">{{ structure.location }}</p>
-        <p ng-hide="structure.location.length">No location.</p>
+        <p class="text-muted" ng-hide="structure.location.length">No location</p>
         <h5 style="margin-top: 24px;">Completion Date</h5>
         <p ng-show="structure.completion.length">{{ structure.completion | date:'dd-MM-yyyy' }}</p>
         <p ng-hide="structure.completion.length">Unknown</p>
@@ -54,7 +54,7 @@
         <ul>
           <li ng-repeat="typology in structure.typologies">{{ typology }}</li>
         </ul>
-        <p ng-show="!structure.typologies.length">No building typology.</p>
+        <p class="text-muted" ng-show="!structure.typologies.length">No building typology</p>
       </div>
       <div class="col-sm-5">
         <img ng-if="structure.media.length>1" class="img-responsive"

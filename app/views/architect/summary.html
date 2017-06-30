@@ -19,7 +19,7 @@
         <span ng-show="Auth.success"> </span>
         <h5>Biography</h5>
         <p style="white-space: pre-wrap;" ng-bind-html="architect.summary"></p>
-        <p ng-show="!architect.summary.length">No biography.</p>
+        <p class="text-muted" ng-show="!architect.summary.length">No biography</p>
       </div>
       <div class="col-sm-5">
         <img ng-if="architect.media.length>1" class="img-responsive"

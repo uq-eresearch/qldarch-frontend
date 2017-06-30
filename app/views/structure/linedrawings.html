@@ -7,7 +7,7 @@
 </div>
 <div class="l-frame l-frame-tight">
   <div class="container">
-    <p class="text-muted" ng-hide="lineDrawingRows.length">No line drawings.</p>
+    <p class="text-muted" ng-hide="lineDrawingRows.length">No line drawings</p>
     <div class="row" ng-repeat="lineDrawingRow in lineDrawingRows">
       <div class="col-sm-2" ng-repeat="lineDrawing in lineDrawingRow">
         <div ng-include="'views/thumb.image.html'" ng-init="photograph = lineDrawing"></div>

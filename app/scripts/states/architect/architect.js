@@ -35,11 +35,21 @@ angular.module('qldarchApp').config(function($stateProvider) {
           return interviews;
         }
       } ],
+      firms : [ 'AggArchObjs', '$filter', function(AggArchObjs, $filter) {
+        return AggArchObjs.loadFirms().then(function(data) {
+          return $filter('filter')(data, function(firm) {
+            return firm.label && !(/\s/.test(firm.label.substring(0, 1)));
+          });
+        }).catch(function() {
+          console.log('unable to load all firms');
+          return {};
+        });
+      } ],
       allstructures : [ 'AggArchObjs', function(AggArchObjs) {
         return AggArchObjs.loadProjects().then(function(data) {
           return data;
         }).catch(function() {
-          console.log('unable to load projects');
+          console.log('unable to load all projects');
           return {};
         });
       } ]

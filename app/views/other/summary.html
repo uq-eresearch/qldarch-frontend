@@ -19,7 +19,7 @@
         <p>{{ other.type }}</p>
         <h5>Summary</h5>
         <p style="white-space: pre-wrap;" ng-bind-html="other.summary"></p>
-        <p ng-show="!other.summary.length">No summary.</p>
+        <p class="text-muted" ng-show="!other.summary.length">No summary</p>
       </div>
     </div>
     <div class="row" ng-show="$state.includes('other.summary.edit')">

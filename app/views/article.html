@@ -33,7 +33,7 @@
   <div class="container">
     <div class="row" ng-hide="$state.includes('article.edit')">
       <div class="col-md-6">
-        <h5>Authors</h5>
+        <h5>Author(s)</h5>
         <p>{{ article.authors }}</p>
         <h5>Periodical Title</h5>
         <p>{{ article.periodical }}</p>
@@ -41,13 +41,14 @@
         <p>{{ article.volume }}</p>
         <h5>Issue</h5>
         <p>{{ article.issue }}</p>
-        <h5>Pages</h5>
+        <h5>Page(s)</h5>
         <p>{{ article.pages }}</p>
         <h5>Publication Date</h5>
         <p class="text-muted" data-ng-hide="article.published.length">No date recorded</p>
         <p>{{ article.published | date:'dd-MM-yyyy' }}</p>
         <h5>Summary</h5>
-        <p style="white-space: pre-wrap;" ng-bind-html="article.summary||'No summary'"></p>
+        <p style="white-space: pre-wrap;" ng-bind-html="article.summary"></p>
+        <p class="text-muted" data-ng-hide="article.summary.length">No summary</p>
       </div>
     </div>
     <div class="row" ng-show="$state.includes('article.edit')">
@@ -67,7 +68,7 @@
             <label for="">Issue</label> <input type="text" class="form-control" placeholder="Issue" ng-model="article.issue">
           </div>
           <div class="form-group">
-            <label for="">Pages</label> <input type="text" class="form-control" placeholder="Pages" ng-model="article.pages">
+            <label for="">Page(s)</label> <input type="text" class="form-control" placeholder="Pages" ng-model="article.pages">
           </div>
           <div class="form-group">
             <label for="">Publication Date</label>

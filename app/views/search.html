@@ -3,11 +3,10 @@
 	margin-bottom: 21px;
 }
 </style>
-<div class="content">
+<div id="search-header" class="content">
   <div class="page-header">
     <div class="container">
-      <h1>Search Results</h1>
-      <!-- <h1>Search Results - "{{ query }}"</h1> -->
+      <h1>Search Results - "{{ query }}"</h1>
     </div>
   </div>
   <div class="text-center" ng-show="!results">
@@ -15,11 +14,14 @@
   </div>
   <section>
     <div class="container">
-      <div ng-repeat="result in results | orderBy:'-score'" class="row" style="margin-bottom: 40px;">
+      <p class="text-muted" ng-hide="results.length">No results found</p>
+      <div ng-repeat="result in results | orderBy:'-score'" class="row" style="margin-bottom: 30px;">
         <img src="" alt="">
         <div class="col-md-1">
-          <img ng-src="{{Uris.WS_MEDIA+result.id+'?dimension=68x65'}}" alt="" class="img-responsive" ng-show="result.id">
-          <div class="square square-icon" ng-class="{'square-interview': result.type=='person', 'square-article': result.type == 'structure'}">
+          <img ng-src="{{Uris.WS_MEDIA+result.id+'?dimension=68x65'}}" alt="" class="img-responsive"
+            ng-show="result.type=='person'||result.type=='firm'||result.type=='structure'">
+          <div class="square square-icon" ng-class="{'square-interview': result.type=='interview', 'square-article': result.type == 'article'}"
+            ng-show="result.type=='article'||result.type=='interview'">
             <div class="square-content">
               <div class="center">
                 <div class="center-content">
@@ -31,39 +33,55 @@
         </div>
         <div class="col-md-8">
           <!-- Title -->
-          <h3>
+          <h4>
             <a ng-if="result.type=='person'&&result.architect==true" ui-sref="architect.summary({ architectId: result.id })" style="color: #333">
-              {{ result.preflabel||result.label }} </a> <a ng-if="result.type=='person'&&result.architect==false"
+              {{ result.preflabel||result.label }} </a> <a
+              ng-if="(result.type=='person'&&result.architect==false)||(!(result.type=='person'||result.type=='firm'||result.type=='structure'||result.type=='article'||result.type=='interview'))"
               ui-sref="other.summary({ otherId: result.id })" style="color: #333"> {{ result.preflabel||result.label }} </a> <a
               ng-if="result.type=='firm'" ui-sref="firm.summary({ firmId: result.id })" style="color: #333"> {{ result.label }} </a> <a
               ng-if="result.type=='structure'" ui-sref="structure.summary({ structureId: result.id })" style="color: #333"> {{ result.label }} </a> <a
-              ng-if="result.type=='interview'" ui-sref="interview.summary({ interviewId: result.id })" style="color: #333"> {{ result.label }} </a> <small
+              ng-if="result.type=='article'" ui-sref="article({ articleId: result.id })" style="color: #333"> {{ result.label }} </a> <a
+              ng-if="result.type=='interview'" ng-href="#/interview/{{result.id}}" style="color: #333"> {{ result.label }} </a> <small
               class="text-muted" style="text-transform: capitalize;"> {{ result.type }} </small>
-          </h3>
+          </h4>
           <!-- /Title -->
-          <p class="text-muted">{{ result.summary | limitTo: 200 }}{{result.summary.length > 200 ? '...' : ''}}</p>
-          <h5 class="text-muted">
+          <p class="text-muted">
             <!-- Authors -->
-            <span ng-show="result.authors">{{ result.authors }},</span>
+            <span ng-show="result.authors">{{result.authors}}</span>
             <!-- /Authors -->
             <!-- Periodical Title -->
-            {{ result.periodicalTitle }}
+            <span ng-show="result.periodical">, {{result.periodical}}</span>
             <!-- /Periodical Title -->
-            <!-- Date Published -->
-            <span ng-show="result.datePublished">, {{ result.datePublished }}</span>
-            <!-- /Date Published -->
             <!-- Volume -->
-            <span ng-show="result.volume">, volume {{ result.volume }}</span>
+            <span ng-show="result.volume">, vol. {{result.volume}}</span>
             <!-- /Volume -->
             <!-- Issue -->
-            <span ng-show="result.issue">, issue {{ result.issue }}</span>
+            <span ng-show="result.issue">, no. {{result.issue}}</span>
             <!-- /Issue -->
             <!-- Pages -->
-            <span ng-show="result.issue">, {{ result.pages }}</span>
+            <span ng-show="result.pages">, pp. {{result.pages}}</span>
             <!-- /Pages -->
-          </h5>
+            <!-- Date Published -->
+            <span ng-show="result.published">, {{result.published|date:'dd-MM-yyyy'}}</span>
+            <!-- /Date Published -->
+          </p>
+          <p class="text-muted" ng-if="result.type!='article'"
+            ng-bind-html="(result.summary | limitTo: 200)+(result.summary.length > 200 ? '...' : '')"></p>
           <!-- Result: Snippet -->
           <div ng-bind-html="result.snippet"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-1">
+          <button class="btn btn-primary navbar-left" ng-click="prevResultPage()" ng-show="page > 0">
+            <i class="fa fa-chevron-left"></i>
+          </button>
+        </div>
+        <div class="col-sm-10" style="text-align: center; font-weight: bold;" ng-show="0 < page <= maxPages">{{ page + 1 }} / {{ maxPages + 1 }}</div>
+        <div class="col-sm-1">
+          <button class="btn btn-primary navbar-right" ng-click="nextResultPage()" ng-show="page < maxPages">
+            <i class="fa fa-chevron-right"></i>
+          </button>
         </div>
       </div>
     </div>

@@ -9,25 +9,14 @@
       </h4>
     </div>
   </div>
-  <div ng-if="firm.subjecttype=='firm'">
-    <a ui-sref="firm.summary({firmId:firm.id})" class="thumbnail-image"> <img ng-if="firm.media"
-      ng-src="{{Uris.WS_MEDIA+firm.media+'?dimension=163x165'}}" alt="{{ firm.subjectlabel }}"> <img ng-if="!firm.media"
-      ng-src="images/icon.png" alt="{{ firm.subjectlabel }}">
+  <div ng-if="firm.subjecttype=='firm'||firm.objecttype=='firm'">
+    <a ui-sref="firm.summary({firmId:firm.firmId})" class="thumbnail-image"> <img ng-if="firm.media"
+      ng-src="{{Uris.WS_MEDIA+firm.media+'?dimension=163x165'}}" alt="{{ firm.firmlabel }}"> <img ng-if="!firm.media" ng-src="images/icon.png"
+      alt="{{ firm.firmlabel }}">
     </a>
     <div class="caption">
       <h4>
-        <a ui-sref="firm.summary({firmId: firm.subject})"> {{ firm.subjectlabel }} </a>
-      </h4>
-    </div>
-  </div>
-  <div ng-if="firm.objecttype=='firm'">
-    <a ui-sref="firm.summary({firmId: firm.object})" class="thumbnail-image"> <img ng-if="firm.media"
-      ng-src="{{Uris.WS_MEDIA+firm.media+'?dimension=163x165'}}" alt="{{ firm.objectlabel }}"> <img ng-if="!firm.media" ng-src="images/icon.png"
-      alt="{{ firm.objectlabel }}">
-    </a>
-    <div class="caption">
-      <h4>
-        <a ui-sref="firm.summary({firmId: firm.object})"> {{ firm.objectlabel }} </a>
+        <a ui-sref="firm.summary({firmId: firm.firmId})"> {{ firm.firmlabel }} </a>
       </h4>
     </div>
   </div>

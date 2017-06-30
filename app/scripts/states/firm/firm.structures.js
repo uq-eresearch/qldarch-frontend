@@ -26,7 +26,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
               structure.structureId = structure.object;
             }
             if (structure.structureId === s.id) {
-              if (angular.isDefined(structure.media)) {
+              if (angular.isDefined(s.media)) {
                 structure.media = s.media;
               }
               if (angular.isDefined(s.lat) && angular.isDefined(s.lng)) {

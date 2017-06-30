@@ -2,10 +2,15 @@
 
 angular.module('qldarchApp').controller('SearchCtrl', function($scope, $location, $http, Uris, WordService) {
 
+  $scope.page = 0;
+  var pagecount = 20;
+
   function activate() {
     $scope.query = $location.search().query;
-    var syntax = '* AND (type:person OR type:firm OR type:structure)';
-    $http.get(Uris.WS_ROOT + 'search?q=' + ($scope.query).replace(WordService.spclCharsLucene, '') + syntax + '&p=0&pc=20').then(function(response) {
+    var query = ($scope.query).replace(WordService.spclCharsLucene, '');
+    var syntax = '* AND category:archobj';
+    $http.get(Uris.WS_ROOT + 'search?q=' + query + syntax + '&p=' + $scope.page + '&pc=' + pagecount).then(function(response) {
+      $scope.maxPages = Math.round(response.data.hits / pagecount) - 1;
       var data = response.data.documents;
       /* globals $:false */
       $.each(data, function(i, item) {
@@ -30,4 +35,21 @@ angular.module('qldarchApp').controller('SearchCtrl', function($scope, $location
   }
 
   activate();
+
+  $scope.nextResultPage = function() {
+    $scope.page++;
+    activate();
+    jQuery('html, body').animate({
+      scrollTop : 0
+    }, 500);
+  };
+
+  $scope.prevResultPage = function() {
+    $scope.page--;
+    activate();
+    jQuery('html, body').animate({
+      scrollTop : 0
+    }, 500);
+  };
+
 });

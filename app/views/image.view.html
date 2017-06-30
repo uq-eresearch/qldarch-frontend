@@ -58,11 +58,11 @@
     <div class="row">
       <div class="col-sm-offset-1 col-md-5">
         <h5>Title of Detail</h5>
-        <p>{{ image.description || 'No detail.' }}</p>
+        <p>{{ image.description || 'No detail' }}</p>
         <h5>Rights</h5>
-        <p>{{ image.rights || 'No rights.' }}</p>
+        <p>{{ image.rights || 'No rights' }}</p>
         <h5>Identifier</h5>
-        <p>{{ image.identifier || 'No identifier.' }}</p>
+        <p>{{ image.identifier || 'No identifier' }}</p>
       </div>
       <div class="col-md-5">
         <h5>Created Date</h5>
@@ -75,7 +75,7 @@
           </a> <a ng-if="depicts.type === 'person'&&depicts.architect==false" ui-sref="other.summary({otherId: depicts.id})"> {{ depicts.label }} </a>
         </p>
         <h5>External Location</h5>
-        <p>{{ image.externallocation || 'No external location.' }}</p>
+        <p>{{ image.externallocation || 'No external location' }}</p>
       </div>
     </div>
   </div>

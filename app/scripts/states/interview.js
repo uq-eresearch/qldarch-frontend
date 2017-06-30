@@ -21,7 +21,6 @@ angular.module('qldarchApp').config(function($stateProvider) {
               }
             }
           }
-          console.log(isArchitect);
           if (isArchitect) {
             $state.go('architect.interview', {
               architectId : intervieweeId,
