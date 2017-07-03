@@ -121,6 +121,7 @@ angular.module('qldarchApp').run(function($rootScope, $route, $location, ngProgr
       // special case
       $rootScope.globalSearch.query = $item.query;
       $model = $item.query;
+      $location.search({});
       $location.path('/search');
       $location.search('query', $item.query);
     } else {
