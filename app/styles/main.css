@@ -6579,12 +6579,28 @@ form .select2-container-active.ng-invalid.ng-dirty .select2-choice {
   font-size: 24px;
   color: white;
 }
+.square.square-person {
+  background-color: #0FACA1;
+  color: white;
+}
+.square.square-firm {
+  background-color: #26D813;
+  color: white;
+}
+.square.square-structure {
+  background-color: #2153B7;
+  color: white;
+}
 .square.square-article {
   background-color: #DA3F68;
   color: white;
 }
 .square.square-interview {
   background-color: #33B3AB;
+  color: white;
+}
+.square.square-other {
+  background-color: #ccc;
   color: white;
 }
 .square.square-map {
