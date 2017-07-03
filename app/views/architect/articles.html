@@ -39,7 +39,7 @@
         </h4>
         <h5 class="text-muted">
           <!-- Authors -->
-          <span ng-show="article.authors">{{article.authors}}</span>
+          <span ng-if="article.authors">{{article.authors}}</span><span ng-if="!article.authors">Unknown</span>
           <!-- /Authors -->
           <!-- Periodical Title -->
           <span ng-show="article.periodical">, {{article.periodical}}</span>

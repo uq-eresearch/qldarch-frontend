@@ -101,7 +101,7 @@ angular.module('qldarchApp').run(function($rootScope, $route, $location, ngProgr
       });
 
       var search = {
-        name : ' <i class="fa fa-search"></i> Search for \'' + val + '\'',
+        name : 'Search for \'' + val + '\'',
         type : 'search',
         query : val
       };
