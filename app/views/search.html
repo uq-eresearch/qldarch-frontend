@@ -45,7 +45,8 @@
               ng-if="result.type=='structure'" ui-sref="structure.summary({ structureId: result.id })" style="color: #333"> {{ result.label }} </a> <a
               ng-if="result.type=='article'" ui-sref="article({ articleId: result.id })" style="color: #333"> {{ result.label }} </a> <a
               ng-if="result.type=='interview'" ng-href="#/interview/{{result.id}}" style="color: #333"> {{ result.label }} </a> <small
-              class="text-muted" style="text-transform: capitalize;"> {{ result.type }} </small>
+              ng-if="!result.architect" class="text-muted" style="text-transform: capitalize;"> {{ result.type }} </small> <small
+              ng-if="result.architect" class="text-muted"> Architect </small>
           </h4>
           <!-- /Title -->
           <p class="text-muted">
