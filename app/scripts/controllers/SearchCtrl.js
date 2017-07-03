@@ -74,20 +74,22 @@ angular.module('qldarchApp').controller('SearchCtrl',
 
       activate();
 
-      $scope.nextResultPage = function() {
-        $scope.page++;
-        activate();
+      function scrollToTop() {
         jQuery('html, body').animate({
           scrollTop : 0
         }, 500);
+      }
+
+      $scope.nextResultPage = function() {
+        $scope.page++;
+        activate();
+        scrollToTop();
       };
 
       $scope.prevResultPage = function() {
         $scope.page--;
         activate();
-        jQuery('html, body').animate({
-          scrollTop : 0
-        }, 500);
+        scrollToTop();
       };
 
     });
