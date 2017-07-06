@@ -57,7 +57,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
         var r = window.confirm('Delete firm ' + firm.label + '?');
         if (r === true) {
           ArchObj.delete(firm.id).then(function() {
-            $state.go('firm.australian');
+            $state.go('firms.australian');
           });
         }
       };
