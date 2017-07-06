@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('qldarchApp').controller('StructureCtrl', function($scope, structure, designers, ArchObj, $filter, BuildingTypologies, $state) {
+angular.module('qldarchApp').controller('StructureCtrl', function($scope, structure, designers, ArchObj, $filter, buildingTypologies, $state) {
   $scope.structure = structure;
   $scope.designers = designers;
 
@@ -10,11 +10,11 @@ angular.module('qldarchApp').controller('StructureCtrl', function($scope, struct
   if (angular.isDefined(structure.typologies)) {
     $scope.structure.$typologies = [];
     angular.forEach(structure.typologies, function(typo) {
-      for ( var typology in BuildingTypologies) {
-        if (typo === BuildingTypologies[typology]) {
+      for ( var typology in buildingTypologies) {
+        if (typo === buildingTypologies[typology]) {
           $scope.structure.$typologies.push({
             id : typology,
-            text : BuildingTypologies[typology]
+            text : buildingTypologies[typology]
           });
         }
       }
@@ -29,10 +29,10 @@ angular.module('qldarchApp').controller('StructureCtrl', function($scope, struct
       var data = {
         results : []
       };
-      for ( var typology in BuildingTypologies) {
+      for ( var typology in buildingTypologies) {
         data.results.push({
           id : typology,
-          text : BuildingTypologies[typology]
+          text : buildingTypologies[typology]
         });
       }
       options.callback(data);

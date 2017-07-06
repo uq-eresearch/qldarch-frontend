@@ -1,15 +1,16 @@
 'use strict';
 
-angular.module('qldarchApp').service('BuildingTypologies', function BuildingTypologies() {
+angular.module('qldarchApp').service('BuildingTypologies', function BuildingTypologies($http, Uris) {
   return {
-    '0' : 'Commercial buildings',
-    '1' : 'Dwellings',
-    '2' : 'Educational facilities',
-    '3' : 'Government buildings',
-    '4' : 'Health care facilities',
-    '5' : 'Industrial buildings',
-    '6' : 'Recreation and sports facilities',
-    '7' : 'Religious buildings',
-    '8' : 'Transport infrastructure'
+    load : function() {
+      return $http({
+        method : 'GET',
+        url : Uris.WS_ROOT + 'buildingtypologies',
+        cache : true
+      }).then(function(result) {
+        console.log('load building typologies');
+        return result.data;
+      });
+    }
   };
 });

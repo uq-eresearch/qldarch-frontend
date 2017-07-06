@@ -28,7 +28,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
         });
         designers.architects = _.uniqBy(person, 'subjectlabel');
         var firm = $filter('filter')(structure.relationships, function(relationship) {
-          if (relationship.subjecttype === 'firm') {            
+          if (relationship.subjecttype === 'firm') {
             return ArchObj.load(relationship.subject).then(function(data) {
               if (angular.isUndefined(relationship.media)) {
                 relationship.media = $filter('filter')(data.media, function(med) {
@@ -44,6 +44,11 @@ angular.module('qldarchApp').config(function($stateProvider) {
         });
         designers.firms = _.uniqBy(firm, 'subjectlabel');
         return designers;
+      } ],
+      buildingTypologies : [ 'BuildingTypologies', function(BuildingTypologies) {
+        return BuildingTypologies.load().then(function(response) {
+          return response;
+        });
       } ]
     },
     controller : 'StructureCtrl'
