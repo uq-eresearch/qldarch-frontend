@@ -15,7 +15,7 @@
     </div>
     <div ng-show="$state.includes('ugc.map.edit.list')" class="panel panel-default">
       <div class="panel-heading">
-        <a href="" ui-sref="ugc.map.edit" class="pull-right"> <i class="fa fa-times"></i>
+        <a ui-sref="ugc.map.edit" class="pull-right"> <i class="fa fa-times"></i>
         </a> Edit Locations
       </div>
       <div class="panel-body">
@@ -62,7 +62,7 @@
             <div ng-show="isShowingFilters" style="margin-top: 16px;">
               <ul class="list-group">
                 <li class="list-group-item" ng-show="(map.$import.locations | filter:importFilter).length !== map.$import.locations.length"><strong>Showing
-                    {{ (map.$import.locations | filter:importFilter).length }} of {{ map.$import.locations.length }} locations</strong> <a href=""
+                    {{ (map.$import.locations | filter:importFilter).length }} of {{ map.$import.locations.length }} locations</strong> <a
                   ng-click="clearImportFilters()">Clear Filters</a></li>
                 <li class="list-group-item">
                   <div class="row">
@@ -138,7 +138,7 @@
                 <i class="fa fa-check"></i> All added
               </button>
               <button class="btn btn-default" ng-click="cancel()" ng-show="map.locations.length">Cancel</button>
-              <a href="" ng-click="isShowingFilters = !isShowingFilters" class="pull-right" ng-show="map.$import.prospectiveLocations.length"> <i
+              <a ng-click="isShowingFilters = !isShowingFilters" class="pull-right" ng-show="map.$import.prospectiveLocations.length"> <i
                 class="fa" ng-class="{'fa-chevron-right': !isShowingFilters, 'fa-chevron-up': isShowingFilters}"></i> Filters
               </a>
             </div>
@@ -148,7 +148,7 @@
                 <li class="list-group-item list-group-item-warning"></li>
                 <li class="list-group-item list-group-item-warning"
                   ng-show="(map.$import.locations | filter:importFilter).length !== map.$import.locations.length">Filtered: Showing {{
-                  (map.$import.locations | filter:importFilter).length }} of {{ map.$import.locations.length }} locations <a href=""
+                  (map.$import.locations | filter:importFilter).length }} of {{ map.$import.locations.length }} locations <a
                   ng-click="clearImportFilters()">Clear Filters</a>
                 </li>
                 <li class="list-group-item"></li>

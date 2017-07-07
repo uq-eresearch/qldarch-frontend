@@ -1,7 +1,7 @@
 <div class="content">
   <div class="page-header has-subnav">
     <div class="container">
-      <small ng-show="firm.id"><a href ui-sref="firms.australian">Firms »</a></small>
+      <small ng-show="firm.id"><a ui-sref="firms.australian">Firms »</a></small>
       <h1>
         <img ng-if="firm.media.length>1" ng-src="{{Uris.WS_MEDIA+((firm.media|filter:{preferred:'!!'})[0].id||firm.media[0].id)+'?dimension=40x40'}}"
           alt="" style="height: 40px; width: 40px; position: relative; top: -4px; margin-right: 1px; border: 3px solid white;" class="" /> <img
@@ -16,14 +16,14 @@
       <div class="row">
         <div class="col-md-12">
           <ul class="nav nav-pills">
-            <li ng-class="{'active': $state.includes('firm.summary')}"><a href ui-sref="firm.summary({ firmId: firm.id })">Summary</a></li>
-            <li ng-class="{active: $state.includes('firm.photograph') || $state.includes('firm.photographs')}" ng-show="firm.id"><a href
+            <li ng-class="{'active': $state.includes('firm.summary')}"><a ui-sref="firm.summary({ firmId: firm.id })">Summary</a></li>
+            <li ng-class="{active: $state.includes('firm.photograph') || $state.includes('firm.photographs')}" ng-show="firm.id"><a
               ui-sref="firm.photographs({ firmId: firm.id })">Photographs</a></li>
-            <li ui-sref-active="active" ng-show="firm.id"><a href ui-sref="firm.employees({ firmId: firm.id })">Employees</a></li>
-            <li ui-sref-active="active" ng-show="firm.id"><a href ui-sref="firm.structures({ firmId: firm.id })">Projects</a></li>
-            <li ui-sref-active="active" ng-show="firm.id"><a href ui-sref="firm.articles({ firmId: firm.id })">Articles</a></li>
-            <li ui-sref-active="active" ng-show="firm.id"><a href ui-sref="firm.relationships({ firmId: firm.id })">Relationships</a></li>
-            <li ui-sref-active="active" ng-show="firm.id"><a href ui-sref="firm.timeline({ firmId: firm.id })">Timeline</a></li>
+            <li ui-sref-active="active" ng-show="firm.id"><a ui-sref="firm.employees({ firmId: firm.id })">Employees</a></li>
+            <li ui-sref-active="active" ng-show="firm.id"><a ui-sref="firm.structures({ firmId: firm.id })">Projects</a></li>
+            <li ui-sref-active="active" ng-show="firm.id"><a ui-sref="firm.articles({ firmId: firm.id })">Articles</a></li>
+            <li ui-sref-active="active" ng-show="firm.id"><a ui-sref="firm.relationships({ firmId: firm.id })">Relationships</a></li>
+            <li ui-sref-active="active" ng-show="firm.id"><a ui-sref="firm.timeline({ firmId: firm.id })">Timeline</a></li>
           </ul>
         </div>
       </div>

@@ -17,22 +17,22 @@
       <div class="row">
         <div class="col-md-12">
           <ul class="nav nav-pills">
-            <li ng-class="{'active': $state.includes('architect.summary')}"><a href ui-sref="architect.summary({ architectId: architect.id })">Biography</a></li>
-            <li ui-sref-active="active" ng-show="architect.media"><a href ui-sref="architect.photographs({ architectId: architect.id })">
+            <li ng-class="{'active': $state.includes('architect.summary')}"><a ui-sref="architect.summary({ architectId: architect.id })">Biography</a></li>
+            <li ui-sref-active="active" ng-show="architect.media"><a ui-sref="architect.photographs({ architectId: architect.id })">
                 Photographs </a></li>
-            <li ui-sref-active="active" ng-if="interviews.length == 1" ng-show="architect.interviews"><a href href
+            <li ui-sref-active="active" ng-if="interviews.length == 1" ng-show="architect.interviews"><a
               ui-sref="architect.interview({ interviewId: interviews[0].id })">Interview</a></li>
             <li class="dropdown" ng-show="interviews.length > 1" ng-class="{'active': $state.includes('architect.interview')}"><a
               class="dropdown-toggle" data-toggle="dropdown" href="#"> Interviews <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li role="presentation" ng-repeat="interview in interviews"><a role="menuitem" tabindex="-1" href
+                <li role="presentation" ng-repeat="interview in interviews"><a role="menuitem" tabindex="-1"
                   ui-sref="architect.interview({ interviewId: interview.id })">Interview #{{ $index + 1 }}</a></li>
               </ul></li>
-            <li ui-sref-active="active" ng-show="architect.id"><a href ui-sref="architect.employers({ architectId: architect.id })">Employers</a></li>
-            <li ui-sref-active="active" ng-show="architect.id"><a href ui-sref="architect.structures({ architectId: architect.id })">Projects</a></li>
-            <li ui-sref-active="active" ng-show="architect.id"><a href ui-sref="architect.articles({ architectId: architect.id })">Articles</a></li>
-            <li ui-sref-active="active" ng-show="architect.id"><a href ui-sref="architect.relationships({ architectId: architect.id })">Relationships</a></li>
-            <li ui-sref-active="active" ng-show="architect.id"><a href ui-sref="architect.timeline({ architectId: architect.id })">Timeline</a></li>
+            <li ui-sref-active="active" ng-show="architect.id"><a ui-sref="architect.employers({ architectId: architect.id })">Employers</a></li>
+            <li ui-sref-active="active" ng-show="architect.id"><a ui-sref="architect.structures({ architectId: architect.id })">Projects</a></li>
+            <li ui-sref-active="active" ng-show="architect.id"><a ui-sref="architect.articles({ architectId: architect.id })">Articles</a></li>
+            <li ui-sref-active="active" ng-show="architect.id"><a ui-sref="architect.relationships({ architectId: architect.id })">Relationships</a></li>
+            <li ui-sref-active="active" ng-show="architect.id"><a ui-sref="architect.timeline({ architectId: architect.id })">Timeline</a></li>
           </ul>
         </div>
       </div>

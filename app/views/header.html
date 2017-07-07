@@ -19,7 +19,7 @@
             <ul class="nav navbar-nav">
               <li class="dropdown"
                 ng-class="{'active': $state.includes('firm') || $state.includes('structure') || $state.includes('architect') || $state.includes('firms') || $state.includes('structures') || $state.includes('architects') || $state.includes('other')}">
-                <a href class="dropdown-toggle" data-toggle="dropdown">Browse <b class="caret"></b></a>
+                <a class="dropdown-toggle" data-toggle="dropdown">Browse <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li><a ui-sref="architects.queensland">Architects</a></li>
                   <li><a ui-sref="firms.australian">Firms</a></li>
@@ -29,8 +29,8 @@
                   <li ng-show="Auth.isEditor()"><a ui-sref="others">Others</a></li>
                 </ul>
               </li>
-              <li class="dropdown" ng-class="{'active': $state.includes('ugc') }"><a href class="dropdown-toggle" data-toggle="dropdown">Build
-                  <b class="caret"></b>
+              <li class="dropdown" ng-class="{'active': $state.includes('ugc') }"><a class="dropdown-toggle" data-toggle="dropdown">Build <b
+                  class="caret"></b>
               </a>
                 <ul class="dropdown-menu">
                   <li><a ui-sref="ugc.timeline.edit.add.import" ui-sref-opts="{inherit: false}">Timeline</a></li>
@@ -42,11 +42,11 @@
               <li class="" ng-hide="Auth.success" uib-tooltip="Create an account" tooltip-placement="bottom"
                 ng-class="{'active': $state.includes('register') }"><a ui-sref="register">Sign Up</a></li>
               <li class="" ng-hide="Auth.success" uib-tooltip="Log in with an existing account" tooltip-placement="bottom"
-                ng-class="{'active': $state.includes('login') }"><a href ui-sref="login">Log in</a></li>
+                ng-class="{'active': $state.includes('login') }"><a ui-sref="login">Log in</a></li>
             </ul>
             <!-- Logged in user -->
             <ul class="nav navbar-nav">
-              <li class="dropdown" ng-show="Auth.success" ng-class="{'active': $state.includes('user') }" style="margin-right: 8px;"><a href
+              <li class="dropdown" ng-show="Auth.success" ng-class="{'active': $state.includes('user') }" style="margin-right: 8px;"><a
                 class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li><a>{{ Auth.user.displayName || Auth.user.username }}</a></li>
