@@ -1,7 +1,7 @@
 <div class="content">
   <div class="page-header has-subnav">
     <div class="container">
-      <small ng-show="other.id"><a ng-href="#/others">Others »</a></small>
+      <small ng-show="other.id"><a ui-sref="others">Others »</a></small>
       <h1>
         <img ng-if="other.media.length>1"
           ng-src="{{Uris.WS_MEDIA+((other.media|filter:{preferred:'!!'})[0].id||other.media[0].id)+'?dimension=40x40'}}" alt=""
@@ -23,7 +23,7 @@
             <li ui-sref-active="active" ng-if="interviews.length == 1" ng-show="other.interviews"><a
               ui-sref="other.interview({ interviewId: interviews[0].id })">Interview</a></li>
             <li class="dropdown" ng-show="interviews.length > 1" ng-class="{'active': $state.includes('other.interview')}"><a
-              class="dropdown-toggle" data-toggle="dropdown" href="#"> Interviews <span class="caret"></span></a>
+              class="dropdown-toggle" data-toggle="dropdown"> Interviews <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li role="presentation" ng-repeat="interview in interviews"><a role="menuitem" tabindex="-1"
                   ui-sref="other.interview({ interviewId: interview.id })">Interview #{{ $index + 1 }}</a></li>

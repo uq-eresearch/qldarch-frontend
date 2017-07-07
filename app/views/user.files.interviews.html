@@ -9,8 +9,8 @@
   <div class="l-frame">
     <div class="container">
       <ul>
-        <li ng-repeat="mediainterview in mediainterviews"><a href="#/interview/{{ mediainterview.depicts.id }}">{{ mediainterview.label }}
-            ({{ mediainterview.type }})</a></li>
+        <li ng-repeat="mediainterview in mediainterviews"><a ui-sref="interview({ interviewId: mediainterview.depicts.id })">{{
+            mediainterview.label }} ({{ mediainterview.type }})</a></li>
       </ul>
     </div>
   </div>

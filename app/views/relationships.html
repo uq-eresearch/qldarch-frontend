@@ -69,7 +69,7 @@ text {
 <div>
   <div class="alert alert-warning" ng-show="Auth.user.role === 'editor' || Auth.user.role === 'admin'" style="margin: 0;">
     <div class="container">
-      <a type="button" class="btn btn-default btn-xs" href="#/relationships/create?archobjId={{archobjId}}&archobjType={{archobjType}}"> <i
+      <a type="button" class="btn btn-default btn-xs" ui-sref="relationships.create({ archobjId: archobjId, archobjType: archobjType })"> <i
         class="fa fa-plus"></i> New Relationship
       </a>
     </div>
@@ -99,7 +99,7 @@ text {
                 ui-sref="firm.summary({ firmId: selected.id })"> {{ selected.label }} </a> <a ng-if="selected.type=='structure'"
                 ui-sref="structure.summary({ structureId: selected.id })"> {{ selected.label }} </a> <a ng-if="selected.type=='article'"
                 ui-sref="article({ articleId: selected.id })"> {{ selected.label }} </a> <a ng-if="selected.type=='interview'"
-                ng-href="#/interview/{{selected.id}}"> {{ selected.label }} </a>
+                ui-sref="interview({ interviewId: selected.id })"> {{ selected.label }} </a>
             </h4>
             <div ng-if="selected.type=='person'&&selected.architect==true" style="text-transform: capitalize; color: black;">Architect</div>
             <div ng-if="selected.type!='person'||selected.architect==false" style="text-transform: capitalize; color: black;">{{ selected.type
@@ -141,31 +141,31 @@ text {
               <h5 style="line-height: 24px; font-weight: normal; margin-bottom: 0;">
                 <!-- subject -->
                 <a ng-if="relationship.subjectarchitect==true&&relationship.subjecttype=='person'"
-                  ui-sref="architect.summary({ architectId: (relationship.subject) })"> {{ relationship.subjectlabel }} </a> <a
+                  ui-sref="architect.summary({ architectId: relationship.subject })"> {{ relationship.subjectlabel }} </a> <a
                   ng-if="relationship.subjecttype=='firm'" ui-sref="firm.summary({ firmId: relationship.subject })"> {{ relationship.subjectlabel
                   }} </a> <a ng-if="relationship.subjecttype=='structure'" ui-sref="structure.summary({ structureId: relationship.subject })"> {{
                   relationship.subjectlabel }} </a> <a ng-if="relationship.subjecttype=='article'" ui-sref="article({ articleId: relationship.subject })">
-                  {{ relationship.subjectlabel }} </a> <a ng-if="relationship.subjecttype=='interview'" ng-href="#/interview/{{relationship.subject}}">
-                  {{ relationship.subjectlabel }} </a> <a
+                  {{ relationship.subjectlabel }} </a> <a ng-if="relationship.subjecttype=='interview'"
+                  ui-sref="interview({ interviewId: relationship.subject })"> {{ relationship.subjectlabel }} </a> <a
                   ng-if="(relationship.subjectarchitect==false&&relationship.subjecttype=='person')||(relationship.subjecttype!='person'&&relationship.subjecttype!='firm'&&relationship.subjecttype!='structure'&&relationship.subjecttype!='article'&&relationship.subjecttype!='interview')"
-                  ui-sref="other.summary({ otherId: (relationship.subject) })"> {{ relationship.subjectlabel }} </a>
+                  ui-sref="other.summary({ otherId: relationship.subject })"> {{ relationship.subjectlabel }} </a>
                 <!-- end:subject -->
                 <!-- predicate -->
                 <a ng-if="relationship.source=='interview'&&!(Auth.user.role=='editor'||Auth.user.role=='admin')"
-                  ng-href="#/interview/{{relationship.interview}}?time={{relationship.utterance}}" style="font-weight: bold;"> {{
+                  ui-sref="interview({ interviewId: relationship.interview, time: relationship.utterance })" style="font-weight: bold;"> {{
                   relationship.relationship }}</a> <span ng-if="relationship.source!='interview'||Auth.user.role=='editor'||Auth.user.role=='admin'">
                   {{ relationship.relationship }} </span>
                 <!-- end:predicate -->
                 <!-- object -->
                 <a ng-if="relationship.objectarchitect==true&&relationship.objecttype=='person'"
-                  ui-sref="architect.summary({ architectId: (relationship.object) })"> {{ relationship.objectlabel }} </a> <a
+                  ui-sref="architect.summary({ architectId: relationship.object })"> {{ relationship.objectlabel }} </a> <a
                   ng-if="relationship.objecttype=='firm'" ui-sref="firm.summary({ firmId: relationship.object })"> {{ relationship.objectlabel }}
                 </a> <a ng-if="relationship.objecttype=='structure'" ui-sref="structure.summary({ structureId: relationship.object })"> {{
                   relationship.objectlabel }} </a> <a ng-if="relationship.objecttype=='article'" ui-sref="article({ articleId: relationship.object })">
-                  {{ relationship.objectlabel }} </a> <a ng-if="relationship.objecttype=='interview'" ng-href="#/interview/{{relationship.object}}">
-                  {{ relationship.objectlabel }} </a> <a
+                  {{ relationship.objectlabel }} </a> <a ng-if="relationship.objecttype=='interview'"
+                  ui-sref="interview({ interviewId: relationship.object })"> {{ relationship.objectlabel }} </a> <a
                   ng-if="(relationship.objectarchitect==false&&relationship.objecttype=='person')||(relationship.objecttype!='person'&&relationship.objecttype!='firm'&&relationship.objecttype!='structure'&&relationship.objecttype!='article'&&relationship.objecttype!='interview')"
-                  ui-sref="other.summary({ otherId: (relationship.object) })"> {{ relationship.objectlabel }} </a>
+                  ui-sref="other.summary({ otherId: relationship.object })"> {{ relationship.objectlabel }} </a>
                 <!-- end:object -->
               </h5>
               <!-- Date -->

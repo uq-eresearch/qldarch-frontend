@@ -53,8 +53,8 @@
         </h5>
         <div class="text-center">
           <span ng-repeat="interviewee in interview.interviewee" style="font-weight: bold;"> <a ng-if="interviewee.architect"
-            ng-href="#/architect/summary?architectId={{ interviewee.id }}"> {{ interviewee.label }} </a> <a ng-if="!interviewee.architect"
-            ng-href="#/other/summary?otherId={{ interviewee.id }}"> {{ interviewee.label }} </a>
+            ui-sref="architect.summary({ architectId: interviewee.id })"> {{ interviewee.label }} </a> <a ng-if="!interviewee.architect"
+            ui-sref="other.summary({ otherId: interviewee.id })"> {{ interviewee.label }} </a>
           </span>
         </div>
       </div>
