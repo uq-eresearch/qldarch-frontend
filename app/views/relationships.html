@@ -30,7 +30,7 @@ text {
 
 .node.selected circle {
 	stroke: yellow;
-	stroke-width: 2.5px;
+	stroke-width: 3px;
 }
 
 .node.node-person circle {
@@ -180,22 +180,39 @@ text {
       <!-- /Selected relationships -->
     </div>
     <div class="container" style="position: relative;">
-      <div></div>
-      <div style="text-align: center; margin-bottom: 16px;" ng-show="selected && selected.id !== subject.id" class="text-muted">Double click
-        circle to center.</div>
+      <div style="text-align: center; margin-bottom: 10px;" ng-show="selected && selected.id !== subject.id" class="text-muted">Double click (a
+        circle) to explore further</div>
     </div>
   </div>
   <div class="l-frame l-frame-tight l-frame-divided" ng-show="data.nodes.length">
     <div class="container">
-      <h3>Legend</h3>
-      <ul class="list-unstyled">
-        <li><div style="display: inline-block; height: 20px; width: 20px; background-color: #0FACA1; margin-right: 8px;"></div> Architect
-          (Practiced in Queensland)</li>
-        <li><div style="display: inline-block; height: 20px; width: 20px; background-color: #E42962; margin-right: 8px;"></div> Architect (Other)</li>
-        <li><div style="display: inline-block; height: 20px; width: 20px; background-color: #2153B7; margin-right: 8px;"></div> Project</li>
-        <li><div style="display: inline-block; height: 20px; width: 20px; background-color: #26D813; margin-right: 8px;"></div> Firm</li>
-        <li><div style="display: inline-block; height: 20px; width: 20px; background-color: #ccc; margin-right: 8px;"></div> Other</li>
-      </ul>
+      <h4>Legend</h4>
+      <div>
+        <div class="row">
+          <div class="col-sm-1" style="display: inline-block; height: 20px; width: 20px; background-color: yellow; vertical-align: middle;"></div>
+          <div class="col-sm-10" style="vertical-align: middle;">Highlighted (by Selecting a) Circle</div>
+        </div>
+        <div class="row">
+          <div class="col-sm-1" style="display: inline-block; height: 20px; width: 20px; background-color: #0FACA1;"></div>
+          <div class="col-sm-10">Architect (Practiced in Queensland)</div>
+        </div>
+        <div class="row">
+          <div class="col-sm-1" style="display: inline-block; height: 20px; width: 20px; background-color: #E42962; vertical-align: middle;"></div>
+          <div class="col-sm-10" style="vertical-align: middle;">Architect (Other)</div>
+        </div>
+        <div class="row">
+          <div class="col-sm-1" style="display: inline-block; height: 20px; width: 20px; background-color: #2153B7; vertical-align: middle;"></div>
+          <div class="col-sm-10" style="vertical-align: middle;">Project</div>
+        </div>
+        <div class="row">
+          <div class="col-sm-1" style="display: inline-block; height: 20px; width: 20px; background-color: #26D813; vertical-align: middle;"></div>
+          <div class="col-sm-10" style="vertical-align: middle;">Firm</div>
+        </div>
+        <div class="row">
+          <div class="col-sm-1" style="display: inline-block; height: 20px; width: 20px; background-color: #ccc; vertical-align: middle;"></div>
+          <div class="col-sm-10" style="vertical-align: middle;">Other</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
