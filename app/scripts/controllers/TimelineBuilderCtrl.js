@@ -85,6 +85,12 @@ angular.module('qldarchApp').controller('TimelineBuilderCtrl',
         $scope.timeline.dates = dates.concat($scope.timeline.dates);
         $scope.timeline.$import = {};
         $state.go('ugc.timeline.edit');
+        setTimeout(function() {
+          var n = jQuery(document).height();
+          jQuery('html, body').animate({
+            scrollTop : n
+          }, 1000);
+        }, 0);
       };
 
       // Delete date
