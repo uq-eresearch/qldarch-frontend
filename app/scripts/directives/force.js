@@ -2,7 +2,7 @@
 
 angular.module('qldarchApp').directive(
     'force',
-    function($state) {
+    function($state, Uris) {
       var LINK_DISTANCE = 100;
       var CHARGE = -1500;
       var HEIGHT = 750;
@@ -99,8 +99,31 @@ angular.module('qldarchApp').directive(
             }).call(force.drag);
 
             newNodesElements.append('circle').attr('r', function(d) {
-              // console.log('count', d.count);
-              return 10 * d.count.clamp(1, 5);
+              if (angular.isDefined(d.media)) {
+                return 10 * d.count.clamp(1.5, 5);
+              } else {
+                return 10 * d.count.clamp(1, 5);
+              }
+            });
+
+            newNodesElements.append('defs').append('pattern').attr('id', function(d) {
+              return (d.id + '-icon');
+            }).attr('width', 1).attr('height', 1).attr('patternContentUnits', 'objectBoundingBox').append('svg:image').attr('xlink:xlink:href',
+                function(d) {
+                  if (angular.isDefined(d.media)) {
+                    var dimension = ((10 * d.count.clamp(1.5, 5)) - 5) * 2;
+                    return (Uris.WS_MEDIA + d.media + '?dimension=' + dimension + 'x' + dimension);
+                  }
+                }).attr('x', 0).attr('y', 0).attr('height', 1).attr('width', 1).attr('preserveAspectRatio', 'xMinYMin slice');
+
+            newNodesElements.append('circle').attr('r', function(d) {
+              if (angular.isDefined(d.media)) {
+                return (10 * d.count.clamp(1.5, 5)) - 5;
+              }
+            }).style('stroke', 'none').style('fill', function(d) {
+              if (angular.isDefined(d.media)) {
+                return ('url(#' + d.id + '-icon)');
+              }
             });
 
             newNodesElements.append('text').attr('x', function(d) {
