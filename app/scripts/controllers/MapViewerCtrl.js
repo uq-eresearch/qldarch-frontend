@@ -32,8 +32,10 @@ angular.module('qldarchApp').controller(
       $scope.$watch('myMap', function(myMap) {
         if (myMap) {
           var bounds = new google.maps.LatLngBounds();
-          var latlng = new google.maps.LatLng(18.547324589827422, -72.388916015625);
+          var latlng = new google.maps.LatLng(-27.4698, 153.0251);// Brisbane
           bounds.extend(latlng);
+          var latlng2 = new google.maps.LatLng(-16.9186, 145.7781);// Cairns
+          bounds.extend(latlng2);
           myMap.fitBounds(bounds);
         }
       });
@@ -107,19 +109,35 @@ angular.module('qldarchApp').controller(
             $scope.map.$markers = [];
 
             // Add in new markers
-            angular.forEach(prospectiveLocations, function(prospectiveLocation) {
-              addMarkerToMapFromLocationWithType(prospectiveLocation, 'prospective');
-            });
-            angular.forEach(addedLocations, function(addedLocation) {
-              addMarkerToMapFromLocationWithType(addedLocation, 'added');
-            });
-
-            // Expand the map to fit the marker
-            var bounds = new google.maps.LatLngBounds();
-            angular.forEach($scope.map.$markers, function(marker) {
-              bounds.extend(marker.position);
-            });
-            $scope.myMap.fitBounds(bounds);
+            var hasLatLon = false;
+            if (angular.isDefined(prospectiveLocations)) {
+              angular.forEach(prospectiveLocations, function(p) {
+                if (angular.isDefined(p.latitude) && angular.isDefined(p.longitude)) {
+                  hasLatLon = true;
+                }
+              });
+            }
+            if (angular.isDefined(addedLocations)) {
+              angular.forEach(addedLocations, function(a) {
+                if (angular.isDefined(a.latitude) && angular.isDefined(a.longitude)) {
+                  hasLatLon = true;
+                }
+              });
+            }
+            if (hasLatLon) {
+              angular.forEach(prospectiveLocations, function(prospectiveLocation) {
+                addMarkerToMapFromLocationWithType(prospectiveLocation, 'prospective');
+              });
+              angular.forEach(addedLocations, function(addedLocation) {
+                addMarkerToMapFromLocationWithType(addedLocation, 'added');
+              });
+              // Expand the map to fit the marker
+              var bounds = new google.maps.LatLngBounds();
+              angular.forEach($scope.map.$markers, function(marker) {
+                bounds.extend(marker.position);
+              });
+              $scope.myMap.fitBounds(bounds);
+            }
           }, 0);
         }, 0);
       }
