@@ -25,6 +25,7 @@
             <li ng-class="{active: $state.includes('structure.map'), disabled: !structure.lat}" ng-show="structure.id"><a
               ui-sref="structure.map({ structureId: structure.id })" ng-show="structure.lat">Map</a> <a ng-show="!structure.lat"
               uib-tooltip="No location stored">Map</a></li>
+            <li ui-sref-active="active" ng-show="structure.id"><a ui-sref="structure.interviews({ structureId: structure.id })">Interviews</a></li>
             <li ui-sref-active="active" ng-show="structure.id"><a ui-sref="structure.articles({ structureId: structure.id })">Articles</a></li>
             <li ui-sref-active="active" ng-show="structure.id"><a ui-sref="structure.relationships({ structureId: structure.id })">Relationships</a></li>
             <li ui-sref-active="active" ng-show="structure.id"><a ui-sref="structure.timeline({ structureId: structure.id })">Timeline</a></li>

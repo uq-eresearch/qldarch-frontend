@@ -1,12 +1,28 @@
 <div class="thumbnail">
-  <!-- image -->
-  <a ui-sref="interview({interviewId: interview.interviews[0]})" class="thumbnail-image"> <img ng-if="interview.media"
-    ng-src="{{Uris.WS_MEDIA+interview.media+'?dimension=163x165'}}" class="img-responsive"> <img ng-if="!interview.media" src="images/icon.png">
-  </a>
-  <!-- caption -->
-  <div class="caption">
-    <h4>
-      <a ui-sref="interview({interviewId: interview.interviews[0]})"> {{interview.label||interview.preflabel}} </a>
-    </h4>
+  <div ng-if="!(interview.source=='interview')">
+    <!-- image -->
+    <a ui-sref="interview({interviewId: interview.interviews[0]})" class="thumbnail-image"> <img ng-if="interview.media"
+      ng-src="{{Uris.WS_MEDIA+interview.media+'?dimension=163x165'}}" class="img-responsive"> <img ng-if="!interview.media"
+      src="images/icon.png">
+    </a>
+    <!-- caption -->
+    <div class="caption">
+      <h4>
+        <a ui-sref="interview({interviewId: interview.interviews[0]})"> {{interview.label||interview.preflabel}} </a>
+      </h4>
+    </div>
+  </div>
+  <div ng-if="interview.source=='interview'">
+    <!-- image -->
+    <a ui-sref="interview({interviewId: interview.interview})" class="thumbnail-image"> <img ng-if="interview.media"
+      ng-src="{{Uris.WS_MEDIA+interview.media+'?dimension=163x165'}}" class="img-responsive"> <img ng-if="!interview.media"
+      src="images/icon.png">
+    </a>
+    <!-- caption -->
+    <div class="caption">
+      <h4>
+        <a ui-sref="interview({interviewId: interview.interview})"> {{interview.interviewlabel}} </a>
+      </h4>
+    </div>
   </div>
 </div>
