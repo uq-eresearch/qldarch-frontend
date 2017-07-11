@@ -1,0 +1,23 @@
+<div class="content">
+  <div class="page-header has-subnav">
+    <div class="container">
+      <h1>Settings</h1>
+    </div>
+  </div>
+  <div class="alert alert-info">
+    <div class="container">
+      <i class="fa fa-info-circle"></i> Update search index.
+    </div>
+  </div>
+  <div class="l-frame">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-5"></div>
+        <div class="col-sm-2">
+          <button class="btn btn-primary" ng-click="searchUpdateAll()" ng-disabled="Auth.user.role != 'admin'">Update Search</button>
+        </div>
+        <div class="col-sm-5"></div>
+      </div>
+    </div>
+  </div>
+</div>
