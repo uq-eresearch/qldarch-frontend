@@ -5,7 +5,8 @@
     <h1>{{ article.label }}</h1>
   </div>
 </div>
-<div class="alert alert-warning" ng-show="Auth.isUQSLQ()" style="margin: 0;" ng-hide="$state.includes('article.edit')">
+<div class="alert alert-warning" ng-show="Auth.isUQSLQ()" style="margin: 0;"
+  ng-hide="$state.includes('article.edit')||(!(article.media|filter:{type:'Article'}).length&&!(Auth.isEditor()||Auth.canDelete()))">
   <div class="container">
     <!-- Download dropdown -->
     <div class="btn-group" ng-hide="!(article.media|filter:{type:'Article'}).length">
