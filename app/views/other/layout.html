@@ -18,8 +18,6 @@
         <div class="col-md-12">
           <ul class="nav nav-pills">
             <li ng-class="{'active': $state.includes('other.summary')}"><a ui-sref="other.summary({ otherId: other.id })">Summary</a></li>
-            <li ng-class="{'active': $state.includes('other.relationships')}" ng-show="other.id"><a
-              ui-sref="other.relationships({ otherId: other.id })">Relationships</a></li>
             <li ui-sref-active="active" ng-if="interviews.length == 1" ng-show="other.interviews"><a
               ui-sref="other.interview({ interviewId: interviews[0].id })">Interview</a></li>
             <li class="dropdown" ng-show="interviews.length > 1" ng-class="{'active': $state.includes('other.interview')}"><a
@@ -28,6 +26,8 @@
                 <li role="presentation" ng-repeat="interview in interviews"><a role="menuitem" tabindex="-1"
                   ui-sref="other.interview({ interviewId: interview.id })">Interview #{{ $index + 1 }}</a></li>
               </ul></li>
+            <li ng-class="{'active': $state.includes('other.relationships')}" ng-show="other.id"><a
+              ui-sref="other.relationships({ otherId: other.id })">Relationships</a></li>
           </ul>
         </div>
       </div>
