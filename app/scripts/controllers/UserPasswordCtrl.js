@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('qldarchApp').controller('UserSettingsCtrl', function($scope, Auth, toaster, Uris, $http, $state) {
+angular.module('qldarchApp').controller('UserPasswordCtrl', function($scope, Auth, toaster, Uris, $http, $state) {
   $scope.user = {};
   $scope.user.username = Auth.user.username;
   $scope.user.email = Auth.user.email;
