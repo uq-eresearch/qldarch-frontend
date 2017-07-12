@@ -75,6 +75,16 @@ module.exports = function(grunt) {
       } ]
     }
   });
+  grunt.config('removeLoggingCalls', {
+    files : [ '.tmp/concat/scripts/scripts.js' ],
+    options : {
+      methods : [ 'log' ],
+      strategy : function(consoleStatement) {
+        return '';
+      },
+      removeSemicolonIfPossible : true
+    }
+  });
   grunt.config('uglify', {
     options : {
       mangle : false,
@@ -201,6 +211,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-remove-logging-calls');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-usemin');
@@ -213,7 +224,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-compress');
 
-  grunt.registerTask('build', [ 'jshint', 'clean', 'less', 'useminPrepare', 'concat', 'autoprefixer', 'copy', 'imagemin', 'htmlmin', 'uglify',
-      'cssmin', 'rev', 'usemin', 'copy:special', 'cdnify', 'compress' ]);
+  grunt.registerTask('build', [ 'jshint', 'clean', 'less', 'useminPrepare', 'concat', 'autoprefixer', 'copy', 'imagemin', 'htmlmin',
+      'removeLoggingCalls', 'uglify', 'cssmin', 'rev', 'usemin', 'copy:special', 'cdnify', 'compress' ]);
 
 };
