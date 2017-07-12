@@ -20,7 +20,7 @@
             <li ng-class="{active: $state.includes('firm.photograph') || $state.includes('firm.photographs')}" ng-show="firm.id"><a
               ui-sref="firm.photographs({ firmId: firm.id })">Photographs</a></li>
             <li ui-sref-active="active" ng-show="firm.id"><a ui-sref="firm.interviews({ firmId: firm.id })">Interviews</a></li>
-            <li ui-sref-active="active" ng-show="firm.id"><a ui-sref="firm.employees({ firmId: firm.id })">Employees</a></li>
+            <li ui-sref-active="active" ng-show="firm.id"><a ui-sref="firm.employees({ firmId: firm.id })" ui-sref-opts="{reload: true}">Employees</a></li>
             <li ui-sref-active="active" ng-show="firm.id"><a ui-sref="firm.structures({ firmId: firm.id })">Projects</a></li>
             <li ui-sref-active="active" ng-show="firm.id"><a ui-sref="firm.articles({ firmId: firm.id })">Articles</a></li>
             <li ui-sref-active="active" ng-show="firm.id"><a ui-sref="firm.relationships({ firmId: firm.id })">Relationships</a></li>
