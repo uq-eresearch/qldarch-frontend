@@ -33,29 +33,19 @@
         <h4>
           <!-- /Title -->
           <a ng-show="article.category == 'archobj'" ui-sref="article({ articleId: article.id })"> {{ article.label }} </a> <a
-            ng-show="article.category == 'media'" ng-href="{{Uris.WS_DOWNLOAD+article.id}}" alt="" target="_blank"> {{
-            article.label||article.filename }} </a>
+            ng-show="article.depicts && article.category == 'media'" ui-sref="article({ articleId: article.depicts })"> {{
+            article.label||article.filename }} </a> <a ng-show="!article.depicts && article.category == 'media'" ng-href="{{Uris.WS_DOWNLOAD+article.id}}"
+            alt="" target="_blank"> {{ article.label||article.filename }} </a>
           <!-- Title -->
         </h4>
-        <h5 class="text-muted">
-          <!-- Authors -->
-          <span ng-if="article.authors">{{article.authors}}</span><span ng-if="!article.authors">Unknown</span>
-          <!-- /Authors -->
-          <!-- Periodical Title -->
-          <span ng-show="article.periodical">, {{article.periodical}}</span>
-          <!-- /Periodical Title -->
-          <!-- Volume -->
-          <span ng-show="article.volume">, vol. {{article.volume}}</span>
-          <!-- /Volume -->
-          <!-- Issue -->
-          <span ng-show="article.issue">, no. {{article.issue}}</span>
-          <!-- /Issue -->
-          <!-- Pages -->
-          <span ng-show="article.pages">, pp. {{article.pages}}</span>
-          <!-- /Pages -->
-          <!-- Date Published -->
-          <span ng-show="article.published">, {{article.published|date:'dd-MM-yyyy'}}</span>
-          <!-- /Date Published -->
+        <h5 class="text-muted" ng-show="article.type == 'article'">
+          <span ng-if="article.authors">{{article.authors}}</span><span ng-if="!article.authors">Unknown</span><span ng-show="article.periodical">,
+            {{article.periodical}}</span><span ng-show="article.volume">, vol. {{article.volume}}</span><span ng-show="article.issue">, no.
+            {{article.issue}}</span><span ng-show="article.pages">, pp. {{article.pages}}</span><span ng-show="article.published">,
+            {{article.published|date:'dd-MM-yyyy'}}</span>
+        </h5>
+        <h5 class="text-muted" ng-show="article.type == 'Article'">
+          <span ng-bind-html="(article.description | limitTo: 200)+(article.description.length > 200 ? '...' : '')"></span>
         </h5>
         <!-- article: Snippet -->
         <div ng-bind-html="article.snippet"></div>

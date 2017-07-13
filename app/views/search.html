@@ -43,24 +43,10 @@
           </h4>
           <!-- /Title -->
           <p class="text-muted">
-            <!-- Authors -->
-            <span ng-if="result.authors">{{result.authors}}</span><span ng-if="!result.authors&&result.type=='article'">Unknown</span>
-            <!-- /Authors -->
-            <!-- Periodical Title -->
-            <span ng-show="result.periodical">, {{result.periodical}}</span>
-            <!-- /Periodical Title -->
-            <!-- Volume -->
-            <span ng-show="result.volume">, vol. {{result.volume}}</span>
-            <!-- /Volume -->
-            <!-- Issue -->
-            <span ng-show="result.issue">, no. {{result.issue}}</span>
-            <!-- /Issue -->
-            <!-- Pages -->
-            <span ng-show="result.pages">, pp. {{result.pages}}</span>
-            <!-- /Pages -->
-            <!-- Date Published -->
-            <span ng-show="result.published">, {{result.published|date:'dd-MM-yyyy'}}</span>
-            <!-- /Date Published -->
+            <span ng-if="result.authors">{{result.authors}}</span><span ng-if="!result.authors&&result.type=='article'">Unknown</span><span
+              ng-show="result.periodical">, {{result.periodical}}</span><span ng-show="result.volume">, vol. {{result.volume}}</span><span
+              ng-show="result.issue">, no. {{result.issue}}</span><span ng-show="result.pages">, pp. {{result.pages}}</span><span
+              ng-show="result.published">, {{result.published|date:'dd-MM-yyyy'}}</span>
           </p>
           <p class="text-muted" ng-if="result.type!='article'"
             ng-bind-html="(result.summary | limitTo: 200)+(result.summary.length > 200 ? '...' : '')"></p>
