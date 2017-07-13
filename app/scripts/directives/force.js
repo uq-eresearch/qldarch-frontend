@@ -5,7 +5,6 @@ angular.module('qldarchApp').directive(
     function($state, Uris) {
       var LINK_DISTANCE = 100;
       var CHARGE = -1500;
-      var HEIGHT = 750;
 
       return {
         template : '<div></div>',
@@ -18,7 +17,19 @@ angular.module('qldarchApp').directive(
         link : function postLink($scope, element) {
 
           // Setup the height and width
-          var forceWidth = element.width(), forceHeight = HEIGHT;
+          var forceWidth = element.width(), forceHeight;
+          var nodeslength = $scope.data.nodes.length;
+          if (nodeslength <= 5) {
+            forceHeight = 350;
+          } else if (5 < nodeslength && nodeslength < 45) {
+            forceHeight = 600;
+          } else if (45 <= nodeslength && nodeslength <= 90) {
+            forceHeight = 800;
+          } else if (90 < nodeslength && nodeslength <= 130) {
+            forceHeight = 950;
+          } else if (nodeslength > 130) {
+            forceHeight = 1050;
+          }
 
           // Setup the SVG
           var svg = d3.select(element.get(0)).append('svg').attr('width', forceWidth).attr('height', forceHeight).on('click', function() {
