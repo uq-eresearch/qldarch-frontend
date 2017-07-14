@@ -37,19 +37,20 @@
         <div class="col-md-8">
           <!-- Title -->
           <h4>
-            <a ng-href="#{{ result.link }}" style="color: #333"> {{ result.preflabel||result.label }} </a> <small ng-if="!result.architect"
-              class="text-muted" style="text-transform: capitalize;"> {{ result.type }} </small> <small ng-if="result.architect" class="text-muted">
-              Architect </small>
+            <a ng-show="result.category == 'archobj'" ng-href="#{{ result.link }}" style="color: #333"> {{ result.preflabel||result.label }} </a> <a
+              ng-show="result.category == 'media'" ng-href="{{Uris.WS_DOWNLOAD+result.id}}" alt="" target="_blank"> {{ result.filename }} </a> <small
+              ng-if="!result.architect" class="text-muted" style="text-transform: capitalize;"> {{ result.type }} </small> <small
+              ng-if="result.architect" class="text-muted"> Architect </small>
           </h4>
           <!-- /Title -->
-          <p class="text-muted">
+          <p class="text-muted" ng-if="result.type == 'article'">
             <span ng-if="result.authors">{{result.authors}}</span><span ng-if="!result.authors&&result.type=='article'">Unknown</span><span
               ng-show="result.periodical">, {{result.periodical}}</span><span ng-show="result.volume">, vol. {{result.volume}}</span><span
               ng-show="result.issue">, no. {{result.issue}}</span><span ng-show="result.pages">, pp. {{result.pages}}</span><span
               ng-show="result.published">, {{result.published|date:'dd-MM-yyyy'}}</span>
           </p>
-          <p class="text-muted" ng-if="result.type!='article'"
-            ng-bind-html="(result.summary | limitTo: 200)+(result.summary.length > 200 ? '...' : '')"></p>
+          <p class="text-muted" ng-if="result.type != 'article'"
+            ng-bind-html="((result.summary | limitTo: 200)+(result.summary.length > 200 ? '...' : ''))||((result.description | limitTo: 200)+(result.description.length > 200 ? '...' : ''))"></p>
           <!-- Result: Snippet -->
           <div ng-bind-html="result.snippet"></div>
         </div>

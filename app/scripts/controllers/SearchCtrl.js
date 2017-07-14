@@ -9,7 +9,7 @@ angular.module('qldarchApp').controller('SearchCtrl',
       function activate() {
         $scope.query = $location.search().query;
         var query = ($scope.query).replace(WordService.spclCharsLucene, '');
-        var syntax = '* AND category:archobj';
+        var syntax = '*';
         $http.get(Uris.WS_ROOT + 'search?q=' + query + syntax + '&p=' + $scope.page + '&pc=' + pagecount).then(function(response) {
           $scope.maxPages = Math.round(response.data.hits / pagecount) - 1;
           var data = response.data.documents;
@@ -54,6 +54,8 @@ angular.module('qldarchApp').controller('SearchCtrl',
               });
             } else if (item.type === 'article') {
               path = '/article?articleId=';
+            } else if (item.category === 'media') {
+              path = '/media/download/';
             } else if (item.type === 'interview') {
               path = '/interview/';
             } else {
