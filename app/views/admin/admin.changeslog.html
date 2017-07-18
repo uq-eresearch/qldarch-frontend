@@ -45,14 +45,21 @@
       <tr>
         <th>User</th>
         <th>Created</th>
-        <th>Document</th>
+        <th>Entity</th>
         <th>Comment</th>
       </tr>
       <tr ng-repeat="log in chgslog.changesLog | orderBy:'created'">
         <td><strong>{{ log.email }}</strong> ({{ log.username }})</td>
         <td>{{ log.created }}</td>
-        <td>|<span ng-repeat="(key, value) in log.document"><span>| {{key}}: </span><span>{{value}} |</span></span>|
-        </td>
+        <td><span><a ng-if="log.document.architect==true&&log.document.type=='person'"
+            ui-sref="architect.summary({ architectId: log.document.id })">{{ log.document.label }}</a><a ng-if="log.document.type=='firm'"
+            ui-sref="firm.summary({ firmId: log.document.id })">{{ log.document.label }}</a><a ng-if="log.document.type=='structure'"
+            ui-sref="structure.summary({ structureId: log.document.id })">{{ log.document.label }}</a><a ng-if="log.document.type=='article'"
+            ui-sref="article({ articleId: log.document.id })">{{ log.document.label }}</a><a ng-if="log.document.type=='interview'"
+            ui-sref="interview({ interviewId: log.document.id })">{{ log.document.label }}</a><a
+            ng-if="(log.document.architect==false&&log.document.type=='person')||(log.document.type!='person'&&log.document.type!='firm'&&log.document.type!='structure'&&log.document.type!='article'&&log.document.type!='interview')"
+            ui-sref="other.summary({ otherId: log.document.id })">{{ log.document.label }}</a></span> <small class="text-muted"
+          style="text-transform: capitalize;"> | {{ log.document.type }}</small></td>
         <td>{{ log.comment }}</td>
       </tr>
     </table>

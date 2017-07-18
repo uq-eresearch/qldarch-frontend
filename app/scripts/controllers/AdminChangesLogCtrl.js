@@ -4,6 +4,7 @@ angular.module('qldarchApp').controller('AdminChangesLogCtrl', function($scope, 
   /* globals $:false */
   $scope.chgslog = {};
   $scope.chgslog.startDate = new Date();
+  $scope.chgslog.startDate.setDate($scope.chgslog.startDate.getDate() - 7);
   $scope.chgslog.endDate = new Date();
 
   $scope.chgslog.dateOptions = {
@@ -72,6 +73,8 @@ angular.module('qldarchApp').controller('AdminChangesLogCtrl', function($scope, 
         d.document = doc;
       });
       $scope.chgslog.changesLog = response.data;
+    }, function(response) {
+      console.log('error message: ' + response.data.msg);
     });
   };
 
@@ -82,5 +85,7 @@ angular.module('qldarchApp').controller('AdminChangesLogCtrl', function($scope, 
       $scope.chgslog.status.disabledRetrieve = false;
     }
   });
+
+  $scope.chgslog.getChangesLog();
 
 });
