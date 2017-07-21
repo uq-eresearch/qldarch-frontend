@@ -1,6 +1,9 @@
 <div class="interview">
   <div class="alert alert-warning" style="margin: 0;" ng-show="Auth.user.role === 'editor' || Auth.user.role === 'admin'">
     <div class="container">
+      <button class="btn btn-default btn-xs" ui-sref="interviewhistorylog({ interviewId: interview.id })" ng-show="Auth.user.role === 'admin'">
+        <i class="fa fa-calendar"></i> History
+      </button>
       <button class="btn btn-default btn-xs" ui-sref="upload.interviews({ id: interview.id })">
         <i class="fa fa-pencil"></i> Edit
       </button>

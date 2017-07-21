@@ -1,0 +1,39 @@
+<div class="alert alert-warning" ng-show="(Auth.user.role === 'editor' || Auth.user.role === 'admin')&&architect.id" style="margin: 0;">
+  <div class="container">
+    <div>
+      <button ng-hide="$state.includes('architect.historylog')" class="btn btn-default btn-xs"
+        ui-sref="architect.historylog({ architectId: architect.id })" ng-show="Auth.user.role === 'admin'">
+        <i class="fa fa-calendar"></i> History
+      </button>
+      <!-- Editor: &nbsp; &nbsp; -->
+      <button ng-hide="$state.includes('architect.summary.edit')" class="btn btn-default btn-xs"
+        ui-sref="architect.summary.edit({ architectId: architect.id })">
+        <i class="fa fa-pencil"></i> Edit
+      </button>
+      <button ng-hide="$state.includes('architect.summary.edit')" class="btn btn-default btn-xs" ng-click="$parent.delete(architect)"
+        ng-show="Auth.user.role === 'admin'">
+        <i class="fa fa-trash-o"></i> Delete
+      </button>
+    </div>
+  </div>
+</div>
+<div class="l-frame l-frame-tight">
+  <div class="container">
+    <table class="table" ng-show="architectHistoryLog.length">
+      <tr>
+        <th>User</th>
+        <th>Created</th>
+        <th>Changes</th>
+        <th>Comment</th>
+      </tr>
+      <tr ng-repeat="log in architectHistoryLog | orderBy:'created'">
+        <td><strong>{{ log.email }}</strong> ({{ log.username }})</td>
+        <td>{{ log.created }}</td>
+        <td><pre ng-if="!log.diffValueChanges" ng-bind-html="log.diffValue" style="white-space: normal;"></pre> <pre ng-if="log.diffValueChanges"
+            ng-bind-html="log.diffValueChanges" style="white-space: normal;"></pre></td>
+        <td>{{ log.comment }}</td>
+      </tr>
+    </table>
+    <p class="text-muted" ng-hide="architectHistoryLog.length">No history found</p>
+  </div>
+</div>

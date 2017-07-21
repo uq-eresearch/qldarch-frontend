@@ -29,15 +29,15 @@
 <!-- endbuild -->
 
 <!-- @fixme: work out why this cannot be included in the usemin group for css -->
-<link rel="stylesheet" href="bower_components/ngprogress/ngProgress.css" />
+<link rel="stylesheet" href="bower_components/ngprogress/ngProgress.css">
 <link rel="stylesheet" href="bower_components/select2/select2.css">
 <!--<link rel="stylesheet" href="bower_components/select2/select2-bootstrap.css">-->
 <link rel="stylesheet" href="bower_components/select2-bootstrap-css/select2-bootstrap.css">
-<link href="bower_components/AngularJS-Toaster/toaster.css" rel="stylesheet" />
+<link rel="stylesheet" href="bower_components/AngularJS-Toaster/toaster.css">
 
 <!-- Fonts -->
 <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
-<link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700" type="text/css">
 
 </head>
 <body>
@@ -100,6 +100,7 @@
   <script src="scripts/initialisationFn.js"></script>
   <script src="scripts/configFn.js"></script>
 
+  <script src="scripts/services/ObjectDiff.js"></script>
   <script src="scripts/services/Uris.js"></script>
   <script src="scripts/services/AggArchObjs.js"></script>
   <script src="scripts/services/ArchObj.js"></script>
@@ -218,6 +219,7 @@
   <script src="scripts/states/other/other.js"></script>
   <script src="scripts/states/other/other.summary.js"></script>
   <script src="scripts/states/other/other.summary.edit.js"></script>
+  <script src="scripts/states/other/other.historylog.js"></script>
   <script src="scripts/states/other/other.relationships.js"></script>
   <script src="scripts/states/other/other.interview.js"></script>
   <script src="scripts/states/architects/architects.js"></script>
@@ -226,11 +228,13 @@
   <script src="scripts/states/architect/architect.js"></script>
   <script src="scripts/states/architect/architect.summary.js"></script>
   <script src="scripts/states/architect/architect.summary.edit.js"></script>
+  <script src="scripts/states/architect/architect.historylog.js"></script>
   <script src="scripts/states/architect/architect.photographs.js"></script>
   <script src="scripts/states/architect/architect.articles.js"></script>
   <script src="scripts/states/architect/architect.relationships.js"></script>
   <script src="scripts/states/architect/architect.timeline.js"></script>
   <script src="scripts/states/interview.js"></script>
+  <script src="scripts/states/interviewhistorylog.js"></script>
   <script src="scripts/states/architect/architect.interview.js"></script>
   <script src="scripts/states/architect/architect.structures.js"></script>
   <script src="scripts/states/architect/architect.employers.js"></script>
@@ -241,6 +245,7 @@
   <script src="scripts/states/firm/firm.js"></script>
   <script src="scripts/states/firm/firm.summary.js"></script>
   <script src="scripts/states/firm/firm.summary.edit.js"></script>
+  <script src="scripts/states/firm/firm.historylog.js"></script>
   <script src="scripts/states/firm/firm.employees.js"></script>
   <script src="scripts/states/firm/firm.photographs.js"></script>
   <script src="scripts/states/firm/firm.interviews.js"></script>
@@ -254,6 +259,7 @@
   <script src="scripts/states/structure/structure.js"></script>
   <script src="scripts/states/structure/structure.summary.js"></script>
   <script src="scripts/states/structure/structure.summary.edit.js"></script>
+  <script src="scripts/states/structure/structure.historylog.js"></script>
   <script src="scripts/states/structure/structure.map.js"></script>
   <script src="scripts/states/structure/structure.photographs.js"></script>
   <script src="scripts/states/structure/structure.lineDrawings.js"></script>
@@ -265,6 +271,7 @@
   <script src="scripts/states/articles.js"></script>
   <script src="scripts/states/article/article.js"></script>
   <script src="scripts/states/article/article.edit.js"></script>
+  <script src="scripts/states/article/articlehistorylog.js"></script>
   <script src="scripts/states/search.js"></script>
   <!-- endbuild -->
 

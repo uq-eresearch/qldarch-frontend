@@ -1,11 +1,15 @@
-<div class="alert alert-warning" ng-show="(Auth.user.role === 'editor' || Auth.user.role === 'admin') && !$state.includes('other.summary.edit')"
-  style="margin: 0;">
+<div class="alert alert-warning" ng-show="(Auth.user.role === 'editor' || Auth.user.role === 'admin')&&other.id" style="margin: 0;">
   <div class="container">
-    <div ng-hide="$state.includes('other.summary.edit')">
-      <button class="btn btn-default btn-xs" ui-sref="other.summary.edit({ otherId: other.id })">
+    <div>
+      <button ng-hide="$state.includes('other.historylog')" class="btn btn-default btn-xs" ui-sref="other.historylog({ otherId: other.id })"
+        ng-show="Auth.user.role === 'admin'">
+        <i class="fa fa-calendar"></i> History
+      </button>
+      <button ng-hide="$state.includes('other.summary.edit')" class="btn btn-default btn-xs" ui-sref="other.summary.edit({ otherId: other.id })">
         <i class="fa fa-pencil"></i> Edit
       </button>
-      <button class="btn btn-default btn-xs" ng-click="delete(other)" ng-show="Auth.user.role === 'admin'">
+      <button ng-hide="$state.includes('other.summary.edit')" class="btn btn-default btn-xs" ng-click="$parent.delete(other)"
+        ng-show="Auth.user.role === 'admin'">
         <i class="fa fa-trash-o"></i> Delete
       </button>
     </div>

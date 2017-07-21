@@ -1,0 +1,43 @@
+<div class="content">
+  <div class="page-header has-subnav">
+    <div class="container">
+      <a ui-sref="interview({ interviewId: interview.id })" ng-show="interview.id"><h1>{{ interview.label }}</h1></a>
+    </div>
+  </div>
+  <div class="alert alert-warning" ng-show="(Auth.user.role === 'editor' || Auth.user.role === 'admin')&&interview.id" style="margin: 0;">
+    <div class="container">
+      <div>
+        <button class="btn btn-default btn-xs" ui-sref="upload.interviews({ id: interview.id })">
+          <i class="fa fa-pencil"></i> Edit
+        </button>
+        <button class="btn btn-default btn-xs" ng-click="delete(interview)" ng-show="Auth.user.role === 'admin'">
+          <i class="fa fa-trash-o"></i> Delete
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="alert alert-info" style="margin-bottom: 0;">
+    <div class="container">
+      <i class="fa fa-info-circle"></i> Interview history log.
+    </div>
+  </div>
+  <div class="l-frame l-frame-tight">
+    <div class="container">
+      <table class="table" ng-show="interviewHistoryLog.length">
+        <tr>
+          <th>User</th>
+          <th>Created</th>
+          <th>Changes</th>
+          <th>Comment</th>
+        </tr>
+        <tr ng-repeat="log in interviewHistoryLog | orderBy:'created'">
+          <td><strong>{{ log.email }}</strong> ({{ log.username }})</td>
+          <td>{{ log.created }}</td>
+          <td><pre ng-if="!log.diffValueChanges" ng-bind-html="log.diffValue" style="white-space: normal;"></pre> <pre
+              ng-if="log.diffValueChanges" ng-bind-html="log.diffValueChanges" style="white-space: normal;"></pre></td>
+          <td>{{ log.comment }}</td>
+        </tr>
+      </table>
+      <p class="text-muted" ng-hide="interviewHistoryLog.length">No history found</p>
+    </div>
+  </div>

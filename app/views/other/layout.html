@@ -17,7 +17,8 @@
       <div class="row">
         <div class="col-md-12">
           <ul class="nav nav-pills">
-            <li ng-class="{'active': $state.includes('other.summary')}"><a ui-sref="other.summary({ otherId: other.id })">Summary</a></li>
+            <li ng-class="{'active': ($state.includes('other.summary')||$state.includes('other.historylog'))}" ng-show="other.id"><a
+              ui-sref="other.summary({ otherId: other.id })">Summary</a></li>
             <li ui-sref-active="active" ng-if="interviews.length == 1" ng-show="other.interviews"><a
               ui-sref="other.interview({ interviewId: interviews[0].id })">Interview</a></li>
             <li class="dropdown" ng-show="interviews.length > 1" ng-class="{'active': $state.includes('other.interview')}"><a

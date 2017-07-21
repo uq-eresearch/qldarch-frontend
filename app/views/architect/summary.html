@@ -1,12 +1,17 @@
-<div class="alert alert-warning" ng-show="(Auth.user.role === 'editor' || Auth.user.role === 'admin') && !$state.includes('architect.summary.edit')"
-  style="margin: 0;">
+<div class="alert alert-warning" ng-show="(Auth.user.role === 'editor' || Auth.user.role === 'admin')&&architect.id" style="margin: 0;">
   <div class="container">
-    <div ng-hide="$state.includes('architect.summary.edit')">
+    <div>
+      <button ng-hide="$state.includes('architect.historylog')" class="btn btn-default btn-xs"
+        ui-sref="architect.historylog({ architectId: architect.id })" ng-show="Auth.user.role === 'admin'">
+        <i class="fa fa-calendar"></i> History
+      </button>
       <!-- Editor: &nbsp; &nbsp; -->
-      <button class="btn btn-default btn-xs" ui-sref="architect.summary.edit({ architectId: architect.id })">
+      <button ng-hide="$state.includes('architect.summary.edit')" class="btn btn-default btn-xs"
+        ui-sref="architect.summary.edit({ architectId: architect.id })">
         <i class="fa fa-pencil"></i> Edit
       </button>
-      <button class="btn btn-default btn-xs" ng-click="$parent.delete(architect)" ng-show="Auth.user.role === 'admin'">
+      <button ng-hide="$state.includes('architect.summary.edit')" class="btn btn-default btn-xs" ng-click="$parent.delete(architect)"
+        ng-show="Auth.user.role === 'admin'">
         <i class="fa fa-trash-o"></i> Delete
       </button>
     </div>

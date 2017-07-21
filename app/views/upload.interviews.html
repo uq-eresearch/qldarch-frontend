@@ -1,13 +1,21 @@
 <div class="content">
   <div class="page-header has-subnav">
     <div class="container">
-      <h1>{{ interview.id && 'Edit Interview' || 'New Interview' }}</h1>
+      <h1 ng-hide="interview.id">New Interview</h1>
+      <a ui-sref="interview({ interviewId: interview.id })" ng-show="interview.id"><h1>{{ interview.label }}</h1></a>
+    </div>
+  </div>
+  <div class="alert alert-warning" ng-show="(Auth.user.role === 'editor' || Auth.user.role === 'admin')&&interview.id" style="margin: 0;">
+    <div class="container">
+      <button class="btn btn-default btn-xs" ui-sref="interviewhistorylog({ interviewId: interview.id })" ng-show="Auth.user.role === 'admin'">
+        <i class="fa fa-calendar"></i> History
+      </button>
     </div>
   </div>
   <!-- Builder info -->
   <div class="alert alert-info" style="margin-bottom: 0;">
     <div class="container">
-      <i class="fa fa-info-circle"></i> Create a new interview.
+      <i class="fa fa-info-circle"></i> {{ interview.id && 'Edit an interview.' || 'Create a new interview.' }}
     </div>
   </div>
   <!-- /Builder info -->

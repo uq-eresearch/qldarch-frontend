@@ -2,14 +2,15 @@
   <div class="container">
     <small> <a ui-sref="articles">Articles »</a>
     </small>
-    <h1>{{ article.label }}</h1>
+    <h1 ng-hide="$state.includes('article.edit')">{{ article.label }}</h1>
+    <a ui-sref="article({ articleId: article.id })" ng-show="$state.includes('article.edit')"><h1>{{ article.label }}</h1></a>
   </div>
 </div>
 <div class="alert alert-warning" ng-show="Auth.isUQSLQ()" style="margin: 0;"
-  ng-hide="$state.includes('article.edit')||(!(article.media|filter:{type:'Article'}).length&&!(Auth.isEditor()||Auth.canDelete()))">
+  ng-hide="(!(article.media|filter:{type:'Article'}).length&&!(Auth.isEditor()||Auth.canDelete()))&&article.id">
   <div class="container">
     <!-- Download dropdown -->
-    <div class="btn-group" ng-hide="!(article.media|filter:{type:'Article'}).length">
+    <div class="btn-group" ng-hide="!(article.media|filter:{type:'Article'}).length||$state.includes('article.edit')">
       <div class="dropdown">
         <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
           Download <span class="caret"></span>
@@ -20,11 +21,15 @@
         </ul>
       </div>
     </div>
-    <button class="btn btn-default btn-xs" ui-sref="article.edit({ articleId: article.id })" ng-show="Auth.isEditor()">
+    <button class="btn btn-default btn-xs" ui-sref="articlehistorylog({ articleId: article.id })" ng-show="Auth.user.role === 'admin'">
+      <i class="fa fa-calendar"></i> History
+    </button>
+    <button class="btn btn-default btn-xs" ui-sref="article.edit({ articleId: article.id })"
+      ng-show="Auth.isEditor()&&!$state.includes('article.edit')">
       <i class="fa fa-pencil"></i> Edit
     </button>
     <!-- Delete button -->
-    <button class="btn btn-default btn-xs" ng-click="delete(article)" ng-show="Auth.canDelete()">
+    <button class="btn btn-default btn-xs" ng-click="delete(article)" ng-show="Auth.canDelete()&&!$state.includes('article.edit')">
       <i class="fa fa-trash-o"></i> Delete
     </button>
     <!-- /Delete button -->

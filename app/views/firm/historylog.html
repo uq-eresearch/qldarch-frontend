@@ -1,0 +1,38 @@
+<div class="alert alert-warning" ng-show="(Auth.user.role === 'editor' || Auth.user.role === 'admin')&&firm.id" style="margin: 0;">
+  <div class="container">
+    <div>
+      <button ng-hide="$state.includes('firm.historylog')" class="btn btn-default btn-xs" ui-sref="firm.historylog({ firmId: firm.id })"
+        ng-show="Auth.user.role === 'admin'">
+        <i class="fa fa-calendar"></i> History
+      </button>
+      <!-- Editor: &nbsp; &nbsp; -->
+      <button ng-hide="$state.includes('firm.summary.edit')" class="btn btn-default btn-xs" ui-sref="firm.summary.edit({ firmId: firm.id })">
+        <i class="fa fa-pencil"></i> Edit
+      </button>
+      <button ng-hide="$state.includes('firm.summary.edit')" class="btn btn-default btn-xs" ng-click="$parent.delete(firm)"
+        ng-show="Auth.user.role === 'admin'">
+        <i class="fa fa-trash-o"></i> Delete
+      </button>
+    </div>
+  </div>
+</div>
+<div class="l-frame l-frame-tight">
+  <div class="container">
+    <table class="table" ng-show="firmHistoryLog.length">
+      <tr>
+        <th>User</th>
+        <th>Created</th>
+        <th>Changes</th>
+        <th>Comment</th>
+      </tr>
+      <tr ng-repeat="log in firmHistoryLog | orderBy:'created'">
+        <td><strong>{{ log.email }}</strong> ({{ log.username }})</td>
+        <td>{{ log.created }}</td>
+        <td><pre ng-if="!log.diffValueChanges" ng-bind-html="log.diffValue" style="white-space: normal;"></pre> <pre ng-if="log.diffValueChanges"
+            ng-bind-html="log.diffValueChanges" style="white-space: normal;"></pre></td>
+        <td>{{ log.comment }}</td>
+      </tr>
+    </table>
+    <p class="text-muted" ng-hide="firmHistoryLog.length">No history found</p>
+  </div>
+</div>

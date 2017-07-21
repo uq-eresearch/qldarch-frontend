@@ -33,9 +33,18 @@ angular.module('qldarchApp').config(function($stateProvider) {
         }
       } ]
     },
-    controller : [ '$scope', 'other', 'interviews', function($scope, other, interviews) {
+    controller : [ '$scope', 'other', 'interviews', 'ArchObj', '$state', function($scope, other, interviews, ArchObj, $state) {
       $scope.other = other;
       $scope.interviews = interviews;
+
+      $scope.delete = function(other) {
+        var r = window.confirm('Delete other ' + other.label + '?');
+        if (r === true) {
+          ArchObj.delete(other.id).then(function() {
+            $state.go('others');
+          });
+        }
+      };
     } ]
   });
 });

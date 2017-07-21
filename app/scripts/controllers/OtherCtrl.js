@@ -50,15 +50,6 @@ angular.module('qldarchApp').controller('OtherCtrl', function($scope, $state, ot
     data : othertypes
   };
 
-  $scope.delete = function(other) {
-    var r = window.confirm('Delete other ' + other.label + '?');
-    if (r === true) {
-      ArchObj.delete(other.id).then(function() {
-        $state.go('others');
-      });
-    }
-  };
-
   $scope.updateOther = function(data) {
     if (data.id) {
       ArchObj.updateOther(data).then(function() {
