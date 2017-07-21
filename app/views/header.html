@@ -33,9 +33,9 @@
                   class="caret"></b>
               </a>
                 <ul class="dropdown-menu">
-                  <li><a ui-sref="ugc.timeline.edit.add.import" ui-sref-opts="{reload: true}">Timeline</a></li>
-                  <li><a ui-sref="ugc.map.edit.add.import" ui-sref-opts="{reload: true}">Map</a></li>
-                  <li><a ui-sref="ugc.wordcloud.edit.add.import" ui-sref-opts="{reload: true}">Word Cloud</a></li>
+                  <li><a ui-sref="ugc.timeline.edit.add.import" ui-sref-opts="{reload: true, inherit: false}">Timeline</a></li>
+                  <li><a ui-sref="ugc.map.edit.add.import" ui-sref-opts="{reload: true, inherit: false}">Map</a></li>
+                  <li><a ui-sref="ugc.wordcloud.edit.add.import" ui-sref-opts="{reload: true, inherit: false}">Word Cloud</a></li>
                 </ul></li>
               <li ng-class="{'active': $state.includes('contribute') }"><a ui-sref="contribute">Contribute</a></li>
               <li class="" ng-hide="Auth.success"><a>&nbsp;</a></li>
