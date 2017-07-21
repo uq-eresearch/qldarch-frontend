@@ -31,7 +31,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
       $scope.entity = structure;
 
       $scope.delete = function(structure) {
-        var r = window.confirm('Delete project ' + structure.name + '?');
+        var r = window.confirm('Delete project ' + structure.label + '?');
         if (r === true) {
           ArchObj.delete(structure.id).then(function() {
             $state.go('structures.australian');
