@@ -1,11 +1,19 @@
 <div class="content">
   <div class="page-header has-subnav">
     <div class="container">
+      <div class="row" ng-show="interview.id">
+        <div class="col-sm-6" style="text-align: left;">
+          <small><a ui-sref="interview({ interviewId: interview.id })">{{ interview.label }} ›</a></small>
+        </div>
+        <div class="col-sm-6" style="text-align: right;">
+          <small><a ui-sref="interviews">» Interviews</a></small>
+        </div>
+      </div>
+      <h1 ng-show="interview.id">{{ interview.label }}</h1>
       <h1 ng-hide="interview.id">New Interview</h1>
-      <a ui-sref="interview({ interviewId: interview.id })" ng-show="interview.id"><h1>{{ interview.label }}</h1></a>
     </div>
   </div>
-  <div class="alert alert-warning" ng-show="(Auth.user.role === 'editor' || Auth.user.role === 'admin')&&interview.id" style="margin: 0;">
+  <div class="alert alert-warning" ng-show="Auth.user.role === 'admin'&&interview.id" style="margin: 0;">
     <div class="container">
       <button class="btn btn-default btn-xs" ui-sref="interviewhistorylog({ interviewId: interview.id })" ng-show="Auth.user.role === 'admin'">
         <i class="fa fa-calendar"></i> History

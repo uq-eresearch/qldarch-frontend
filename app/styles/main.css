@@ -3657,8 +3657,6 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-collapse {
   max-height: 340px;
   overflow-x: visible;
-  padding-right: 15px;
-  padding-left: 15px;
   border-top: 1px solid transparent;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
   -webkit-overflow-scrolling: touch;
@@ -3838,7 +3836,6 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-form {
   margin-left: -15px;
   margin-right: -15px;
-  padding: 10px 15px;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -6754,7 +6751,7 @@ form .select2-container-active.ng-invalid.ng-dirty .select2-choice {
     width: 1170px !important;
   }
 }
-
+/* ObjectDiff */
 .diff {
 	display: inline-block;
 }

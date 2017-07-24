@@ -37,6 +37,37 @@ angular.module('qldarchApp').config(function($stateProvider) {
             });
             var doc = JSON.parse(d.document);
             d.document = doc;
+            delete d.document.id;
+            delete d.document.created;
+            delete d.document.type;
+            if (angular.isDefined(d.document.label)) {
+              d.document.Name = d.document.label;
+              delete d.document.label;
+            }
+            if (angular.isDefined(d.document.summary)) {
+              d.document.Summary = d.document.summary;
+              delete d.document.summary;
+            }
+            if (angular.isDefined(d.document.start)) {
+              d.document['Start Year'] = d.document.start;
+              delete d.document.start;
+            }
+            if (angular.isDefined(d.document.end)) {
+              d.document['End Year'] = d.document.end;
+              delete d.document.end;
+            }
+            if (angular.isDefined(d.document.precededby)) {
+              d.document['Preceded By'] = d.document.precededby;
+              delete d.document.precededby;
+            }
+            if (angular.isDefined(d.document.succeededby)) {
+              d.document['Succeeded By'] = d.document.succeededby;
+              delete d.document.succeededby;
+            }
+            if (angular.isDefined(d.document.australian)) {
+              d.document['Australian Firm'] = d.document.australian;
+              delete d.document.australian;
+            }
           });
           return response.data;
         }, function(response) {

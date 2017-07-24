@@ -1,13 +1,19 @@
 <div class="page-header has-subnav">
   <div class="container">
-    <small> <a ui-sref="articles">Articles »</a>
-    </small>
-    <h1 ng-hide="$state.includes('article.edit')">{{ article.label }}</h1>
-    <a ui-sref="article({ articleId: article.id })" ng-show="$state.includes('article.edit')"><h1>{{ article.label }}</h1></a>
+    <div class="row" ng-show="$state.includes('article.edit')">
+      <div class="col-sm-10" style="text-align: left;">
+        <small><a ui-sref="article({ articleId: article.id })">{{ article.label }} ›</a></small>
+      </div>
+      <div class="col-sm-2" style="text-align: right;">
+        <small><a ui-sref="articles">» Articles</a></small>
+      </div>
+    </div>
+    <small ng-hide="$state.includes('article.edit')"><a ui-sref="articles">Articles »</a></small>
+    <h1>{{ article.label }}</h1>
   </div>
 </div>
-<div class="alert alert-warning" ng-show="Auth.isUQSLQ()" style="margin: 0;"
-  ng-hide="(!(article.media|filter:{type:'Article'}).length&&!(Auth.isEditor()||Auth.canDelete()))&&article.id">
+<div class="alert alert-warning" style="margin: 0;"
+  ng-hide="($state.includes('article.edit')&&Auth.user.role === 'editor')||(!(article.media|filter:{type:'Article'}).length&&!(Auth.user.role === 'editor'||Auth.user.role === 'admin'))">
   <div class="container">
     <!-- Download dropdown -->
     <div class="btn-group" ng-hide="!(article.media|filter:{type:'Article'}).length||$state.includes('article.edit')">

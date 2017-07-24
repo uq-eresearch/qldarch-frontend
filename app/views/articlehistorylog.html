@@ -1,7 +1,14 @@
 <div class="page-header has-subnav">
   <div class="container">
-    <small> <a ui-sref="articles">Articles »</a>
-    </small> <a ui-sref="article({ articleId: article.id })"><h1>{{ article.label }}</h1></a>
+    <div class="row">
+      <div class="col-sm-10" style="text-align: left;">
+        <small><a ui-sref="article({ articleId: article.id })">{{ article.label }} ›</a></small>
+      </div>
+      <div class="col-sm-2" style="text-align: right;">
+        <small><a ui-sref="articles">» Articles</a></small>
+      </div>
+    </div>
+    <h1>{{ article.label }}</h1>
   </div>
 </div>
 <div class="alert alert-warning" ng-show="(Auth.user.role === 'editor' || Auth.user.role === 'admin')&&article.id" style="margin: 0;">

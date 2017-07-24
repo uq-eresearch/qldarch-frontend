@@ -185,17 +185,17 @@ function objectDiff($sce) {
           var keys = Object.keys(obj);
           var length = keys.length;
           if (length === 0) {
-            accumulator += '<span>' + openChar + closeChar + '</span>';
+            accumulator += '<div>' + openChar + closeChar + '</div>';
           } else {
-            accumulator += '<span>' + openChar + '</span>\n<div class="diff-level">';
+            accumulator += '<div>' + openChar + '</div>\n<div class="diff-level">';
             for (var i = 0; i < length; i++) {
               var key = keys[i];
-              accumulator = _inspect(accumulator + stringifyObjectKey(escapeHTML(key)) + '<span>: </span>', obj[key]);
+              accumulator = _inspect(accumulator + stringifyObjectKey(escapeHTML(key)) + ': ', obj[key]);
               if (i < length - 1) {
-                accumulator += '<span>,</span>\n';
+                accumulator += '<div></div>\n';
               }
             }
-            accumulator += '\n</div><span>' + closeChar + '</span>';
+            accumulator += '\n</div><div>' + closeChar + '</div>';
           }
           break;
 
@@ -237,8 +237,8 @@ function objectDiff($sce) {
       properties.push(formatChange(key, diff[key], shallow));
     }
 
-    return $sce.trustAsHtml('<span>' + openChar + '</span>\n<div class="diff-level">' + properties.join('<span>,</span>\n') + '\n</div><span>' +
-        closeChar + '</span>');
+    return $sce.trustAsHtml('<div>' + openChar + '</div>\n<div class="diff-level">' + properties.join('<div></div>\n') + '\n</div><div>' + closeChar +
+        '</div>');
   }
 
   /**
@@ -265,8 +265,8 @@ function objectDiff($sce) {
       }
     }
 
-    return $sce.trustAsHtml('<span>' + openChar + '</span>\n<div class="diff-level">' + properties.join('<span>,</span>\n') + '\n</div><span>' +
-        closeChar + '</span>');
+    return $sce.trustAsHtml('<div>' + openChar + '</div>\n<div class="diff-level">' + properties.join('<div></div>\n') + '\n</div><div>' + closeChar +
+        '</div>');
   }
 
   /**
@@ -281,26 +281,26 @@ function objectDiff($sce) {
     var property;
     switch (changed) {
       case 'equal':
-        property = (stringifyObjectKey(escapeHTML(key)) + '<span>: </span>' + inspect(diffItem.value));
+        property = (stringifyObjectKey(escapeHTML(key)) + ': <div></div>' + inspect(diffItem.value));
         break;
 
       case 'removed':
-        property = ('<del class="diff">' + stringifyObjectKey(escapeHTML(key)) + '<span>: </span>' + inspect(diffItem.value) + '</del>');
+        property = ('<del class="diff">' + stringifyObjectKey(escapeHTML(key)) + ': <div></div>' + inspect(diffItem.value) + '</del>');
         break;
 
       case 'added':
-        property = ('<ins class="diff">' + stringifyObjectKey(escapeHTML(key)) + '<span>: </span>' + inspect(diffItem.value) + '</ins>');
+        property = ('<ins class="diff">' + stringifyObjectKey(escapeHTML(key)) + ': <div></div>' + inspect(diffItem.value) + '</ins>');
         break;
 
       case 'primitive change':
-        var prefix = stringifyObjectKey(escapeHTML(key)) + '<span>: </span>';
-        property = ('<del class="diff diff-key">' + prefix + inspect(diffItem.removed) + '</del><span>,</span>\n' + '<ins class="diff diff-key">' +
-            prefix + inspect(diffItem.added) + '</ins>');
+        var prefix = stringifyObjectKey(escapeHTML(key)) + ': ';
+        property = (prefix + '<div></div><del class="diff diff-key">' + inspect(diffItem.removed) + '</del><div></div>\n' +
+            '<ins class="diff diff-key">' + inspect(diffItem.added) + '</ins>');
         break;
 
       case 'object change':
-        property = shallow ? '' : (stringifyObjectKey(key) + '<span>: </span>' + (diffOnly ? formatChangesToXMLString(diffItem)
-            : formatToJsonXMLString(diffItem)));
+        property = shallow ? ''
+            : (stringifyObjectKey(key) + ': ' + (diffOnly ? formatChangesToXMLString(diffItem) : formatToJsonXMLString(diffItem)));
         break;
     }
 

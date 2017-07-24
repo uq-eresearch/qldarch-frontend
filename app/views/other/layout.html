@@ -1,7 +1,14 @@
 <div class="content">
   <div class="page-header has-subnav">
     <div class="container">
-      <small ng-show="other.id"><a ui-sref="others">Others »</a></small>
+      <div class="row" ng-show="other.id">
+        <div class="col-sm-6" style="text-align: left;">
+          <small><a ui-sref="others">Others »</a></small>
+        </div>
+        <div class="col-sm-6" ng-show="$state.includes('other.interview')" style="text-align: right;">
+          <small><a ui-sref="interviews">» Interviews</a></small>
+        </div>
+      </div>
       <h1>
         <img ng-if="other.media.length>1"
           ng-src="{{Uris.WS_MEDIA+((other.media|filter:{preferred:'!!'})[0].id||other.media[0].id)+'?dimension=40x40'}}" alt=""

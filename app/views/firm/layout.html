@@ -1,7 +1,23 @@
 <div class="content">
   <div class="page-header has-subnav">
     <div class="container">
-      <small ng-show="firm.id"><a ui-sref="firms.australian">Firms »</a></small>
+      <div class="row" ng-show="firm.id">
+        <div class="col-sm-6" style="text-align: left;">
+          <small><a ui-sref="firms.australian">Firms »</a></small>
+        </div>
+        <div class="col-sm-6" ng-show="$state.includes('firm.interviews')" style="text-align: right;">
+          <small><a ui-sref="interviews">» Interviews</a></small>
+        </div>
+        <div class="col-sm-6" ng-show="$state.includes('firm.employees')" style="text-align: right;">
+          <small><a ui-sref="architects.queensland">» Architects</a></small>
+        </div>
+        <div class="col-sm-6" ng-show="$state.includes('firm.structures')" style="text-align: right;">
+          <small><a ui-sref="structures.australian">» Projects</a></small>
+        </div>
+        <div class="col-sm-6" ng-show="$state.includes('firm.articles')" style="text-align: right;">
+          <small><a ui-sref="articles">» Articles</a></small>
+        </div>
+      </div>
       <h1>
         <img ng-if="firm.media.length>1" ng-src="{{Uris.WS_MEDIA+((firm.media|filter:{preferred:'!!'})[0].id||firm.media[0].id)+'?dimension=40x40'}}"
           alt="" style="height: 40px; width: 40px; position: relative; top: -4px; margin-right: 1px; border: 3px solid white;" class="" /> <img

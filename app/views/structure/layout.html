@@ -1,7 +1,17 @@
 <div class="content">
   <div class="page-header has-subnav">
     <div class="container">
-      <small ng-show="structure.id"><a ui-sref="structures.australian">Projects »</a></small>
+      <div class="row" ng-show="structure.id">
+        <div class="col-sm-6" style="text-align: left;">
+          <small><a ui-sref="structures.australian">Projects »</a></small>
+        </div>
+        <div class="col-sm-6" ng-show="$state.includes('structure.interviews')" style="text-align: right;">
+          <small><a ui-sref="interviews">» Interviews</a></small>
+        </div>
+        <div class="col-sm-6" ng-show="$state.includes('structure.articles')" style="text-align: right;">
+          <small><a ui-sref="articles">» Articles</a></small>
+        </div>
+      </div>
       <h1>
         <img ng-if="structure.media.length>1"
           ng-src="{{Uris.WS_MEDIA+((structure.media|filter:{preferred:'!!'})[0].id||structure.media[0].id)+'?dimension=40x40'}}" alt=""

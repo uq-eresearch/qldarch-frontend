@@ -1,17 +1,10 @@
 <div class="alert alert-warning" ng-show="(Auth.user.role === 'editor' || Auth.user.role === 'admin')&&structure.id" style="margin: 0;">
   <div class="container">
     <div>
-      <button ng-hide="$state.includes('structure.historylog')" class="btn btn-default btn-xs"
-        ui-sref="structure.historylog({ structureId: structure.id })" ng-show="Auth.user.role === 'admin'">
-        <i class="fa fa-calendar"></i> History
-      </button>
-      <!-- Editor: &nbsp; &nbsp; -->
-      <button ng-hide="$state.includes('structure.summary.edit')" class="btn btn-default btn-xs"
-        ui-sref="structure.summary.edit({ structureId: structure.id })">
+      <button class="btn btn-default btn-xs" ui-sref="structure.summary.edit({ structureId: structure.id })">
         <i class="fa fa-pencil"></i> Edit
       </button>
-      <button ng-hide="$state.includes('structure.summary.edit')" class="btn btn-default btn-xs" ng-click="$parent.delete(structure)"
-        ng-show="Auth.user.role === 'admin'">
+      <button class="btn btn-default btn-xs" ng-click="$parent.delete(structure)" ng-show="Auth.user.role === 'admin'">
         <i class="fa fa-trash-o"></i> Delete
       </button>
     </div>

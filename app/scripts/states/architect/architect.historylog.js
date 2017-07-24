@@ -37,6 +37,31 @@ angular.module('qldarchApp').config(function($stateProvider) {
             });
             var doc = JSON.parse(d.document);
             d.document = doc;
+            delete d.document.id;
+            delete d.document.created;
+            delete d.document.type;
+            delete d.document.label;
+            delete d.document.architect;
+            if (angular.isDefined(d.document.firstname)) {
+              d.document['First Name'] = d.document.firstname;
+              delete d.document.firstname;
+            }
+            if (angular.isDefined(d.document.lastname)) {
+              d.document['Last Name'] = d.document.lastname;
+              delete d.document.lastname;
+            }
+            if (angular.isDefined(d.document.preflabel)) {
+              d.document['Also known as'] = d.document.preflabel;
+              delete d.document.preflabel;
+            }
+            if (angular.isDefined(d.document.summary)) {
+              d.document.Biography = d.document.summary;
+              delete d.document.summary;
+            }
+            if (angular.isDefined(d.document.practicedinqueensland)) {
+              d.document['Practiced in Queensland'] = d.document.practicedinqueensland;
+              delete d.document.practicedinqueensland;
+            }
           });
           return response.data;
         }, function(response) {

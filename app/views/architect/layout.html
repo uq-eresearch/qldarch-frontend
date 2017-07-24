@@ -1,7 +1,23 @@
 <div class="content">
   <div class="page-header has-subnav">
     <div class="container">
-      <small ng-show="architect.id"><a ui-sref="architects.queensland">Architects »</a></small>
+      <div class="row" ng-show="architect.id">
+        <div class="col-sm-6" style="text-align: left;">
+          <small><a ui-sref="architects.queensland">Architects »</a></small>
+        </div>
+        <div class="col-sm-6" ng-show="$state.includes('architect.interview')" style="text-align: right;">
+          <small><a ui-sref="interviews">» Interviews</a></small>
+        </div>
+        <div class="col-sm-6" ng-show="$state.includes('architect.employers')" style="text-align: right;">
+          <small><a ui-sref="firms.australian">» Firms</a></small>
+        </div>
+        <div class="col-sm-6" ng-show="$state.includes('architect.structures')" style="text-align: right;">
+          <small><a ui-sref="structures.australian">» Projects</a></small>
+        </div>
+        <div class="col-sm-6" ng-show="$state.includes('architect.articles')" style="text-align: right;">
+          <small><a ui-sref="articles">» Articles</a></small>
+        </div>
+      </div>
       <h1>
         <img ng-if="architect.media.length>1"
           ng-src="{{Uris.WS_MEDIA+((architect.media|filter:{preferred:'!!'})[0].id||architect.media[0].id)+'?dimension=40x40'}}" alt=""
