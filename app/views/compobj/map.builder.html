@@ -5,17 +5,17 @@
 </div>
 <div class="l-frame l-frame-tighter l-frame-divided">
   <div class="container">
-    <div ng-hide="$state.includes('ugc.map.edit.add') || $state.includes('ugc.map.edit.list')">
-      <button class="btn" ui-sref="ugc.map.edit.add.import" ng-class="{'btn-primary': !map.locations.length, 'btn-default': map.locations.length}">
+    <div ng-hide="$state.includes('map.edit.add') || $state.includes('map.edit.list')">
+      <button class="btn" ui-sref="map.edit.add.import" ng-class="{'btn-primary': !map.locations.length, 'btn-default': map.locations.length}">
         <i class="fa fa-plus"></i> Add More Locations
       </button>
-      <button ng-show="map.locations.length" class="btn btn-link pull-right" ui-sref="ugc.map.edit.list">
+      <button ng-show="map.locations.length" class="btn btn-link pull-right" ui-sref="map.edit.list">
         <i class="fa fa-pencil"></i> Edit Locations
       </button>
     </div>
-    <div ng-show="$state.includes('ugc.map.edit.list')" class="panel panel-default">
+    <div ng-show="$state.includes('map.edit.list')" class="panel panel-default">
       <div class="panel-heading">
-        <a ui-sref="ugc.map.edit" class="pull-right"> <i class="fa fa-times"></i>
+        <a ui-sref="map.edit" class="pull-right"> <i class="fa fa-times"></i>
         </a> Edit Locations
       </div>
       <div class="panel-body">
@@ -43,13 +43,13 @@
       </div>
       <ul class="list-group">
         <li class="list-group-item">
-          <button class="btn btn-primary" ui-sref="ugc.map.edit">Done</button>
+          <button class="btn btn-primary" ui-sref="map.edit">Done</button>
         </li>
       </ul>
     </div>
-    <div class="panel panel-default" ng-if="$state.includes('ugc.map.edit.add')">
+    <div class="panel panel-default" ng-if="$state.includes('map.edit.add')">
       <div class="panel-body">
-        <uib-tabset> <!-- Import location --> <uib-tab heading="Import Locations" select="$state.go('ugc.map.edit.add.import')">
+        <uib-tabset> <!-- Import location --> <uib-tab heading="Import Locations" select="$state.go('map.edit.add.import')">
         <div style="padding: 8px; margin-top: 8px;">
           <p class="text-muted">Search for architects, projects or firms to import locations.</p>
           <div ui-select2="architectStructureFirmSelectMap" ng-model="map.$import.entity" class="form-control"></div>
@@ -193,7 +193,7 @@
   </div>
 </div>
 <div class="l-frame l-frame-tighter l-frame-divided"
-  ng-show="map.locations.length && !map.$import.prospectiveLocations.length && !$state.includes('ugc.map.edit.list') && !$state.includes('ugc.map.edit.add') && Auth.success">
+  ng-show="map.locations.length && !map.$import.prospectiveLocations.length && !$state.includes('map.edit.list') && !$state.includes('map.edit.add') && Auth.success">
   <div class="container">
     <div class="row">
       <div class="col-sm-8">
@@ -207,5 +207,37 @@
         <button class="btn btn-default" ng-click="removeAll()">Cancel</button>
       </div>
     </div>
+  </div>
+</div>
+<div class="l-frame l-frame-tighter l-frame-divided"
+  ng-show="$state.includes('map.edit.add') && (map.locations.length || map.$import.prospectiveLocations.length)">
+  <div class="container" style="text-align: center;">
+    <strong style="margin-right: 8px;">Zoom</strong>
+    <div class="btn-group">
+      <button type="button" class="btn btn-default btn-xs" ng-model="zoom" uib-btn-radio="'all'">All</button>
+      <button type="button" class="btn btn-default btn-xs" ng-model="zoom" uib-btn-radio="'prospective'">
+        <svg height="16" width="14">
+          <circle cx="7" cy="10" r="5" stroke="#3388ff" stroke-opacity="0.5" stroke-width="2" fill="#3388ff" fill-opacity="0.2" /></svg>
+        New ({{ map.$import.prospectiveLocations.length || 0 }})
+      </button>
+      <button type="button" class="btn btn-default btn-xs" ng-model="zoom" uib-btn-radio="'added'">
+        <img src="../../../../bower_components/leaflet/dist/images/marker-icon.png" style="height: 16px;"> Added ({{map.locations.length||0}})
+      </button>
+    </div>
+    <span style="margin-right: 24px;" class="text-muted" ng-mouseenter="zoomProspective()" ng-mouseleave="zoomAll()"> </span> <span class="text-muted"
+      ng-mouseenter="zoomAdded()" ng-mouseleave="zoomAll()"> </span>
+  </div>
+</div>
+<div class="l-frame l-frame-media" ng-if="map.locations.length || map.$import.prospectiveLocations.length">
+  <div class="container">
+    <h3 style="text-align: center; margin-bottom: 24px;" ng-show="compoundObject.title.length">
+      <!-- Map title -->
+      {{ compoundObject.title }}<br />
+      <!-- /Map title -->
+      <!-- Author name -->
+      <small ng-show="compoundObject.user.displayName.length">By {{ compoundObject.user.displayName }}</small>
+      <!-- /Author name -->
+    </h3>
+    <leaflet width="100%" height="400px"></leaflet>
   </div>
 </div>

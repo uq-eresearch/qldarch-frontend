@@ -17,7 +17,7 @@
     </div>
   </div>
   <div ng-switch-when="map">
-    <a class="square square-map square-svg" ui-sref="ugc.map({id: compoundObject.id })">
+    <a class="square square-map square-svg" ui-sref="map.viewer({id: compoundObject.id })">
       <div class="square-content">
         <div class="center">
           <div class="center-content">
@@ -28,7 +28,7 @@
     </a>
     <div class="caption">
       <h4>
-        <a ui-sref="ugc.map({id: compoundObject.id })"> {{ compoundObject.title }} </a>
+        <a ui-sref="map.viewer({id: compoundObject.id })"> {{ compoundObject.title }} </a>
       </h4>
       <p class="text-muted" style="text-align: center;">By {{ compoundObject.user }}</p>
     </div>

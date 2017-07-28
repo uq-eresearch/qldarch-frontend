@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "dependencies": {
     "angular": "~1.6.5",
+    "angular-simple-logger": "~0.1.7",
     "json3": "~3.2.6",
     "es5-shim": "~2.1.0",
     "angular-resource": "~1.6.5",
@@ -26,11 +27,12 @@
     "ngprogress": "~1.0.7",
     "angular-bootstrap": "~0.14.3",
     "jquery-csv": "~0.8.3",
-    "angular-ui-map": "~0.5.0",
+    "angular-ui-utils": "~0.2.3",
     "AngularJS-Toaster": "jirikavi/AngularJS-Toaster#~0.4.181",
     "angular-animate": "~1.6.5",
     "angular-recaptcha": "~3.2.1",
-    "angular-ui-tinymce": "~0.0.19"
+    "angular-ui-tinymce": "~0.0.19",
+    "ui-leaflet": "~2.0.0"
   },
   "devDependencies": {
     "angular-mocks": "~1.6.5",

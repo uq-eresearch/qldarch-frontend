@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('qldarchApp').config(function($stateProvider) {
-  $stateProvider.state('ugc.map.edit.list', {
-    url : '/list'
+  $stateProvider.state('map.edit.add', {
+    abstract : true,
+    url : '/add'
   });
 });

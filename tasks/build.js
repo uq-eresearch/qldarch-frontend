@@ -17,15 +17,11 @@ module.exports = function(grunt) {
         src : [ '*.{ico,png,txt}', '.htaccess', 'bower_components/angular-file-upload/dist/angular-file-upload-shim.min.js',
             'bower_components/jquery/jquery.min.js', 'bower_components/tinymce/tinymce.min.js',
             'bower_components/tinymce/plugins/paste/plugin.min.js', 'bower_components/tinymce/themes/modern/theme.min.js',
-            'bower_components/angular/angular.min.js', 'bower_components/bootstrap/dist/js/bootstrap.min.js', 'bower_components/timelinejs/**', // FIXME:
-            // this
-            // shouldnt
-            // be
-            // here
-            'images/{,*/}*.{gif,webp}', 'images/header.jpg', 'fonts/*', 'resources/*', 'bower_components/tinymce/skins/lightgray/skin.min.css',
-            'bower_components/tinymce/skins/lightgray/content.min.css', 'bower_components/tinymce/skins/lightgray/fonts/tinymce.woff',
-            'bower_components/tinymce/skins/lightgray/fonts/tinymce.ttf', 'bower_components/ngprogress/ngProgress.css',
-            'bower_components/select2/select2.css', 'bower_components/select2/select2.png',
+            'bower_components/angular/angular.min.js', 'bower_components/bootstrap/dist/js/bootstrap.min.js', 'bower_components/timelinejs/**',
+            'bower_components/leaflet/**', 'images/{,*/}*.{gif,webp}', 'images/header.jpg', 'fonts/*', 'resources/*',
+            'bower_components/tinymce/skins/lightgray/skin.min.css', 'bower_components/tinymce/skins/lightgray/content.min.css',
+            'bower_components/tinymce/skins/lightgray/fonts/tinymce.woff', 'bower_components/tinymce/skins/lightgray/fonts/tinymce.ttf',
+            'bower_components/ngprogress/ngProgress.css', 'bower_components/select2/**',
             'bower_components/select2-bootstrap-css/select2-bootstrap.css', 'bower_components/AngularJS-Toaster/toaster.css',
             'bower_components/font-awesome/css/font-awesome.min.css', 'bower_components/font-awesome/fonts/fontawesome-webfont.woff',
             'bower_components/font-awesome/fonts/fontawesome-webfont.ttf' ]

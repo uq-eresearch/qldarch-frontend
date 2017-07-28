@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('qldarchApp').controller('StructuresCtrl',
-    function($scope, structures, LayoutHelper, GraphHelper, $stateParams, $location, $filter, $state) {
+    function($scope, structures, LayoutHelper, GraphHelper, leafletData, $stateParams, $location, $filter, $state) {
+      /* globals L:false */
       var DEFAULT_STRUCTURE_ROW_COUNT = 5;
       $scope.structureRowDisplayCount = DEFAULT_STRUCTURE_ROW_COUNT;
 
@@ -72,5 +73,23 @@ angular.module('qldarchApp').controller('StructuresCtrl',
       $scope.addMoreStructureRows = function() {
         $scope.structureRowDisplayCount += 5;
       };
+
+      function addMarkers() {
+        leafletData.getMap().then(function(map) {
+          var latlon = [];
+          angular.forEach($scope.structures, function(structure) {
+            if (angular.isDefined(structure.lat) && angular.isDefined(structure.lng)) {
+              var mkr = [ structure.lat, structure.lng ];
+              L.marker(mkr).bindPopup('<a href="#/project/summary?structureId=' + structure.id + '">' + structure.label + '</a>').addTo(map);
+              latlon.push(mkr);
+            }
+          });
+          map.fitBounds(new L.LatLngBounds(latlon));
+        });
+      }
+
+      $scope.$watch('structures', function() {
+        addMarkers();
+      });
 
     });

@@ -31,7 +31,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
               }
               if (angular.isDefined(s.lat) && angular.isDefined(s.lng)) {
                 structure.lat = s.lat;
-                structure.lon = s.lng;
+                structure.lng = s.lng;
               }
             }
           });

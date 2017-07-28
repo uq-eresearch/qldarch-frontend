@@ -4,8 +4,9 @@ angular
     .module('qldarchApp')
     .controller(
         'MapBuilderCtrl',
-        function($scope, compobj, entities, CompObj, ArchObj, Uris, GraphHelper, $filter, $state, Auth, $q) {
+        function($scope, compobj, entities, CompObj, ArchObj, Uris, GraphHelper, $filter, $state, Auth, $q, leafletData) {
           /* globals _:false */
+          /* globals L:false */
           $scope.compoundObject = compobj;
           $scope.map = compobj;
           $scope.map.$import = {};
@@ -15,6 +16,9 @@ angular
             $scope.compoundObject.user = Auth.user;
             $scope.compoundObject.type = 'map';
           }
+
+          $scope.map.markers = [];
+          $scope.map.$import.prospectiveMarkers = [];
 
           entities = $filter('orderBy')(entities, function(entity) {
             return entity.label;
@@ -246,18 +250,43 @@ angular
             $scope.map.$import.entity = null;
             $scope.map.$import.locations = null;
             $scope.isShowingFilters = false;
-            $state.go('ugc.map.edit');
+            $state.go('map.edit');
           };
           $scope.cancel = function() {
             $scope.map.$import.entity = null;
             $scope.map.$import.locations = null;
             $scope.map.$import.prospectiveLocations = [];
             $scope.isShowingFilters = false;
-            $state.go('ugc.map.edit');
+            $state.go('map.edit');
           };
           $scope.add = function(location) {
             addLocationsToMap([ location ]);
           };
+
+          function addLocationsMarkers() {
+            leafletData.getMap().then(
+                function(map) {
+                  var latlon = [];
+                  angular.forEach($scope.map.locations, function(structure) {
+                    if (angular.isDefined(structure.longitude) && angular.isDefined(structure.longitude)) {
+                      var mkr = [ structure.latitude, structure.longitude ];
+                      var marker = L.marker(mkr)
+                          .bindPopup('<a href="#/project/summary?structureId=' + structure.id + '">' + structure.label + '</a>').addTo(map);
+                      $scope.map.markers.push(marker);
+                      latlon.push(mkr);
+                    }
+                  });
+                  map.fitBounds(new L.LatLngBounds(latlon));
+                });
+          }
+
+          function removeLocationsMarkers() {
+            leafletData.getMap().then(function(map) {
+              angular.forEach($scope.map.markers, function(marker) {
+                map.removeLayer(marker);
+              });
+            });
+          }
 
           function removeLocationFromMap(location) {
             // Go through ones in the import list
@@ -268,6 +297,8 @@ angular
             });
             var index = $scope.map.locations.indexOf(location);
             $scope.map.locations.splice(index, 1);
+            removeLocationsMarkers();
+            addLocationsMarkers();
             generateProspectiveLocations();
           }
 
@@ -276,6 +307,7 @@ angular
               importLocation.$added = false;
             });
             $scope.map.locations = [];
+            removeLocationsMarkers();
             generateProspectiveLocations();
           };
 
@@ -373,9 +405,103 @@ angular
           // Save Map
           $scope.save = function() {
             CompObj.create($scope.compoundObject).then(function(data) {
-              $state.go('ugc.map', {
+              $state.go('map.viewer', {
                 id : data.id
               });
             });
           };
+
+          function addProspectiveLocationsMarkers() {
+            leafletData.getMap().then(function(map) {
+              var latlon = [];
+              angular.forEach($scope.map.$import.prospectiveLocations, function(structure) {
+                if (angular.isDefined(structure.longitude) && angular.isDefined(structure.longitude)) {
+                  var mkr = [ structure.latitude, structure.longitude ];
+                  map.preferCanvas = true;
+                  var prospectiveMarker = L.circleMarker(mkr, {
+                    color : '#3388ff'
+                  }).bindPopup('<a href="#/project/summary?structureId=' + structure.id + '">' + structure.label + '</a>').addTo(map);
+                  $scope.map.$import.prospectiveMarkers.push(prospectiveMarker);
+                  latlon.push(mkr);
+                }
+              });
+              map.fitBounds(new L.LatLngBounds(latlon));
+            });
+          }
+
+          function removeProspectiveLocationsMarkers() {
+            leafletData.getMap().then(function(map) {
+              angular.forEach($scope.map.$import.prospectiveMarkers, function(marker) {
+                map.removeLayer(marker);
+              });
+            });
+          }
+
+          $scope.$watchCollection('map.locations', function() {
+            removeProspectiveLocationsMarkers();
+            addLocationsMarkers();
+          });
+
+          $scope.$watchCollection('map.$import.prospectiveLocations', function() {
+            removeProspectiveLocationsMarkers();
+            addProspectiveLocationsMarkers();
+          });
+
+          function zoomProspectiveLocationsMarkers() {
+            leafletData.getMap().then(function(map) {
+              var latlon = [];
+              angular.forEach($scope.map.$import.prospectiveLocations, function(structure) {
+                if (angular.isDefined(structure.longitude) && angular.isDefined(structure.longitude)) {
+                  var mkr = [ structure.latitude, structure.longitude ];
+                  latlon.push(mkr);
+                }
+              });
+              map.fitBounds(new L.LatLngBounds(latlon));
+            });
+          }
+
+          function zoomLocationsMarkers() {
+            leafletData.getMap().then(function(map) {
+              var latlon = [];
+              angular.forEach($scope.map.locations, function(structure) {
+                if (angular.isDefined(structure.longitude) && angular.isDefined(structure.longitude)) {
+                  var mkr = [ structure.latitude, structure.longitude ];
+                  latlon.push(mkr);
+                }
+              });
+              map.fitBounds(new L.LatLngBounds(latlon));
+            });
+          }
+
+          function zoomAllMarkers() {
+            leafletData.getMap().then(function(map) {
+              var latlon = [];
+              angular.forEach($scope.map.locations, function(structure) {
+                if (angular.isDefined(structure.longitude) && angular.isDefined(structure.longitude)) {
+                  var mkr = [ structure.latitude, structure.longitude ];
+                  latlon.push(mkr);
+                }
+              });
+              angular.forEach($scope.map.$import.prospectiveLocations, function(structure) {
+                if (angular.isDefined(structure.longitude) && angular.isDefined(structure.longitude)) {
+                  var mkr = [ structure.latitude, structure.longitude ];
+                  latlon.push(mkr);
+                }
+              });
+              map.fitBounds(new L.LatLngBounds(latlon));
+            });
+          }
+
+          $scope.$watch('zoom', function(zoom) {
+            if (zoom) {
+              if (zoom === 'prospective') {
+                zoomProspectiveLocationsMarkers();
+              } else if (zoom === 'all') {
+                zoomAllMarkers();
+              } else if (zoom === 'added') {
+                zoomLocationsMarkers();
+              }
+            }
+          });
+
         });

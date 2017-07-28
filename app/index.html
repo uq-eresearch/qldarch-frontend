@@ -38,6 +38,7 @@
 <!-- Fonts -->
 <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700" type="text/css">
+<link rel="stylesheet" href="bower_components/leaflet/dist/leaflet.css">
 
 </head>
 <body>
@@ -64,6 +65,7 @@
   <script src="bower_components/jquery/jquery.min.js"></script>
   <script src="bower_components/tinymce/tinymce.min.js"></script>
   <script src="bower_components/angular/angular.min.js"></script>
+  <script src="bower_components/leaflet/dist/leaflet.js"></script>
   <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
   <!-- build:js scripts/plugins.js -->
@@ -75,6 +77,7 @@
   <!-- endbuild -->
 
   <!-- build:js scripts/modules.js -->
+  <script src="bower_components/angular-simple-logger/dist/angular-simple-logger.min.js"></script>
   <script src="bower_components/angular-resource/angular-resource.min.js"></script>
   <script src="bower_components/angular-cookies/angular-cookies.min.js"></script>
   <script src="bower_components/angular-animate/angular-animate.min.js"></script>
@@ -84,7 +87,6 @@
   <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
   <script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.min.js"></script>
   <script src="bower_components/angular-audio-player/dist/angular-audio-player.min.js"></script>
-  <script src="bower_components/angular-ui-map/ui-map.min.js"></script>
   <script src="bower_components/angular-ui-utils/ui-utils.min.js"></script>
   <script src="bower_components/angular-ui-select2/src/select2.js"></script>
   <script src="bower_components/ngprogress/build/ngProgress.min.js"></script>
@@ -93,6 +95,7 @@
   <script src="bower_components/lodash/dist/lodash.min.js"></script>
   <script src="bower_components/angular-recaptcha/release/angular-recaptcha.min.js"></script>
   <script src="bower_components/angular-ui-tinymce/dist/tinymce.min.js"></script>
+  <script src="bower_components/ui-leaflet/dist/ui-leaflet.min.js"></script>
   <!-- endbuild -->
 
   <!-- build:js scripts/scripts.js -->
@@ -121,7 +124,6 @@
   <script src="scripts/directives/videoplayer.js"></script>
   <script src="scripts/directives/force.js"></script>
   <script src="scripts/directives/timeline.js"></script>
-  <script src="scripts/directives/projectMap.js"></script>
   <script src="scripts/directives/test.js"></script>
 
   <script src="scripts/filters/slice.js"></script>
@@ -205,11 +207,12 @@
   <script src="scripts/states/ugc/ugc.timeline.edit.js"></script>
   <script src="scripts/states/ugc/ugc.timeline.edit.add.js"></script>
   <script src="scripts/states/ugc/ugc.timeline.edit.add.import.js"></script>
-  <script src="scripts/states/ugc/ugc.map.js"></script>
-  <script src="scripts/states/ugc/ugc.map.edit.js"></script>
-  <script src="scripts/states/ugc/ugc.map.edit.add.js"></script>
-  <script src="scripts/states/ugc/ugc.map.edit.add.import.js"></script>
-  <script src="scripts/states/ugc/ugc.map.edit.list.js"></script>
+  <script src="scripts/states/compobj/map.js"></script>
+  <script src="scripts/states/compobj/map.viewer.js"></script>
+  <script src="scripts/states/compobj/map.edit.js"></script>
+  <script src="scripts/states/compobj/map.edit.add.js"></script>
+  <script src="scripts/states/compobj/map.edit.add.import.js"></script>
+  <script src="scripts/states/compobj/map.edit.list.js"></script>
   <script src="scripts/states/ugc/ugc.wordcloud.js"></script>
   <script src="scripts/states/ugc/ugc.wordcloud.edit.js"></script>
   <script src="scripts/states/ugc/ugc.wordcloud.edit.add.js"></script>
@@ -279,10 +282,8 @@
   <script src="//www.google.com/recaptcha/api.js?render=explicit&onload=vcRecaptchaApiLoaded" async defer></script>
 
   <script type="text/javascript">
-      function onGoogleReady() {
-        console.log('Bootstraping angularjs now');
-        angular.bootstrap(document, [ 'qldarchApp' ]);
-      }
+      console.log('Bootstraping angularjs now');
+      angular.bootstrap(document, [ 'qldarchApp' ]);
 
       /**
        * Returns a number whose value is limited to the given range.
@@ -299,13 +300,6 @@
         return Math.min(Math.max(this, min), max);
       };
     </script>
-
-  <!-- @todo: Get this to trigger angular bootstrap when loaded -->
-  <script type="text/javascript"
-    src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization',
-       'version':'1','packages':['timeline']}]}"></script>
-
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=onGoogleReady"></script>
 
 </body>
 </html>

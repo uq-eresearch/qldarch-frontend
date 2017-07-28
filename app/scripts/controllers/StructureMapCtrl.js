@@ -1,46 +1,16 @@
 'use strict';
 
-angular.module('qldarchApp').controller('StructureMapCtrl', function($scope, lat, lon) {
-  // Structure lat lon
-  var position = new google.maps.LatLng(lat, lon);
-  $scope.myMarkers = [];
-
-  $scope.mapOptions = {
-    center : position,
-    zoom : 15,
-    mapTypeId : google.maps.MapTypeId.ROADMAP
-  };
-  $scope.mapEvents = {
-
-  };
-
-  $scope.$watch('myMap', function(myMap) {
-    if (myMap) {
-      google.maps.event.trigger($scope.myMap, 'resize');
-      $scope.myMap.setCenter(position);
+angular.module('qldarchApp').controller('StructureMapCtrl', function($scope, lat, lon, leafletData) {
+  /* globals L:false */
+  $scope.markers = {
+    0 : {
+      lat : lat,
+      lng : lon
     }
+  };
+
+  leafletData.getMap().then(function(map) {
+    map.fitBounds(new L.LatLngBounds([ [ lat, lon ] ]));
   });
 
-  $scope.addMarker = function($event, $params) {
-    $scope.myMarkers.push(new google.maps.Marker({
-      map : $scope.myMap,
-      position : $params[0].latLng
-    }));
-  };
-
-  $scope.setZoomMessage = function(zoom) {
-    $scope.zoomMessage = 'You just zoomed to ' + zoom + '!';
-    console.log(zoom, 'zoomed');
-  };
-
-  $scope.openMarkerInfo = function(marker) {
-    $scope.currentMarker = marker;
-    $scope.currentMarkerLat = marker.getPosition().lat();
-    $scope.currentMarkerLng = marker.getPosition().lng();
-    $scope.myInfoWindow.open($scope.myMap, marker);
-  };
-
-  $scope.setMarkerPosition = function(marker, lat, lng) {
-    marker.setPosition(new google.maps.LatLng(lat, lng));
-  };
 });

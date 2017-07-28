@@ -1,44 +1,41 @@
 'use strict';
 
-angular.module('qldarchApp').controller('ArchitectStructuresCtrl', function($scope, $http, structures, GraphHelper, LayoutHelper) {
+angular.module('qldarchApp').controller(
+    'ArchitectStructuresCtrl',
+    function($scope, $http, structures, GraphHelper, LayoutHelper, leafletData) {
+      /* globals L:false */
+      $scope.structureRows = LayoutHelper.group(GraphHelper.graphValues(structures), 6);
 
-  $scope.structures = structures;
-  $scope.structureRows = LayoutHelper.group(GraphHelper.graphValues(structures), 6);
+      $scope.isShowingMap = function() {
+        var hasmap = false;
+        angular.forEach(structures, function(structure) {
+          if (angular.isDefined(structure.lat) && angular.isDefined(structure.lng)) {
+            hasmap = true;
+          }
+        });
+        return hasmap;
+      };
 
-  // Setup the filters and map
-  $scope.isShowingMap = function() {
-    var hasmap = false;
-    angular.forEach(structures, function(structure) {
-      // We have some data to show on the map, so just set it to on
-      if (angular.isDefined(structure.lat)) {
-        // console.log('show the map');
-        hasmap = true;
+      function addMarkers() {
+        leafletData.getMap().then(
+            function(map) {
+              var latlon = [];
+              angular.forEach(structures, function(structure) {
+                if (angular.isDefined(structure.lat) && angular.isDefined(structure.lng)) {
+                  var mkr = [ structure.lat, structure.lng ];
+                  L.marker(mkr).bindPopup(
+                      '<a href="#/project/summary?structureId=' + structure.structureId + '">' + structure.structurelabel + '</a>').addTo(map);
+                  latlon.push(mkr);
+                }
+              });
+              map.fitBounds(new L.LatLngBounds(latlon));
+            });
       }
-    });
-    return hasmap;
-  };
 
-  // Setup the map
-  $scope.mapOptions = {
-    zoom : 15,
-    maxZoom : 16,
-    mapTypeId : google.maps.MapTypeId.ROADMAP
-  };
-
-  $scope.$watch('myMap', function(myMap) {
-    // console.log('is showing map', $scope.isShowingMap);
-    if (myMap) {
-      // console.log('we have a map', myMap);
-      var bounds = new google.maps.LatLngBounds();
-      angular.forEach(structures, function(structure) {
-        if (angular.isDefined(structure.lat)) {
-          // console.log('has a location', structure.lat);
-          // Use the bounds
-          var latlng = new google.maps.LatLng(structure.lat, structure.lon);
-          bounds.extend(latlng);
+      $scope.$watch('isShowingMap', function(isShowingMap) {
+        if (isShowingMap) {
+          addMarkers();
         }
       });
-      myMap.fitBounds(bounds);
-    }
-  });
-});
+
+    });
