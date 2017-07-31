@@ -276,30 +276,9 @@
   <script src="scripts/states/article/article.edit.js"></script>
   <script src="scripts/states/article/articlehistorylog.js"></script>
   <script src="scripts/states/search.js"></script>
+
+  <script src="scripts/bootstrapping.js"></script>
   <!-- endbuild -->
-
-  <!-- Include the JS ReCaptcha API -->
-  <script src="//www.google.com/recaptcha/api.js?render=explicit&onload=vcRecaptchaApiLoaded" async defer></script>
-
-  <script type="text/javascript">
-      console.log('Bootstraping angularjs now');
-      angular.bootstrap(document, [ 'qldarchApp' ]);
-
-      /**
-       * Returns a number whose value is limited to the given range.
-       *
-       * Example: limit the output of this computation to between 0 and 255
-       * (x * 255).clamp(0, 255)
-       *
-       * @param {Number} min The lower boundary of the output range
-       * @param {Number} max The upper boundary of the output range
-       * @returns A number in the range [min, max]
-       * @type Number
-       */
-      Number.prototype.clamp = function(min, max) {
-        return Math.min(Math.max(this, min), max);
-      };
-    </script>
 
 </body>
 </html>

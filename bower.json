@@ -30,7 +30,7 @@
     "angular-ui-utils": "~0.2.3",
     "AngularJS-Toaster": "jirikavi/AngularJS-Toaster#~0.4.181",
     "angular-animate": "~1.6.5",
-    "angular-recaptcha": "~3.2.1",
+    "angular-recaptcha": "~4.1.0",
     "angular-ui-tinymce": "~0.0.19",
     "ui-leaflet": "~2.0.0"
   },
