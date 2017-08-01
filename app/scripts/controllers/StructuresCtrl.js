@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('qldarchApp').controller('StructuresCtrl',
-    function($scope, structures, LayoutHelper, GraphHelper, leafletData, $stateParams, $location, $filter, $state) {
+angular.module('qldarchApp').controller(
+    'StructuresCtrl',
+    function($scope, structures, LayoutHelper, GraphHelper, leafletData, $stateParams, $location, $filter, $state, BuildingTypologyMarkers) {
       /* globals L:false */
       var DEFAULT_STRUCTURE_ROW_COUNT = 5;
       $scope.structureRowDisplayCount = DEFAULT_STRUCTURE_ROW_COUNT;
@@ -79,8 +80,15 @@ angular.module('qldarchApp').controller('StructuresCtrl',
           var latlon = [];
           angular.forEach($scope.structures, function(structure) {
             if (angular.isDefined(structure.lat) && angular.isDefined(structure.lng)) {
+              var mkrIcon = {};
+              if (angular.isDefined(structure.typology)) {
+                mkrIcon = {
+                  icon : BuildingTypologyMarkers[structure.typology]
+                };
+              }
               var mkr = [ structure.lat, structure.lng ];
-              L.marker(mkr).bindPopup('<a href="#/project/summary?structureId=' + structure.id + '">' + structure.label + '</a>').addTo(map);
+              var mkrPopup = '<a href="#/project/summary?structureId=' + structure.id + '">' + structure.label + '</a>';
+              L.marker(mkr, mkrIcon).bindPopup(mkrPopup).addTo(map);
               latlon.push(mkr);
             }
           });
@@ -88,8 +96,29 @@ angular.module('qldarchApp').controller('StructuresCtrl',
         });
       }
 
+      function addLegend() {
+        console.log(BuildingTypologyMarkers);
+        leafletData.getMap().then(
+            function(map) {
+              var legend = L.control({
+                position : 'bottomleft'
+              });
+              legend.onAdd = function() {
+                var div = L.DomUtil.create('div', 'legend');
+                for ( var key in BuildingTypologyMarkers) {
+                  div.innerHTML += '<div class="outline"><i class="fa fa-' + BuildingTypologyMarkers[key].options.icon + '" style="color:' +
+                      BuildingTypologyMarkers[key].options.iconColor + ';background:' + BuildingTypologyMarkers[key].options.markerColor +
+                      '"></i></div>' + key + '<br>';
+                }
+                return div;
+              };
+              legend.addTo(map);
+            });
+      }
+
       $scope.$watch('structures', function() {
         addMarkers();
+        addLegend();
       });
 
     });

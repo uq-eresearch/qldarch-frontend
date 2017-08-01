@@ -23,8 +23,7 @@ module.exports = function(grunt) {
             'bower_components/tinymce/skins/lightgray/fonts/tinymce.woff', 'bower_components/tinymce/skins/lightgray/fonts/tinymce.ttf',
             'bower_components/ngprogress/ngProgress.css', 'bower_components/select2/**',
             'bower_components/select2-bootstrap-css/select2-bootstrap.css', 'bower_components/AngularJS-Toaster/toaster.css',
-            'bower_components/font-awesome/css/font-awesome.min.css', 'bower_components/font-awesome/fonts/fontawesome-webfont.woff',
-            'bower_components/font-awesome/fonts/fontawesome-webfont.ttf' ]
+            'bower_components/font-awesome/**', 'bower_components/Leaflet.awesome-markers/**' ]
       } ]
     },
     special : {
