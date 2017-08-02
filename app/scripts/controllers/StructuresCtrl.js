@@ -97,7 +97,6 @@ angular.module('qldarchApp').controller(
       }
 
       function addLegend() {
-        console.log(BuildingTypologyMarkers);
         leafletData.getMap().then(
             function(map) {
               var legend = L.control({
