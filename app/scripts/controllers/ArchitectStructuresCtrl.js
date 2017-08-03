@@ -18,6 +18,7 @@ angular.module('qldarchApp').controller(
 
       function addMarkers() {
         leafletData.getMap().then(function(map) {
+          var markers = L.markerClusterGroup();
           var latlon = [];
           angular.forEach(structures, function(structure) {
             if (angular.isDefined(structure.lat) && angular.isDefined(structure.lng)) {
@@ -29,10 +30,12 @@ angular.module('qldarchApp').controller(
               }
               var mkr = [ structure.lat, structure.lng ];
               var mkrPopup = '<a href="#/project/summary?structureId=' + structure.structureId + '">' + structure.structurelabel + '</a>';
-              L.marker(mkr, mkrIcon).bindPopup(mkrPopup).addTo(map);
+              var marker = L.marker(mkr, mkrIcon).bindPopup(mkrPopup);
+              markers.addLayer(marker);
               latlon.push(mkr);
             }
           });
+          map.addLayer(markers);
           map.fitBounds(new L.LatLngBounds(latlon));
         });
       }

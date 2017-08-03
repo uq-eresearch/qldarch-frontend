@@ -14,16 +14,13 @@ module.exports = function(grunt) {
         dot : true,
         cwd : 'app',
         dest : 'dist',
-        src : [ '*.{ico,png,txt}', '.htaccess', 'bower_components/angular-file-upload/dist/angular-file-upload-shim.min.js',
-            'bower_components/jquery/jquery.min.js', 'bower_components/tinymce/tinymce.min.js',
-            'bower_components/tinymce/plugins/paste/plugin.min.js', 'bower_components/tinymce/themes/modern/theme.min.js',
-            'bower_components/angular/angular.min.js', 'bower_components/bootstrap/dist/js/bootstrap.min.js', 'bower_components/timelinejs/**',
-            'bower_components/leaflet/**', 'images/{,*/}*.{gif,webp}', 'images/header.jpg', 'fonts/*', 'resources/*',
-            'bower_components/tinymce/skins/lightgray/skin.min.css', 'bower_components/tinymce/skins/lightgray/content.min.css',
-            'bower_components/tinymce/skins/lightgray/fonts/tinymce.woff', 'bower_components/tinymce/skins/lightgray/fonts/tinymce.ttf',
-            'bower_components/ngprogress/ngProgress.css', 'bower_components/select2/**',
-            'bower_components/select2-bootstrap-css/select2-bootstrap.css', 'bower_components/AngularJS-Toaster/toaster.css',
-            'bower_components/font-awesome/**', 'bower_components/Leaflet.awesome-markers/**' ]
+        src : [ '.htaccess', '*.{ico,png,txt}', 'fonts/*', 'images/{,*/}*.{gif,webp}', 'images/header.jpg', 'resources/*',
+            'bower_components/jquery/jquery.min.js', 'bower_components/angular/angular.min.js',
+            'bower_components/bootstrap/dist/js/bootstrap.min.js', 'bower_components/angular-file-upload/dist/**',
+            'bower_components/font-awesome/**', 'bower_components/select2/**', 'bower_components/timelinejs/**', 'bower_components/tinymce/**',
+            'bower_components/leaflet/dist/**', 'bower_components/Leaflet.awesome-markers/dist/**', 'bower_components/leaflet.markercluster/dist/**',
+            'bower_components/ngprogress/ngProgress.css', 'bower_components/select2-bootstrap-css/select2-bootstrap.css',
+            'bower_components/AngularJS-Toaster/toaster.css' ]
       } ]
     },
     special : {
