@@ -3,6 +3,10 @@
 console.log('bootstrapping angularjs now');
 angular.bootstrap(document, [ 'qldarchApp' ]);
 
+google.charts.load('current', {
+  'packages' : [ 'timeline' ]
+});
+
 /**
  * Returns a number whose value is limited to the given range.
  * 
