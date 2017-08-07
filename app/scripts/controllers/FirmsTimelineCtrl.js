@@ -2,11 +2,8 @@
 
 angular.module('qldarchApp').controller(
     'FirmsTimelineCtrl',
-    function($scope, firms, GraphHelper, $http, australian, $stateParams, $state, $timeout, $filter) {
+    function($scope, firms, $stateParams, $location, $filter) {
 
-      var DEFAULT_FIRM_ROW_COUNT = 5, data = null;
-      $scope.firmRowDisplayCount = DEFAULT_FIRM_ROW_COUNT;
-      $scope.australian = australian;
       $scope.$stateParams = $stateParams;
       $scope.indexes = {
         '#' : false,
@@ -38,12 +35,43 @@ angular.module('qldarchApp').controller(
         'Z' : false
       };
 
-      firms = $filter('orderBy')(GraphHelper.graphValues(firms), function(firm) {
+      function isLetter(char) {
+        return char.match(/[a-z]/i);
+      }
+
+      firms = $filter('filter')(
+          firms,
+          function(firm) {
+            var startLetter = firm.label.substring(0, 1).toUpperCase();
+            if (!isNaN(startLetter)) {
+              $scope.indexes['#'] = true;
+            } else if (isLetter(startLetter)) {
+              $scope.indexes[startLetter] = true;
+            }
+            if ($stateParams.index && $stateParams.index.length === 1) {
+              if (!$stateParams.index || $stateParams.index === 'null' || ($stateParams.index && firm.label.substring(0, 1) === $stateParams.index) ||
+                  ($stateParams.index === '#' && !isNaN(firm.label.substring(0, 1)))) {
+                return true;
+              }
+              return false;
+            }
+            return true;
+          });
+
+      firms = $filter('orderBy')(firms, function(firm) {
         return firm.label;
       });
 
-      function isLetter(char) {
-        return char.match(/[a-z]/i);
+      function frows() {
+        /* globals $:false */
+        return $.grep(firms, function(firm) {
+          if ($stateParams.index) {
+            var c0 = firm.label.charAt(0);
+            return $stateParams.index === '#' ? $.isNumeric(c0) : (c0.toUpperCase() === $stateParams.index);
+          } else {
+            return true;
+          }
+        });
       }
 
       function makeChart(data) {
@@ -58,7 +86,7 @@ angular.module('qldarchApp').controller(
 
         dataTable.addColumn({
           type : 'string',
-          id : 'President'
+          id : 'Firm'
         });
         dataTable.addColumn({
           type : 'string',
@@ -73,101 +101,34 @@ angular.module('qldarchApp').controller(
           id : 'End'
         });
 
-        // Process the data
-        var years = data[0];
-        var hasData = false;
-
-        for (var i = 1; i < data.length; i++) {
-          var row = data[i];
-          var date = {
-            'endDate' : '1949',
-            'headline' : 'my headline',
-            'text' : '<p>Body text goes here, some HTML is OK</p>',
-            'tag' : 'This is Optional',
-            'classname' : 'optionaluniqueclassnamecanbeaddedhere',
-          };
-          var hasFirm = false;
-          for (var j = 0; j < row.length; j++) {
-            var cell = row[j];
-            var cellYear = years[j].split('-')[0];
-            if (cell) {
-              // Not empty cell
-              if (cell !== '') {
-                // we have some value
-                // @todo: check if its the current data
-                if (date.startDate) {
-                  // Set the end date
-                  date.endDate = cellYear;
-                } else {
-                  // Enable indexes because we have a firm that starts with that
-                  // letter
-                  if (cell.length) {
-                    var startLetter = cell.substring(0, 1).toUpperCase();
-                    if (!isNaN(startLetter)) {
-                      $scope.indexes['#'] = true;
-                    } else if (isLetter(startLetter)) {
-                      $scope.indexes[startLetter] = true;
-                    }
-                  }
-
-                  if (!$stateParams.index || $stateParams.index === 'null' || ($stateParams.index && cell.substring(0, 1) === $stateParams.index) ||
-                      ($stateParams.index === '#' && !isNaN(cell.substring(0, 1)))) {
-                    // Create a new date
-                    hasData = true;
-                    date.startDate = cellYear;
-                    date.endDate = cellYear;
-                    date.headline = cell;
-                    hasFirm = true;
-                  }
-                }
-              }
-            }
+        for (var i = 0; i < data.length; i++) {
+          var rowData;
+          if ((data.length === 1) && (data[i].start.getTime() === data[i].end.getTime())) {
+            rowData = [ data[i].label, data[i].start.toUTCString(),
+                new Date(data[i].start.getFullYear(), data[i].start.getMonth(), data[i].start.getDate()),
+                new Date(data[i].end.getFullYear(), data[i].end.getMonth(), data[i].end.getDate() + 1) ];
+          } else {
+            rowData = [ data[i].label, data[i].label, new Date(data[i].start.getFullYear(), data[i].start.getMonth(), data[i].start.getDate()),
+                new Date(data[i].end.getFullYear(), data[i].end.getMonth(), data[i].end.getDate()) ];
           }
-          if (hasFirm) {
-            var rowData = [ date.headline, date.headline, new Date(date.startDate, 0, 1), new Date(date.endDate, 11, 31) ];
-            dataTable.addRow(rowData);
-          }
+          dataTable.addRow(rowData);
         }
         var options = {
           timeline : {
             colorByRowLabel : true
           }
         };
-        if (hasData) {
-          chart.draw(dataTable, options);
-        }
+        chart.draw(dataTable, options);
       }
 
       $scope.goToIndex = function(index) {
-        $stateParams.index = index;
-        $timeout(function() {
-          $timeout(function() {
-            makeChart(data);
-          });
-        }, 0);
-      };
-
-      $scope.timeline = {
-        headline : 'Timeline headline',
-        text : '<b>hello</b>',
-        asset : {
-
-        },
-        dates : []
-      };
-
-      // Australian firms, show the timeline
-      if (australian) {
-
-        var url;
-        url = 'resources/firms.json';
-
-        $http.get(url).then(function(response) {
-          data = response.data;
-          if (!data.length) {
-            return;
-          }
-          makeChart(data);
+        $location.search({
+          index : index
         });
-      }
+        $stateParams.index = index;
+        makeChart(frows());
+      };
+
+      makeChart(firms);
+
     });

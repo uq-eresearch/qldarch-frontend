@@ -10,8 +10,8 @@
         <div class="col-md-12">
           <ul class="nav nav-pills">
             <li ui-sref-active="active"><a ui-sref="firms.australian">Queensland-based</a></li>
-            <li ui-sref-active="active"><a ui-sref="firms.timeline">Timeline</a></li>
             <li ui-sref-active="active"><a ui-sref="firms.other">Other</a></li>
+            <li ui-sref-active="active"><a ui-sref="firms.timeline">Timeline</a></li>
           </ul>
         </div>
       </div>
@@ -19,7 +19,8 @@
   </div>
   <div class="alert alert-warning" ng-show="Auth.user.role === 'editor' || Auth.user.role === 'admin'" style="margin: 0;">
     <div class="container">
-      <button class="btn btn-default btn-xs" ui-sref="firm.summary.edit({firmId:null})" ng-show="Auth.user.role === 'editor' || Auth.user.role === 'admin'">
+      <button class="btn btn-default btn-xs" ui-sref="firm.summary.edit({firmId:null})"
+        ng-show="Auth.user.role === 'editor' || Auth.user.role === 'admin'">
         <i class="fa fa-plus"></i> New Firm
       </button>
     </div>
