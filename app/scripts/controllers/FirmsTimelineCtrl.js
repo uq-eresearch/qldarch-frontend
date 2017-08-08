@@ -78,7 +78,11 @@ angular.module('qldarchApp').controller(
         // Setup the chart
         var container = document.getElementById('chart');
         var $container = jQuery(container);
-        $container.css('height', '600px');
+
+        var paddingHeight = 50;
+        var rowHeight = data.length * 41;
+        var chartHeight = rowHeight + paddingHeight;
+        $container.css('height', chartHeight + 'px');
 
         var chart = new google.visualization.Timeline(container);
 
