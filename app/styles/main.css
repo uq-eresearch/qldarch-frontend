@@ -307,7 +307,6 @@ img {
 .carousel-inner > .item > a > img {
   display: block;
   max-width: 100%;
-  height: auto;
 }
 .img-rounded {
   border-radius: 6px;
@@ -5579,7 +5578,7 @@ button.close {
   .carousel-caption {
     left: 20%;
     right: 20%;
-    padding-bottom: 30px;
+    padding-bottom: 83px;
   }
   .carousel-indicators {
     bottom: 20px;
@@ -6383,28 +6382,19 @@ form .select2-container-active.ng-invalid.ng-dirty .select2-choice {
   border: black;
 }
 .jumbotron {
-  background-image: url('../images/header.jpg');
-  background-repeat: no-repeat;
-  background-position: 50% 100%;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
   color: white;
   text-align: center;
   text-shadow: 0px 1px 1px black;
-  padding: 84px 0;
+  padding: 0 0;
   margin: 0;
   /**
    * Components
    */
 }
-.jumbotron h1 {
-  font-size: 24px;
-}
-.jumbotron p {
-  font-size: 16px;
-  font-weight: normal;
+.jumbotron img {
+  height: 245px;
+  width: 100%;
+  object-fit: cover;
 }
 /**
  * Front page search

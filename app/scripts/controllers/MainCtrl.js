@@ -1,6 +1,15 @@
 'use strict';
 
-angular.module('qldarchApp').controller('MainCtrl', function($scope, $sce, interviews, LayoutHelper, GraphHelper, compoundObjects) {
+angular.module('qldarchApp').controller('MainCtrl', function($scope, $sce, Uris, interviews, LayoutHelper, GraphHelper, compoundObjects) {
+  $scope.slidesInterval = 5000;
+  $scope.slides = [ {
+    image : '../images/header_1280x165.jpg',
+    caption : '<h3>Explore Queensland Architecture</h3>'
+  }, {
+    image : Uris.QLDARCH_UI + 'videos/poster.png',
+    caption : '<h4>Search for architects, firms and projects or use the interactive tools</h4>'
+  } ];
+
   $scope.searchType = 'entities';
   $scope.query = '';
 

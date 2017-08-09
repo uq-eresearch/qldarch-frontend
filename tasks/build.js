@@ -14,7 +14,7 @@ module.exports = function(grunt) {
         dot : true,
         cwd : 'app',
         dest : 'dist',
-        src : [ '.htaccess', '*.{ico,png,txt}', 'fonts/*', 'images/{,*/}*.{gif,webp}', 'images/header.jpg', 'resources/*',
+        src : [ '.htaccess', '*.{ico,png,txt}', 'fonts/*', 'images/{,*/}*.{gif,webp}', 'images/header_1280x165.jpg', 'resources/*',
             'bower_components/jquery/jquery.min.js', 'bower_components/angular/angular.min.js',
             'bower_components/bootstrap/dist/js/bootstrap.min.js', 'bower_components/angular-file-upload/dist/**',
             'bower_components/font-awesome/**', 'bower_components/select2/**', 'bower_components/timelinejs/**', 'bower_components/tinymce/**',

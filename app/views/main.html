@@ -1,8 +1,10 @@
 <div class="content">
   <div class="jumbotron">
-    <div class="container">
-      <h1>Explore Queensland Architecture</h1>
-      <p>Search for architects, firms and projects or use the interactive tools</p>
+    <div uib-carousel interval="slidesInterval">
+      <div uib-slide ng-repeat="slide in slides" active="slide.active">
+        <img ng-src="{{ slide.image }}">
+        <div class="carousel-caption" ng-bind-html="slide.caption"></div>
+      </div>
     </div>
   </div>
   <div class="l-frame l-frame-highlight l-frame-tight">
