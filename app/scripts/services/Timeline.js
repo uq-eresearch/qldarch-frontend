@@ -19,31 +19,31 @@ angular.module('qldarchApp').service('Timeline', function Timeline($http, $filte
     if (obj.subject !== id) {
       label = obj.subjectlabel;
       if (obj.subjecttype === 'person' && obj.subjectarchitect === true) {
-        opentag = '<a href="#/architect/summary?architectId=' + obj.subject + '">';
+        opentag = '<a href="/architect/summary?architectId=' + obj.subject + '">';
         closetag = '</a>';
       } else if (obj.subjecttype === 'person' && obj.subjectarchitect === false) {
-        opentag = '<a href="#/other/summary?otherId=' + obj.subject + '">';
+        opentag = '<a href="/other/summary?otherId=' + obj.subject + '">';
         closetag = '</a>';
       } else if (obj.subjecttype === 'firm') {
-        opentag = '<a href="#/firm/summary?firmId=' + obj.subject + '">';
+        opentag = '<a href="/firm/summary?firmId=' + obj.subject + '">';
         closetag = '</a>';
       } else if (obj.subjecttype === 'structure') {
-        opentag = '<a href="#/project/summary?structureId=' + obj.subject + '">';
+        opentag = '<a href="/project/summary?structureId=' + obj.subject + '">';
         closetag = '</a>';
       }
     } else {
       label = obj.objectlabel;
       if (obj.objecttype === 'person' && obj.objectarchitect === true) {
-        opentag = '<a href="#/architect/summary?architectId=' + obj.object + '">';
+        opentag = '<a href="/architect/summary?architectId=' + obj.object + '">';
         closetag = '</a>';
       } else if (obj.objecttype === 'person' && obj.objectarchitect === false) {
-        opentag = '<a href="#/other/summary?otherId=' + obj.object + '">';
+        opentag = '<a href="/other/summary?otherId=' + obj.object + '">';
         closetag = '</a>';
       } else if (obj.objecttype === 'firm') {
-        opentag = '<a href="#/firm/summary?firmId=' + obj.object + '">';
+        opentag = '<a href="/firm/summary?firmId=' + obj.object + '">';
         closetag = '</a>';
       } else if (obj.objecttype === 'structure') {
-        opentag = '<a href="#/project/summary?structureId=' + obj.object + '">';
+        opentag = '<a href="/project/summary?structureId=' + obj.object + '">';
         closetag = '</a>';
       }
     }

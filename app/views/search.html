@@ -37,7 +37,7 @@
         <div class="col-md-8">
           <!-- Title -->
           <h4>
-            <a ng-show="result.category == 'archobj'" ng-href="#{{ result.link }}" style="color: #333"> {{ result.preflabel||result.label }} </a> <a
+            <a ng-show="result.category == 'archobj'" ng-href="{{ result.link }}" style="color: #333"> {{ result.preflabel||result.label }} </a> <a
               ng-show="result.category == 'media'" ng-href="{{Uris.WS_DOWNLOAD+result.id}}" alt="" target="_blank"> {{ result.filename }} </a> <small
               ng-if="!result.architect" class="text-muted" style="text-transform: capitalize;"> {{ result.type }} </small> <small
               ng-if="result.architect" class="text-muted"> Architect </small>

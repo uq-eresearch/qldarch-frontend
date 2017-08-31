@@ -29,7 +29,7 @@ angular.module('qldarchApp').controller(
                 };
               }
               var mkr = [ structure.lat, structure.lng ];
-              var mkrPopup = '<a href="#/project/summary?structureId=' + structure.structureId + '">' + structure.structurelabel + '</a>';
+              var mkrPopup = '<a href="/project/summary?structureId=' + structure.structureId + '">' + structure.structurelabel + '</a>';
               var marker = L.marker(mkr, mkrIcon).bindPopup(mkrPopup);
               markers.addLayer(marker);
               latlon.push(mkr);

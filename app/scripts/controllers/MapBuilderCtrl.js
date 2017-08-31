@@ -271,7 +271,7 @@ angular
                     if (angular.isDefined(structure.longitude) && angular.isDefined(structure.longitude)) {
                       var mkr = [ structure.latitude, structure.longitude ];
                       var marker = L.marker(mkr)
-                          .bindPopup('<a href="#/project/summary?structureId=' + structure.id + '">' + structure.label + '</a>').addTo(map);
+                          .bindPopup('<a href="/project/summary?structureId=' + structure.id + '">' + structure.label + '</a>').addTo(map);
                       $scope.map.markers.push(marker);
                       latlon.push(mkr);
                     }
@@ -420,7 +420,7 @@ angular
                   map.preferCanvas = true;
                   var prospectiveMarker = L.circleMarker(mkr, {
                     color : '#3388ff'
-                  }).bindPopup('<a href="#/project/summary?structureId=' + structure.id + '">' + structure.label + '</a>').addTo(map);
+                  }).bindPopup('<a href="/project/summary?structureId=' + structure.id + '">' + structure.label + '</a>').addTo(map);
                   $scope.map.$import.prospectiveMarkers.push(prospectiveMarker);
                   latlon.push(mkr);
                 }

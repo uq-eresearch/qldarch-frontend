@@ -5,6 +5,7 @@ angular.module('qldarchApp').config(function($urlRouterProvider, $httpProvider, 
   console.log('does this work?');
 
   $locationProvider.hashPrefix('');
+  $locationProvider.html5Mode(true);
 
   $qProvider.errorOnUnhandledRejections(false);
 

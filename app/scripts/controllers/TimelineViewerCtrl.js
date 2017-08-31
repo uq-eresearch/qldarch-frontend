@@ -60,16 +60,16 @@ angular.module('qldarchApp').controller('TimelineViewerCtrl', function($scope, c
       }
       label = date.archobj.label;
       if (date.archobj.type === 'person' && date.archobj.architect === true) {
-        opentag = '<a href="#/architect/summary?architectId=' + date.archobj.id + '">';
+        opentag = '<a href="/architect/summary?architectId=' + date.archobj.id + '">';
         closetag = '</a>';
       } else if (date.archobj.type === 'person' && date.archobj.architect === false) {
-        opentag = '<a href="#/other/summary?otherId=' + date.archobj.id + '">';
+        opentag = '<a href="/other/summary?otherId=' + date.archobj.id + '">';
         closetag = '</a>';
       } else if (date.archobj.type === 'firm') {
-        opentag = '<a href="#/firm/summary?firmId=' + date.archobj.id + '">';
+        opentag = '<a href="/firm/summary?firmId=' + date.archobj.id + '">';
         closetag = '</a>';
       } else if (date.archobj.type === 'structure') {
-        opentag = '<a href="#/project/summary?structureId=' + date.archobj.id + '">';
+        opentag = '<a href="/project/summary?structureId=' + date.archobj.id + '">';
         closetag = '</a>';
       }
     } else {
