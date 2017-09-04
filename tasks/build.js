@@ -194,6 +194,7 @@ module.exports = function(grunt) {
         }
       },
       expand : true,
+      dot : true,
       cwd : 'dist/',
       src : [ '**/*' ],
       dest : 'frontend-' + version + '/'
