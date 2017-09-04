@@ -5,6 +5,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
+  var modRewrite = require('connect-modrewrite');
+
   // workaround for http-proxy with gzip chunked server responses
   // found here: https://github.com/nodejitsu/node-http-proxy/issues/1007
   // also had issues with images being returned through this proxy
@@ -43,8 +45,7 @@ module.exports = function(grunt) {
       livereload : 35729,
       middleware : function(connect, options, middlewares) {
         // inject a custom middleware into the array of default middlewares
-        // middlewares.unshift(prx('/ws', 'http://vm-203-101-226-13.qld.nectar.org.au'), prx('/files'), prx('/omeka'), prx('/static'));
-        middlewares.unshift(prx('/ws', 'http://localhost:8080/qldarch'));
+        middlewares.unshift(prx('/ws', 'http://localhost:8080/qldarch'), modRewrite(['^[^\\.]*$ /index.html [L]']));
         return middlewares;
       }
     },
