@@ -16,4 +16,20 @@ angular.module('qldarchApp').controller('AdminSettingsCtrl', function($scope, to
       toaster.pop('error', 'Error occured', 'Sorry, we couldn\t update search index');
     });
   };
+
+  $scope.siteMapUpdate = function() {
+    $http({
+      method : 'POST',
+      url : Uris.WS_ROOT + 'sitemap',
+      headers : {
+        'Content-Type' : 'application/x-www-form-urlencoded'
+      },
+      withCredentials : true
+    }).then(function() {
+      $state.go('main');
+      toaster.pop('success', 'Sitemap Updated', 'You have update sitemap file');
+    }, function() {
+      toaster.pop('error', 'Error occured', 'Sorry, we couldn\t update sitemap file');
+    });
+  };
 });
