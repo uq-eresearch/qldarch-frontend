@@ -6,4 +6,4 @@ angular.module('config', []).constant('ENV', {
 });
 
 angular.module('qldarchApp', [ 'config', 'ngCookies', 'ngResource', 'ngSanitize', 'ngAnimate', 'ngRoute', 'ngProgress', 'ui.bootstrap', 'ui.select2',
-    'audioPlayer', 'ui.utils', 'infinite-scroll', 'ui.router', 'angularFileUpload', 'toaster', 'vcRecaptcha', 'ui.tinymce', 'ui-leaflet' ]);
+    'mediaPlayer', 'ui.utils', 'infinite-scroll', 'ui.router', 'angularFileUpload', 'toaster', 'vcRecaptcha', 'ui.tinymce', 'ui-leaflet' ]);
