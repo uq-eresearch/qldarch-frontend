@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('qldarchApp').controller('StructureCtrl',
-    function($scope, structure, designers, ArchObj, firms, architects, $filter, buildingTypologies, $state) {
+    function($scope, structure, designers, ArchObj, firms, architects, $filter, buildingTypologies, $state, $q) {
       $scope.structure = structure;
       $scope.designers = designers;
 
@@ -116,35 +116,39 @@ angular.module('qldarchApp').controller('StructureCtrl',
       };
 
       $scope.updateStructure = function(data) {
+        var promises = [];
+        var promise;
         if (data.id) {
-          ArchObj.updateStructure(data).then(function() {
-            $state.go('structure.summary', {
-              structureId : data.id
-            }, {
-              reload : true,
-              inherit : false
-            });
+          promise = ArchObj.updateStructure(data).then(function(res) {
+            return res;
           }).catch(function(error) {
             console.log('Failed to save', error);
             $state.go('structure.summary.edit', {
               structureId : data.id
             });
+            return error;
           });
+          promises.push(promise);
         } else {
-          ArchObj.createStructure(data).then(function() {
-            $state.go('structure.summary', {
-              structureId : data.id
-            }, {
-              reload : true,
-              inherit : false
-            });
+          promise = ArchObj.createStructure(data).then(function(res) {
+            return res;
           }).catch(function(error) {
             console.log('Failed to save', error);
             $state.go('structure.summary.edit', {
               structureId : data.id
             });
+            return error;
           });
+          promises.push(promise);
         }
+        $q.all(promises).then(function() {
+          $state.go('structure.summary', {
+            structureId : data.id
+          }, {
+            reload : true,
+            inherit : false
+          });
+        });
       };
 
       $scope.clearCompletionDate = function() {
