@@ -25,6 +25,14 @@
 }
 </style>
 <div>
+  <div class="alert alert-warning" ng-show="Auth.user.role === 'editor' || Auth.user.role === 'admin'" style="margin: 0;">
+    <div class="container">
+      <button class="btn btn-default btn-xs" ui-sref="structure.summary.edit({structureId:null})"
+        ng-show="Auth.user.role === 'editor' || Auth.user.role === 'admin'">
+        <i class="fa fa-plus"></i> New Project
+      </button>
+    </div>
+  </div>
   <div class="l-frame l-frame-media" ng-show="isShowingMap()">
     <div class="container">
       <leaflet width="100%" height="400px"></leaflet>

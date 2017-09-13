@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, Uris, RelationshipLabels, toaster) {
+angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, $q, Uris, RelationshipLabels, toaster, CreateRelationship) {
   /* globals $:false */
   var path = Uris.WS_ROOT + 'archobj/';
 
@@ -277,6 +277,17 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
           payload.typologies.push(typology.text);
         });
       }
+      var relationships = [];
+      if (payload.$associatedFirm !== null && angular.isDefined(payload.$associatedFirm)) {
+        angular.forEach(payload.$associatedFirm, function(firm) {
+          relationships.push(firm.id);
+        });
+      }
+      if (payload.$associatedArchitects !== null && angular.isDefined(payload.$associatedArchitects)) {
+        angular.forEach(payload.$associatedArchitects, function(architect) {
+          relationships.push(architect.id);
+        });
+      }
       if (!(payload.completion instanceof Date)) {
         payload.completion = new Date(payload.completion);
       }
@@ -293,6 +304,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
       delete payload.$associatedFirm;
       delete payload.$associatedArchitects;
       delete payload.$typologies;
+      delete payload.associatedEntities;
       delete payload.lat;
       delete payload.lon;
       delete payload.locked;
@@ -329,7 +341,34 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         angular.extend(data, response.data);
         toaster.pop('success', data.label + ' created');
         console.log('created structure id: ' + data.id);
-        return data;
+        if (relationships.length > 0) {
+          var promises = [];
+          angular.forEach(relationships, function(r) {
+            var relationship = {};
+            relationship.$source = 'structure';
+            relationship.$type = {
+              id : 'WorkedOn'
+            };
+            relationship.$subject = {
+              id : r
+            };
+            relationship.$object = {
+              id : data.id
+            };
+            var promise = CreateRelationship.createRelationship(relationship).then(function(rsp) {
+              return rsp;
+            }, function(rsp) {
+              return rsp;
+            });
+            promises.push(promise);
+          });
+          $q.all(promises).then(function() {
+            toaster.pop('success', 'Associated entities added');
+            return data;
+          });
+        } else {
+          return data;
+        }
       }, function(response) {
         toaster.pop('error', 'Error occured', response.data.msg);
         console.log('error message: ' + response.data.msg);
@@ -342,6 +381,17 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         payload.typologies = [];
         angular.forEach(payload.$typologies, function(typology) {
           payload.typologies.push(typology.text);
+        });
+      }
+      var relationships = [];
+      if (payload.$associatedFirm !== null && angular.isDefined(payload.$associatedFirm)) {
+        angular.forEach(payload.$associatedFirm, function(firm) {
+          relationships.push(firm.id);
+        });
+      }
+      if (payload.$associatedArchitects !== null && angular.isDefined(payload.$associatedArchitects)) {
+        angular.forEach(payload.$associatedArchitects, function(architect) {
+          relationships.push(architect.id);
         });
       }
       if (!(payload.completion instanceof Date)) {
@@ -360,6 +410,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
       delete payload.$associatedFirm;
       delete payload.$associatedArchitects;
       delete payload.$typologies;
+      delete payload.associatedEntities;
       delete payload.lat;
       delete payload.lon;
       delete payload.locked;
@@ -396,7 +447,64 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, U
         angular.extend(data, response.data);
         toaster.pop('success', data.label + ' updated');
         console.log('updated structure id: ' + data.id);
-        return data;
+        if (relationships.length > 0 || data.associatedEntities.length > 0) {
+          var promises = [];
+          if (relationships.length > 0) {
+            angular.forEach(relationships, function(r) {
+              var newrelationship = true;
+              angular.forEach(data.associatedEntities, function(e) {
+                if (e.id === r) {
+                  newrelationship = false;
+                }
+              });
+              if (newrelationship) {
+                var relationship = {};
+                relationship.$source = 'structure';
+                relationship.$type = {
+                  id : 'WorkedOn'
+                };
+                relationship.$subject = {
+                  id : r
+                };
+                relationship.$object = {
+                  id : data.id
+                };
+                var promise = CreateRelationship.createRelationship(relationship).then(function(rsp) {
+                  return rsp;
+                }, function(rsp) {
+                  return rsp;
+                });
+                promises.push(promise);
+              }
+            });
+          }
+          if (data.associatedEntities.length > 0) {
+            angular.forEach(data.associatedEntities, function(e) {
+              var entityexist = false;
+              angular.forEach(relationships, function(rel) {
+                if (e.id === rel) {
+                  entityexist = true;
+                }
+              });
+              if (!entityexist) {
+                var promise = $http.delete(Uris.WS_ROOT + 'relationship/' + e.relationshipid, {
+                  withCredentials : true
+                }).then(function(rsp) {
+                  return rsp;
+                }, function(rsp) {
+                  return rsp;
+                });
+                promises.push(promise);
+              }
+            });
+          }
+          $q.all(promises).then(function() {
+            toaster.pop('success', 'Associated entities updated');
+            return data;
+          });
+        } else {
+          return data;
+        }
       }, function(response) {
         toaster.pop('error', 'Error occured', response.data.msg);
         console.log('error message: ' + response.data.msg);
