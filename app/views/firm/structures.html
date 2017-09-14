@@ -27,7 +27,7 @@
 <div>
   <div class="alert alert-warning" ng-show="Auth.user.role === 'editor' || Auth.user.role === 'admin'" style="margin: 0;">
     <div class="container">
-      <button class="btn btn-default btn-xs" ui-sref="structure.summary.edit({structureId:null})"
+      <button class="btn btn-default btn-xs" ui-sref="structure.summary.edit({firmId:$stateParams.firmId})"
         ng-show="Auth.user.role === 'editor' || Auth.user.role === 'admin'">
         <i class="fa fa-plus"></i> New Project
       </button>

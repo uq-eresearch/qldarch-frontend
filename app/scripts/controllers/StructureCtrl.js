@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('qldarchApp').controller('StructureCtrl',
-    function($scope, structure, designers, ArchObj, firms, architects, $filter, buildingTypologies, $state, $q) {
+    function($scope, structure, designers, ArchObj, firms, architects, $filter, buildingTypologies, $state, $q, $stateParams) {
+      /* globals $:false */
       $scope.structure = structure;
       $scope.designers = designers;
 
@@ -29,6 +30,17 @@ angular.module('qldarchApp').controller('StructureCtrl',
           firmobj.relationshipid = firm.relationshipid;
           $scope.structure.associatedEntities.push(firmobj);
         });
+      }
+      if (angular.isDefined($stateParams.firmId)) {
+        $scope.structure.$associatedFirm = [];
+        var firm = $.grep(firms, function(f) {
+          return JSON.stringify(f.id) === $stateParams.firmId;
+        });
+        var firmobj = {
+          id : firm[0].id,
+          text : firm[0].label
+        };
+        $scope.structure.$associatedFirm.push(firmobj);
       }
 
       var dataFirmSelect = {
@@ -62,6 +74,17 @@ angular.module('qldarchApp').controller('StructureCtrl',
           architectobj.relationshipid = architect.relationshipid;
           $scope.structure.associatedEntities.push(architectobj);
         });
+      }
+      if (angular.isDefined($stateParams.architectId)) {
+        $scope.structure.$associatedArchitects = [];
+        var architect = $.grep(architects, function(a) {
+          return JSON.stringify(a.id) === $stateParams.architectId;
+        });
+        var architectobj = {
+          id : architect[0].id,
+          text : architect[0].label
+        };
+        $scope.structure.$associatedArchitects.push(architectobj);
       }
 
       var dataArchitectSelect = {

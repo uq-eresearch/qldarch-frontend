@@ -2,7 +2,7 @@
 
 angular.module('qldarchApp').config(function($stateProvider) {
   $stateProvider.state('structure.summary', {
-    url : '/summary',
+    url : '/summary?architectId&firmId',
     templateUrl : 'views/structure/summary.html',
     resolve : {
       designers : [ 'structure', '$filter', 'ArchObj', function(structure, $filter, ArchObj) {
