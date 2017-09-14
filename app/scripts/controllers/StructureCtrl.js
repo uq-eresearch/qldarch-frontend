@@ -181,6 +181,14 @@ angular.module('qldarchApp').controller('StructureCtrl',
       $scope.cancel = function() {
         if (structure.id) {
           $state.go('structure.summary');
+        } else if (angular.isDefined($stateParams.firmId)) {
+          $state.go('firm.summary', {
+            firmId : $stateParams.firmId
+          });
+        } else if (angular.isDefined($stateParams.architectId)) {
+          $state.go('architect.summary', {
+            architectId : $stateParams.architectId
+          });
         } else {
           $state.go('structures.australian');
         }
