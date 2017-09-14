@@ -186,6 +186,8 @@ angular.module('qldarchApp').controller(
         if ($scope.isSyncing && !$scope.isSearching) {
           if ($scope.audioPlayer.currentTime === 0) {
             return true;
+          } else if (angular.isUndefined($scope.audioPlayer.currentTime) && angular.isDefined(exchange.endTime)) {
+            return true;
           } else {
             return $scope.audioPlayer.currentTime < exchange.endTime;
           }
