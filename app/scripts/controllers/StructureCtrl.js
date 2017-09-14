@@ -165,12 +165,30 @@ angular.module('qldarchApp').controller('StructureCtrl',
           promises.push(promise);
         }
         $q.all(promises).then(function() {
-          $state.go('structure.summary', {
-            structureId : data.id
-          }, {
-            reload : true,
-            inherit : false
-          });
+          if (angular.isDefined($stateParams.firmId)) {
+            $state.go('firm.structures', {
+              firmId : $stateParams.firmId
+            }, {
+              reload : true,
+              inherit : false
+            });
+          } else if (angular.isDefined($stateParams.architectId)) {
+            $state.go('architect.structures', {
+              architectId : $stateParams.architectId
+            }, {
+              reload : true,
+              inherit : false
+            });
+          } else if (structure.id) {
+            $state.go('structure.summary', {
+              structureId : data.id
+            }, {
+              reload : true,
+              inherit : false
+            });
+          } else {
+            $state.go('structures.australian');
+          }
         });
       };
 
@@ -182,11 +200,11 @@ angular.module('qldarchApp').controller('StructureCtrl',
         if (structure.id) {
           $state.go('structure.summary');
         } else if (angular.isDefined($stateParams.firmId)) {
-          $state.go('firm.summary', {
+          $state.go('firm.structures', {
             firmId : $stateParams.firmId
           });
         } else if (angular.isDefined($stateParams.architectId)) {
-          $state.go('architect.summary', {
+          $state.go('architect.structures', {
             architectId : $stateParams.architectId
           });
         } else {
