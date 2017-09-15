@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('qldarchApp').controller('StructureCtrl',
+angular.module('qldarchApp').controller(
+    'StructureCtrl',
     function($scope, structure, designers, ArchObj, firms, architects, $filter, buildingTypologies, $state, $q, $stateParams) {
       /* globals $:false */
       $scope.structure = structure;
@@ -137,6 +138,26 @@ angular.module('qldarchApp').controller('StructureCtrl',
           options.callback(data);
         }
       };
+
+      $scope.$watch('structure.location', function(location) {
+        if (angular.isDefined(location)) {
+          clearTimeout($scope.typingTimer);
+          $scope.typingTimer = setTimeout(function() {
+            $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?address=' + $scope.structure.location,
+                function(data) {
+                  if (data.results.length === 1) {
+                    if ((structure.latitude !== data.results[0].geometry.location.lat) ||
+                        (structure.longitude !== data.results[0].geometry.location.lng)) {
+                      structure.latitude = data.results[0].geometry.location.lat;
+                      structure.longitude = data.results[0].geometry.location.lng;
+                      $('#LAT').val(data.results[0].geometry.location.lat);
+                      $('#LNG').val(data.results[0].geometry.location.lng);
+                    }
+                  }
+                });
+          }, 3000);
+        }
+      });
 
       $scope.updateStructure = function(data) {
         var promises = [];
