@@ -122,7 +122,9 @@ text {
                     <div class="center-content">
                       <div ng-switch on="relationship.source">
                         <div ng-switch-when="interview">
-                          <i class="fa fa-microphone" style="font-size: 16px;"></i>
+                          <a ui-sref="interview({ interviewId: relationship.interview, time: relationship.utterance })" style="color: white;"> <i
+                            class="fa fa-microphone" style="font-size: 16px;"></i>
+                          </a>
                         </div>
                         <div ng-switch-when="structure">
                           <i class="fa fa-building-o" style="font-size: 16px;"></i>
@@ -155,10 +157,9 @@ text {
                   ui-sref="other.summary({ otherId: relationship.subject })"> {{ relationship.subjectlabel }} </a>
                 <!-- end:subject -->
                 <!-- predicate -->
-                <a ng-if="relationship.source=='interview'&&!(Auth.user.role=='editor'||Auth.user.role=='admin')"
-                  ui-sref="interview({ interviewId: relationship.interview, time: relationship.utterance })" style="font-weight: bold;"> {{
-                  relationship.relationship }}</a> <span ng-if="relationship.source!='interview'||Auth.user.role=='editor'||Auth.user.role=='admin'">
-                  {{ relationship.relationship }} </span>
+                <a ng-if="relationship.source=='interview'" ui-sref="interview({ interviewId: relationship.interview, time: relationship.utterance })"
+                  style="font-weight: bold;"> {{ relationship.relationship }}</a> <span ng-if="relationship.source!='interview'"> {{
+                  relationship.relationship }} </span>
                 <!-- end:predicate -->
                 <!-- object -->
                 <a ng-if="relationship.objectarchitect==true&&relationship.objecttype=='person'"
