@@ -6,7 +6,7 @@
 <div class="content">
   <div class="page-header">
     <div class="container">
-      <h1>Search Results - "{{ query }}"</h1>
+      <h1 style="text-transform: none !important;">Search Results - "{{ query }}"</h1>
     </div>
   </div>
   <div class="text-center" ng-show="!results">
@@ -55,18 +55,9 @@
           <div ng-bind-html="result.snippet"></div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-sm-1">
-          <button class="btn btn-primary navbar-left" ng-click="prevResultPage()" ng-show="page > 0">
-            <i class="fa fa-chevron-left"></i>
-          </button>
-        </div>
-        <div class="col-sm-10" style="text-align: center; font-weight: bold;" ng-show="0 < page <= maxPages">{{ page + 1 }} / {{ maxPages + 1 }}</div>
-        <div class="col-sm-1">
-          <button class="btn btn-primary navbar-right" ng-click="nextResultPage()" ng-show="page < maxPages">
-            <i class="fa fa-chevron-right"></i>
-          </button>
-        </div>
+      <div>
+        <uib-pagination total-items="totalItems" items-per-page="itemsPerPage" ng-model="currentPage" max-size="maxSize" ng-change="pageChanged()"
+          boundary-links="true" rotate="false" previous-text="&lsaquo;" next-text="&rsaquo;"></uib-pagination>
       </div>
     </div>
   </section>

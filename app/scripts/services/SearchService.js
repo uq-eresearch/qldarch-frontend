@@ -8,7 +8,7 @@
     function getArticles(query) {
       var syntax = '* AND (type:article OR type:Article) AND (category:archobj OR category:media)';
       var url = Uris.WS_ROOT + 'search?q=' + query.replace(WordService.spclCharsLucene, '') + syntax + '&p=0';
-      return $http.get(url).then(function(resp) {
+      return $http.get(url + '&pc=0').then(function(resp) {
         return $http.get(url + '&pc=' + resp.data.hits).then(function(response) {
           return _.map(response.data.documents, function(article) {
             return _.assign({}, article, {
@@ -22,7 +22,7 @@
     function getArticlesInterviews(query) {
       var syntax = '* AND (type:article OR type:interview) AND category:archobj';
       var url = Uris.WS_ROOT + 'search?q=' + query.replace(WordService.spclCharsLucene, '') + syntax + '&p=0';
-      return $http.get(url).then(function(resp) {
+      return $http.get(url + '&pc=0').then(function(resp) {
         return $http.get(url + '&pc=' + resp.data.hits).then(function(response) {
           var data = response.data.documents;
           var documents = [];
