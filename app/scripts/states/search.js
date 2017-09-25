@@ -84,7 +84,10 @@ angular.module('qldarchApp').config(
                               return result.type === 'interview';
                             });
                             var articles = $filter('filter')(docs, function(result) {
-                              return result.type === 'article' || result.type === 'Article';
+                              return result.type === 'article';
+                            });
+                            var articlefiles = $filter('filter')(docs, function(result) {
+                              return result.type === 'Article';
                             });
                             var others = $filter('filter')(
                                 docs,
@@ -92,7 +95,7 @@ angular.module('qldarchApp').config(
                                   return result.architect !== true && result.type !== 'firm' && result.type !== 'structure' &&
                                       result.type !== 'interview' && result.type !== 'article' && result.type !== 'Article';
                                 });
-                            var data = architects.concat(firms, structures, interviews, articles, others);
+                            var data = architects.concat(firms, structures, interviews, articles, articlefiles, others);
                             /* globals $:false */
                             $.each(data, function(i, item) {
                               var path;
