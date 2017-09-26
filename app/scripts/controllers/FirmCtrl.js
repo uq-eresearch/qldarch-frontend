@@ -1,7 +1,29 @@
 'use strict';
 
-angular.module('qldarchApp').controller('FirmCtrl', function($scope, $filter, firm, firms, ArchObj, $state) {
+angular.module('qldarchApp').controller('FirmCtrl', function($scope, $filter, firm, firms, architects, ArchObj, $state) {
   $scope.firm = firm;
+
+  architects = $filter('orderBy')(architects, function(architect) {
+    return architect.label;
+  });
+
+  var dataArchitectSelect = {
+    results : []
+  };
+
+  angular.forEach(architects, function(architect) {
+    dataArchitectSelect.results.push({
+      id : architect.id,
+      text : architect.label
+    });
+  });
+
+  $scope.architectSelect = {
+    placeholder : 'Select an Architect',
+    dropdownAutoWidth : true,
+    multiple : true,
+    data : dataArchitectSelect
+  };
 
   firms = $filter('orderBy')(firms, function(firm) {
     return firm.label;

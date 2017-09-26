@@ -123,6 +123,12 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, $
 
     createFirm : function(data) {
       var payload = angular.copy(data);
+      if (payload.$employedArchitects !== null && angular.isDefined(payload.$employedArchitects)) {
+        payload.employees = [];
+        angular.forEach(payload.$employedArchitects, function(architect) {
+          payload.employees.push(architect.id);
+        });
+      }
       if (!(payload.start instanceof Date)) {
         payload.start = new Date(payload.start);
       }
@@ -154,6 +160,7 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, $
         payload.succeededby = payload.$succeededByFirms.id;
       }
       // Remove any extra information
+      delete payload.$employedArchitects;
       delete payload.$precededByFirms;
       delete payload.$succeededByFirms;
       delete payload.locked;

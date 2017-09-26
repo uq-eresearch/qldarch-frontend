@@ -81,6 +81,19 @@
             <label>Succeeded By</label>
             <div ui-select2="succeededBySelect" ng-model="firm.$succeededByFirms" class="form-control"></div>
           </div>
+          <div class="form-group" ng-hide="$stateParams.firmId">
+            <label>Employed Architects</label>
+            <div class="row">
+              <div class="col-sm-10">
+                <div ui-select2="architectSelect" ng-model="firm.$employedArchitects" class="form-control"></div>
+              </div>
+              <div class="col-sm-2" style="border-left: 1px solid #ccc; padding-left: 16px;">
+                <button class="btn btn-default form-control" ui-sref="architect.summary.edit({})">
+                  <i class="fa fa-plus"></i> New Architect
+                </button>
+              </div>
+            </div>
+          </div>
           <div class="checkbox">
             <label> <input type="checkbox" ng-model="firm.australian"> Australian Firm
             </label>
