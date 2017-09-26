@@ -2,7 +2,7 @@
 
 angular.module('qldarchApp').config(function($stateProvider) {
   $stateProvider.state('relationships.create', {
-    url : '/create?archobjId&archobjType',
+    url : '/create?type&archobjId&archobjType',
     templateUrl : 'views/relationships/relationships.create.html',
     resolve : {
       types : [ 'RelationshipLabels', function(RelationshipLabels) {
@@ -10,23 +10,27 @@ angular.module('qldarchApp').config(function($stateProvider) {
           return response;
         });
       } ],
-      architects : [ 'AggArchObjs', function(AggArchObjs) {
+      architects : [ 'AggArchObjs', '$filter', function(AggArchObjs, $filter) {
         return AggArchObjs.loadArchitects().then(function(data) {
           angular.forEach(data, function(d) {
             d.type = 'architect';
           });
-          return data;
+          return $filter('filter')(data, function(architect) {
+            return architect.label && !(/\s/.test(architect.label.substring(0, 1)));
+          });
         }).catch(function() {
           console.log('unable to load architects');
           return {};
         });
       } ],
-      firms : [ 'AggArchObjs', function(AggArchObjs) {
+      firms : [ 'AggArchObjs', '$filter', function(AggArchObjs, $filter) {
         return AggArchObjs.loadFirms().then(function(data) {
           angular.forEach(data, function(d) {
             d.type = 'firm';
           });
-          return data;
+          return $filter('filter')(data, function(firm) {
+            return firm.label && !(/\s/.test(firm.label.substring(0, 1)));
+          });
         }).catch(function() {
           console.log('unable to load firms');
           return {};

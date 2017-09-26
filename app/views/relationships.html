@@ -73,8 +73,9 @@ text {
 <div>
   <div class="alert alert-warning" ng-show="Auth.user.role === 'editor' || Auth.user.role === 'admin'" style="margin: 0;">
     <div class="container">
-      <a type="button" class="btn btn-default btn-xs" ui-sref="relationships.create({ archobjId: archobjId, archobjType: archobjType })"> <i
-        class="fa fa-plus"></i> New Relationship
+      <a type="button" class="btn btn-default btn-xs"
+        ui-sref="relationships.create({ type: 'structure', archobjId: archobjId, archobjType: archobjType })"> <i class="fa fa-plus"></i> New
+        Relationship
       </a>
     </div>
   </div>

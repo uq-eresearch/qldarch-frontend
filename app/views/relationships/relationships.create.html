@@ -5,9 +5,14 @@
     </div>
   </div>
   <!-- Builder info -->
-  <div class="alert alert-info" style="margin-bottom: 0;">
+  <div ng-show="$stateParams.type==='structure'" class="alert alert-info" style="margin-bottom: 0;">
     <div class="container">
-      <i class="fa fa-info-circle"></i> Create new structure relationship.
+      <i class="fa fa-info-circle"></i> Create a project or structure relationship.
+    </div>
+  </div>
+  <div ng-show="$stateParams.type==='firm'&&$stateParams.archobjType==='firm'" class="alert alert-info" style="margin-bottom: 0;">
+    <div class="container">
+      <i class="fa fa-info-circle"></i> Add an employment relationship.
     </div>
   </div>
   <!-- /Builder info -->
@@ -29,7 +34,7 @@
                   </button>
                   <ul class="dropdown-menu" role="addNew">
                     <li><a ui-sref="architect.summary.edit({})">Architect</a></li>
-                    <li><a ui-sref="firm.summary.edit({})">Firm</a></li>
+                    <li ng-hide="$stateParams.type==='firm'&&$stateParams.archobjType==='firm'"><a ui-sref="firm.summary.edit({})">Firm</a></li>
                   </ul>
                 </div>
               </div>
@@ -54,7 +59,8 @@
                     Add New&nbsp;&nbsp;&nbsp;<span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu" role="addNew">
-                    <li><a ui-sref="structure.summary.edit({})">Project</a></li>
+                    <li ng-show="$stateParams.type==='firm'&&$stateParams.archobjType==='firm'"><a ui-sref="firm.summary.edit({})">Firm</a></li>
+                    <li ng-show="$stateParams.type==='structure'"><a ui-sref="structure.summary.edit({})">Project</a></li>
                   </ul>
                 </div>
               </div>

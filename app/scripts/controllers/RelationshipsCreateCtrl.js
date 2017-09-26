@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('qldarchApp').controller('RelationshipsCreateCtrl',
-    function($scope, $http, Uris, toaster, types, $filter, structures, architectsFirms, $state, $stateParams, CreateRelationship) {
+    function($scope, $http, Uris, toaster, types, $filter, architects, firms, structures, architectsFirms, $state, $stateParams, CreateRelationship) {
 
       $scope.relationship = {};
 
@@ -10,7 +10,13 @@ angular.module('qldarchApp').controller('RelationshipsCreateCtrl',
       };
 
       for ( var type in types) {
-        if (type === 'WorkedOn') {
+        if ($stateParams.type === 'firm' && type === 'Employment') {
+          relationshiptypes.results.push({
+            id : type,
+            text : types[type]
+          });
+        }
+        if ($stateParams.type === 'structure' && type === 'WorkedOn') {
           relationshiptypes.results.push({
             id : type,
             text : types[type]
@@ -25,19 +31,38 @@ angular.module('qldarchApp').controller('RelationshipsCreateCtrl',
         data : relationshiptypes
       };
 
-      $scope.relationship.$type = {
-        id : 'WorkedOn',
-        text : 'worked on'
+      if ($stateParams.type === 'firm') {
+        $scope.relationship.$type = {
+          id : 'Employment',
+          text : 'employed by'
+        };
+      }
+      if ($stateParams.type === 'structure') {
+        $scope.relationship.$type = {
+          id : 'WorkedOn',
+          text : 'worked on'
+        };
+      }
+
+      architects = $filter('orderBy')(architects, function(architect) {
+        return architect.label;
+      });
+      var architectsSelect = {
+        results : []
       };
+      angular.forEach(architects, function(architect) {
+        architectsSelect.results.push({
+          id : architect.id,
+          text : architect.label + ' (Architect)'
+        });
+      });
 
       architectsFirms = $filter('orderBy')(architectsFirms, function(entity) {
         return entity.label;
       });
-
       var architectsFirmsSelect = {
         results : []
       };
-
       angular.forEach(architectsFirms, function(e) {
         if (e.label && !(/\s/.test(e.label.substring(0, 1)))) {
           var entitytype = 'unknown';
@@ -55,21 +80,42 @@ angular.module('qldarchApp').controller('RelationshipsCreateCtrl',
         }
       });
 
+      var subjplaceholder;
+      var subjdataselect;
+      if ($stateParams.type === 'firm') {
+        subjplaceholder = 'Select an Architect';
+        subjdataselect = architectsSelect;
+      } else {
+        subjplaceholder = 'Select an Architect or a Firm';
+        subjdataselect = architectsFirmsSelect;
+      }
+
       $scope.subjSelect = {
-        placeholder : 'Select an Architect or a Firm',
+        placeholder : subjplaceholder,
         dropdownAutoWidth : true,
         multiple : false,
-        data : architectsFirmsSelect
+        data : subjdataselect
       };
+
+      firms = $filter('orderBy')(firms, function(firm) {
+        return firm.label;
+      });
+      var firmsSelect = {
+        results : []
+      };
+      angular.forEach(firms, function(firm) {
+        firmsSelect.results.push({
+          id : firm.id,
+          text : firm.label + ' (Firm)'
+        });
+      });
 
       structures = $filter('orderBy')(structures, function(entity) {
         return entity.label;
       });
-
       var structuresSelect = {
         results : []
       };
-
       angular.forEach(structures, function(e) {
         if (e.label && !(/\s/.test(e.label.substring(0, 1)))) {
           var entitytype = 'unknown';
@@ -87,11 +133,21 @@ angular.module('qldarchApp').controller('RelationshipsCreateCtrl',
         }
       });
 
+      var objplaceholder;
+      var objdataselect;
+      if ($stateParams.type === 'firm') {
+        objplaceholder = 'Select a firm';
+        objdataselect = firmsSelect;
+      } else {
+        objplaceholder = 'Select a Project';
+        objdataselect = structuresSelect;
+      }
+
       $scope.objSelect = {
-        placeholder : 'Select a Project',
+        placeholder : objplaceholder,
         dropdownAutoWidth : true,
         multiple : false,
-        data : structuresSelect
+        data : objdataselect
       };
 
       $scope.relationship.$subject = null;
@@ -102,6 +158,15 @@ angular.module('qldarchApp').controller('RelationshipsCreateCtrl',
             $scope.relationship.$object = {
               id : structure.id,
               text : structure.label
+            };
+          }
+        });
+      } else if ($stateParams.type === 'firm' && $stateParams.archobjType === 'firm') {
+        angular.forEach(firms, function(firm) {
+          if ($stateParams.archobjId === JSON.stringify(firm.id)) {
+            $scope.relationship.$object = {
+              id : firm.id,
+              text : firm.label
             };
           }
         });
@@ -137,11 +202,23 @@ angular.module('qldarchApp').controller('RelationshipsCreateCtrl',
         relationship.$source = 'structure';
         CreateRelationship.createRelationship(relationship).then(function() {
           toaster.pop('success', 'Relationship created');
-          goToRelationships($stateParams.archobjId, $stateParams.archobjType);
+          if ($stateParams.type === 'firm' && $stateParams.archobjType === 'firm') {
+            $state.go('firm.employees', {
+              firmId : $stateParams.archobjId
+            });
+          } else {
+            goToRelationships($stateParams.archobjId, $stateParams.archobjType);
+          }
         });
       };
 
       $scope.cancel = function() {
-        goToRelationships($stateParams.archobjId, $stateParams.archobjType);
+        if ($stateParams.type === 'firm' && $stateParams.archobjType === 'firm') {
+          $state.go('firm.employees', {
+            firmId : $stateParams.archobjId
+          });
+        } else {
+          goToRelationships($stateParams.archobjId, $stateParams.archobjType);
+        }
       };
     });
