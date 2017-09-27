@@ -7,8 +7,8 @@
     </div>
   </div>
   <div class="l-frame">
-    <div class="container">
-      <div ng-repeat="mediaimageRow in mediaimageRows" class="row">
+    <div class="container" infinite-scroll="addMoreImageRows()">
+      <div ng-repeat="mediaimageRow in mediaimageRows | limitTo:imageRowDisplayCount" class="row">
         <div class="col-md-2" ng-repeat="photograph in mediaimageRow">
           <div ng-include="'views/thumb.image.html'" ng-init="image = photograph"></div>
         </div>
