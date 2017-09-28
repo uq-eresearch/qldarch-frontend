@@ -7,7 +7,7 @@ angular.module('qldarchApp').controller('ArchObjArticlesCtrl', function($scope, 
   });
 
   articles = $filter('orderBy')(articles, function(article) {
-    return (article.category === 'archobj' || article.label || '');
+    return (article.category === 'archobj' || article.label || article.filename || '');
   });
 
   articles = _.uniqBy(articles, 'label');
