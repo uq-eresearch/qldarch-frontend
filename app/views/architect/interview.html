@@ -1,13 +1,13 @@
 <div class="interview">
-  <div class="alert alert-warning" style="margin: 0;" ng-show="Auth.user.role === 'editor' || Auth.user.role === 'admin'">
+  <div class="alert alert-warning" style="margin: 0;" ng-if="Auth.user.role === 'editor' || Auth.user.role === 'admin'">
     <div class="container">
-      <button class="btn btn-default btn-xs" ui-sref="interviewhistorylog({ interviewId: interview.id })" ng-show="Auth.user.role === 'admin'">
+      <button class="btn btn-default btn-xs" ui-sref="interviewhistorylog({ interviewId: interview.id })" ng-if="Auth.user.role === 'admin'">
         <i class="fa fa-calendar"></i> History
       </button>
       <button class="btn btn-default btn-xs" ui-sref="upload.interviews({ id: interview.id })">
         <i class="fa fa-pencil"></i> Edit
       </button>
-      <button class="btn btn-default btn-xs" ng-click="delete(interview)" ng-show="Auth.canDelete()">
+      <button class="btn btn-default btn-xs" ng-click="delete(interview)" ng-if="Auth.canDelete()">
         <i class="fa fa-trash-o"></i> Delete
       </button>
     </div>
@@ -46,7 +46,7 @@
     <div class="interview-heading">
       <div class="container">
         <div ng-repeat="media in interview.media">
-          <a ng-show="media.type==='Youtube'" ng-href="{{ media.url }}" target="_blank" class="pull-right">Watch on YouTube</a>
+          <a ng-if="media.type==='Youtube'" ng-href="{{ media.url }}" target="_blank" class="pull-right">Watch on YouTube</a>
         </div>
         <h5 ng-click="isShowingInterviewDetails = !isShowingInterviewDetails" class="pull-left"
           style="margin: 0; padding: 0; position: relative; top: 3px;">
@@ -61,7 +61,7 @@
         </div>
       </div>
     </div>
-    <div class="interview-details" ng-show="isShowingInterviewDetails">
+    <div class="interview-details" ng-if="isShowingInterviewDetails">
       <div class="container">
         <div class="row">
           <div class="col-md-6">
@@ -86,7 +86,7 @@
       </div>
     </div>
   </div>
-  <div class="alert alert-warning" style="margin: 0;" ng-show="Auth.canDelete() && isShowingTranscript">
+  <div class="alert alert-warning" style="margin: 0;" ng-if="Auth.canDelete() && isShowingTranscript">
     <div class="container">
       <button class="btn btn-default btn-xs" ng-click="deleteTranscript(interview)">
         <i class="fa fa-trash-o"></i> Delete Transcript
@@ -95,7 +95,7 @@
   </div>
   <div class="l-frame l-frame-tight">
     <!-- Interview transcript -->
-    <div class="interview-transcript" ng-show="isShowingTranscript" id="transcript">
+    <div class="interview-transcript" ng-if="isShowingTranscript" id="transcript">
       <div class="container">
         <div class="row">
           <div class="col-sm-12">
@@ -110,9 +110,9 @@
                 <i class="fa fa-cloud-download"></i> Download <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" role="menu">
-                <li ng-hide="!(interview.media|filter:{type:'Audio'}).length"><a
+                <li ng-if="(interview.media|filter:{type:'Audio'}).length"><a
                   ng-href="{{Uris.WS_DOWNLOAD+(interview.media|filter:{type:'Audio'})[0].id}}" target="_blank">Audio</a></li>
-                <li ng-hide="!(interview.media|filter:{type:'Transcript'}).length"><a
+                <li ng-if="(interview.media|filter:{type:'Transcript'}).length"><a
                   ng-href="{{Uris.WS_DOWNLOAD+(interview.media|filter:{type:'Transcript'})[0].id}}" target="_blank">Transcript</a></li>
               </ul>
             </div>
@@ -151,8 +151,8 @@
                       ui-sref="architect.summary({architectId: exchange.speakerid})"> {{ exchange.speaker }} </a> <a
                       ng-if="getSpeakerArchitect(exchange.speakerid)==false" ui-sref="other.summary({otherId: exchange.speakerid})"> {{
                         exchange.speaker }} </a> <span ng-if="getSpeakerArchitect(exchange.speakerid)==undefined"> {{ exchange.speaker }} </span> <span
-                      ng-show="!exchange.speaker"> {{ exchange.speakerInitials }} </span>
-                    </strong> <span class="pull-right" ng-show="isSearching">{{ exchange.time }}</span>
+                      ng-if="!exchange.speaker"> {{ exchange.speakerInitials }} </span>
+                    </strong> <span class="pull-right" ng-if="isSearching">{{ exchange.time }}</span>
                   </div>
                   <p ng-bind-html="exchange.transcript | highlight:transcriptSearchInput" ng-class="{ highlight: startTime == exchange.startTime }"></p>
                 </div>
@@ -161,25 +161,24 @@
             <!-- end of transcript -->
             <!-- relationships -->
             <div class="col-sm-6">
-              <div class="panel panel-default" ng-hide="(isSearching || !Auth.success ) && !exchange.relationships.length">
+              <div class="panel panel-default" ng-if="(!isSearching || Auth.success ) && exchange.relationships.length">
                 <div class="panel-heading" ng-if="(Auth.user.role === 'editor' || Auth.user.role === 'admin') && Auth.success && !isSearching">
                   <!-- Control buttons -->
-                  <span ng-hide="exchange.isAddingRelationship || exchange.isEditingRelationships">
+                  <span ng-if="!exchange.isAddingRelationship || !exchange.isEditingRelationships">
                     <button type="button" class="btn btn-default btn-xs" ng-click="showAddRelationship(exchange)">
                       <i class="fa fa-plus fa-fw"></i>
                     </button>
                     <button type="button" class="btn btn-default btn-xs" ng-click="showEditRelationships(exchange)"
-                      ng-show="exchange.relationships.length">
+                      ng-if="exchange.relationships.length">
                       <i class="fa fa-pencil fa-fw"></i>
                     </button>
                   </span>
                   <button type="button" class="btn btn-primary btn-xs" ng-click="hideEditRelationships(exchange)"
-                    ng-show="exchange.isEditingRelationships">
+                    ng-if="exchange.isEditingRelationships">
                     <i class="fa fa-check fa-fw"></i>
                   </button>
                   <!-- New relationship -->
-                  <form name="form" ng-submit="addRelationshipToExchange(relationship, exchange, interview.id)"
-                    ng-hide="!exchange.isAddingRelationship">
+                  <form name="form" ng-submit="addRelationshipToExchange(relationship, exchange, interview.id)" ng-if="exchange.isAddingRelationship">
                     <div class="form-group">
                       <label>Subject <i class="fa fa-asterisk fa-asterisk-required"></i></label>
                       <div class="row">
@@ -228,7 +227,7 @@
                       <label>From</label>
                       <div class="well well-sm">
                         <div uib-datepicker ng-model="relationship.from" min-mode="year" year-range="5"></div>
-                        <div style="margin-top: 10px;" ng-show="relationship.from">
+                        <div style="margin-top: 10px;" ng-if="relationship.from">
                           <button type="button" class="btn btn-sm btn-primary" ng-click="relationship.from = ''">Clear</button>
                         </div>
                       </div>
@@ -237,7 +236,7 @@
                       <label>Until</label>
                       <div class="well well-sm">
                         <div uib-datepicker ng-model="relationship.until" min-mode="year" year-range="5"></div>
-                        <div style="margin-top: 10px;" ng-show="relationship.until">
+                        <div style="margin-top: 10px;" ng-if="relationship.until">
                           <button type="button" class="btn btn-sm btn-primary" ng-click="relationship.until = ''">Clear</button>
                         </div>
                       </div>
@@ -253,7 +252,7 @@
                 <!-- Relationship List -->
                 <ul class="list-group" ng-if="exchange.relationships.length">
                   <li class="list-group-item" ng-repeat="relationship in exchange.relationships">
-                    <button class="btn btn-xs btn-danger" ng-show="exchange.isEditingRelationships" style="margin-right: 5px;"
+                    <button class="btn btn-xs btn-danger" ng-if="exchange.isEditingRelationships" style="margin-right: 5px;"
                       ng-click="deleteRelationship(relationship, exchange)">
                       <i class="fa fa-trash-o fa-fw"></i>
                     </button> <a ng-if="relationship.subjecttype=='person'&&relationship.subjectarchitect==true"
@@ -291,9 +290,9 @@
                     ng-bind-html="relationship.objectlabel || '' | highlight:transcriptSearchInput"></a> <span
                     ng-if="relationship.objecttype!= 'person'&&relationship.objecttype!='firm'&&relationship.objecttype!='structure'&&relationship.objecttype==undefined"
                     ng-bind-html="relationship.objectlabel || '' | highlight:transcriptSearchInput"></span> <!-- Date --> <span
-                    ng-show="relationship.from">(</span>{{ relationship.from }}<span ng-show="relationship.from && !relationship.until">)</span><span
-                    ng-show="relationship.from && relationship.until"> - </span><span ng-show="!relationship.from && relationship.until">(</span>{{
-                    relationship.until }}<span ng-show="relationship.until">)</span>
+                    ng-if="relationship.from">(</span>{{ relationship.from }}<span ng-if="relationship.from && !relationship.until">)</span><span
+                    ng-if="relationship.from && relationship.until"> - </span><span ng-if="!relationship.from && relationship.until">(</span>{{
+                    relationship.until }}<span ng-if="relationship.until">)</span>
                   </li>
                 </ul>
                 <!-- /Relationship List -->
