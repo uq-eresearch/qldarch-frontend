@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('qldarchApp').factory('File', function(Uris, $upload, $http, toaster) {
+angular.module('qldarchApp').factory('File', function(Uris, $upload, $http, toaster, YYYYMMDDdate) {
   /* globals $:false */
   var path = Uris.WS_ROOT + 'media/';
 
@@ -17,16 +17,8 @@ angular.module('qldarchApp').factory('File', function(Uris, $upload, $http, toas
 
     update : function(data) {
       var payload = angular.copy(data);
-      if (!(payload.created instanceof Date)) {
-        payload.created = new Date(payload.created);
-      }
-      var date = '0' + payload.created.getDate();
-      var month = '0' + (payload.created.getMonth() + 1);
-      var year = payload.created.getFullYear();
-      if (!(isNaN(date) || isNaN(month) || isNaN(year))) {
-        var fixedDate = year + '-' + month + '-' + date;
-        payload.created = fixedDate;
-      } else {
+      payload.created = YYYYMMDDdate.formatDate(payload.created);
+      if (payload.created === null) {
         delete payload.created;
       }
       if (payload.$type.id !== null && angular.isDefined(payload.$type.id)) {

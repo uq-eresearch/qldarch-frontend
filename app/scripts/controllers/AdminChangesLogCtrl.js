@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('qldarchApp').controller('AdminChangesLogCtrl', function($scope, $http, Uris, users) {
+angular.module('qldarchApp').controller('AdminChangesLogCtrl', function($scope, $http, Uris, YYYYMMDDdate, users) {
   /* globals $:false */
   $scope.chgslog = {};
   $scope.chgslog.startDate = new Date();
@@ -28,28 +28,8 @@ angular.module('qldarchApp').controller('AdminChangesLogCtrl', function($scope, 
 
   $scope.chgslog.getChangesLog = function() {
     var payload = {};
-    payload.startdate = $scope.chgslog.startDate;
-    if (!(payload.startdate instanceof Date)) {
-      payload.startdate = new Date(payload.startdate);
-    }
-    var datestart = '0' + payload.startdate.getDate();
-    var monthstart = '0' + (payload.startdate.getMonth() + 1);
-    var yearstart = payload.startdate.getFullYear();
-    if (!(isNaN(datestart) || isNaN(monthstart) || isNaN(yearstart))) {
-      var fixedStartDate = yearstart + '-' + monthstart + '-' + datestart;
-      payload.startdate = fixedStartDate;
-    }
-    payload.enddate = $scope.chgslog.endDate;
-    if (!(payload.enddate instanceof Date)) {
-      payload.enddate = new Date(payload.enddate);
-    }
-    var dateend = '0' + payload.enddate.getDate();
-    var monthend = '0' + (payload.enddate.getMonth() + 1);
-    var yearend = payload.enddate.getFullYear();
-    if (!(isNaN(dateend) || isNaN(monthend) || isNaN(yearend))) {
-      var fixedEndDate = yearend + '-' + monthend + '-' + dateend;
-      payload.enddate = fixedEndDate;
-    }
+    payload.startdate = YYYYMMDDdate.formatDate($scope.chgslog.startDate);
+    payload.enddate = YYYYMMDDdate.formatDate($scope.chgslog.endDate);
     $http({
       method : 'POST',
       url : Uris.WS_ROOT + 'archobjversion',

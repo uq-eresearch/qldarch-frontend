@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, $q, Uris, RelationshipLabels, toaster, CreateRelationship) {
+angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, $q, Uris, RelationshipLabels, toaster, CreateRelationship, YYYYMMDDdate) {
   /* globals $:false */
   var path = Uris.WS_ROOT + 'archobj/';
 
@@ -129,28 +129,12 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, $
           payload.employees.push(architect.id);
         });
       }
-      if (!(payload.start instanceof Date)) {
-        payload.start = new Date(payload.start);
-      }
-      var startdate = '0' + payload.start.getDate();
-      var startmonth = '0' + (payload.start.getMonth() + 1);
-      var startyear = payload.start.getFullYear();
-      if (!(isNaN(startdate) || isNaN(startmonth) || isNaN(startyear))) {
-        var fixedStartDate = startyear + '-' + startmonth + '-' + startdate;
-        payload.start = fixedStartDate;
-      } else {
+      payload.start = YYYYMMDDdate.formatDate(payload.start);
+      if (payload.start === null) {
         delete payload.start;
       }
-      if (!(payload.end instanceof Date)) {
-        payload.end = new Date(payload.end);
-      }
-      var enddate = '0' + payload.end.getDate();
-      var endmonth = '0' + (payload.end.getMonth() + 1);
-      var endyear = payload.end.getFullYear();
-      if (!(isNaN(enddate) || isNaN(endmonth) || isNaN(endyear))) {
-        var fixedEndDate = endyear + '-' + endmonth + '-' + enddate;
-        payload.end = fixedEndDate;
-      } else {
+      payload.end = YYYYMMDDdate.formatDate(payload.end);
+      if (payload.end === null) {
         delete payload.end;
       }
       if (payload.$precededByFirms !== null && angular.isDefined(payload.$precededByFirms)) {
@@ -204,28 +188,12 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, $
 
     updateFirm : function(data) {
       var payload = angular.copy(data);
-      if (!(payload.start instanceof Date)) {
-        payload.start = new Date(payload.start);
-      }
-      var startdate = '0' + payload.start.getDate();
-      var startmonth = '0' + (payload.start.getMonth() + 1);
-      var startyear = payload.start.getFullYear();
-      if (!(isNaN(startdate) || isNaN(startmonth) || isNaN(startyear))) {
-        var fixedStartDate = startyear + '-' + startmonth + '-' + startdate;
-        payload.start = fixedStartDate;
-      } else {
+      payload.start = YYYYMMDDdate.formatDate(payload.start);
+      if (payload.start === null) {
         delete payload.start;
       }
-      if (!(payload.end instanceof Date)) {
-        payload.end = new Date(payload.end);
-      }
-      var enddate = '0' + payload.end.getDate();
-      var endmonth = '0' + (payload.end.getMonth() + 1);
-      var endyear = payload.end.getFullYear();
-      if (!(isNaN(enddate) || isNaN(endmonth) || isNaN(endyear))) {
-        var fixedEndDate = endyear + '-' + endmonth + '-' + enddate;
-        payload.end = fixedEndDate;
-      } else {
+      payload.end = YYYYMMDDdate.formatDate(payload.end);
+      if (payload.end === null) {
         delete payload.end;
       }
       if (payload.$precededByFirms !== null && angular.isDefined(payload.$precededByFirms)) {
@@ -295,16 +263,8 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, $
           relationships.push(architect.id);
         });
       }
-      if (!(payload.completion instanceof Date)) {
-        payload.completion = new Date(payload.completion);
-      }
-      var date = '0' + payload.completion.getDate();
-      var month = '0' + (payload.completion.getMonth() + 1);
-      var year = payload.completion.getFullYear();
-      if (!(isNaN(date) || isNaN(month) || isNaN(year))) {
-        var fixedDate = year + '-' + month + '-' + date;
-        payload.completion = fixedDate;
-      } else {
+      payload.completion = YYYYMMDDdate.formatDate(payload.completion);
+      if (payload.completion === null) {
         delete payload.completion;
       }
       // Remove any extra information
@@ -401,16 +361,8 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, $
           relationships.push(architect.id);
         });
       }
-      if (!(payload.completion instanceof Date)) {
-        payload.completion = new Date(payload.completion);
-      }
-      var date = '0' + payload.completion.getDate();
-      var month = '0' + (payload.completion.getMonth() + 1);
-      var year = payload.completion.getFullYear();
-      if (!(isNaN(date) || isNaN(month) || isNaN(year))) {
-        var fixedDate = year + '-' + month + '-' + date;
-        payload.completion = fixedDate;
-      } else {
+      payload.completion = YYYYMMDDdate.formatDate(payload.completion);
+      if (payload.completion === null) {
         delete payload.completion;
       }
       // Remove any extra information
@@ -520,16 +472,8 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, $
 
     createArticle : function(data) {
       var payload = angular.copy(data);
-      if (!(payload.published instanceof Date)) {
-        payload.published = new Date(payload.published);
-      }
-      var date = '0' + payload.published.getDate();
-      var month = '0' + (payload.published.getMonth() + 1);
-      var year = payload.published.getFullYear();
-      if (!(isNaN(date) || isNaN(month) || isNaN(year))) {
-        var fixedDate = year + '-' + month + '-' + date;
-        payload.published = fixedDate;
-      } else {
+      payload.published = YYYYMMDDdate.formatDate(payload.published);
+      if (payload.published === null) {
         delete payload.published;
       }
       // Remove any extra information
@@ -574,16 +518,8 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, $
 
     updateArticle : function(data) {
       var payload = angular.copy(data);
-      if (!(payload.published instanceof Date)) {
-        payload.published = new Date(payload.published);
-      }
-      var date = '0' + payload.published.getDate();
-      var month = '0' + (payload.published.getMonth() + 1);
-      var year = payload.published.getFullYear();
-      if (!(isNaN(date) || isNaN(month) || isNaN(year))) {
-        var fixedDate = year + '-' + month + '-' + date;
-        payload.published = fixedDate;
-      } else {
+      payload.published = YYYYMMDDdate.formatDate(payload.published);
+      if (payload.published === null) {
         delete payload.published;
       }
       // Remove any extra information
@@ -628,16 +564,8 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, $
 
     createInterview : function(data) {
       var payload = angular.copy(data);
-      if (!(payload.created instanceof Date)) {
-        payload.created = new Date(payload.created);
-      }
-      var date = '0' + payload.created.getDate();
-      var month = '0' + (payload.created.getMonth() + 1);
-      var year = payload.created.getFullYear();
-      if (!(isNaN(date) || isNaN(month) || isNaN(year))) {
-        var fixedDate = year + '-' + month + '-' + date;
-        payload.created = fixedDate;
-      } else {
+      payload.created = YYYYMMDDdate.formatDate(payload.created);
+      if (payload.created === null) {
         delete payload.created;
       }
       payload.type = 'interview';
@@ -696,16 +624,8 @@ angular.module('qldarchApp').factory('ArchObj', function($http, $cacheFactory, $
 
     updateInterview : function(data) {
       var payload = angular.copy(data);
-      if (!(payload.created instanceof Date)) {
-        payload.created = new Date(payload.created);
-      }
-      var date = '0' + payload.created.getDate();
-      var month = '0' + (payload.created.getMonth() + 1);
-      var year = payload.created.getFullYear();
-      if (!(isNaN(date) || isNaN(month) || isNaN(year))) {
-        var fixedDate = year + '-' + month + '-' + date;
-        payload.created = fixedDate;
-      } else {
+      payload.created = YYYYMMDDdate.formatDate(payload.created);
+      if (payload.created === null) {
         delete payload.created;
       }
       if (payload.$interviewees !== null && angular.isDefined(payload.$interviewees)) {
