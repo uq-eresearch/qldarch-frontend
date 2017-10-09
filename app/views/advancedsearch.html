@@ -1,0 +1,100 @@
+<div class="content">
+  <div class="page-header has-subnav">
+    <div class="container">
+      <h1>Advanced Search</h1>
+    </div>
+  </div>
+  <div class="alert alert-info">
+    <div class="container">
+      <i class="fa fa-info-circle"></i> Search with advanced query syntax.
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <form name="form" ng-submit="advSearch(global,options)">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <div class="form-group">
+                <label for="">Global Search</label> <input type="text" class="form-control" placeholder="Add global search phrase" ng-model="global">
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="form-group">
+                <label for="">Label Field</label> <input type="text" class="form-control" placeholder="Add label search phrase"
+                  ng-model="options.label">
+              </div>
+              <div class="form-group">
+                <label>Category Field</label>
+                <div>
+                  <div ui-select2="categorySelect" ng-model="options.category" class="form-control"></div>
+                </div>
+              </div>
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <label>Archive Object</label>
+                </div>
+                <div class="panel-body">
+                  <div class="form-group">
+                    <label>Archive Object Type Field</label>
+                    <div>
+                      <div ui-select2="archobjtypeSelect" ng-model="options.archobjtype" class="form-control"></div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="">Summary Field</label> <input type="text" class="form-control" placeholder="Add summary search phrase"
+                      ng-model="options.summary">
+                  </div>
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <label>Person</label>
+                    </div>
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <label>Architect Field</label>
+                        <div>
+                          <div ui-select2="architectSelect" ng-model="options.architect" class="form-control"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <label>Structure</label>
+                    </div>
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <label>Building Typology Field</label>
+                        <div>
+                          <div ui-select2="typologySelect" ng-model="options.typology" class="form-control"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <label>Media</label>
+                </div>
+                <div class="panel-body">
+                  <div class="form-group">
+                    <label>Media Type Field</label>
+                    <div>
+                      <div ui-select2=mediatypeSelect ng-model="options.mediatype" class="form-control"></div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="">Description Field</label> <input type="text" class="form-control" placeholder="Add description search phrase"
+                      ng-model="options.description">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid || !isValid()">Search</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

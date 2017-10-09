@@ -3,7 +3,7 @@
 angular.module('qldarchApp').config(
     function($stateProvider) {
       $stateProvider.state('search', {
-        url : '/search?query',
+        url : '/search?query&fieldquery',
         templateUrl : 'views/search.html',
         resolve : {
           architects : [ 'AggArchObjs', 'GraphHelper', '$filter', function(AggArchObjs, GraphHelper, $filter) {
@@ -64,8 +64,16 @@ angular.module('qldarchApp').config(
               '$filter',
               function($location, $http, Uris, WordService, architects, firms, structures, personnotarchitect, othersnotperson, $filter) {
                 var query = $location.search().query;
-                var q = (query).replace(WordService.spclCharsLucene, '');
-                var url = Uris.WS_ROOT + 'search?q=' + q + '*&p=0';
+                var q = '';
+                if (angular.isDefined(query)) {
+                  q = (query).replace(WordService.spclCharsLucene, '') + '*';
+                }
+                var fieldquery = $location.search().fieldquery;
+                var fq = '';
+                if (angular.isDefined(fieldquery)) {
+                  fq = fieldquery;
+                }
+                var url = Uris.WS_ROOT + 'search?q=' + q + fq + '&p=0';
                 return $http.get(url + '&pc=0').then(
                     function(resp) {
                       return $http.get(url + '&pc=' + resp.data.hits).then(
@@ -154,7 +162,7 @@ angular.module('qldarchApp').config(
                               data[i].link = path + item.id;
                             });
                             return {
-                              query : q,
+                              query : (q + fq).replace(/[()"*]/g, ''),
                               totalItems : resp.data.hits,
                               data : data
                             };

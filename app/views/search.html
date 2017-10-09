@@ -1,12 +1,12 @@
-<style>
-.row {
-	margin-bottom: 21px;
-}
-</style>
 <div class="content">
   <div class="page-header">
     <div class="container">
-      <h1 style="text-transform: none !important;">Search Results - "{{ query }}"</h1>
+      <div class="row">
+        <div class="col-sm-12" style="text-align: left;">
+          <small><a ui-sref="advancedsearch">Advanced Search »</a></small>
+        </div>
+      </div>
+      <h1 style="text-transform: none !important; margin-bottom: 21px;">Search Results - "{{ query }}"</h1>
     </div>
   </div>
   <div class="text-center" ng-show="!results">
