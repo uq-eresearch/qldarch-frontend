@@ -189,20 +189,20 @@ angular
                   fieldquery = fieldquery + ')';
                 }
               }
-            }
-            if (angular.isDefined(options.architect)) {
-              if (options.architect.length > 0) {
-                fieldquery = fieldquery + and + '(';
-                var l = 0;
-                angular.forEach(extractId(options.architect), function(id) {
-                  if (l === 0) {
-                    fieldquery = fieldquery + 'architect:' + id;
-                  } else {
-                    fieldquery = fieldquery + or + 'architect:' + id;
-                  }
-                  l++;
-                });
-                fieldquery = fieldquery + ')';
+              if (angular.isDefined(options.architect)) {
+                if (options.architect.length > 0) {
+                  fieldquery = fieldquery + and + '(';
+                  var l = 0;
+                  angular.forEach(extractId(options.architect), function(id) {
+                    if (l === 0) {
+                      fieldquery = fieldquery + 'architect:' + id;
+                    } else {
+                      fieldquery = fieldquery + or + 'architect:' + id;
+                    }
+                    l++;
+                  });
+                  fieldquery = fieldquery + ')';
+                }
               }
             }
             if (fieldquery.length > 5) {
