@@ -1,19 +1,19 @@
 <div class="content">
   <div class="page-header has-subnav">
     <div class="container">
-      <h1>Upload Image</h1>
+      <h1>Upload Video</h1>
     </div>
   </div>
   <!-- Builder info -->
   <div class="alert alert-info" style="margin-bottom: 0;">
     <div class="container">
-      <i class="fa fa-info-circle"></i> Upload new photographs or line drawings of projects.
+      <i class="fa fa-info-circle"></i> Upload new videos.
     </div>
   </div>
   <!-- /Builder info -->
   <div class="l-frame l-frame-tight">
     <div class="container">
-      <label class="control-label">Which architect or firm or project do the photos depict? <i class="fa fa-asterisk fa-asterisk-required"></i></label>
+      <label class="control-label">Which architect or firm or project do the videos depict? <i class="fa fa-asterisk fa-asterisk-required"></i></label>
       <div class="row">
         <div class="col-sm-10">
           <div ui-select2="archObjSelect" ng-model="selectedObj" class="form-control" required></div>
@@ -26,11 +26,7 @@
       </div>
       <div class="form-group">
         <label for="" class="control-label">Title of Detail <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input name="title"
-          type="text" class="form-control" ng-model="selectedTitle" placeholder="What is this a photograph of?" required />
-      </div>
-      <div class="form-group">
-        <label>Image Type <i class="fa fa-asterisk fa-asterisk-required"></i></label>
-        <div ui-select2="imageTypeSelect" ng-model="imageType" class="form-control"></div>
+          type="text" class="form-control" ng-model="selectedTitle" placeholder="What is this a video of?" required />
       </div>
     </div>
   </div>
@@ -38,7 +34,7 @@
     <div class="container">
       <div class="alert alert-info">
         <p>
-          Remember, all <strong>scanned images</strong> should be <strong>no more than 72DPI</strong>.
+          Remember, all <strong>scanned videos</strong> should be <strong>no more than 72DPI</strong>.
         </p>
       </div>
       <form>
@@ -49,7 +45,7 @@
           <div ng-file-drop-available="dropSupported=true" ng-show="!dropSupported">HTML5 Drop File is not supported!</div>
           <div class="upload-choose">
             <div class="upload-choose-label">Or select files</div>
-            <input type="file" ng-file-select ng-model="$files" accept="image/*" multiple>
+            <input type="file" ng-file-select ng-model="$files" accept="video/*" multiple>
           </div>
         </div>
       </form>

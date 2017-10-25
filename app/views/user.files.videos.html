@@ -1,0 +1,19 @@
+<div>
+  <div class="alert alert-warning" style="margin: 0;">
+    <div class="container">
+      <button class="btn btn-default btn-xs" ui-sref="upload.videos">
+        <i class="fa fa-cloud-upload"></i> Upload Videos
+      </button>
+    </div>
+  </div>
+  <div class="l-frame">
+    <div class="container" infinite-scroll="addMoreVideoRows()">
+      <p class="text-muted" ng-hide="mediavideoRows.length">No videos</p>
+      <div ng-repeat="mediavideoRow in mediavideoRows | limitTo:videoRowDisplayCount" class="row">
+        <div class="col-md-2" ng-repeat="video in mediavideoRow">
+          <div ng-include="'views/thumb.video.html'"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

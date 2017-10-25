@@ -1,0 +1,19 @@
+<div>
+  <!-- Video -->
+  <a
+    ui-sref="video.view({videoId: video.id, archobjId: (architect.id||firm.id||structure.id||video.depicts.id||video.depicts), archobjType: (architect.type||firm.type||structure.type||video.depicts.type||video.depictstype)})">
+    <video width="163" height="165" controls>
+      <source src="{{Uris.WS_MEDIA+video.id}}">
+    </video>
+  </a>
+  <!-- /Video -->
+  <div class="thumbnail">
+    <div class="caption">
+      <h4>
+        <a
+          ui-sref="video.view({videoId: video.id, archobjId: (architect.id||firm.id||structure.id||video.depicts.id||video.depicts), archobjType: (architect.type||firm.type||structure.type||video.depicts.type||video.depictstype)})">
+          {{ video.label||video.filename }} </a>
+      </h4>
+    </div>
+  </div>
+</div>

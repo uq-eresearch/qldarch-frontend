@@ -1,0 +1,56 @@
+<div class="content">
+  <div class="l-frame l-frame-media l-frame-tight">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
+          <video style="width: 100%; margin: 0 auto;" controls>
+            <source src="{{Uris.WS_MEDIA+video.id}}">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="l-frame">
+    <div class="container">
+      <form name="form" ng-submit="updateVideo(video)">
+        <!-- Title -->
+        <div class="form-group">
+          <label>Title of Detail <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control"
+            ng-model="video.label" placeholder="What is this a video of?" required />
+        </div>
+        <!-- Description -->
+        <div class="form-group">
+          <label>Description</label>
+          <textarea placeholder="Describe this item" ng-model="video.description" class="form-control"></textarea>
+        </div>
+        <!-- Creator -->
+        <div class="form-group" class="form-group">
+          <label>Creator of Video <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control"
+            ng-model="video.creator" placeholder="Who is the creator?" />
+        </div>
+        <!-- Created Date -->
+        <div class="form-group">
+          <label>Created Date</label>
+          <div class="well well-sm">
+            <div uib-datepicker ng-model="video.created" show-weeks="false"></div>
+            <div style="margin-top: 10px;" ng-show="video.created">
+              <button type="button" class="btn btn-sm btn-primary" ng-click="video.created = ''">Clear</button>
+            </div>
+          </div>
+        </div>
+        <!-- Rights -->
+        <div class="form-group">
+          <label>Rights <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control" ng-model="video.rights"
+            placeholder="Who owns the rights to this item?" />
+        </div>
+        <!-- External Identifier -->
+        <div class="form-group">
+          <label>External Identifier</label> <input type="text" placeholder="Does this item have an external identifier?" ng-model="video.identifier"
+            class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid">Save</button>
+        <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>

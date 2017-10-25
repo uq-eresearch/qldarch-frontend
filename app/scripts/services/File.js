@@ -21,8 +21,10 @@ angular.module('qldarchApp').factory('File', function(Uris, $upload, $http, toas
       if (payload.created === null) {
         delete payload.created;
       }
-      if (payload.$type.id !== null && angular.isDefined(payload.$type.id)) {
-        payload.type = payload.$type.id;
+      if (payload.$type !== null && angular.isDefined(payload.$type)) {
+        if (payload.$type.id !== null && angular.isDefined(payload.$type.id)) {
+          payload.type = payload.$type.id;
+        }
       }
       // Remove any extra information
       delete payload.$type;

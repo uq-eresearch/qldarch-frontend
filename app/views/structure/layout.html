@@ -33,6 +33,7 @@
               ui-sref="structure.photographs({ structureId: structure.id })">Photographs</a></li>
             <li ng-class="{active: $state.includes('structure.lineDrawing') || $state.includes('structure.lineDrawings')}" ng-show="structure.id"><a
               ui-sref="structure.lineDrawings({ structureId: structure.id })">Line Drawings</a></li>
+            <li ui-sref-active="active" ng-show="structure.media"><a ui-sref="structure.videos({ structureId: structure.id })"> Videos </a></li>
             <li ng-class="{active: $state.includes('structure.map'), disabled: !structure.lat}" ng-show="structure.id"><a
               ui-sref="structure.map({ structureId: structure.id })" ng-show="structure.lat">Map</a> <a ng-show="!structure.lat"
               uib-tooltip="No location stored">Map</a></li>

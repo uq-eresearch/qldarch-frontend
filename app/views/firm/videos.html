@@ -1,0 +1,17 @@
+<div class="alert alert-warning" ng-show="Auth.user.role === 'editor' || Auth.user.role === 'admin'" style="margin: 0;">
+  <div class="container">
+    <button class="btn btn-default btn-sm btn-xs" ui-sref="upload.videos({id: firm.id, name: firm.label, type: firm.type })">
+      <i class="fa fa-cloud-upload"></i> Upload Video
+    </button>
+  </div>
+</div>
+<div class="l-frame l-frame-tight">
+  <div class="container">
+    <p class="text-muted" ng-hide="videosRows.length">No videos</p>
+    <div class="row" ng-repeat="videosRow in videosRows">
+      <div class="col-sm-2" ng-repeat="video in videosRow">
+        <div ng-include="'views/thumb.video.html'"></div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,28 +1,23 @@
 'use strict';
 
-angular.module('qldarchApp').controller('FilePhotographCtrl',
-    function($scope, $filter, $upload, File, $state, $stateParams, firms, architects, structures, ImageTypes, toaster) {
+angular.module('qldarchApp').controller('FileVideoCtrl',
+    function($scope, $filter, $upload, File, $state, $stateParams, firms, architects, structures, toaster) {
 
-      function goToPhotographs() {
+      function goToVideos() {
         var params = {};
         if ($stateParams.type === 'person') {
           params.architectId = $stateParams.id;
-          $state.go('architect.photographs', params);
+          $state.go('architect.videos', params);
         } else if ($stateParams.type === 'firm') {
           params.firmId = $stateParams.id;
-          $state.go('firm.photographs', params);
+          $state.go('firm.videos', params);
         } else if ($stateParams.type === 'structure') {
           params.structureId = $stateParams.id;
-          $state.go('structure.photographs', params);
+          $state.go('structure.videos', params);
         } else {
-          $state.go('user.files.images');
+          $state.go('user.files.videos');
         }
       }
-
-      $scope.imageType = {
-        id : 'Image',
-        text : 'Image'
-      };
 
       $scope.expressions = [];
 
@@ -66,19 +61,19 @@ angular.module('qldarchApp').controller('FilePhotographCtrl',
           $scope.myModelObj = {
             depicts : $scope.selectedObj.id,
             label : $scope.selectedTitle,
-            type : $scope.imageType.id
+            type : 'Video'
           };
           expression.id = $stateParams.id;
           expression.$upload = File.upload($scope.myModelObj, file).progress(function(evt) {
             expression.$uploadFile.percent = parseInt(100.0 * evt.loaded / evt.total);
           }).success(function() {
             expression.$uploadFile.isComplete = expression.$uploadFile.percent === 100;
-            console.log('image file upload succeeded');
-            goToPhotographs();
+            console.log('video file upload succeeded');
+            goToVideos();
           }).error(function(err) {
             // Something went wrong uploading the file
             toaster.pop('error', 'Error occured', err.data.msg);
-            console.log('image file upload failed');
+            console.log('video file upload failed');
             var index = $scope.expressions.indexOf(expression);
             $scope.expressions.splice(index, 1);
           });
@@ -86,7 +81,7 @@ angular.module('qldarchApp').controller('FilePhotographCtrl',
       };
 
       $scope.cancelUpload = function() {
-        goToPhotographs();
+        goToVideos();
       };
 
       var archObjData = {
@@ -108,21 +103,4 @@ angular.module('qldarchApp').controller('FilePhotographCtrl',
         data : archObjData
       };
 
-      $scope.imageTypeSelect = {
-        placeholder : 'Select an Image Type',
-        dropdownAutoWidth : true,
-        multiple : false,
-        query : function(options) {
-          var data = {
-            results : []
-          };
-          for ( var type in ImageTypes) {
-            data.results.push({
-              id : type,
-              text : ImageTypes[type]
-            });
-          }
-          options.callback(data);
-        }
-      };
     });

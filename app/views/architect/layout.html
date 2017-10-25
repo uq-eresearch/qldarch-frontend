@@ -37,6 +37,7 @@
               ui-sref="architect.summary({ architectId: architect.id })">Biography</a></li>
             <li ui-sref-active="active" ng-show="architect.media"><a ui-sref="architect.photographs({ architectId: architect.id })">
                 Photographs </a></li>
+            <li ui-sref-active="active" ng-show="architect.media"><a ui-sref="architect.videos({ architectId: architect.id })"> Videos </a></li>
             <li ui-sref-active="active" ng-if="interviews.length == 1" ng-show="architect.interviews"><a
               ui-sref="architect.interview({ interviewId: interviews[0].id })">Interview</a></li>
             <li class="dropdown" ng-show="interviews.length > 1" ng-class="{'active': $state.includes('architect.interview')}"><a
