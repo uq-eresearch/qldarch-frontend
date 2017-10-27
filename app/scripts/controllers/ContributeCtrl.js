@@ -2,14 +2,14 @@
 
 angular.module('qldarchApp').controller(
     'ContributeCtrl',
-    function($scope, ENV, vcRecaptchaService, $http, Uris, $state, toaster) {
+    function($scope, vcRecaptchaService, $http, Uris, $state, toaster) {
 
       $scope.recaptchaResponse = null;
 
       $scope.recaptchaWidgetId = null;
 
       $scope.recaptchaModel = {
-        key : '6Lc7wQkUAAAAALbZbaaiQxLwzEuzsJdMq-fQGzt4'// qldarch.net@gmail.com
+        key : '6Lc7wQkUAAAAALbZbaaiQxLwzEuzsJdMq-fQGzt4'
       };
 
       $scope.setRecaptchaResponse = function(response) {
