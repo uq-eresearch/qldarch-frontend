@@ -15,21 +15,21 @@ angular.module('qldarchApp').controller(
       }
 
       $scope.isSyncingTranscript = false;
-      var audioPlayerDom = document.getElementById('audio1');
-      $scope.audioPlayer = {};
+      var playerDom = document.getElementById('audio1');
+      $scope.player = {};
 
       // Look for our external locations
-      $scope.audioPlayerPlaylist = [];
+      $scope.playerPlaylist = [];
 
       angular.forEach(interview.media, function(extLocation) {
         if (extLocation.type === 'Audio') {
           if (extLocation.mimetype === 'audio/mpeg') {
-            $scope.audioPlayerPlaylist = [ {
+            $scope.playerPlaylist = [ {
               src : Uris.WS_MEDIA + extLocation.id,
               type : 'audio/mpeg'
             } ];
           } else if (extLocation.mimetype === 'audio/ogg') {
-            $scope.audioPlayerPlaylist.push({
+            $scope.playerPlaylist.push({
               src : Uris.WS_MEDIA + extLocation.id,
               type : 'audio/ogg'
             });
@@ -122,9 +122,9 @@ angular.module('qldarchApp').controller(
       }
 
       // Updates the current exchange from player
-      $scope.$watch('audioPlayer.currentTime', setCurrentExchangeFromTime);
+      $scope.$watch('player.currentTime', setCurrentExchangeFromTime);
       // Cancels any searching when the play button is clicked
-      $scope.$on('audioplayer:play', playing);
+      $scope.$on('player.playing', playing);
 
       /**
        * Adds more exchanges to the UI
@@ -145,7 +145,7 @@ angular.module('qldarchApp').controller(
         angular.forEach($scope.interview.transcript, function(exchange) {
           $scope.hideAddRelationship(exchange);
         });
-        $scope.audioPlayer.pause();
+        $scope.player.pause();
         exchange.isAddingRelationship = true;
       };
 
@@ -169,7 +169,7 @@ angular.module('qldarchApp').controller(
         angular.forEach($scope.interview.transcript, function(exchange) {
           $scope.hideAddRelationship(exchange);
         });
-        $scope.audioPlayer.pause();
+        $scope.player.pause();
         exchange.isEditingRelationships = true;
       };
       $scope.hideEditRelationships = function(exchange) {
@@ -184,12 +184,12 @@ angular.module('qldarchApp').controller(
        */
       $scope.timeFilter = function(exchange) {
         if ($scope.isSyncing && !$scope.isSearching) {
-          if ($scope.audioPlayer.currentTime === 0) {
+          if ($scope.player.currentTime === 0) {
             return true;
-          } else if (angular.isUndefined($scope.audioPlayer.currentTime) && angular.isDefined(exchange.endTime)) {
+          } else if (angular.isUndefined($scope.player.currentTime) && angular.isDefined(exchange.endTime)) {
             return true;
           } else {
-            return $scope.audioPlayer.currentTime < exchange.endTime;
+            return $scope.player.currentTime < exchange.endTime;
           }
         } else {
           return true;
@@ -206,7 +206,7 @@ angular.module('qldarchApp').controller(
       $scope.transcriptSearchInputChanged = function(transcriptSearchInput) {
         $scope.isSearching = true;
         nextMatch = 0;
-        $scope.audioPlayer.pause();
+        $scope.player.pause();
         $scope.exchangeDisplayCount = interview.transcript.length;
 
         if (transcriptSearchInput === '') {
@@ -233,16 +233,16 @@ angular.module('qldarchApp').controller(
        * @param exchange
        */
       $scope.playFromExchange = function(exchange) {
-        $scope.audioPlayer.pause();
+        $scope.player.pause();
         console.log('play from exchange');
         jQuery('html, body').animate({
           scrollTop : jQuery('.player').offset().top + 'px'
         }, 500, 'swing', function() {
-          audioPlayerDom.currentTime = exchange.startTime;
-          $scope.audioPlayer.currentTime = exchange.startTime;
+          playerDom.currentTime = exchange.startTime;
+          $scope.player.currentTime = exchange.startTime;
           $scope.isSyncing = true;
           playing();
-          $scope.audioPlayer.play();
+          $scope.player.play();
         });
       };
 
