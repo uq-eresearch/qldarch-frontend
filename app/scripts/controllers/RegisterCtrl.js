@@ -9,7 +9,7 @@ angular.module('qldarchApp').controller(
       $scope.recaptchaWidgetId = null;
 
       $scope.recaptchaModel = {
-        key : '6Lc7wQkUAAAAALbZbaaiQxLwzEuzsJdMq-fQGzt4'
+        key : Uris.reCAPTCHASiteKey
       };
 
       $scope.setRecaptchaResponse = function(response) {
