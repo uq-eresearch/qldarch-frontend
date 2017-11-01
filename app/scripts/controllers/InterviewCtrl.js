@@ -15,27 +15,48 @@ angular.module('qldarchApp').controller(
       }
 
       $scope.isSyncingTranscript = false;
-      var playerDom = document.getElementById('audio1');
+      var mediaPlayerId = 'intvwmediaplayer';
+      var playerDom = document.getElementById(mediaPlayerId);
       $scope.player = {};
 
       // Look for our external locations
       $scope.playerPlaylist = [];
 
-      angular.forEach(interview.media, function(extLocation) {
-        if (extLocation.type === 'Audio') {
-          if (extLocation.mimetype === 'audio/mpeg') {
-            $scope.playerPlaylist = [ {
-              src : Uris.WS_MEDIA + extLocation.id,
-              type : 'audio/mpeg'
-            } ];
-          } else if (extLocation.mimetype === 'audio/ogg') {
-            $scope.playerPlaylist.push({
-              src : Uris.WS_MEDIA + extLocation.id,
-              type : 'audio/ogg'
-            });
-          }
+      var preferredMediaExist = false;
+      var videoExist = false;
+      angular.forEach(interview.media, function(med) {
+        if (angular.isDefined(med.preferred)) {
+          preferredMediaExist = true;
+        }
+        if (med.type === 'Video') {
+          videoExist = true;
         }
       });
+      if (preferredMediaExist) {
+        interview.media = $filter('orderBy')(interview.media, function(med) {
+          return (med.preferred || '');
+        }, true);
+      } else if (videoExist) {
+        interview.media = $filter('orderBy')(interview.media, function(med) {
+          return (med.type === 'Video' || '');
+        });
+      } else {
+        interview.media = $filter('orderBy')(interview.media, function(med) {
+          return (med.type === 'Audio' || '');
+        });
+      }
+      if (interview.media[0].type === 'Audio' || interview.media[0].type === 'Video') {
+        $scope.playerPlaylist.push({
+          src : Uris.WS_MEDIA + interview.media[0].id,
+          type : interview.media[0].mimetype
+        });
+        if (interview.media[0].type === 'Audio') {
+          jQuery('#' + mediaPlayerId).attr('style', 'width: 100%;height: 40px;');
+        } else {
+          jQuery('.player-video').hide();
+          jQuery('#' + mediaPlayerId).attr('style', 'width: 100%;');
+        }
+      }
 
       $scope.currentSpeaker = {};
       $scope.isSyncing = true;
