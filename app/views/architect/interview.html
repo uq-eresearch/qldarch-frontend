@@ -161,7 +161,8 @@
             <!-- end of transcript -->
             <!-- relationships -->
             <div class="col-sm-6">
-              <div class="panel panel-default" ng-if="(!isSearching || Auth.success ) && exchange.relationships.length">
+              <div class="panel panel-default"
+                ng-if="((!isSearching || Auth.success ) && exchange.relationships.length) || (Auth.user.role === 'editor' || Auth.user.role === 'admin')">
                 <div class="panel-heading" ng-if="(Auth.user.role === 'editor' || Auth.user.role === 'admin') && Auth.success && !isSearching">
                   <!-- Control buttons -->
                   <span ng-if="!exchange.isAddingRelationship || !exchange.isEditingRelationships">
