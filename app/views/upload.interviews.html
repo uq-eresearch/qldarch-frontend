@@ -89,27 +89,30 @@
           </div>
         </div>
         <div class="form-group">
-          <label> Audio Files (mp3, ogg) <i class="fa fa-asterisk fa-asterisk-required"></i>
+          <label> Audio or Video Files (mp3, ogg, mp4, ogv) <i class="fa fa-asterisk fa-asterisk-required"></i>
           </label>
           <!-- Added files -->
           <ul class="list-group">
             <!-- Existing files -->
-            <li class="list-group-item" ng-repeat="file in interview.media" ng-show="file.type=='Audio'">
-              <button class="btn btn-default btn-xs pull-right" ng-click="delete(file)">
+            <li class="list-group-item" ng-repeat="file in interview.media" ng-show="file.type=='Audio'||file.type=='Video'">
+              <button class="btn btn-default btn-xs pull-right" ng-click="delete(file)" style="margin-left: 5px;">
                 <i class="fa fa-trash-o"></i>
-              </button> {{ file.filename }}
+              </button>
+              <button class="btn btn-default btn-xs pull-right" ng-if="interview.media[0].id===file.id&&file.preferred" disabled>Preferred</button>
+              <button class="btn btn-default btn-xs pull-right" ng-click="setPreferred(file)" ng-if="interview.media[0].id!==file.id||!file.preferred">Set
+                as preferred</button> {{ file.filename }}
             </li>
           </ul>
           <!-- /Added files -->
           <!-- Upload form -->
           <div class="form-group upload">
-            <div ng-file-drop ng-model="$audiofile" ng-file-drag-over-class="upload-dropzone-dragover" ng-show="dropSupported" class="upload-dropzone">
+            <div ng-file-drop ng-model="$mediafile" ng-file-drag-over-class="upload-dropzone-dragover" ng-show="dropSupported" class="upload-dropzone">
               <i class="fa fa-cloud-upload"></i> Drop audio files here
             </div>
             <div ng-file-drop-available="dropSupported=true" ng-show="!dropSupported">HTML5 Drop File is not supported!</div>
             <div class="upload-choose">
               <div class="upload-choose-label">Or select files</div>
-              <input type="file" ng-file-select ng-model="$audiofile">
+              <input type="file" ng-file-select ng-model="$mediafile">
             </div>
             <div ng-show="expAudio" class="row">
               <div class="col-sm-10">
@@ -162,9 +165,9 @@
           </div>
         </div>
         <div class="form-group">
-          <button class="btn btn-primary" ng-click="updateInterview(interview, $audiofile, $transcriptfile)" ng-disabled="form.$invalid||isDisabled">{{
+          <button class="btn btn-primary" ng-click="updateInterview(interview, $mediafile, $transcriptfile)" ng-disabled="form.$invalid||isDisabled">{{
             interview.id && 'Update' || 'Create' }}</button>
-          <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+          <button class="btn btn-default" ng-click="cancel()" ng-disabled="isDisabled">Cancel</button>
         </div>
       </form>
     </div>
