@@ -112,6 +112,8 @@
               <ul class="dropdown-menu" role="menu">
                 <li ng-if="(interview.media|filter:{type:'Audio'}).length"><a
                   ng-href="{{Uris.WS_DOWNLOAD+(interview.media|filter:{type:'Audio'})[0].id}}" target="_blank">Audio</a></li>
+                <li ng-if="(interview.media|filter:{type:'Video'}).length"><a
+                  ng-href="{{Uris.WS_DOWNLOAD+(interview.media|filter:{type:'Video'})[0].id}}" target="_blank">Video</a></li>
                 <li ng-if="(interview.media|filter:{type:'Transcript'}).length"><a
                   ng-href="{{Uris.WS_DOWNLOAD+(interview.media|filter:{type:'Transcript'})[0].id}}" target="_blank">Transcript</a></li>
               </ul>
