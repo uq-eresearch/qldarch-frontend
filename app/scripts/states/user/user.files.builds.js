@@ -20,6 +20,6 @@ angular.module('qldarchApp').config(function($stateProvider) {
       } ]
     },
     controller : 'UserUgcsCtrl',
-    templateUrl : 'views/user.files.builds.html'
+    templateUrl : 'views/user/user.files.builds.html'
   });
 });

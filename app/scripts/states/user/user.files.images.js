@@ -11,6 +11,6 @@ angular.module('qldarchApp').config(function($stateProvider) {
       } ]
     },
     controller : 'UserFilesCtrl',
-    templateUrl : 'views/user.files.images.html'
+    templateUrl : 'views/user/user.files.images.html'
   });
 });

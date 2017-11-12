@@ -15,6 +15,6 @@ angular.module('qldarchApp').config(function($stateProvider) {
         });
       } ]
     },
-    templateUrl : 'views/user.files.html'
+    templateUrl : 'views/user/user.files.html'
   });
 });

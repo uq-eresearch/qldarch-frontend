@@ -3,7 +3,7 @@
 angular.module('qldarchApp').config(function($stateProvider) {
   $stateProvider.state('upload.documents', {
     url : '/documents',
-    templateUrl : 'views/upload.documents.html',
+    templateUrl : 'views/upload/upload.documents.html',
     resolve : {
       structures : [ 'AggArchObjs', '$filter', function(AggArchObjs, $filter) {        
         return AggArchObjs.loadProjects().then(function(data) {

@@ -35,7 +35,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
         });
       } ]
     },
-    templateUrl : 'views/upload.interviews.html',
+    templateUrl : 'views/upload/upload.interviews.html',
     controller : 'UploadInterviewsCtrl'
   });
 });
