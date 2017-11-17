@@ -12,7 +12,7 @@ angular.module('qldarchApp').config(function($stateProvider) {
           firms : []
         };
         var person = $filter('filter')(structure.relationships, function(relationship) {
-          if (relationship.subjecttype === 'person') {
+          if (relationship.subjecttype === 'person' && relationship.relationship !== 'references') {
             return ArchObj.load(relationship.subject).then(function(data) {
               if (angular.isUndefined(relationship.media)) {
                 relationship.media = $filter('filter')(data.media, function(med) {
