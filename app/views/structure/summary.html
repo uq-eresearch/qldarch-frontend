@@ -31,7 +31,8 @@
               ng-src="{{Uris.WS_MEDIA+designer.media+'?dimension=32x32'}}" style="width: 32px; height: 32px;">
           </a>
             <div class="media-body">
-              <a ui-sref="firm.summary({ firmId: designer.subject })"> {{ designer.subjectlabel }} </a>
+              <a ui-sref="firm.summary({ firmId: designer.subject })"> {{ designer.subjectlabel }} </a> » <a
+                ui-sref="firm.structures({ firmId: designer.subject })"> Projects </a>
             </div></li>
         </ul>
         <h5 style="margin-top: 24px;">Associated Architects</h5>
@@ -43,7 +44,8 @@
               style="display: block; width: 32px">
           </a>
             <div class="media-body">
-              <a ui-sref="architect.summary({ architectId: designer.subject })"> {{ designer.subjectlabel }} </a>
+              <a ui-sref="architect.summary({ architectId: designer.subject })"> {{ designer.subjectlabel }} </a> » <a
+                ui-sref="architect.structures({ architectId: designer.subject })"> Projects </a>
             </div></li>
         </ul>
         <h5 style="margin-top: 24px;">Location</h5>
