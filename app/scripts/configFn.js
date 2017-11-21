@@ -19,12 +19,7 @@ angular.module('qldarchApp').config(function($urlRouterProvider, $httpProvider, 
       responseError : function(rejection) {
         // do something on error
         console.log('got a Response ERROR!', rejection);
-        if (rejection.status === 403) {
-          toaster.pop('warning', 'You are not logged in.', 'Please log in to continue.');
-        }
-        if (rejection.status === 500) {
-          toaster.pop('error', 'Oops. Something went wrong.', 'Please contact the system administrator.');
-        }
+        toaster.pop('warning', rejection.statusText, rejection.data.msg);
         return $q.reject(rejection);
       }
     };

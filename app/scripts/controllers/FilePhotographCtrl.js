@@ -68,6 +68,23 @@ angular.module('qldarchApp').controller('FilePhotographCtrl',
             label : $scope.selectedTitle,
             type : $scope.imageType.id
           };
+          if (angular.isDefined($scope.image)) {
+            if (angular.isDefined($scope.image.description)) {
+              $scope.myModelObj.description = $scope.image.description;
+            }
+            if (angular.isDefined($scope.image.creator)) {
+              $scope.myModelObj.creator = $scope.image.creator;
+            }
+            if (angular.isDefined($scope.image.created)) {
+              $scope.myModelObj.created = $scope.image.created;
+            }
+            if (angular.isDefined($scope.image.rights)) {
+              $scope.myModelObj.rights = $scope.image.rights;
+            }
+            if (angular.isDefined($scope.image.identifier)) {
+              $scope.myModelObj.identifier = $scope.image.identifier;
+            }
+          }
           expression.id = $stateParams.id;
           expression.$upload = File.upload($scope.myModelObj, file).progress(function(evt) {
             expression.$uploadFile.percent = parseInt(100.0 * evt.loaded / evt.total);

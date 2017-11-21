@@ -7,9 +7,14 @@ angular.module('qldarchApp').factory('File', function(Uris, $upload, $http, toas
   // Public API here
   return {
     upload : function(data, file) {
+      var payload = angular.copy(data);
+      payload.created = YYYYMMDDdate.formatDate(payload.created);
+      if (payload.created === null) {
+        delete payload.created;
+      }
       return $upload.upload({
         url : path + 'upload',
-        data : data,
+        data : payload,
         file : file,
         withCredentials : true
       });

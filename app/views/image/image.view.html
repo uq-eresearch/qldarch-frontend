@@ -58,15 +58,19 @@
     <div class="row">
       <div class="col-sm-offset-1 col-md-5">
         <h5>Title of Detail</h5>
-        <p>{{ image.description || 'No detail' }}</p>
+        <p>{{ image.label || 'No detail' }}</p>
+        <h5>Type</h5>
+        <p>{{ image.type || 'No type' }}</p>
+        <h5>Description</h5>
+        <p>{{ image.description || 'No description' }}</p>
         <h5>Rights</h5>
         <p>{{ image.rights || 'No rights' }}</p>
-        <h5>Identifier</h5>
-        <p>{{ image.identifier || 'No identifier' }}</p>
       </div>
       <div class="col-md-5">
+        <h5>Creator</h5>
+        <p>{{ image.creator || 'No creator' }}</p>
         <h5>Created Date</h5>
-        <p>{{ image.created | date:'dd-MM-yyyy' }}</p>
+        <p>{{ (image.created | date:'dd-MM-yyyy') || 'No date' }}</p>
         <h5>Depicts</h5>
         <p>
           <a ng-if="depicts.type === 'structure'" ui-sref="structure.summary({structureId: depicts.id})"> {{ depicts.label }} </a> <a
@@ -74,8 +78,8 @@
             ng-if="depicts.type === 'person'&&depicts.architect==true" ui-sref="architect.summary({architectId: depicts.id})"> {{ depicts.label }}
           </a> <a ng-if="depicts.type === 'person'&&depicts.architect==false" ui-sref="other.summary({otherId: depicts.id})"> {{ depicts.label }} </a>
         </p>
-        <h5>External Location</h5>
-        <p>{{ image.externallocation || 'No external location' }}</p>
+        <h5>Identifier</h5>
+        <p>{{ image.identifier || 'No identifier' }}</p>
       </div>
     </div>
   </div>

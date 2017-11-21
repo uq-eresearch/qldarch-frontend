@@ -28,6 +28,36 @@
         <label for="" class="control-label">Title of Detail <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input name="title"
           type="text" class="form-control" ng-model="selectedTitle" placeholder="What is this a video of?" required />
       </div>
+      <!-- Description -->
+      <div class="form-group">
+        <label>Description</label>
+        <textarea placeholder="Describe this item" ng-model="video.description" class="form-control"></textarea>
+      </div>
+      <!-- Creator -->
+      <div class="form-group">
+        <label>Creator of Image <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control"
+          ng-model="video.creator" placeholder="Who is the creator?" />
+      </div>
+      <!-- Created Date -->
+      <div class="form-group">
+        <label>Created Date</label>
+        <div class="well well-sm">
+          <div uib-datepicker ng-model="video.created" show-weeks="false"></div>
+          <div style="margin-top: 10px;" ng-show="video.created">
+            <button type="button" class="btn btn-sm btn-primary" ng-click="video.created = ''">Clear</button>
+          </div>
+        </div>
+      </div>
+      <!-- Rights -->
+      <div class="form-group">
+        <label>Rights <i class="fa fa-asterisk fa-asterisk-required"></i></label> <input type="text" class="form-control" ng-model="video.rights"
+          placeholder="Who owns the rights to this item?" />
+      </div>
+      <!-- External Identifier -->
+      <div class="form-group">
+        <label>External Identifier</label> <input type="text" placeholder="Does this item have an external identifier?" ng-model="video.identifier"
+          class="form-control">
+      </div>
     </div>
   </div>
   <div class="l-frame l-frame-highlight" ng-show="selectedObj">

@@ -63,6 +63,23 @@ angular.module('qldarchApp').controller('FileVideoCtrl',
             label : $scope.selectedTitle,
             type : 'Video'
           };
+          if (angular.isDefined($scope.video)) {
+            if (angular.isDefined($scope.video.description)) {
+              $scope.myModelObj.description = $scope.video.description;
+            }
+            if (angular.isDefined($scope.video.creator)) {
+              $scope.myModelObj.creator = $scope.video.creator;
+            }
+            if (angular.isDefined($scope.video.created)) {
+              $scope.myModelObj.created = $scope.video.created;
+            }
+            if (angular.isDefined($scope.video.rights)) {
+              $scope.myModelObj.rights = $scope.video.rights;
+            }
+            if (angular.isDefined($scope.video.identifier)) {
+              $scope.myModelObj.identifier = $scope.video.identifier;
+            }
+          }
           expression.id = $stateParams.id;
           expression.$upload = File.upload($scope.myModelObj, file).progress(function(evt) {
             expression.$uploadFile.percent = parseInt(100.0 * evt.loaded / evt.total);
